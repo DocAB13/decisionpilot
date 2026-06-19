@@ -1,0 +1,8 @@
+{
+  "name": "DecisionPilot",
+  "short_name": "DecisionPilot",
+  "icons": [],
+  "theme_color": "#0066CC",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
