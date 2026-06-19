@@ -2,306 +2,207 @@ import { useState, useEffect, useRef } from "react";
 import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
 import { HeroBanner, WorldwideSection } from "./HeroBanner";
 
+// ── Design tokens ─────────────────────────────────────────
 const C = {
-  bg: "#F5F7FA", surface: "#FFFFFF", card: "#FFFFFF", border: "#E2E8F0",
-  accent: "#0066CC", accentLight: "#EBF4FF", accentHover: "#0052A3",
-  text: "#1A202C", textSecondary: "#4A5568", muted: "#718096", success: "#38A169",
-  shadow: "0 1px 3px rgba(0,0,0,0.1)", shadowMd: "0 4px 6px rgba(0,0,0,0.07)",
+  bg: "#F8F9FC",
+  surface: "#FFFFFF",
+  card: "#FFFFFF",
+  border: "#E8ECF4",
+  accent: "#1A56DB",
+  accentDark: "#1240A8",
+  accentLight: "#EEF3FF",
+  text: "#0F172A",
+  textSecondary: "#475569",
+  muted: "#94A3B8",
+  success: "#059669",
+  gold: "#D97706",
+  purple: "#7C3AED",
+  shadow: "0 1px 4px rgba(15,23,42,0.08)",
+  shadowMd: "0 4px 16px rgba(15,23,42,0.10)",
+  shadowLg: "0 12px 40px rgba(15,23,42,0.13)",
 };
 
-function amz(k) { return `/go?url=${encodeURIComponent(`https://www.amazon.com/s?k=${encodeURIComponent(k)}`)}` }
-function bkg(ss) { return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(ss)}&aid=decisionpilot` }
-function img(id, w = 400, h = 220) { return `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format` }
-
-const CATEGORIES = [
-  { id: "vacation", label: "Vacation", emoji: "🏖️", desc: "Hotels & destinations", color: "#0066CC", image: img("photo-1507525428034-b723cf961d3e") },
-  { id: "phone", label: "Smartphone", emoji: "📱", desc: "Find your perfect phone", color: "#7C3AED", image: img("photo-1511707171634-5f897ff02aa9") },
-  { id: "laptop", label: "Laptop", emoji: "💻", desc: "Work, gaming, study", color: "#0891B2", image: img("photo-1496181133206-80ce9b88a853") },
-  { id: "tv", label: "TV", emoji: "📺", desc: "Picture perfect viewing", color: "#059669", image: img("photo-1593784991095-a205069470b6") },
-  { id: "car", label: "Car", emoji: "🚗", desc: "Electric, sport, family", color: "#DC2626", image: img("photo-1494976388531-d1058494cdd8") },
-  { id: "fitness", label: "Fitness", emoji: "🏋️", desc: "Gym & wellness gear", color: "#D97706", image: img("photo-1517836357463-d25dfeac3438") },
-  { id: "pet", label: "Pet", emoji: "🐕", desc: "Find your companion", color: "#7C3AED", image: img("photo-1587300003388-59208cc962cb") },
-  { id: "dining", label: "Dining Out", emoji: "🍽️", desc: "Restaurants & delivery", color: "#DB2777", image: img("photo-1414235077428-338989a2e8c0") },
-  { id: "career", label: "Career", emoji: "💼", desc: "Jobs & skills", color: "#0066CC", image: img("photo-1454165804606-c3d57bc86b40") },
-];
-
-const TREE = {
-  id: "root", question: "What do you want to decide?", emoji: "🧭",
-  options: [
-    {
-      label: "🏖️ Vacation", id: "vacation", question: "What's your travel style?", emoji: "✈️",
-      image: img("photo-1507525428034-b723cf961d3e"),
-      options: [
-        {
-          label: "🌊 Beach & Relax", id: "beach", question: "What's your budget per person?", emoji: "💰",
-          image: img("photo-1519046904884-53103b34b206"),
-          options: [
-            { label: "Under $800", id: "beach_budget", image: img("photo-1533105079780-92b9be482077"), result: { title: "Albania Riviera or Bulgaria", description: "Hidden gems with stunning beaches at a fraction of the cost.", picks: [
-              { name: "Ksamil, Albania", tag: "Best Value", desc: "Crystal clear water, authentic food, almost zero crowds.", link: bkg("Ksamil"), image: img("photo-1584646098378-0f756cbf9e2c") },
-              { name: "Sunny Beach, Bulgaria", tag: "Party Scene", desc: "Lively atmosphere, affordable hotels, warm Black Sea water.", link: bkg("Sunny Beach Bulgaria"), image: img("photo-1507003211169-0a1dd7228f2d") },
-              { name: "Ulcinj, Montenegro", tag: "Underrated", desc: "Long sandy beach, warm Adriatic water, very affordable.", link: bkg("Ulcinj"), image: img("photo-1506905925346-21bda4d32df4") },
-            ]}},
-            { label: "$800 – $1,500", id: "beach_mid", image: img("photo-1469474968028-56623f02e42e"), result: { title: "Crete or Mallorca", description: "Classic Mediterranean excellence at mid-range prices.", picks: [
-              { name: "Crete, Greece", tag: "Best Overall", desc: "Diverse landscapes, incredible food, warm locals.", link: bkg("Crete"), image: img("photo-1533105079780-92b9be482077") },
-              { name: "Mallorca, Spain", tag: "Best Nightlife", desc: "Stunning coves, world-class clubs, easy transport.", link: bkg("Mallorca"), image: img("photo-1504701954957-2010ec3bcec1") },
-              { name: "Algarve, Portugal", tag: "Hidden Gem", desc: "Dramatic cliffs, golden beaches, excellent seafood.", link: bkg("Algarve"), image: img("photo-1555881400-74d7acaacd8b") },
-            ]}},
-            { label: "Over $1,500", id: "beach_luxury", image: img("photo-1602002418082-a4443978a5be"), result: { title: "Santorini, Maldives or Bali", description: "World-class luxury destinations.", picks: [
-              { name: "Santorini, Greece", tag: "Most Iconic", desc: "Caldera sunsets, infinity pools, romantic atmosphere.", link: bkg("Santorini"), image: img("photo-1570077188670-e3a8d69ac5ff") },
-              { name: "Maldives", tag: "Ultimate Luxury", desc: "Overwater bungalows, private beaches, world-class diving.", link: bkg("Maldives"), image: img("photo-1514282401047-d79a71a590e8") },
-              { name: "Bali, Indonesia", tag: "Best Value Luxury", desc: "Luxury at mid-range prices. Seminyak for nightlife, Ubud for culture.", link: bkg("Bali"), image: img("photo-1537996194471-e657df975ab4") },
-            ]}},
-          ],
-        },
-        {
-          label: "🏛️ Culture & City", id: "culture", question: "Which region?", emoji: "🗺️",
-          image: img("photo-1499856871958-5b9627545d1a"),
-          options: [
-            { label: "🇪🇺 Europe", id: "europe_culture", image: img("photo-1499856871958-5b9627545d1a"), result: { title: "Rome, Prague or Lisbon", description: "Europe's finest cultural cities.", picks: [
-              { name: "Rome, Italy", tag: "Most Historic", desc: "Colosseum, Vatican, incredible food.", link: bkg("Rome"), image: img("photo-1552832230-c0197dd311b5") },
-              { name: "Prague, Czech Republic", tag: "Best Value", desc: "Fairy-tale architecture, craft beer culture.", link: bkg("Prague"), image: img("photo-1519677100203-a0e668c92439") },
-              { name: "Lisbon, Portugal", tag: "Most Underrated", desc: "Trams, Fado music, epic Atlantic views.", link: bkg("Lisbon"), image: img("photo-1558642891-54be180ea339") },
-            ]}},
-            { label: "🌏 Asia", id: "asia_culture", image: img("photo-1540959733332-eab4deabeeaf"), result: { title: "Tokyo, Kyoto or Bangkok", description: "Asia's most captivating destinations.", picks: [
-              { name: "Tokyo, Japan", tag: "Most Unique", desc: "Futuristic and traditional at once.", link: bkg("Tokyo"), image: img("photo-1540959733332-eab4deabeeaf") },
-              { name: "Kyoto, Japan", tag: "Most Traditional", desc: "Geishas, temples, bamboo forests.", link: bkg("Kyoto"), image: img("photo-1545569341-9eb8b30979d9") },
-              { name: "Bangkok, Thailand", tag: "Best Value", desc: "Street food, temples, rooftop bars.", link: bkg("Bangkok"), image: img("photo-1508009603885-50cf7c579365") },
-            ]}},
-            { label: "🌎 Americas", id: "americas_culture", image: img("photo-1485871981521-5b1fd3805eee"), result: { title: "New York, Buenos Aires or Mexico City", description: "The Americas' most vibrant destinations.", picks: [
-              { name: "New York, USA", tag: "Most Iconic", desc: "Times Square, Central Park, world-class food.", link: bkg("New York"), image: img("photo-1485871981521-5b1fd3805eee") },
-              { name: "Buenos Aires, Argentina", tag: "Most Passionate", desc: "Tango, steak, European architecture.", link: bkg("Buenos Aires"), image: img("photo-1612294037637-ec328d0e075e") },
-              { name: "Mexico City, Mexico", tag: "Best Value", desc: "Ancient ruins, world-class food scene.", link: bkg("Mexico City"), image: img("photo-1585464231875-d9ef1f5ad396") },
-            ]}},
-          ],
-        },
-        { label: "🥾 Adventure", id: "adventure", image: img("photo-1464822759023-fed622ff2c3b"), result: { title: "New Zealand, Patagonia or Norway", description: "The world's ultimate adventure destinations.", picks: [
-          { name: "New Zealand", tag: "Best All-Round", desc: "Bungee jumping, hiking, hobbit holes.", link: bkg("New Zealand"), image: img("photo-1507699622108-4be3abd695ad") },
-          { name: "Patagonia, Argentina", tag: "Most Dramatic", desc: "Torres del Paine, glaciers, end of the world.", link: bkg("Patagonia"), image: img("photo-1501854140801-50d01698950b") },
-          { name: "Norway", tag: "Best in Europe", desc: "Fjords, Northern Lights, midnight sun.", link: bkg("Norway"), image: img("photo-1531366936337-7c912a4589a7") },
-        ]}},
-      ],
-    },
-    {
-      label: "📱 Smartphone", id: "phone", question: "What matters most?", emoji: "📱",
-      image: img("photo-1511707171634-5f897ff02aa9"),
-      options: [
-        { label: "📸 Best Camera", id: "phone_camera", image: img("photo-1516035069371-29a1b244cc32"), result: { title: "Top Camera Phones 2026", description: "Photography champions.", picks: [
-          { name: "iPhone 16 Pro Max", tag: "Best Overall", desc: "Cinematic mode, ProRes video, titanium build.", link: amz("iPhone 16 Pro Max"), image: img("photo-1695048133142-1a20484d2569") },
-          { name: "Google Pixel 9 Pro", tag: "Best AI Camera", desc: "Google's AI makes every photo look professional.", link: amz("Google Pixel 9 Pro"), image: img("photo-1598327105666-5b89351aff97") },
-          { name: "Samsung Galaxy S25 Ultra", tag: "Most Versatile", desc: "200MP sensor, 10x optical zoom, S Pen.", link: amz("Samsung Galaxy S25 Ultra"), image: img("photo-1610945415295-d9bbf067e59c") },
-        ]}},
-        { label: "🔋 Best Battery", id: "phone_battery", image: img("photo-1585771724684-38269d6639fd"), result: { title: "All-Day Battery Champions", description: "Never worry about charging.", picks: [
-          { name: "OnePlus 13", tag: "Fastest Charging", desc: "100W charging, full charge in 25 minutes.", link: amz("OnePlus 13"), image: img("photo-1511707171634-5f897ff02aa9") },
-          { name: "Samsung Galaxy S25+", tag: "Best Balance", desc: "All-day battery with premium features.", link: amz("Samsung Galaxy S25 Plus"), image: img("photo-1610945415295-d9bbf067e59c") },
-          { name: "iPhone 16 Plus", tag: "Best iOS Battery", desc: "2 days of normal use.", link: amz("iPhone 16 Plus"), image: img("photo-1695048133142-1a20484d2569") },
-        ]}},
-        { label: "💰 Best Value", id: "phone_value", image: img("photo-1580910051074-3eb694886505"), result: { title: "Premium Features, Smart Price", description: "Flagship feel without flagship price.", picks: [
-          { name: "Google Pixel 8a", tag: "Best Under $500", desc: "Flagship AI features, pure Android, excellent camera.", link: amz("Google Pixel 8a"), image: img("photo-1598327105666-5b89351aff97") },
-          { name: "Samsung Galaxy A55", tag: "Best Mid-Range", desc: "Beautiful display, solid camera, 5G.", link: amz("Samsung Galaxy A55"), image: img("photo-1610945415295-d9bbf067e59c") },
-          { name: "Nothing Phone 3a", tag: "Most Unique", desc: "Glyph interface, clean design, excellent specs.", link: amz("Nothing Phone 3a"), image: img("photo-1511707171634-5f897ff02aa9") },
-        ]}},
-      ],
-    },
-    {
-      label: "💻 Laptop", id: "laptop", question: "What will you use it for?", emoji: "💻",
-      image: img("photo-1496181133206-80ce9b88a853"),
-      options: [
-        { label: "🎮 Gaming", id: "laptop_gaming", image: img("photo-1542751371-adc38448a05e"), result: { title: "Best Gaming Laptops 2026", description: "Maximum performance for serious gamers.", picks: [
-          { name: "ASUS ROG Zephyrus G16", tag: "Best Overall", desc: "RTX 4080, 240Hz display, stunning design.", link: amz("ASUS ROG Zephyrus G16"), image: img("photo-1593640408182-31c228745c5b") },
-          { name: "Razer Blade 16", tag: "Most Premium", desc: "Unmatched build quality, RTX 4090 option, OLED display.", link: amz("Razer Blade 16"), image: img("photo-1542751371-adc38448a05e") },
-          { name: "Lenovo Legion Pro 5", tag: "Best Value", desc: "RTX 4070, excellent thermals, great price-to-performance.", link: amz("Lenovo Legion Pro 5"), image: img("photo-1496181133206-80ce9b88a853") },
-        ]}},
-        { label: "💼 Business", id: "laptop_business", image: img("photo-1517694712202-14dd9538aa97"), result: { title: "Best Business Laptops 2026", description: "Productivity, portability, reliability.", picks: [
-          { name: "Apple MacBook Pro 14\"", tag: "Best Overall", desc: "M4 chip, incredible battery, best-in-class display.", link: amz("MacBook Pro 14 M4"), image: img("photo-1517694712202-14dd9538aa97") },
-          { name: "ThinkPad X1 Carbon", tag: "Most Reliable", desc: "Military-grade durability, legendary keyboard.", link: amz("ThinkPad X1 Carbon"), image: img("photo-1496181133206-80ce9b88a853") },
-          { name: "Dell XPS 13", tag: "Most Portable", desc: "Ultralight, beautiful OLED display, powerful Intel.", link: amz("Dell XPS 13"), image: img("photo-1593640408182-31c228745c5b") },
-        ]}},
-        { label: "🎓 Student", id: "laptop_student", image: img("photo-1498050108023-c5249f4df085"), result: { title: "Best Student Laptops 2026", description: "Performance and value for studying.", picks: [
-          { name: "Apple MacBook Air M3", tag: "Best Overall", desc: "Fanless, all-day battery, perfect for any student.", link: amz("MacBook Air M3"), image: img("photo-1517694712202-14dd9538aa97") },
-          { name: "Acer Swift 14 AI", tag: "Best Windows", desc: "Intel Core Ultra, OLED display, lightweight.", link: amz("Acer Swift 14 AI"), image: img("photo-1496181133206-80ce9b88a853") },
-          { name: "Chromebook Plus", tag: "Most Affordable", desc: "Perfect for Google Docs, great battery, fast.", link: amz("Chromebook Plus"), image: img("photo-1498050108023-c5249f4df085") },
-        ]}},
-      ],
-    },
-    {
-      label: "📺 TV", id: "tv", question: "What's your priority?", emoji: "📺",
-      image: img("photo-1593784991095-a205069470b6"),
-      options: [
-        { label: "🎬 Best Picture", id: "tv_picture", image: img("photo-1593359677879-a4bb92f4834a"), result: { title: "Best Picture Quality TVs 2026", description: "For those who refuse to compromise.", picks: [
-          { name: "LG G5 OLED", tag: "Best Overall", desc: "Infinite contrast, perfect blacks, Dolby Vision.", link: amz("LG G5 OLED TV"), image: img("photo-1593784991095-a205069470b6") },
-          { name: "Samsung QN90D Neo QLED", tag: "Brightest", desc: "Mini-LED brilliance, perfect for bright rooms.", link: amz("Samsung QN90D Neo QLED"), image: img("photo-1593359677879-a4bb92f4834a") },
-          { name: "Sony Bravia 9", tag: "Best Processing", desc: "Sony's AI processor makes everything look cinematic.", link: amz("Sony Bravia 9"), image: img("photo-1601944177325-f8867652837f") },
-        ]}},
-        { label: "💰 Best Value", id: "tv_value", image: img("photo-1601944177325-f8867652837f"), result: { title: "Best Value TVs 2026", description: "Great picture without breaking the bank.", picks: [
-          { name: "Hisense U8N", tag: "Best Bang for Buck", desc: "Mini-LED, 144Hz, Dolby Vision.", link: amz("Hisense U8N TV"), image: img("photo-1593784991095-a205069470b6") },
-          { name: "TCL QM8", tag: "Best Budget QLED", desc: "Quantum dots, excellent brightness, Google TV.", link: amz("TCL QM8 TV"), image: img("photo-1593359677879-a4bb92f4834a") },
-          { name: "Amazon Fire TV Omni", tag: "Most Affordable", desc: "Alexa built-in, decent picture, unbeatable price.", link: amz("Amazon Fire TV Omni"), image: img("photo-1601944177325-f8867652837f") },
-        ]}},
-        { label: "🎮 Gaming TV", id: "tv_gaming", image: img("photo-1542751371-adc38448a05e"), result: { title: "Best Gaming TVs 2026", description: "Low latency, high refresh rate.", picks: [
-          { name: "LG C4 OLED 42\"", tag: "Best Gaming OLED", desc: "0.1ms response, 4x HDMI 2.1, 120Hz.", link: amz("LG C4 OLED 42 inch"), image: img("photo-1593784991095-a205069470b6") },
-          { name: "Samsung S90D OLED", tag: "Best for Sports", desc: "Anti-glare OLED, 144Hz, stunning in any lighting.", link: amz("Samsung S90D OLED"), image: img("photo-1593359677879-a4bb92f4834a") },
-          { name: "Hisense U7N", tag: "Best Value Gaming", desc: "144Hz, HDMI 2.1, mini-LED at competitive price.", link: amz("Hisense U7N TV"), image: img("photo-1601944177325-f8867652837f") },
-        ]}},
-      ],
-    },
-    {
-      label: "🚗 Car", id: "car", question: "What type of car?", emoji: "🚗",
-      image: img("photo-1494976388531-d1058494cdd8"),
-      options: [
-        { label: "⚡ Electric", id: "car_electric", image: img("photo-1560958089-b8a1929cea89"), result: { title: "Best Electric Cars 2026", description: "The EV market has matured.", picks: [
-          { name: "Tesla Model 3", tag: "Best All-Round", desc: "500km range, supercharger network, autopilot.", link: "https://www.autoscout24.com/lst/tesla/model-3", image: img("photo-1560958089-b8a1929cea89") },
-          { name: "Volkswagen ID.4", tag: "Most Practical", desc: "SUV form factor, comfortable, VW reliability.", link: "https://www.autoscout24.com/lst/volkswagen/id.4", image: img("photo-1617788138017-80ad40651399") },
-          { name: "Hyundai Ioniq 6", tag: "Best Range", desc: "800V ultra-fast charging, 600km+ range.", link: "https://www.autoscout24.com/lst/hyundai/ioniq-6", image: img("photo-1494976388531-d1058494cdd8") },
-        ]}},
-        { label: "🏎️ Performance", id: "car_performance", image: img("photo-1503376780353-7e6692767b70"), result: { title: "Performance Cars Worth Every Euro", description: "Driving pleasure above all else.", picks: [
-          { name: "BMW M3 Competition", tag: "Best Driver's Car", desc: "503hp inline-6, perfect balance, daily usable.", link: "https://www.autoscout24.com/lst/bmw/m3", image: img("photo-1555215695-3004980ad54e") },
-          { name: "Porsche 911", tag: "Most Iconic", desc: "Timeless, appreciates in value, usable every day.", link: "https://www.autoscout24.com/lst/porsche/911", image: img("photo-1503376780353-7e6692767b70") },
-          { name: "Toyota GR86", tag: "Best Value Fun", desc: "Pure driving joy, lightweight, affordable.", link: "https://www.autoscout24.com/lst/toyota/gr86", image: img("photo-1494976388531-d1058494cdd8") },
-        ]}},
-        { label: "👨‍👩‍👧 Family SUV", id: "car_family", image: img("photo-1533473359331-0135ef1b58bf"), result: { title: "Best Family SUVs 2026", description: "Space, safety, and comfort.", picks: [
-          { name: "Skoda Kodiaq", tag: "Best Value", desc: "7 seats, huge boot, VW group reliability.", link: "https://www.autoscout24.com/lst/skoda/kodiaq", image: img("photo-1533473359331-0135ef1b58bf") },
-          { name: "Volvo XC60", tag: "Safest Choice", desc: "World-class safety, beautiful Scandinavian interior.", link: "https://www.autoscout24.com/lst/volvo/xc60", image: img("photo-1617788138017-80ad40651399") },
-          { name: "Kia EV9", tag: "Future-Proof", desc: "7-seat electric SUV, 500km range.", link: "https://www.autoscout24.com/lst/kia/ev9", image: img("photo-1560958089-b8a1929cea89") },
-        ]}},
-      ],
-    },
-    {
-      label: "🏋️ Fitness", id: "fitness", question: "What's your fitness goal?", emoji: "🏋️",
-      image: img("photo-1517836357463-d25dfeac3438"),
-      options: [
-        { label: "💪 Build Muscle", id: "fitness_muscle", image: img("photo-1534438327276-14e5300c3a48"), result: { title: "Best Home Gym Equipment", description: "Build serious muscle without leaving home.", picks: [
-          { name: "Adjustable Dumbbell Set", tag: "Most Versatile", desc: "Replaces 15 pairs of dumbbells.", link: amz("adjustable dumbbell set"), image: img("photo-1534438327276-14e5300c3a48") },
-          { name: "Power Rack + Barbell", tag: "Most Effective", desc: "Squat, bench, deadlift. The holy trinity.", link: amz("power rack barbell set"), image: img("photo-1517836357463-d25dfeac3438") },
-          { name: "Resistance Band Set", tag: "Best Budget", desc: "Surprisingly effective, portable, joint-friendly.", link: amz("resistance band set heavy"), image: img("photo-1571019614242-c5c5dee9f50b") },
-        ]}},
-        { label: "🏃 Cardio", id: "fitness_cardio", image: img("photo-1538805060514-97d9cc17730c"), result: { title: "Best Cardio Equipment 2026", description: "Burn calories efficiently at home.", picks: [
-          { name: "Concept2 RowErg", tag: "Best Overall", desc: "Full body workout, low impact, Olympic-grade.", link: amz("Concept2 RowErg rowing machine"), image: img("photo-1541534741688-6078c6bfb5c5") },
-          { name: "NordicTrack Treadmill", tag: "Most Popular", desc: "iFit classes, incline training, foldable.", link: amz("NordicTrack treadmill"), image: img("photo-1538805060514-97d9cc17730c") },
-          { name: "Assault AirBike", tag: "Most Intense", desc: "HIIT king. 20 minutes = 1 hour jogging.", link: amz("Assault AirBike"), image: img("photo-1517836357463-d25dfeac3438") },
-        ]}},
-        { label: "🧘 Wellness", id: "fitness_wellness", image: img("photo-1506126613408-eca07ce68773"), result: { title: "Best Wellness Equipment 2026", description: "Recovery, flexibility, mental health.", picks: [
-          { name: "Manduka PRO Yoga Mat", tag: "Essential", desc: "The last yoga mat you'll ever buy.", link: amz("Manduka PRO yoga mat"), image: img("photo-1506126613408-eca07ce68773") },
-          { name: "Theragun Pro", tag: "Best Recovery", desc: "Percussive therapy used by pro athletes.", link: amz("Theragun Pro massage gun"), image: img("photo-1571019614242-c5c5dee9f50b") },
-          { name: "Hypervolt 2 Pro", tag: "Best Value", desc: "Quieter than Theragun, equally effective.", link: amz("Hypervolt 2 Pro massage gun"), image: img("photo-1517836357463-d25dfeac3438") },
-        ]}},
-      ],
-    },
-    {
-      label: "🐕 Pet", id: "pet", question: "Which pet suits you?", emoji: "🐾",
-      image: img("photo-1587300003388-59208cc962cb"),
-      options: [
-        { label: "🐕 Dog", id: "pet_dog", question: "What's your lifestyle?", emoji: "🐕", image: img("photo-1587300003388-59208cc962cb"),
-          options: [
-            { label: "🏃 Active", id: "dog_active", image: img("photo-1548199973-03cce0bbc87b"), result: { title: "Best Dogs for Active People", description: "Dogs that match your energy.", picks: [
-              { name: "Border Collie", tag: "Most Intelligent", desc: "Needs 2+ hours exercise daily.", link: amz("Border Collie dog supplies"), image: img("photo-1568572933382-74d440642117") },
-              { name: "Labrador Retriever", tag: "Most Popular", desc: "Friendly, energetic, great with families.", link: amz("Labrador dog supplies"), image: img("photo-1587300003388-59208cc962cb") },
-              { name: "Vizsla", tag: "Best Companion", desc: "Velcro dog. Excellent runner and swimmer.", link: amz("Vizsla dog supplies"), image: img("photo-1548199973-03cce0bbc87b") },
-            ]}},
-            { label: "🏠 Relaxed", id: "dog_calm", image: img("photo-1583511655826-05700d52f4d9"), result: { title: "Best Dogs for Relaxed Owners", description: "Dogs happy chilling at home.", picks: [
-              { name: "Bulldog", tag: "Most Relaxed", desc: "Minimal exercise, loves sofa time.", link: amz("Bulldog dog supplies"), image: img("photo-1583511655826-05700d52f4d9") },
-              { name: "Shih Tzu", tag: "Best Lap Dog", desc: "Affectionate, low exercise, hypoallergenic.", link: amz("Shih Tzu dog supplies"), image: img("photo-1587300003388-59208cc962cb") },
-              { name: "Basset Hound", tag: "Most Chill", desc: "Easygoing, friendly, loves sleeping.", link: amz("Basset Hound dog supplies"), image: img("photo-1548199973-03cce0bbc87b") },
-            ]}},
-          ],
-        },
-        { label: "🐱 Cat", id: "pet_cat", image: img("photo-1514888286974-6c03e2ca1dba"), result: { title: "Best Cat Breeds 2026", description: "Find your perfect feline companion.", picks: [
-          { name: "Maine Coon", tag: "Most Sociable", desc: "Dog-like personality, loves people.", link: amz("Maine Coon cat supplies"), image: img("photo-1514888286974-6c03e2ca1dba") },
-          { name: "Ragdoll", tag: "Most Relaxed", desc: "Goes limp when held, extremely gentle.", link: amz("Ragdoll cat supplies"), image: img("photo-1543852786-1cf6624b9987") },
-          { name: "British Shorthair", tag: "Most Independent", desc: "Calm, dignified, great for busy owners.", link: amz("British Shorthair cat supplies"), image: img("photo-1526336024174-e58f5cdd8e13") },
-        ]}},
-        { label: "🐠 Other", id: "pet_other", image: img("photo-1522069169874-c58ec4b76be5"), result: { title: "Low Maintenance Pets", description: "Companionship without high commitment.", picks: [
-          { name: "Betta Fish", tag: "Most Beautiful", desc: "Stunning colors, small tank, interactive.", link: amz("Betta fish tank aquarium"), image: img("photo-1522069169874-c58ec4b76be5") },
-          { name: "Guinea Pig", tag: "Most Social", desc: "Gentle, social, great with children.", link: amz("guinea pig cage supplies"), image: img("photo-1548767797-d8c844163c4a") },
-          { name: "Leopard Gecko", tag: "Most Unique", desc: "Low maintenance, long-lived, no smell.", link: amz("leopard gecko terrarium"), image: img("photo-1504450874802-0ba2bcd9b5ae") },
-        ]}},
-      ],
-    },
-    {
-      label: "🍽️ Dining Out", id: "dining", question: "What's the occasion?", emoji: "🍽️",
-      image: img("photo-1414235077428-338989a2e8c0"),
-      options: [
-        { label: "💑 Romantic", id: "dining_romantic", image: img("photo-1559339352-11d035aa65de"), result: { title: "Perfect Romantic Restaurant", description: "Make it unforgettable.", picks: [
-          { name: "OpenTable", tag: "Best Reservations", desc: "Filter 'romantic', book 1 week ahead.", link: "https://www.opentable.com", image: img("photo-1559339352-11d035aa65de") },
-          { name: "TripAdvisor", tag: "Best Reviews", desc: "Sort by 'romantic atmosphere'.", link: "https://www.tripadvisor.com", image: img("photo-1414235077428-338989a2e8c0") },
-          { name: "TheFork", tag: "Best Deals", desc: "Often 50% off at great restaurants.", link: "https://www.thefork.com", image: img("photo-1424847651672-bf20a4b0982b") },
-        ]}},
-        { label: "👨‍👩‍👧 Family", id: "dining_family", image: img("photo-1547592180-85f173990554"), result: { title: "Perfect Family Restaurant", description: "Where everyone is happy.", picks: [
-          { name: "Yelp", tag: "Best for Families", desc: "Filter 'good for kids', 'high chairs'.", link: "https://www.yelp.com", image: img("photo-1547592180-85f173990554") },
-          { name: "Google Maps", tag: "Most Convenient", desc: "Search 'family restaurant near me'.", link: "https://maps.google.com", image: img("photo-1414235077428-338989a2e8c0") },
-          { name: "TheFork", tag: "Best Booking", desc: "Easy group reservations.", link: "https://www.thefork.com", image: img("photo-1424847651672-bf20a4b0982b") },
-        ]}},
-        { label: "🍕 Casual", id: "dining_casual", image: img("photo-1513104890138-7c749659a591"), result: { title: "Best Food Delivery 2026", description: "Great food without the fuss.", picks: [
-          { name: "Uber Eats", tag: "Most Options", desc: "Largest restaurant selection worldwide.", link: "https://www.ubereats.com", image: img("photo-1513104890138-7c749659a591") },
-          { name: "Deliveroo", tag: "Best Quality", desc: "Premium restaurant partners.", link: "https://deliveroo.com", image: img("photo-1414235077428-338989a2e8c0") },
-          { name: "Google Maps", tag: "Best Discovery", desc: "Sort by rating, check wait times.", link: "https://maps.google.com", image: img("photo-1424847651672-bf20a4b0982b") },
-        ]}},
-      ],
-    },
-    {
-      label: "💼 Career", id: "career", question: "What's your situation?", emoji: "💼",
-      image: img("photo-1454165804606-c3d57bc86b40"),
-      options: [
-        { label: "🚀 Switch Jobs", id: "career_switch", image: img("photo-1497366216548-37526070297c"), result: { title: "How to Navigate a Job Switch", description: "A structured approach.", picks: [
-          { name: "Evaluate Total Compensation", tag: "Step 1", desc: "Salary + equity + benefits + remote.", link: "https://www.levels.fyi", image: img("photo-1554224155-6726b3ff858f") },
-          { name: "Research Culture", tag: "Step 2", desc: "Glassdoor, Blind, LinkedIn. Talk to insiders.", link: "https://www.glassdoor.com", image: img("photo-1497366216548-37526070297c") },
-          { name: "Negotiate", tag: "Step 3", desc: "Always negotiate. First offer is never final.", link: "https://www.linkedin.com/jobs", image: img("photo-1454165804606-c3d57bc86b40") },
-        ]}},
-        { label: "🌍 Relocate", id: "career_relocate", image: img("photo-1488646953014-85cb44e25828"), result: { title: "Best Cities for Career Growth 2026", description: "Location matters enormously.", picks: [
-          { name: "Dubai, UAE", tag: "Tax Free", desc: "Zero income tax, international hub.", link: "https://www.linkedin.com/jobs/search/?location=Dubai", image: img("photo-1512453979798-5ea266f8880c") },
-          { name: "Berlin, Germany", tag: "Tech Hub", desc: "Strong startup ecosystem, great quality of life.", link: "https://www.linkedin.com/jobs/search/?location=Berlin", image: img("photo-1560969184-10fe8719e047") },
-          { name: "Lisbon, Portugal", tag: "Best QoL", desc: "Tech visa, lower cost, sun, safety.", link: "https://www.linkedin.com/jobs/search/?location=Lisbon", image: img("photo-1558642891-54be180ea339") },
-        ]}},
-        { label: "📚 Learn Skills", id: "career_learn", image: img("photo-1456513080510-7bf3a84b82f8"), result: { title: "Best Learning Platforms 2026", description: "Invest in yourself.", picks: [
-          { name: "Coursera", tag: "Best Certificates", desc: "University-backed, Google/Meta/IBM certs.", link: "https://www.coursera.org", image: img("photo-1456513080510-7bf3a84b82f8") },
-          { name: "Udemy", tag: "Best Value", desc: "Lifetime access, frequent 90% sales.", link: "https://www.udemy.com", image: img("photo-1498050108023-c5249f4df085") },
-          { name: "LinkedIn Learning", tag: "Best for Career", desc: "Skills shown on your LinkedIn profile.", link: "https://www.linkedin.com/learning", image: img("photo-1454165804606-c3d57bc86b40") },
-        ]}},
-      ],
-    },
-  ],
-};
-
-function findNode(tree, path) {
-  let node = tree;
-  for (const id of path) {
-    if (!node.options) return null;
-    node = node.options.find((o) => o.id === id);
-    if (!node) return null;
-  }
-  return node;
+function img(id, w = 800, h = 500) {
+  return `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`;
 }
+function bkg(ss) { return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(ss)}&aid=decisionpilot`; }
+function amz(k) { return `/go?url=${encodeURIComponent(`https://www.amazon.com/s?k=${encodeURIComponent(k)}`)}` }
 
-function Badge({ children, color = "#0066CC" }) {
-  return <span style={{ background: color + "15", color, border: `1px solid ${color}30`, borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase" }}>{children}</span>;
+// ── Decision Trees ────────────────────────────────────────
+const TREES = {
+  vacation: {
+    label: "Vacation", emoji: "🏖️",
+    image: img("photo-1507525428034-b723cf961d3e"),
+    questions: [
+      { id: "style", q: "What kind of vacation are you dreaming of?", options: ["🌊 Beach & Relaxation", "🏛️ Culture & History", "🥾 Adventure & Nature", "🏙️ City & Nightlife", "🍷 Food & Wine", "🧘 Wellness & Retreat"] },
+      { id: "duration", q: "How long is your trip?", options: ["Weekend (2-3 days)", "Short break (4-6 days)", "1 week", "2 weeks", "3+ weeks"] },
+      { id: "budget", q: "What's your total budget per person?", options: ["Under $500", "$500–$1,000", "$1,000–$2,500", "$2,500–$5,000", "$5,000+"] },
+      { id: "travel_with", q: "Who are you travelling with?", options: ["Solo", "Partner / Couple", "Family with young kids", "Family with teens", "Group of friends", "Parents / Senior family"] },
+      { id: "climate", q: "What climate do you prefer?", options: ["☀️ Hot & sunny", "🌤️ Warm & mild", "❄️ Cool & crisp", "🌧️ Doesn't matter"] },
+      { id: "accommodation", q: "Where would you prefer to stay?", options: ["Luxury resort", "Boutique hotel", "Budget hotel / hostel", "Airbnb / apartment", "Camping / glamping"] },
+      { id: "flight", q: "How far are you willing to fly?", options: ["No flight (road trip)", "Up to 3 hours", "3–6 hours", "6–10 hours", "Any distance"] },
+      { id: "vibe", q: "What's most important to you?", options: ["🍹 Complete relaxation", "📸 Instagram-worthy spots", "🎭 Local culture & authenticity", "⚡ Non-stop activities", "💰 Best value for money"] },
+      { id: "avoid", q: "What do you want to avoid?", options: ["Crowds & tourists", "Long flights", "Expensive destinations", "Extreme heat", "Language barriers", "Nothing — I'm flexible"] },
+    ],
+  },
+  phone: {
+    label: "Smartphone", emoji: "📱",
+    image: img("photo-1511707171634-5f897ff02aa9"),
+    questions: [
+      { id: "budget", q: "What's your budget for a new phone?", options: ["Under $300", "$300–$500", "$500–$800", "$800–$1,200", "$1,200+"] },
+      { id: "os", q: "Which operating system do you prefer?", options: ["🍎 iOS (Apple)", "🤖 Android", "No preference — show me the best"] },
+      { id: "priority", q: "What matters most to you?", options: ["📸 Camera quality", "🔋 Battery life", "⚡ Raw performance", "💎 Premium design & build", "🤖 AI & smart features", "💰 Best value"] },
+      { id: "camera_use", q: "How do you mainly use your camera?", options: ["Social media & everyday shots", "Professional photography", "Video & content creation", "Low-light & night photography", "I rarely use the camera"] },
+      { id: "usage", q: "How do you primarily use your phone?", options: ["Social media & browsing", "Gaming", "Work & productivity", "Photography & video", "Calls & messaging only"] },
+      { id: "size", q: "What screen size do you prefer?", options: ["Compact (under 6\")", "Standard (6\"–6.5\")", "Large (6.5\"+)", "No preference"] },
+      { id: "brand", q: "Any brand preferences or deal-breakers?", options: ["Open to anything", "Prefer Samsung", "Prefer Apple", "Prefer Google Pixel", "Prefer Chinese brands (Xiaomi, OnePlus)", "Avoid Chinese brands"] },
+      { id: "trade_in", q: "What phone are you upgrading from?", options: ["iPhone (any)", "Samsung Galaxy", "Google Pixel", "Old Android (other brand)", "First smartphone", "Other"] },
+      { id: "feature", q: "Which feature would be a game-changer for you?", options: ["Satellite connectivity", "Under-display fingerprint", "Foldable screen", "Stylus / S-Pen", "Best-in-class zoom", "Fastest charging"] },
+    ],
+  },
+  car: {
+    label: "Car", emoji: "🚗",
+    image: img("photo-1494976388531-d1058494cdd8"),
+    questions: [
+      { id: "budget", q: "What's your budget?", options: ["Under €15,000", "€15,000–€25,000", "€25,000–€40,000", "€40,000–€70,000", "€70,000+"] },
+      { id: "type", q: "What type of car do you need?", options: ["🏎️ Sports & Performance", "🚙 SUV / Crossover", "🚗 Sedan / Saloon", "🚐 Family MPV / Van", "🚙 Compact / City car", "⚡ Electric specifically"] },
+      { id: "fuel", q: "What powertrain do you prefer?", options: ["⚡ Full electric (BEV)", "🔌 Plug-in hybrid (PHEV)", "⛽ Petrol", "🛢️ Diesel", "🔄 Hybrid (non-plug-in)", "Open to anything"] },
+      { id: "usage", q: "How will you mainly use the car?", options: ["Daily city commute", "Long motorway trips", "Family duties & school runs", "Weekend leisure & road trips", "Mixed use"] },
+      { id: "seats", q: "How many seats do you need?", options: ["2 seats", "4–5 seats", "6–7 seats", "8+ seats"] },
+      { id: "priority", q: "What's your top priority?", options: ["💰 Lowest running costs", "🏆 Reliability & longevity", "🎯 Driving fun & handling", "🛡️ Safety ratings", "📱 Technology & connectivity", "🌿 Environmental impact"] },
+      { id: "range", q: "If electric, what range do you need?", options: ["Under 300km (city only)", "300–450km", "450–600km", "600km+ (long-distance)", "Not considering electric"] },
+      { id: "brand_pref", q: "Any brand preferences?", options: ["German (BMW, Audi, Mercedes, VW)", "Japanese (Toyota, Honda, Mazda)", "Korean (Hyundai, Kia)", "American (Tesla, Ford)", "French/Italian (Peugeot, Renault, Fiat)", "Open to anything"] },
+      { id: "new_used", q: "New or used?", options: ["Brand new only", "Nearly new (under 2 years)", "Used (2–5 years)", "Any age — best value matters"] },
+    ],
+  },
+  laptop: {
+    label: "Laptop", emoji: "💻",
+    image: img("photo-1496181133206-80ce9b88a853"),
+    questions: [
+      { id: "budget", q: "What's your budget?", options: ["Under $400", "$400–$700", "$700–$1,200", "$1,200–$2,000", "$2,000+"] },
+      { id: "primary_use", q: "What will you mainly use it for?", options: ["🎮 Gaming", "💼 Work & productivity", "🎓 University / studying", "🎨 Creative work (video, design)", "💻 Software development", "📱 Basic browsing & streaming"] },
+      { id: "os", q: "Which OS do you prefer?", options: ["🍎 macOS", "🪟 Windows", "🐧 Linux", "No preference — show me the best"] },
+      { id: "portability", q: "How important is portability?", options: ["Critical — I carry it everywhere", "Important — occasional travel", "Moderate — mostly desk use", "Not important — desktop replacement"] },
+      { id: "battery", q: "How long do you need the battery to last?", options: ["4–6 hours (near power always)", "6–8 hours", "8–12 hours", "12+ hours (all-day untethered)"] },
+      { id: "display", q: "What display do you prioritize?", options: ["Colour accuracy (creative work)", "High refresh rate (gaming/smoothness)", "OLED for vivid colours", "Matte finish (no glare)", "Largest possible screen", "Compact & light matters more"] },
+      { id: "performance", q: "What performance level do you need?", options: ["Basic (web, office, streaming)", "Mid-range (multitasking, light editing)", "High (4K video, 3D, heavy dev)", "Extreme (AI workloads, AAA gaming)"] },
+      { id: "brand", q: "Any brand preferences?", options: ["Apple MacBook", "Dell / XPS", "Lenovo ThinkPad", "ASUS ROG / ZenBook", "HP / Spectre", "Open to anything"] },
+      { id: "storage", q: "How much storage do you need?", options: ["256GB (light user)", "512GB (moderate)", "1TB (heavy user)", "2TB+ (professional)"] },
+    ],
+  },
+  tv: {
+    label: "TV", emoji: "📺",
+    image: img("photo-1593784991095-a205069470b6"),
+    questions: [
+      { id: "budget", q: "What's your budget?", options: ["Under $300", "$300–$600", "$600–$1,200", "$1,200–$2,500", "$2,500+"] },
+      { id: "size", q: "What screen size are you looking for?", options: ["Under 43\"", "43\"–50\"", "55\"", "65\"", "75\"", "85\"+"] },
+      { id: "primary_use", q: "What will you mainly watch?", options: ["🎬 Movies & streaming", "🎮 Gaming (PS5/Xbox)", "⚽ Sports", "📺 Regular TV & news", "🎨 Mixed use"] },
+      { id: "room", q: "What's the room like?", options: ["Very bright (lots of windows)", "Moderately lit", "Dark home cinema", "Bedroom (close viewing)"] },
+      { id: "panel", q: "Do you have a panel type preference?", options: ["OLED (best blacks, contrast)", "QLED / Mini-LED (bright, vivid)", "Standard LED (budget-friendly)", "No preference — recommend me"] },
+      { id: "gaming", q: "If gaming — what do you need?", options: ["120Hz+ refresh rate", "HDMI 2.1 ports", "VRR / G-Sync / FreeSync", "Low input lag only", "I don't game"] },
+      { id: "smart_features", q: "What smart features matter?", options: ["Google TV", "Tizen (Samsung)", "webOS (LG)", "Apple AirPlay support", "Simple — I use external devices", "Alexa / Google Assistant"] },
+      { id: "brand", q: "Any brand preference?", options: ["LG", "Samsung", "Sony", "Hisense (best value)", "TCL", "Open to anything"] },
+      { id: "priority", q: "What's your absolute top priority?", options: ["🖤 Perfect black levels", "☀️ Brightness for daylight", "🎮 Gaming performance", "💰 Best value per inch", "🔊 Built-in sound quality", "🎨 Colour accuracy"] },
+    ],
+  },
+  fitness: {
+    label: "Fitness", emoji: "🏋️",
+    image: img("photo-1517836357463-d25dfeac3438"),
+    questions: [
+      { id: "goal", q: "What's your primary fitness goal?", options: ["💪 Build muscle & strength", "🏃 Lose weight & cardio", "🧘 Flexibility & mindfulness", "🏊 Athletic performance", "❤️ General health & longevity", "🔄 Maintain current fitness"] },
+      { id: "location", q: "Where do you plan to work out?", options: ["🏠 Home gym", "🏋️ Commercial gym", "🌳 Outdoors", "Mixed (home + gym)", "I travel frequently"] },
+      { id: "budget", q: "What's your equipment budget?", options: ["Under $100", "$100–$500", "$500–$1,500", "$1,500–$5,000", "$5,000+"] },
+      { id: "experience", q: "What's your fitness experience level?", options: ["Complete beginner", "Some experience (1–2 years)", "Intermediate (3–5 years)", "Advanced (5+ years)", "Former athlete"] },
+      { id: "time", q: "How much time can you commit per week?", options: ["1–2 hours", "3–4 hours", "5–7 hours", "8–10 hours", "10+ hours"] },
+      { id: "injuries", q: "Do you have any physical limitations?", options: ["No limitations", "Knee / lower body issues", "Back problems", "Shoulder / upper body issues", "Cardiovascular concerns", "Multiple issues — need low impact"] },
+      { id: "equipment", q: "What equipment do you already own?", options: ["Nothing yet", "Basic dumbbells", "Resistance bands", "Barbell & weights", "Cardio machine (treadmill/bike)", "Full home gym setup"] },
+      { id: "motivation", q: "What keeps you motivated?", options: ["Tracking progress & data", "Classes & community", "Competition & challenges", "Solo & self-directed", "Online coaching & apps", "Partner workouts"] },
+      { id: "priority_feature", q: "Which matters most to you?", options: ["Fast visible results", "Long-term sustainability", "Minimum time investment", "Maximum calorie burn", "Building strength specifically", "Mental health & stress relief"] },
+    ],
+  },
+  pet: {
+    label: "Pet", emoji: "🐕",
+    image: img("photo-1587300003388-59208cc962cb"),
+    questions: [
+      { id: "type", q: "What type of pet are you considering?", options: ["🐕 Dog", "🐱 Cat", "🐠 Fish / Aquatic", "🐦 Bird", "🐹 Small animal (hamster, rabbit)", "🦎 Reptile", "Surprise me — recommend based on my lifestyle"] },
+      { id: "living", q: "What's your living situation?", options: ["Large house with garden", "House without garden", "Large apartment", "Small apartment / studio", "Shared housing"] },
+      { id: "activity", q: "How active is your lifestyle?", options: ["Very active (daily sport, hiking)", "Moderately active (regular walks)", "Lightly active (occasional walks)", "Sedentary (mostly indoors)"] },
+      { id: "time", q: "How much time can you give daily to a pet?", options: ["Less than 1 hour", "1–2 hours", "2–4 hours", "4+ hours", "I work from home — lots of time"] },
+      { id: "allergies", q: "Any allergy concerns?", options: ["No allergies", "Mild — prefer hypoallergenic", "Severe — need hypoallergenic", "Unknown"] },
+      { id: "experience", q: "What's your pet ownership experience?", options: ["First pet ever", "Had pets as a child", "Some adult experience", "Experienced owner", "Professional / breeder level"] },
+      { id: "budget", q: "What's your monthly pet budget?", options: ["Under $50", "$50–$150", "$150–$300", "$300–$600", "$600+"] },
+      { id: "family", q: "Who else is in your household?", options: ["Just me", "Partner / adult couple", "Family with young children (under 6)", "Family with older children", "Elderly family members", "Other pets already"] },
+      { id: "priority", q: "What matters most to you in a pet?", options: ["Affectionate & cuddly", "Low maintenance", "Playful & energetic", "Intelligent & trainable", "Quiet & calm", "Unique & conversation-starting"] },
+    ],
+  },
+  career: {
+    label: "Career", emoji: "💼",
+    image: img("photo-1454165804606-c3d57bc86b40"),
+    questions: [
+      { id: "situation", q: "What's your current career situation?", options: ["🎓 Recent graduate / entry level", "💼 Mid-career looking for change", "🚀 Seeking promotion", "🌍 Want to relocate", "🆓 Want to go freelance", "📚 Want to upskill / retrain"] },
+      { id: "industry", q: "What industry are you in or targeting?", options: ["Technology & Software", "Finance & Banking", "Healthcare & Medical", "Marketing & Creative", "Engineering & Manufacturing", "Education & Research", "Other / Undecided"] },
+      { id: "salary_goal", q: "What's your salary target?", options: ["Under $40k", "$40k–$70k", "$70k–$100k", "$100k–$150k", "$150k–$250k", "$250k+"] },
+      { id: "work_style", q: "What work style do you prefer?", options: ["Fully remote", "Hybrid (2–3 days office)", "Full office — I like the structure", "Flexible / freelance", "International travel required"] },
+      { id: "priority", q: "What's your top career priority right now?", options: ["💰 Maximum salary", "🌱 Learning & growth", "⚖️ Work-life balance", "🎯 Job security", "🌍 Impact & purpose", "🏆 Prestige & recognition"] },
+      { id: "skills", q: "What are your strongest skills?", options: ["Technical / coding / engineering", "Analytical / data / finance", "Communication / leadership", "Creative / design / writing", "Sales / business development", "Operations / project management"] },
+      { id: "education", q: "What's your education level?", options: ["High school", "Some college", "Bachelor's degree", "Master's degree", "PhD / Doctorate", "Self-taught / bootcamp"] },
+      { id: "timeline", q: "What's your timeline for making a change?", options: ["Immediately — urgent", "Within 3 months", "3–6 months", "6–12 months", "Exploring / no rush"] },
+      { id: "obstacle", q: "What's your biggest career obstacle?", options: ["Lack of experience", "Wrong industry / field", "Salary negotiation", "Interview skills", "Network & connections", "Visa / immigration", "Confidence & imposter syndrome"] },
+    ],
+  },
+  dining: {
+    label: "Dining Out", emoji: "🍽️",
+    image: img("photo-1414235077428-338989a2e8c0"),
+    questions: [
+      { id: "occasion", q: "What's the occasion?", options: ["💑 Romantic date night", "👨‍👩‍👧 Family dinner", "🎉 Birthday / celebration", "💼 Business lunch / dinner", "👫 Casual friends gathering", "🧘 Solo dining experience"] },
+      { id: "cuisine", q: "What cuisine are you in the mood for?", options: ["🇮🇹 Italian / Mediterranean", "🇯🇵 Japanese / Sushi", "🥩 Steakhouse", "🌮 Mexican / Latin", "🍛 Indian / Asian", "🐟 Seafood", "Surprise me"] },
+      { id: "budget", q: "What's your budget per person?", options: ["Under $20", "$20–$40", "$40–$75", "$75–$150", "$150+"] },
+      { id: "atmosphere", q: "What atmosphere are you looking for?", options: ["Intimate & quiet", "Lively & buzzing", "Outdoor / terrace", "Rooftop", "Casual & relaxed", "Formal fine dining"] },
+      { id: "dietary", q: "Any dietary requirements?", options: ["None", "Vegetarian", "Vegan", "Gluten-free", "Halal", "Kosher", "Multiple requirements"] },
+      { id: "location_pref", q: "Location preference?", options: ["City centre / downtown", "Neighbourhood gem", "Waterfront / view", "Hotel restaurant", "No preference"] },
+      { id: "group_size", q: "How many people?", options: ["Just 1–2", "3–4", "5–8", "9–15", "16+"] },
+      { id: "booking", q: "Do you need a booking?", options: ["Yes — planning ahead", "Walk-in preferred", "Either is fine"] },
+      { id: "priority", q: "What matters most?", options: ["🌟 Michelin stars / awards", "📸 Instagrammable food", "🍷 Wine list", "🎵 Ambiance & music", "⚡ Speed of service", "💰 Value for money"] },
+    ],
+  },
+};
+
+// ── Components ────────────────────────────────────────────
+
+function Badge({ children, color = "#1A56DB" }) {
+  return (
+    <span style={{
+      background: color + "18", color,
+      border: `1px solid ${color}35`,
+      borderRadius: 6, padding: "3px 10px",
+      fontSize: 11, fontWeight: 700,
+      letterSpacing: 0.6, textTransform: "uppercase",
+    }}>{children}</span>
+  );
 }
 
 function LanguageSwitcher({ lang, setLang }) {
   const [open, setOpen] = useState(false);
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
-
   return (
     <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 1000 }}>
       {open && (
         <div style={{
-          position: "absolute", bottom: 52, right: 0,
+          position: "absolute", bottom: 56, right: 0,
           background: "#fff", border: `1px solid ${C.border}`,
-          borderRadius: 14, boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
-          width: 200, maxHeight: 360, overflowY: "auto",
-          padding: "8px 0",
+          borderRadius: 16, boxShadow: C.shadowLg,
+          width: 210, maxHeight: 380, overflowY: "auto", padding: "6px 0",
         }}>
           {LANGUAGES.map(l => (
             <button key={l.code} onClick={() => { setLang(l.code); setOpen(false); }}
               style={{
                 width: "100%", display: "flex", alignItems: "center", gap: 10,
-                padding: "9px 16px", border: "none", cursor: "pointer", textAlign: "left",
+                padding: "9px 16px", border: "none", cursor: "pointer",
                 background: l.code === lang ? C.accentLight : "transparent",
                 color: l.code === lang ? C.accent : C.text,
                 fontSize: 14, fontWeight: l.code === lang ? 700 : 400,
-                transition: "background 0.1s",
-              }}
-              onMouseEnter={e => { if (l.code !== lang) e.currentTarget.style.background = "#F7FAFC"; }}
-              onMouseLeave={e => { if (l.code !== lang) e.currentTarget.style.background = "transparent"; }}>
-              <span style={{ fontSize: 18 }}>{l.flag}</span>
+              }}>
+              <span style={{ fontSize: 20 }}>{l.flag}</span>
               <span>{l.name}</span>
             </button>
           ))}
@@ -310,276 +211,586 @@ function LanguageSwitcher({ lang, setLang }) {
       <button onClick={() => setOpen(!open)} style={{
         display: "flex", alignItems: "center", gap: 8,
         background: C.accent, color: "#fff", border: "none",
-        borderRadius: 12, padding: "10px 16px", cursor: "pointer",
-        fontSize: 14, fontWeight: 700, boxShadow: `0 4px 16px ${C.accent}44`,
+        borderRadius: 14, padding: "11px 18px", cursor: "pointer",
+        fontSize: 14, fontWeight: 700, boxShadow: `0 4px 20px ${C.accent}50`,
         transition: "all 0.2s",
-      }}
-        onMouseEnter={e => e.currentTarget.style.background = C.accentHover}
-        onMouseLeave={e => e.currentTarget.style.background = C.accent}>
+      }}>
         <span style={{ fontSize: 20 }}>{current.flag}</span>
         <span>{current.name}</span>
-        <span style={{ fontSize: 10 }}>{open ? "▲" : "▼"}</span>
+        <span style={{ fontSize: 9, opacity: 0.8 }}>{open ? "▲" : "▼"}</span>
       </button>
     </div>
   );
 }
 
-function TopNav({ onBack, showBack, t, lang, setLang }) {
+function TopNav({ onBack, showBack, t }) {
   return (
-    <div style={{ background: C.accent, padding: "0 24px", boxShadow: "0 2px 8px rgba(0,102,204,0.3)", position: "sticky", top: 0, zIndex: 100 }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", gap: 16, height: 60 }}>
+    <div style={{
+      background: "#fff", borderBottom: `1px solid ${C.border}`,
+      padding: "0 32px", position: "sticky", top: 0, zIndex: 100,
+      boxShadow: "0 1px 0 #E8ECF4",
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", gap: 16, height: 68 }}>
         {showBack && (
-          <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
-            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
-            onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}> ← Back</button>
+          <button onClick={onBack} style={{
+            display: "flex", alignItems: "center", gap: 6,
+            background: "transparent", border: `1px solid ${C.border}`,
+            color: C.textSecondary, borderRadius: 10, padding: "7px 14px",
+            cursor: "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.15s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.accent; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textSecondary; }}>
+            ← Back
+          </button>
         )}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 8, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🧭</div>
-          <span style={{ color: "#fff", fontWeight: 800, fontSize: 18 }}>DecisionPilot</span>
+          <div style={{
+            width: 36, height: 36, borderRadius: 10,
+            background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 18, boxShadow: `0 4px 12px ${C.accent}40`,
+          }}>🧭</div>
+          <span style={{ color: C.text, fontWeight: 800, fontSize: 19, letterSpacing: -0.5 }}>DecisionPilot</span>
         </div>
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ background: "rgba(255,255,255,0.15)", color: "#fff", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 600 }}>🆓 {t.free}</span>
+          <span style={{
+            background: "#ECFDF5", color: "#059669",
+            border: "1px solid #A7F3D0",
+            borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 600,
+          }}>✦ {t?.free || "Free"}</span>
         </div>
       </div>
     </div>
   );
 }
 
-function CategoryGrid({ onSelect, t }) {
-  const [hovered, setHovered] = useState(null);
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16 }}>
-      {CATEGORIES.map((cat) => (
-        <button key={cat.id} onClick={() => onSelect(cat.id)}
-          onMouseEnter={() => setHovered(cat.id)} onMouseLeave={() => setHovered(null)}
-          style={{ background: C.card, border: `2px solid ${hovered === cat.id ? cat.color : C.border}`, borderRadius: 14, overflow: "hidden", cursor: "pointer", transition: "all 0.2s", transform: hovered === cat.id ? "translateY(-3px)" : "translateY(0)", boxShadow: hovered === cat.id ? `0 8px 24px ${cat.color}22` : C.shadow, padding: 0, textAlign: "left" }}>
-          <div style={{ height: 100, backgroundImage: `url(${cat.image})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
-            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(to bottom, transparent 40%, ${cat.color}CC)` }} />
-            <div style={{ position: "absolute", bottom: 8, left: 10, fontSize: 24 }}>{cat.emoji}</div>
-          </div>
-          <div style={{ padding: "12px 12px 14px" }}>
-            <div style={{ color: C.text, fontWeight: 700, fontSize: 14, marginBottom: 3 }}>{cat.label}</div>
-            <div style={{ color: C.muted, fontSize: 12 }}>{cat.desc}</div>
-          </div>
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function OptionCard({ opt, onClick }) {
+function CategoryCard({ cat, onClick }) {
   const [hovered, setHovered] = useState(false);
   return (
-    <button onClick={onClick} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{ background: C.card, border: `2px solid ${hovered ? C.accent : C.border}`, borderRadius: 14, overflow: "hidden", cursor: "pointer", transition: "all 0.2s", transform: hovered ? "translateY(-2px)" : "translateY(0)", boxShadow: hovered ? `0 6px 20px ${C.accent}22` : C.shadow, padding: 0, textAlign: "left", width: "100%" }}>
-      {opt.image && (
-        <div style={{ height: 140, backgroundImage: `url(${opt.image})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5))" }} />
-        </div>
-      )}
-      <div style={{ padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ color: C.text, fontWeight: 700, fontSize: 15 }}>{opt.label}</span>
-        <span style={{ color: C.accent, fontSize: 20 }}>›</span>
+    <button onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: C.card, border: `1.5px solid ${hovered ? cat.color : C.border}`,
+        borderRadius: 18, overflow: "hidden", cursor: "pointer",
+        transition: "all 0.25s cubic-bezier(.4,0,.2,1)",
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+        boxShadow: hovered ? `0 16px 40px ${cat.color}25` : C.shadow,
+        padding: 0, textAlign: "left",
+      }}>
+      <div style={{
+        height: 130,
+        backgroundImage: `url(${cat.image})`,
+        backgroundSize: "cover", backgroundPosition: "center",
+        position: "relative",
+      }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          background: `linear-gradient(160deg, transparent 30%, ${cat.color}DD 100%)`,
+        }} />
+        <div style={{ position: "absolute", top: 12, left: 12, fontSize: 28 }}>{cat.emoji}</div>
+        {hovered && (
+          <div style={{
+            position: "absolute", bottom: 10, right: 10,
+            background: cat.color, color: "#fff",
+            borderRadius: 8, padding: "4px 10px", fontSize: 11, fontWeight: 700,
+          }}>Start →</div>
+        )}
+      </div>
+      <div style={{ padding: "14px 16px 16px" }}>
+        <div style={{ color: C.text, fontWeight: 700, fontSize: 15, marginBottom: 3 }}>{cat.label}</div>
+        <div style={{ color: C.muted, fontSize: 12, lineHeight: 1.5 }}>{cat.desc}</div>
       </div>
     </button>
   );
 }
 
-function ResultCard({ pick, index, t }) {
-  const colors = [C.accent, "#7C3AED", "#38A169"];
-  const c = colors[index % 3];
-  const [hovered, setHovered] = useState(false);
+function QuestionScreen({ category, onComplete, onBack, t }) {
+  const tree = TREES[category];
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [selected, setSelected] = useState(null);
+  const [animKey, setAnimKey] = useState(0);
+
+  const question = tree.questions[step];
+  const total = tree.questions.length;
+  const progress = ((step) / total) * 100;
+
+  function handleSelect(option) {
+    setSelected(option);
+    setTimeout(() => {
+      const newAnswers = { ...answers, [question.id]: option };
+      setAnswers(newAnswers);
+      setSelected(null);
+      if (step < total - 1) {
+        setStep(s => s + 1);
+        setAnimKey(k => k + 1);
+      } else {
+        onComplete(newAnswers);
+      }
+    }, 220);
+  }
+
   return (
-    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{ background: C.card, border: `1px solid ${hovered ? c + "44" : C.border}`, borderRadius: 14, overflow: "hidden", marginBottom: 12, transition: "all 0.2s", boxShadow: hovered ? C.shadowMd : C.shadow }}>
-      {pick.image && (
-        <div style={{ height: 160, backgroundImage: `url(${pick.image})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.6))" }} />
-          <div style={{ position: "absolute", bottom: 12, left: 16, right: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ color: "#fff", fontWeight: 800, fontSize: 17, textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>{pick.name}</span>
-            <Badge color="#fff">{pick.tag}</Badge>
+    <div style={{ minHeight: "100vh", background: C.bg }}>
+      {/* Hero image bar */}
+      <div style={{
+        height: 180,
+        backgroundImage: `url(${tree.image})`,
+        backgroundSize: "cover", backgroundPosition: "center",
+        position: "relative",
+      }}>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.65))" }} />
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+          {/* Progress bar */}
+          <div style={{ height: 3, background: "rgba(255,255,255,0.2)" }}>
+            <div style={{ height: "100%", width: `${progress}%`, background: "#fff", transition: "width 0.4s ease" }} />
           </div>
         </div>
-      )}
-      <div style={{ padding: "16px 18px" }}>
-        {!pick.image && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-            <span style={{ color: C.text, fontWeight: 800, fontSize: 16 }}>{pick.name}</span>
-            <Badge color={c}>{pick.tag}</Badge>
+        <div style={{ position: "absolute", bottom: 20, left: 32, display: "flex", alignItems: "center", gap: 10 }}>
+          <button onClick={onBack} style={{
+            background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.3)", color: "#fff",
+            borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 13, fontWeight: 600,
+          }}>← Back</button>
+          <span style={{ color: "rgba(255,255,255,0.8)", fontSize: 13, fontWeight: 500 }}>
+            {tree.emoji} {tree.label} · Question {step + 1} of {total}
+          </span>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px" }}>
+        <div key={animKey} style={{ animation: "fadeUp 0.35s ease" }}>
+          <h2 style={{
+            color: C.text, fontSize: "clamp(22px, 3.5vw, 32px)",
+            fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.25,
+            marginBottom: 36, textAlign: "center",
+          }}>
+            {question.q}
+          </h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {question.options.map((opt, i) => (
+              <button key={opt} onClick={() => handleSelect(opt)}
+                style={{
+                  background: selected === opt ? C.accentLight : C.card,
+                  border: `1.5px solid ${selected === opt ? C.accent : C.border}`,
+                  borderRadius: 14, padding: "16px 22px",
+                  textAlign: "left", cursor: "pointer",
+                  color: selected === opt ? C.accent : C.text,
+                  fontSize: 15, fontWeight: selected === opt ? 700 : 500,
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  transition: "all 0.15s",
+                  boxShadow: selected === opt ? `0 4px 16px ${C.accent}22` : C.shadow,
+                  animation: `fadeUp 0.3s ease ${i * 0.04}s both`,
+                }}
+                onMouseEnter={e => { if (selected !== opt) { e.currentTarget.style.borderColor = C.accent + "66"; e.currentTarget.style.transform = "translateX(4px)"; } }}
+                onMouseLeave={e => { if (selected !== opt) { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.transform = "translateX(0)"; } }}>
+                <span>{opt}</span>
+                {selected === opt
+                  ? <span style={{ color: C.accent, fontSize: 18 }}>✓</span>
+                  : <span style={{ color: C.muted, fontSize: 18 }}>›</span>
+                }
+              </button>
+            ))}
           </div>
-        )}
-        <p style={{ color: C.textSecondary, fontSize: 14, margin: "0 0 12px", lineHeight: 1.6 }}>{pick.desc}</p>
-        <a href={pick.link} target="_blank" rel="noopener noreferrer"
-          style={{ display: "inline-flex", alignItems: "center", gap: 6, background: c, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", padding: "8px 18px", borderRadius: 8 }}
-          onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-          onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-          {t.view_deals || "View deals →"}
-        </a>
+
+          {/* Skip */}
+          <div style={{ textAlign: "center", marginTop: 24 }}>
+            <button onClick={() => handleSelect("No preference")}
+              style={{ background: "none", border: "none", color: C.muted, fontSize: 13, cursor: "pointer", textDecoration: "underline" }}>
+              Skip this question
+            </button>
+          </div>
+        </div>
+      </div>
+      <style>{`@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }`}</style>
+    </div>
+  );
+}
+
+function LoadingScreen({ category }) {
+  const tree = TREES[category];
+  const [step, setStep] = useState(0);
+  const steps = [
+    `Analyzing your ${tree?.label?.toLowerCase()} preferences...`,
+    "Searching trusted review sources...",
+    "Comparing top options worldwide...",
+    "Calculating best matches for you...",
+    "Almost ready — finalizing recommendations...",
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => setStep(s => Math.min(s + 1, steps.length - 1)), 1200);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div style={{
+      minHeight: "100vh", background: C.bg,
+      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      padding: 32,
+    }}>
+      <div style={{ textAlign: "center", maxWidth: 480 }}>
+        <div style={{ fontSize: 64, marginBottom: 32, animation: "spin 3s linear infinite" }}>{tree?.emoji || "🧭"}</div>
+        <h2 style={{ color: C.text, fontSize: 28, fontWeight: 800, marginBottom: 12, letterSpacing: -0.5 }}>
+          Finding your perfect {tree?.label?.toLowerCase()}...
+        </h2>
+        <p style={{ color: C.textSecondary, fontSize: 16, marginBottom: 48, lineHeight: 1.6 }}>
+          Our AI is analyzing thousands of reviews from CNET, TechRadar, Wirecutter, and more.
+        </p>
+
+        {/* Progress steps */}
+        <div style={{ textAlign: "left", background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadowMd }}>
+          {steps.map((s, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", gap: 12,
+              padding: "8px 0", opacity: i <= step ? 1 : 0.3,
+              transition: "opacity 0.5s",
+            }}>
+              <div style={{
+                width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
+                background: i < step ? C.success : i === step ? C.accent : C.border,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 11, color: "#fff", fontWeight: 700,
+                transition: "background 0.5s",
+              }}>
+                {i < step ? "✓" : i + 1}
+              </div>
+              <span style={{ color: i <= step ? C.text : C.muted, fontSize: 14, fontWeight: i === step ? 600 : 400 }}>{s}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <style>{`@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
+    </div>
+  );
+}
+
+function RecommendationCard({ pick, index }) {
+  const [hovered, setHovered] = useState(false);
+  const badgeColors = [C.gold, C.accent, C.success, C.purple, "#DC2626"];
+  const c = badgeColors[index];
+
+  return (
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{
+        background: C.card, borderRadius: 20,
+        border: `1.5px solid ${hovered ? c + "55" : C.border}`,
+        boxShadow: hovered ? `0 16px 48px ${c}18` : C.shadow,
+        overflow: "hidden", transition: "all 0.25s cubic-bezier(.4,0,.2,1)",
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
+        marginBottom: 20,
+        animation: `fadeUp 0.4s ease ${index * 0.1}s both`,
+      }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {/* Header */}
+        <div style={{
+          background: `linear-gradient(135deg, ${c}12, ${c}05)`,
+          borderBottom: `1px solid ${c}22`,
+          padding: "20px 24px",
+          display: "flex", alignItems: "center", gap: 14,
+        }}>
+          <div style={{
+            width: 44, height: 44, borderRadius: 12,
+            background: `linear-gradient(135deg, ${c}, ${c}CC)`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#fff", fontSize: 18, fontWeight: 900, flexShrink: 0,
+          }}>
+            {index + 1}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
+              <span style={{ color: C.text, fontWeight: 800, fontSize: 18 }}>{pick.name}</span>
+              <Badge color={c}>{pick.badge}</Badge>
+            </div>
+            <div style={{ color: C.muted, fontSize: 13, fontWeight: 500 }}>{pick.price}</div>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div style={{ padding: "20px 24px" }}>
+          {/* Why this for you */}
+          <div style={{
+            background: C.accentLight, borderRadius: 10, padding: "12px 16px",
+            marginBottom: 16, borderLeft: `3px solid ${C.accent}`,
+          }}>
+            <span style={{ color: C.accent, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>Why this for you · </span>
+            <span style={{ color: C.textSecondary, fontSize: 14, lineHeight: 1.6 }}>{pick.why}</span>
+          </div>
+
+          {/* Pros / Cons */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+            <div>
+              <div style={{ color: C.success, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>✓ Pros</div>
+              {pick.pros?.map((p, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 5 }}>
+                  <span style={{ color: C.success, fontSize: 13, marginTop: 1, flexShrink: 0 }}>✓</span>
+                  <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
+                </div>
+              ))}
+            </div>
+            <div>
+              <div style={{ color: "#DC2626", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>✗ Cons</div>
+              {pick.cons?.map((p, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 5 }}>
+                  <span style={{ color: "#DC2626", fontSize: 13, marginTop: 1, flexShrink: 0 }}>✗</span>
+                  <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+            <span style={{ color: C.muted, fontSize: 12 }}>Source: {pick.source}</span>
+            <a href={pick.link} target="_blank" rel="noopener noreferrer"
+              style={{
+                background: c, color: "#fff", textDecoration: "none",
+                padding: "9px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+                display: "inline-flex", alignItems: "center", gap: 6,
+                transition: "opacity 0.15s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+              View deal →
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
+function ResultsScreen({ category, answers, onRestart, onBack, t }) {
+  const tree = TREES[category];
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchRecs() {
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mode: "tree_result", category, answers }),
+        });
+        const result = await response.json();
+        if (result.type === "recommendations") {
+          setData(result.data);
+        } else {
+          setError("Could not load recommendations. Please try again.");
+        }
+      } catch {
+        setError("Connection error. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchRecs();
+  }, []);
+
+  if (loading) return <LoadingScreen category={category} />;
+
+  if (error) return (
+    <div style={{ minHeight: "100vh", background: C.bg, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 16 }}>
+      <div style={{ fontSize: 48 }}>😕</div>
+      <p style={{ color: C.text, fontSize: 18, fontWeight: 600 }}>{error}</p>
+      <button onClick={onRestart} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 24px", cursor: "pointer", fontSize: 15, fontWeight: 700 }}>Try Again</button>
+    </div>
+  );
+
+  return (
+    <div style={{ minHeight: "100vh", background: C.bg }}>
+      {/* Hero */}
+      <div style={{
+        height: 200, backgroundImage: `url(${tree.image})`,
+        backgroundSize: "cover", backgroundPosition: "center", position: "relative",
+      }}>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7))" }} />
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, maxWidth: 800, margin: "0 auto", padding: "0 24px 28px" }}>
+          <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 13, fontWeight: 600, marginBottom: 12 }}>← Back</button>
+          <h1 style={{ color: "#fff", fontSize: "clamp(20px, 3.5vw, 28px)", fontWeight: 900, margin: 0, letterSpacing: -0.5, textShadow: "0 2px 12px rgba(0,0,0,0.4)" }}>{data?.title}</h1>
+          {data?.subtitle && <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 14, margin: "6px 0 0", lineHeight: 1.5 }}>{data.subtitle}</p>}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px 80px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <span style={{ color: C.muted, fontSize: 13 }}>Powered by AI · Sources: CNET, TechRadar, Wirecutter & more</span>
+          </div>
+          <button onClick={onRestart} style={{ background: C.accentLight, color: C.accent, border: `1px solid ${C.accent}33`, borderRadius: 10, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700 }}>
+            🔄 Start over
+          </button>
+        </div>
+
+        {data?.picks?.map((pick, i) => <RecommendationCard key={i} pick={pick} index={i} />)}
+
+        <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
+          <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>Not satisfied with these results? Try our AI chat for a deeper conversation.</p>
+          <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
+            style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
+            🤖 Chat with AI instead
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const CATEGORIES_LIST = [
+  { id: "vacation", label: "Vacation", emoji: "🏖️", desc: "Hotels & destinations worldwide", color: "#1A56DB", image: img("photo-1507525428034-b723cf961d3e") },
+  { id: "phone", label: "Smartphone", emoji: "📱", desc: "Find your perfect device", color: "#7C3AED", image: img("photo-1511707171634-5f897ff02aa9") },
+  { id: "laptop", label: "Laptop", emoji: "💻", desc: "Work, gaming & study", color: "#0891B2", image: img("photo-1496181133206-80ce9b88a853") },
+  { id: "tv", label: "TV", emoji: "📺", desc: "Picture-perfect viewing", color: "#059669", image: img("photo-1593784991095-a205069470b6") },
+  { id: "car", label: "Car", emoji: "🚗", desc: "Electric, sport & family", color: "#DC2626", image: img("photo-1494976388531-d1058494cdd8") },
+  { id: "fitness", label: "Fitness", emoji: "🏋️", desc: "Gym & wellness equipment", color: "#D97706", image: img("photo-1517836357463-d25dfeac3438") },
+  { id: "pet", label: "Pet", emoji: "🐕", desc: "Find your ideal companion", color: "#7C3AED", image: img("photo-1587300003388-59208cc962cb") },
+  { id: "dining", label: "Dining Out", emoji: "🍽️", desc: "Restaurants & experiences", color: "#DB2777", image: img("photo-1414235077428-338989a2e8c0") },
+  { id: "career", label: "Career", emoji: "💼", desc: "Jobs, skills & growth", color: "#1A56DB", image: img("photo-1454165804606-c3d57bc86b40") },
+];
+
 function Landing({ onStart, t, lang, setLang }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
-    const target = 12847;
+    const target = 24891;
     const step = Math.ceil(target / 60);
     const timer = setInterval(() => setCount(c => Math.min(c + step, target)), 16);
     return () => clearInterval(timer);
   }, []);
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg }}>
-      <TopNav showBack={false} t={t} lang={lang} setLang={setLang} />
+    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
+      <TopNav showBack={false} t={t} />
 
       <HeroBanner onStart={onStart} t={t} lang={lang} />
 
       {/* Stats bar */}
-      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "16px 24px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "center", gap: 48, flexWrap: "wrap" }}>
+      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "18px 24px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", justifyContent: "center", gap: 56, flexWrap: "wrap" }}>
           {[
-            { value: `${count.toLocaleString()}+`, label: t.decisions_made },
-            { value: "9", label: t.categories },
-            { value: "100%", label: t.free },
+            { value: `${count.toLocaleString()}+`, label: t?.decisions_made || "Decisions made" },
+            { value: "9", label: t?.categories || "Categories" },
             { value: "30+", label: "Languages" },
+            { value: "100%", label: t?.free || "Free" },
           ].map((s, i) => (
             <div key={i} style={{ textAlign: "center" }}>
-              <div style={{ color: C.accent, fontSize: 22, fontWeight: 900 }}>{s.value}</div>
-              <div style={{ color: C.muted, fontSize: 12, marginTop: 2 }}>{s.label}</div>
+              <div style={{ color: C.accent, fontSize: 24, fontWeight: 900, letterSpacing: -0.5 }}>{s.value}</div>
+              <div style={{ color: C.muted, fontSize: 12, marginTop: 3, fontWeight: 500 }}>{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px 0" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "72px 24px 0" }}>
+
         {/* How it works */}
-        <div style={{ marginBottom: 56 }}>
-          <h2 style={{ color: C.text, fontSize: 24, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>{t.how_title}</h2>
-          <p style={{ color: C.muted, textAlign: "center", marginBottom: 32, fontSize: 15 }}>{t.how_desc}</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
+        <div style={{ marginBottom: 80 }}>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>How it works</div>
+            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.how_title || "Decide smarter, faster"}</h2>
+            <p style={{ color: C.textSecondary, fontSize: 17, maxWidth: 500, margin: "0 auto", lineHeight: 1.65 }}>{t?.how_desc || "Get your personalized answer in under 60 seconds"}</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
             {[
-              { num: "1", icon: "🎯", title: t.step1_title, desc: t.step1_desc },
-              { num: "2", icon: "💬", title: t.step2_title, desc: t.step2_desc },
-              { num: "3", icon: "✨", title: t.step3_title, desc: t.step3_desc },
+              { num: "01", icon: "🎯", title: t?.step1_title || "Choose a category", desc: t?.step1_desc || "Pick from 9 decision categories" },
+              { num: "02", icon: "💬", title: t?.step2_title || "Answer 8–10 questions", desc: t?.step2_desc || "Our AI learns exactly what you need" },
+              { num: "03", icon: "🤖", title: "AI analyzes options", desc: "Searches CNET, Wirecutter, Booking & more in real-time" },
+              { num: "04", icon: "✨", title: t?.step3_title || "Get 5 perfect matches", desc: t?.step3_desc || "Personalized picks with pros, cons & direct links" },
             ].map((s, i) => (
-              <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: "24px 20px", boxShadow: C.shadow, display: "flex", gap: 16, alignItems: "flex-start" }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: C.accent, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, flexShrink: 0 }}>{s.num}</div>
-                <div>
-                  <div style={{ color: C.text, fontWeight: 700, fontSize: 15, marginBottom: 6 }}>{s.icon} {s.title}</div>
-                  <div style={{ color: C.muted, fontSize: 13, lineHeight: 1.6 }}>{s.desc}</div>
-                </div>
+              <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "28px 24px", boxShadow: C.shadow }}>
+                <div style={{ color: C.accent, fontSize: 12, fontWeight: 800, letterSpacing: 1.5, marginBottom: 14, opacity: 0.5 }}>{s.num}</div>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>{s.icon}</div>
+                <div style={{ color: C.text, fontWeight: 700, fontSize: 16, marginBottom: 6 }}>{s.title}</div>
+                <div style={{ color: C.muted, fontSize: 13, lineHeight: 1.6 }}>{s.desc}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Categories */}
-        <div style={{ marginBottom: 0 }}>
-          <h2 style={{ color: C.text, fontSize: 24, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>{t.what_title}</h2>
-          <p style={{ color: C.muted, textAlign: "center", marginBottom: 32, fontSize: 15 }}>{t.what_desc}</p>
-          <CategoryGrid onSelect={(id) => onStart("tree", id)} t={t} />
+        <div style={{ marginBottom: 80 }}>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Categories</div>
+            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.what_title || "What are you deciding today?"}</h2>
+            <p style={{ color: C.textSecondary, fontSize: 17, margin: "0 auto", lineHeight: 1.65 }}>{t?.what_desc || "Click any category to start — no signup required"}</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
+            {CATEGORIES_LIST.map(cat => (
+              <CategoryCard key={cat.id} cat={cat} onClick={() => onStart("tree", cat.id)} />
+            ))}
+          </div>
+        </div>
+
+        {/* AI Chat CTA */}
+        <div style={{ marginBottom: 80 }}>
+          <div style={{
+            background: `linear-gradient(135deg, ${C.accent} 0%, #3B5BDB 50%, #7048E8 100%)`,
+            borderRadius: 24, padding: "52px 40px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            flexWrap: "wrap", gap: 28, boxShadow: `0 20px 60px ${C.accent}30`,
+          }}>
+            <div>
+              <h2 style={{ color: "#fff", fontSize: "clamp(22px, 3.5vw, 34px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 10px" }}>
+                Can't find your category?
+              </h2>
+              <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 16, margin: 0, lineHeight: 1.6, maxWidth: 440 }}>
+                Chat with our AI about any decision — from choosing a university to planning a wedding.
+              </p>
+            </div>
+            <button onClick={() => onStart("chat")} style={{
+              background: "#fff", color: C.accent,
+              border: "none", borderRadius: 14, padding: "16px 32px",
+              fontSize: 16, fontWeight: 800, cursor: "pointer",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s",
+              whiteSpace: "nowrap",
+            }}
+              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
+              onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+              🤖 {t?.btn_chat || "Chat with AI"} →
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Worldwide section with globe */}
-      <div style={{ marginTop: 60 }}>
-        <WorldwideSection t={t} />
-      </div>
+      {/* Worldwide section */}
+      <WorldwideSection t={t} />
 
       {/* Footer */}
-      <div style={{ background: C.text, padding: "32px 24px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 18 }}>🧭</span>
-            <span style={{ color: "#fff", fontWeight: 700 }}>DecisionPilot</span>
-            <span style={{ color: "#718096", fontSize: 13 }}>© 2026</span>
+      <div style={{ background: "#0F172A", padding: "40px 24px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
+            <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>DecisionPilot</span>
+            <span style={{ color: "#475569", fontSize: 13 }}>© 2026</span>
           </div>
-          <span style={{ color: "#718096", fontSize: 12 }}>{t.footer}</span>
+          <span style={{ color: "#475569", fontSize: 12 }}>{t?.footer || "Free forever · No signup · AI-powered · Global"}</span>
         </div>
       </div>
 
       <LanguageSwitcher lang={lang} setLang={setLang} />
-    </div>
-  );
-}
-
-function TreeScreen({ onBack, startId, t, lang, setLang }) {
-  const [path, setPath] = useState(startId ? [startId] : []);
-  const [animKey, setAnimKey] = useState(0);
-  const currentNode = findNode(TREE, path);
-  function choose(optionId) { setPath(p => [...p, optionId]); setAnimKey(k => k + 1); }
-  function back() { if (path.length === 0) { onBack(); return; } setPath(p => p.slice(0, -1)); setAnimKey(k => k + 1); }
-  const hasResult = currentNode?.result;
-
-  return (
-    <div style={{ minHeight: "100vh", background: C.bg }}>
-      <TopNav showBack onBack={back} t={t} lang={lang} setLang={setLang} />
-
-      {currentNode?.image && !hasResult && (
-        <div style={{ height: 200, backgroundImage: `url(${currentNode.image})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6))" }} />
-          <div style={{ position: "absolute", bottom: 24, left: 24, right: 24, maxWidth: 700, margin: "0 auto" }}>
-            <div style={{ fontSize: 40, marginBottom: 8 }}>{currentNode.emoji || "🧭"}</div>
-            <h2 style={{ color: "#fff", fontSize: "clamp(20px, 3vw, 28px)", fontWeight: 900, margin: 0, textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>{currentNode.question}</h2>
-          </div>
-        </div>
-      )}
-
-      <div style={{ maxWidth: 700, margin: "0 auto", padding: "32px 24px 80px" }}>
-        {path.length > 0 && (
-          <div style={{ display: "flex", gap: 4, marginBottom: 28 }}>
-            {path.map((_, i) => <div key={i} style={{ height: 4, flex: 1, borderRadius: 2, background: C.accent }} />)}
-            <div style={{ height: 4, flex: 1, borderRadius: 2, background: C.border }} />
-          </div>
-        )}
-
-        <div key={animKey} style={{ animation: "fadeSlide 0.3s ease" }}>
-          {!hasResult ? (
-            <>
-              {!currentNode?.image && (
-                <div style={{ textAlign: "center", marginBottom: 32 }}>
-                  <div style={{ fontSize: 56, marginBottom: 12 }}>{currentNode?.emoji || "🧭"}</div>
-                  <h2 style={{ color: C.text, fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 900, marginBottom: 8 }}>{currentNode?.question}</h2>
-                  <p style={{ color: C.muted, fontSize: 15 }}>{t.select_option}</p>
-                </div>
-              )}
-              {currentNode?.image && <p style={{ color: C.muted, fontSize: 15, marginBottom: 20, textAlign: "center" }}>{t.select_option}</p>}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
-                {currentNode?.options?.map((opt) => <OptionCard key={opt.id} opt={opt} onClick={() => choose(opt.id)} />)}
-              </div>
-            </>
-          ) : (
-            <>
-              <div style={{ background: C.accentLight, border: `1px solid ${C.accent}33`, borderRadius: 16, padding: "24px", marginBottom: 24, textAlign: "center" }}>
-                <div style={{ fontSize: 40, marginBottom: 10 }}>✨</div>
-                <h2 style={{ color: C.text, fontSize: 22, fontWeight: 900, marginBottom: 8 }}>{currentNode.result.title}</h2>
-                <p style={{ color: C.textSecondary, fontSize: 15, lineHeight: 1.6, margin: 0 }}>{currentNode.result.description}</p>
-              </div>
-              {currentNode.result.picks.map((pick, i) => <ResultCard key={i} pick={pick} index={i} t={t} />)}
-              <button onClick={() => { setPath([]); setAnimKey(k => k + 1); }}
-                style={{ marginTop: 20, width: "100%", background: C.accent, color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
-                onMouseEnter={e => e.currentTarget.style.background = C.accentHover}
-                onMouseLeave={e => e.currentTarget.style.background = C.accent}>
-                {t.another}
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-
-      <LanguageSwitcher lang={lang} setLang={setLang} />
-      <style>{`@keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }`}</style>
     </div>
   );
 }
 
 function ChatScreen({ onBack, t, lang, setLang }) {
-  const [messages, setMessages] = useState([{ role: "assistant", content: `Hi! I'm your DecisionPilot AI. Tell me about any decision — vacation, laptop, TV, car, fitness, pets, dining, phone, or career. 🧭` }]);
+  const [messages, setMessages] = useState([{
+    role: "assistant",
+    content: "Hi! I'm your DecisionPilot AI. Tell me about any decision you're facing — vacation, phone, car, career, fitness, pets, laptop, TV, or anything else. I'll ask a few questions and give you a personalized recommendation. 🧭",
+  }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
+
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
+  useEffect(() => {
+    function handleOpenChat() {}
+    window.addEventListener("openChat", handleOpenChat);
+    return () => window.removeEventListener("openChat", handleOpenChat);
+  }, []);
 
   async function send() {
     const text = input.trim();
@@ -589,7 +800,10 @@ function ChatScreen({ onBack, t, lang, setLang }) {
     setMessages(newMessages);
     setLoading(true);
     try {
-      const response = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.content })), lang }) });
+      const response = await fetch("/api/chat", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.content })), lang }),
+      });
       const data = await response.json();
       setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
     } catch {
@@ -597,64 +811,89 @@ function ChatScreen({ onBack, t, lang, setLang }) {
     } finally { setLoading(false); }
   }
 
-  const suggestions = ["Best beach vacation under $1000", "iPhone vs Samsung 2026", "Best laptop for students", "Should I adopt a cat or dog?"];
+  const suggestions = ["Best beach vacation under $1,000", "iPhone vs Samsung Galaxy 2026", "Best laptop for university students", "Should I get a cat or a dog?"];
 
   return (
-    <div style={{ height: "100vh", background: C.bg, display: "flex", flexDirection: "column" }}>
-      <TopNav showBack onBack={onBack} t={t} lang={lang} setLang={setLang} />
-      <div style={{ flex: 1, overflowY: "auto", padding: "24px", maxWidth: 760, margin: "0 auto", width: "100%" }}>
+    <div style={{ height: "100vh", background: C.bg, display: "flex", flexDirection: "column", fontFamily: "'Inter', system-ui, sans-serif" }}>
+      <TopNav showBack onBack={onBack} t={t} />
+
+      <div style={{ flex: 1, overflowY: "auto", padding: "28px 24px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
         {messages.length === 1 && (
-          <div style={{ marginBottom: 24 }}>
-            <p style={{ color: C.muted, fontSize: 12, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>{t.try_asking}</p>
+          <div style={{ marginBottom: 28 }}>
+            <p style={{ color: C.muted, fontSize: 11, fontWeight: 700, letterSpacing: 1.2, textTransform: "uppercase", marginBottom: 12 }}>{t?.try_asking || "Try asking"}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {suggestions.map((s, i) => (
                 <button key={i} onClick={() => setInput(s)}
-                  style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 20, padding: "7px 14px", color: C.textSecondary, fontSize: 13, cursor: "pointer", boxShadow: C.shadow }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.accent; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textSecondary; }}>
+                  style={{
+                    background: C.card, border: `1px solid ${C.border}`,
+                    borderRadius: 20, padding: "8px 16px", color: C.textSecondary,
+                    fontSize: 13, cursor: "pointer", boxShadow: C.shadow,
+                    transition: "all 0.15s", fontWeight: 500,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.accent; e.currentTarget.style.background = C.accentLight; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textSecondary; e.currentTarget.style.background = C.card; }}>
                   {s}
                 </button>
               ))}
             </div>
           </div>
         )}
+
         {messages.map((m, i) => (
-          <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", marginBottom: 16 }}>
-            {m.role === "assistant" && <div style={{ width: 34, height: 34, borderRadius: 8, flexShrink: 0, background: C.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, marginRight: 10, marginTop: 2 }}>🧭</div>}
-            <div style={{ maxWidth: "78%", padding: "12px 16px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? C.accent : C.card, border: m.role === "user" ? "none" : `1px solid ${C.border}`, color: m.role === "user" ? "#fff" : C.text, fontSize: 14, lineHeight: 1.75, whiteSpace: "pre-wrap", boxShadow: C.shadow }}>{m.content}</div>
+          <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", marginBottom: 18, animation: "fadeUp 0.3s ease" }}>
+            {m.role === "assistant" && (
+              <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, marginRight: 12, marginTop: 2, boxShadow: `0 4px 12px ${C.accent}33` }}>🧭</div>
+            )}
+            <div style={{
+              maxWidth: "78%", padding: "14px 18px",
+              borderRadius: m.role === "user" ? "20px 20px 4px 20px" : "20px 20px 20px 4px",
+              background: m.role === "user" ? `linear-gradient(135deg, ${C.accent}, #3B5BDB)` : C.card,
+              border: m.role === "user" ? "none" : `1px solid ${C.border}`,
+              color: m.role === "user" ? "#fff" : C.text,
+              fontSize: 14, lineHeight: 1.75, whiteSpace: "pre-wrap",
+              boxShadow: m.role === "user" ? `0 4px 16px ${C.accent}33` : C.shadow,
+            }}>{m.content}</div>
           </div>
         ))}
+
         {loading && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: C.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
-            <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: "18px 18px 18px 4px", padding: "12px 16px", boxShadow: C.shadow }}>
-              <div style={{ display: "flex", gap: 4 }}>{[0, 1, 2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />)}</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
+            <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: "20px 20px 20px 4px", padding: "14px 18px", boxShadow: C.shadow }}>
+              <div style={{ display: "flex", gap: 5 }}>
+                {[0, 1, 2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, animation: `bounce 1.2s ease-in-out ${i * 0.18}s infinite` }} />)}
+              </div>
             </div>
           </div>
         )}
         <div ref={bottomRef} />
       </div>
-      <div style={{ background: C.card, borderTop: `1px solid ${C.border}`, padding: "16px 24px", boxShadow: "0 -2px 8px rgba(0,0,0,0.06)" }}>
-        <div style={{ display: "flex", gap: 10, maxWidth: 760, margin: "0 auto" }}>
-          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()} placeholder={t.placeholder}
-            style={{ flex: 1, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: "12px 16px", color: C.text, fontSize: 14, outline: "none", fontFamily: "inherit" }}
+
+      <div style={{ background: C.card, borderTop: `1px solid ${C.border}`, padding: "16px 24px", boxShadow: "0 -4px 20px rgba(15,23,42,0.06)" }}>
+        <div style={{ display: "flex", gap: 10, maxWidth: 800, margin: "0 auto" }}>
+          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
+            placeholder={t?.placeholder || "Ask me anything — vacation, phone, career..."}
+            style={{ flex: 1, background: C.bg, border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "13px 18px", color: C.text, fontSize: 14, outline: "none", fontFamily: "inherit", transition: "border-color 0.15s" }}
             onFocus={e => e.target.style.borderColor = C.accent}
             onBlur={e => e.target.style.borderColor = C.border} />
           <button onClick={send} disabled={loading || !input.trim()}
-            style={{ background: input.trim() ? C.accent : C.border, color: "#fff", border: "none", borderRadius: 10, padding: "12px 20px", cursor: input.trim() ? "pointer" : "default", fontSize: 18 }}
-            onMouseEnter={e => input.trim() && (e.currentTarget.style.background = C.accentHover)}
-            onMouseLeave={e => input.trim() && (e.currentTarget.style.background = C.accent)}>↑</button>
+            style={{ background: input.trim() ? `linear-gradient(135deg, ${C.accent}, #3B5BDB)` : C.border, color: "#fff", border: "none", borderRadius: 12, padding: "13px 22px", cursor: input.trim() ? "pointer" : "default", fontSize: 18, boxShadow: input.trim() ? `0 4px 16px ${C.accent}44` : "none", transition: "all 0.15s" }}>↑</button>
         </div>
       </div>
+
       <LanguageSwitcher lang={lang} setLang={setLang} />
-      <style>{`@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }`}</style>
+      <style>{`
+        @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+      `}</style>
     </div>
   );
 }
 
 export default function App() {
   const [screen, setScreen] = useState("landing");
-  const [startId, setStartId] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [answers, setAnswers] = useState(null);
   const [lang, setLang] = useState("en");
 
   useEffect(() => {
@@ -662,11 +901,39 @@ export default function App() {
     setLang(detected);
   }, []);
 
+  useEffect(() => {
+    function handleOpenChat() { setScreen("chat"); }
+    window.addEventListener("openChat", handleOpenChat);
+    return () => window.removeEventListener("openChat", handleOpenChat);
+  }, []);
+
   const t = getTranslation(lang);
 
-  function handleStart(mode, id = null) { setStartId(id); setScreen(mode); }
+  function handleStart(mode, id = null) {
+    if (mode === "tree" && id) { setCategory(id); setScreen("questions"); }
+    else if (mode === "chat") { setScreen("chat"); }
+    else { setScreen("landing"); }
+  }
 
-  if (screen === "tree") return <TreeScreen onBack={() => setScreen("landing")} startId={startId} t={t} lang={lang} setLang={setLang} />;
+  if (screen === "questions" && category) {
+    return <QuestionScreen
+      category={category}
+      onComplete={(ans) => { setAnswers(ans); setScreen("results"); }}
+      onBack={() => setScreen("landing")}
+      t={t}
+    />;
+  }
+
+  if (screen === "results" && category && answers) {
+    return <ResultsScreen
+      category={category}
+      answers={answers}
+      onRestart={() => { setAnswers(null); setScreen("questions"); }}
+      onBack={() => { setAnswers(null); setScreen("questions"); }}
+      t={t}
+    />;
+  }
+
   if (screen === "chat") return <ChatScreen onBack={() => setScreen("landing")} t={t} lang={lang} setLang={setLang} />;
   return <Landing onStart={handleStart} t={t} lang={lang} setLang={setLang} />;
 }
