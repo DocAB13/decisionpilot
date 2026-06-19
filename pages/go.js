@@ -1,13 +1,19 @@
-export default function handler(req, res) {
-  const { url } = req.query;
-  if (!url) return res.redirect('/');
+export default function Go({ url }) {
+  return null;
+}
+
+export async function getServerSideProps({ query }) {
+  const { url } = query;
   
+  if (!url) {
+    return { redirect: { destination: '/', permanent: false } };
+  }
+
   try {
-    const decoded = decodeURIComponent(url);
-    const amazonUrl = new URL(decoded);
+    const amazonUrl = new URL(decodeURIComponent(url));
     amazonUrl.searchParams.set('tag', 'decisionpilot-20');
-    res.redirect(301, amazonUrl.toString());
+    return { redirect: { destination: amazonUrl.toString(), permanent: false } };
   } catch {
-    res.redirect('/');
+    return { redirect: { destination: '/', permanent: false } };
   }
 }
