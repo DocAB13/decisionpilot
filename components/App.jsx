@@ -1,24 +1,39 @@
 import { useState, useEffect, useRef } from "react";
 
 const C = {
-  bg: "#07070F", surface: "#0F0F1A", card: "#13131F", border: "#1E1E35",
-  accent: "#7C6AF7", accentGlow: "#7C6AF722", gold: "#F0B429", goldGlow: "#F0B42915",
-  text: "#F0EFF8", muted: "#6B6A85", success: "#34D399", danger: "#F87171",
+  bg: "#F5F7FA",
+  surface: "#FFFFFF",
+  card: "#FFFFFF",
+  border: "#E2E8F0",
+  borderHover: "#CBD5E1",
+  accent: "#0066CC",
+  accentLight: "#EBF4FF",
+  accentHover: "#0052A3",
+  gold: "#F59E0B",
+  text: "#1A202C",
+  textSecondary: "#4A5568",
+  muted: "#718096",
+  success: "#38A169",
+  successLight: "#F0FFF4",
+  danger: "#E53E3E",
+  shadow: "0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)",
+  shadowMd: "0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06)",
+  shadowLg: "0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05)",
 };
 
 function amz(k) { return `/go?url=${encodeURIComponent(`https://www.amazon.com/s?k=${encodeURIComponent(k)}`)}` }
 function bkg(ss) { return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(ss)}&aid=decisionpilot` }
 
 const CATEGORIES = [
-  { id: "vacation", label: "Vacation", emoji: "🏖️", desc: "Hotels & destinations" },
-  { id: "phone", label: "Smartphone", emoji: "📱", desc: "Find your perfect phone" },
-  { id: "laptop", label: "Laptop", emoji: "💻", desc: "Work, gaming, study" },
-  { id: "tv", label: "TV", emoji: "📺", desc: "Picture perfect viewing" },
-  { id: "car", label: "Car", emoji: "🚗", desc: "Electric, sport, family" },
-  { id: "fitness", label: "Fitness", emoji: "🏋️", desc: "Gym & wellness gear" },
-  { id: "pet", label: "Pet", emoji: "🐕", desc: "Find your companion" },
-  { id: "dining", label: "Dining Out", emoji: "🍽️", desc: "Restaurants & delivery" },
-  { id: "career", label: "Career", emoji: "💼", desc: "Jobs & skills" },
+  { id: "vacation", label: "Vacation", emoji: "🏖️", desc: "Hotels & destinations", color: "#0066CC" },
+  { id: "phone", label: "Smartphone", emoji: "📱", desc: "Find your perfect phone", color: "#7C3AED" },
+  { id: "laptop", label: "Laptop", emoji: "💻", desc: "Work, gaming, study", color: "#0891B2" },
+  { id: "tv", label: "TV", emoji: "📺", desc: "Picture perfect viewing", color: "#059669" },
+  { id: "car", label: "Car", emoji: "🚗", desc: "Electric, sport, family", color: "#DC2626" },
+  { id: "fitness", label: "Fitness", emoji: "🏋️", desc: "Gym & wellness gear", color: "#D97706" },
+  { id: "pet", label: "Pet", emoji: "🐕", desc: "Find your companion", color: "#7C3AED" },
+  { id: "dining", label: "Dining Out", emoji: "🍽️", desc: "Restaurants & delivery", color: "#DB2777" },
+  { id: "career", label: "Career", emoji: "💼", desc: "Jobs & skills", color: "#0066CC" },
 ];
 
 const TREE = {
@@ -123,7 +138,7 @@ const TREE = {
           { name: "Sony Bravia 9", tag: "Best Processing", desc: "Sony's AI processor makes everything look cinematic.", link: amz("Sony Bravia 9") },
         ]}},
         { label: "💰 Best Value", id: "tv_value", result: { title: "Best Value TVs 2026", description: "Great picture without breaking the bank.", picks: [
-          { name: "Hisense U8N", tag: "Best Bang for Buck", desc: "Mini-LED, 144Hz, Dolby Vision. Competes with TVs twice the price.", link: amz("Hisense U8N TV") },
+          { name: "Hisense U8N", tag: "Best Bang for Buck", desc: "Mini-LED, 144Hz, Dolby Vision.", link: amz("Hisense U8N TV") },
           { name: "TCL QM8", tag: "Best Budget QLED", desc: "Quantum dots, excellent brightness, Google TV.", link: amz("TCL QM8 TV") },
           { name: "Amazon Fire TV Omni", tag: "Most Affordable", desc: "Alexa built-in, decent picture, unbeatable price.", link: amz("Amazon Fire TV Omni") },
         ]}},
@@ -168,7 +183,7 @@ const TREE = {
           { name: "Assault AirBike", tag: "Most Intense", desc: "HIIT king. 20 minutes burns as much as an hour of jogging.", link: amz("Assault AirBike") },
         ]}},
         { label: "🧘 Flexibility & Wellness", id: "fitness_wellness", result: { title: "Best Wellness Equipment 2026", description: "Recovery, flexibility, mental health.", picks: [
-          { name: "Manduka PRO Yoga Mat", tag: "Essential", desc: "The last yoga mat you'll ever buy. Worth every penny.", link: amz("Manduka PRO yoga mat") },
+          { name: "Manduka PRO Yoga Mat", tag: "Essential", desc: "The last yoga mat you'll ever buy.", link: amz("Manduka PRO yoga mat") },
           { name: "Theragun Pro", tag: "Best Recovery", desc: "Percussive therapy for muscle recovery. Used by pro athletes.", link: amz("Theragun Pro massage gun") },
           { name: "Hypervolt 2 Pro", tag: "Best Value", desc: "Quieter than Theragun, equally effective, better price.", link: amz("Hypervolt 2 Pro massage gun") },
         ]}},
@@ -193,7 +208,7 @@ const TREE = {
         },
         { label: "🐱 Cat", id: "pet_cat", result: { title: "Best Cat Breeds 2026", description: "Find your perfect feline companion.", picks: [
           { name: "Maine Coon", tag: "Most Sociable", desc: "Dog-like personality, loves people, gentle giant.", link: amz("Maine Coon cat supplies") },
-          { name: "Ragdoll", tag: "Most Relaxed", desc: "Goes limp when held, extremely gentle, perfect indoor cat.", link: amz("Ragdoll cat supplies") },
+          { name: "Ragdoll", tag: "Most Relaxed", desc: "Goes limp when held, extremely gentle.", link: amz("Ragdoll cat supplies") },
           { name: "British Shorthair", tag: "Most Independent", desc: "Calm, dignified, great for busy owners.", link: amz("British Shorthair cat supplies") },
         ]}},
         { label: "🐠 Fish / Other", id: "pet_other", result: { title: "Low Maintenance Pets", description: "Companionship without high commitment.", picks: [
@@ -256,67 +271,73 @@ function findNode(tree, path) {
   return node;
 }
 
-function useTypewriter(text, speed = 30) {
-  const [displayed, setDisplayed] = useState("");
-  useEffect(() => {
-    setDisplayed("");
-    let i = 0;
-    const timer = setInterval(() => {
-      if (i < text.length) { setDisplayed(text.slice(0, i + 1)); i++; }
-      else clearInterval(timer);
-    }, speed);
-    return () => clearInterval(timer);
-  }, [text]);
-  return displayed;
-}
-
-function Orb({ style }) {
-  return <div style={{ position: "absolute", borderRadius: "50%", filter: "blur(100px)", pointerEvents: "none", zIndex: 0, ...style }} />;
-}
-
 function Badge({ children, color = C.accent }) {
-  return <span style={{ background: color + "22", color, border: `1px solid ${color}44`, borderRadius: 20, padding: "2px 10px", fontSize: 11, fontWeight: 700, letterSpacing: 0.8, textTransform: "uppercase" }}>{children}</span>;
+  return (
+    <span style={{
+      background: color + "15", color, border: `1px solid ${color}30`,
+      borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 700,
+      letterSpacing: 0.5, textTransform: "uppercase",
+    }}>{children}</span>
+  );
 }
 
-function GlowButton({ onClick, children, primary, style = {} }) {
-  const [hovered, setHovered] = useState(false);
+function TopNav({ onBack, showBack }) {
   return (
-    <button onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: primary ? `linear-gradient(135deg, ${C.accent} 0%, #9B8BFF 100%)` : "transparent",
-        color: primary ? "#fff" : C.text,
-        border: primary ? "none" : `1px solid ${hovered ? C.accent : C.border}`,
-        borderRadius: 14, padding: "16px 32px", fontSize: 16, fontWeight: 700,
-        cursor: "pointer", transition: "all 0.2s",
-        boxShadow: primary && hovered ? `0 12px 40px ${C.accent}55` : primary ? `0 8px 28px ${C.accent}33` : "none",
-        transform: hovered ? "translateY(-2px)" : "translateY(0)",
-        background: primary ? `linear-gradient(135deg, ${C.accent}, #9B8BFF)` : hovered ? C.accentGlow : "transparent",
-        ...style,
-      }}>{children}</button>
+    <div style={{
+      background: C.accent, padding: "0 24px",
+      boxShadow: "0 2px 8px rgba(0,102,204,0.3)",
+      position: "sticky", top: 0, zIndex: 100,
+    }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", gap: 16, height: 60 }}>
+        {showBack && (
+          <button onClick={onBack} style={{
+            background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)",
+            color: "#fff", borderRadius: 8, padding: "6px 14px", cursor: "pointer",
+            fontSize: 13, fontWeight: 600, transition: "all 0.15s",
+          }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>
+            ← Back
+          </button>
+        )}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{
+            width: 34, height: 34, borderRadius: 8, background: "rgba(255,255,255,0.2)",
+            display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18,
+          }}>🧭</div>
+          <span style={{ color: "#fff", fontWeight: 800, fontSize: 18, letterSpacing: -0.3 }}>DecisionPilot</span>
+        </div>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 8, alignItems: "center" }}>
+          <span style={{
+            background: "rgba(255,255,255,0.15)", color: "#fff",
+            border: "1px solid rgba(255,255,255,0.3)",
+            borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 600,
+          }}>🆓 Free Beta</span>
+        </div>
+      </div>
+    </div>
   );
 }
 
 function CategoryGrid({ onSelect }) {
   const [hovered, setHovered] = useState(null);
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12 }}>
       {CATEGORIES.map((cat) => (
         <button key={cat.id} onClick={() => onSelect(cat.id)}
           onMouseEnter={() => setHovered(cat.id)}
           onMouseLeave={() => setHovered(null)}
           style={{
-            background: hovered === cat.id ? C.accentGlow : C.card,
-            border: `1px solid ${hovered === cat.id ? C.accent + "66" : C.border}`,
-            borderRadius: 16, padding: "20px 16px", cursor: "pointer",
-            transition: "all 0.2s", transform: hovered === cat.id ? "translateY(-3px)" : "translateY(0)",
-            boxShadow: hovered === cat.id ? `0 8px 24px ${C.accent}22` : "none",
-            display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+            background: hovered === cat.id ? cat.color + "08" : C.card,
+            border: `2px solid ${hovered === cat.id ? cat.color : C.border}`,
+            borderRadius: 12, padding: "20px 14px", cursor: "pointer",
+            transition: "all 0.2s", transform: hovered === cat.id ? "translateY(-2px)" : "translateY(0)",
+            boxShadow: hovered === cat.id ? `0 6px 20px ${cat.color}22` : C.shadow,
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textAlign: "center",
           }}>
-          <span style={{ fontSize: 32 }}>{cat.emoji}</span>
-          <span style={{ color: C.text, fontWeight: 700, fontSize: 13 }}>{cat.label}</span>
-          <span style={{ color: C.muted, fontSize: 11, textAlign: "center", lineHeight: 1.4 }}>{cat.desc}</span>
+          <span style={{ fontSize: 34 }}>{cat.emoji}</span>
+          <span style={{ color: C.text, fontWeight: 700, fontSize: 14 }}>{cat.label}</span>
+          <span style={{ color: C.muted, fontSize: 12, lineHeight: 1.4 }}>{cat.desc}</span>
         </button>
       ))}
     </div>
@@ -324,26 +345,32 @@ function CategoryGrid({ onSelect }) {
 }
 
 function ResultCard({ pick, index }) {
-  const colors = [C.gold, C.accent, C.success];
+  const colors = [C.accent, "#7C3AED", C.success];
   const c = colors[index % 3];
   const [hovered, setHovered] = useState(false);
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
-        background: hovered ? `linear-gradient(135deg, ${c}11, ${C.card})` : C.card,
-        border: `1px solid ${hovered ? c + "55" : c + "33"}`,
-        borderRadius: 18, padding: "22px 24px", marginBottom: 12,
-        transition: "all 0.2s", transform: hovered ? "translateY(-3px)" : "translateY(0)",
-        boxShadow: hovered ? `0 12px 32px ${c}22` : `0 4px 16px ${c}11`,
+        background: C.card, border: `1px solid ${hovered ? c + "44" : C.border}`,
+        borderLeft: `4px solid ${c}`,
+        borderRadius: 12, padding: "20px 22px", marginBottom: 10,
+        transition: "all 0.2s", boxShadow: hovered ? C.shadowMd : C.shadow,
       }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 8 }}>
-        <span style={{ color: C.text, fontWeight: 800, fontSize: 17 }}>{pick.name}</span>
+        <span style={{ color: C.text, fontWeight: 800, fontSize: 16 }}>{pick.name}</span>
         <Badge color={c}>{pick.tag}</Badge>
       </div>
-      <p style={{ color: C.muted, fontSize: 14, margin: "0 0 12px", lineHeight: 1.7 }}>{pick.desc}</p>
+      <p style={{ color: C.textSecondary, fontSize: 14, margin: "0 0 12px", lineHeight: 1.6 }}>{pick.desc}</p>
       <a href={pick.link} target="_blank" rel="noopener noreferrer"
-        style={{ display: "inline-flex", alignItems: "center", gap: 6, color: c, fontSize: 13, fontWeight: 700, textDecoration: "none", background: c + "15", padding: "6px 14px", borderRadius: 20, transition: "background 0.15s" }}>
-        View deals <span style={{ fontSize: 16 }}>→</span>
+        style={{
+          display: "inline-flex", alignItems: "center", gap: 6,
+          background: c, color: "#fff", fontSize: 13, fontWeight: 700,
+          textDecoration: "none", padding: "7px 16px", borderRadius: 8,
+          transition: "opacity 0.15s",
+        }}
+        onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+        onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+        View deals →
       </a>
     </div>
   );
@@ -358,98 +385,110 @@ function Landing({ onStart }) {
     return () => clearInterval(timer);
   }, []);
 
-  const headline = useTypewriter("Stop hesitating.", 50);
-
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, position: "relative", overflow: "hidden" }}>
-      <Orb style={{ width: 700, height: 700, background: C.accent, opacity: 0.1, top: -300, left: -200 }} />
-      <Orb style={{ width: 500, height: 500, background: C.gold, opacity: 0.06, top: 200, right: -150 }} />
-      <Orb style={{ width: 400, height: 400, background: C.success, opacity: 0.05, bottom: -100, left: "30%" }} />
+    <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "system-ui, -apple-system, sans-serif" }}>
+      <TopNav showBack={false} />
 
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 960, margin: "0 auto", padding: "0 24px" }}>
-        {/* Nav */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 0", borderBottom: `1px solid ${C.border}` }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 38, height: 38, borderRadius: 11, background: `linear-gradient(135deg, ${C.accent}, ${C.gold})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: `0 4px 16px ${C.accent}44` }}>🧭</div>
-            <span style={{ color: C.text, fontWeight: 900, fontSize: 19, letterSpacing: -0.5 }}>DecisionPilot</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <span style={{ color: C.muted, fontSize: 13 }}>{count.toLocaleString()} decisions made</span>
-            <Badge color={C.gold}>Free Beta</Badge>
-          </div>
-        </div>
-
-        {/* Hero */}
-        <div style={{ textAlign: "center", paddingTop: 100, paddingBottom: 70 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: C.accentGlow, border: `1px solid ${C.accent}44`, borderRadius: 24, padding: "7px 18px", marginBottom: 32, color: C.accent, fontSize: 13, fontWeight: 600 }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: C.success, display: "inline-block", boxShadow: `0 0 8px ${C.success}` }} />
+      {/* Hero */}
+      <div style={{ background: `linear-gradient(135deg, #0055AA 0%, #0077DD 50%, #0099FF 100%)`, padding: "60px 24px 80px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)",
+            borderRadius: 24, padding: "6px 16px", marginBottom: 28,
+            color: "#fff", fontSize: 13, fontWeight: 600,
+          }}>
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ADE80", display: "inline-block" }} />
             AI-Powered Decision Making
           </div>
-
-          <h1 style={{ color: C.text, fontSize: "clamp(40px, 7vw, 76px)", fontWeight: 900, lineHeight: 1.02, letterSpacing: -3, margin: "0 0 8px" }}>
-            {headline || "Stop hesitating."}
+          <h1 style={{ color: "#fff", fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 900, lineHeight: 1.1, letterSpacing: -2, margin: "0 0 16px" }}>
+            Stop hesitating.<br />Start deciding.
           </h1>
-          <h1 style={{ fontSize: "clamp(40px, 7vw, 76px)", fontWeight: 900, lineHeight: 1.02, letterSpacing: -3, margin: "0 0 32px", background: `linear-gradient(135deg, ${C.accent} 0%, ${C.gold} 60%, ${C.success} 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Start deciding.
-          </h1>
-
-          <p style={{ color: C.muted, fontSize: 19, maxWidth: 540, margin: "0 auto 52px", lineHeight: 1.75 }}>
-            Your AI co-pilot for every major decision. Vacations, gadgets, cars, careers — get personalized recommendations in seconds.
+          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 18, maxWidth: 520, margin: "0 auto 40px", lineHeight: 1.7 }}>
+            Your AI co-pilot for every major decision. Vacations, gadgets, cars, careers — personalized recommendations in seconds.
           </p>
-
-          <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", marginBottom: 80 }}>
-            <GlowButton primary onClick={() => onStart("tree")}>🌳 Decision Tree</GlowButton>
-            <GlowButton onClick={() => onStart("chat")}>🤖 Chat with AI</GlowButton>
-          </div>
-
-          {/* Stats */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 48, marginBottom: 80, flexWrap: "wrap" }}>
-            {[
-              { value: "9+", label: "Categories" },
-              { value: "100%", label: "Free to use" },
-              { value: "AI", label: "Powered" },
-            ].map((s, i) => (
-              <div key={i} style={{ textAlign: "center" }}>
-                <div style={{ color: C.text, fontSize: 32, fontWeight: 900, letterSpacing: -1 }}>{s.value}</div>
-                <div style={{ color: C.muted, fontSize: 13, marginTop: 4 }}>{s.label}</div>
-              </div>
-            ))}
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            <button onClick={() => onStart("tree")} style={{
+              background: "#fff", color: C.accent, border: "none",
+              borderRadius: 10, padding: "14px 28px", fontSize: 16, fontWeight: 700,
+              cursor: "pointer", boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+              transition: "all 0.2s",
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.25)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.2)"; }}>
+              🌳 Decision Tree
+            </button>
+            <button onClick={() => onStart("chat")} style={{
+              background: "rgba(255,255,255,0.15)", color: "#fff",
+              border: "2px solid rgba(255,255,255,0.4)",
+              borderRadius: 10, padding: "14px 28px", fontSize: 16, fontWeight: 700,
+              cursor: "pointer", transition: "all 0.2s",
+            }}
+              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
+              onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>
+              🤖 Chat with AI
+            </button>
           </div>
         </div>
+      </div>
+
+      {/* Stats bar */}
+      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "16px 24px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "center", gap: 48, flexWrap: "wrap" }}>
+          {[
+            { value: `${count.toLocaleString()}+`, label: "Decisions made" },
+            { value: "9", label: "Categories" },
+            { value: "100%", label: "Free to use" },
+            { value: "AI", label: "Powered" },
+          ].map((s, i) => (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div style={{ color: C.accent, fontSize: 22, fontWeight: 900 }}>{s.value}</div>
+              <div style={{ color: C.muted, fontSize: 12, marginTop: 2 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "48px 24px 80px" }}>
 
         {/* How it works */}
-        <div style={{ marginBottom: 80 }}>
-          <h2 style={{ color: C.text, fontSize: 28, fontWeight: 800, textAlign: "center", marginBottom: 40, letterSpacing: -0.5 }}>How it works</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20 }}>
+        <div style={{ marginBottom: 56 }}>
+          <h2 style={{ color: C.text, fontSize: 24, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>How it works</h2>
+          <p style={{ color: C.muted, textAlign: "center", marginBottom: 32, fontSize: 15 }}>Get your answer in under 60 seconds</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
             {[
-              { step: "01", icon: "🎯", title: "Choose a category", desc: "Pick what you want to decide — vacation, phone, car, and more." },
-              { step: "02", icon: "💬", title: "Answer questions", desc: "Navigate the tree or chat with AI about your needs and preferences." },
-              { step: "03", icon: "✨", title: "Get your answer", desc: "Receive personalized recommendations with direct links to the best deals." },
+              { num: "1", icon: "🎯", title: "Choose a category", desc: "Pick what you want to decide from our 9 categories." },
+              { num: "2", icon: "💬", title: "Answer questions", desc: "Navigate the tree or chat with AI about your preferences." },
+              { num: "3", icon: "✨", title: "Get recommendations", desc: "Receive personalized picks with direct links to the best deals." },
             ].map((s, i) => (
-              <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 20, padding: "28px 24px" }}>
-                <div style={{ color: C.accent, fontSize: 12, fontWeight: 800, letterSpacing: 2, marginBottom: 12 }}>{s.step}</div>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>{s.icon}</div>
-                <div style={{ color: C.text, fontWeight: 700, fontSize: 15, marginBottom: 8 }}>{s.title}</div>
-                <div style={{ color: C.muted, fontSize: 13, lineHeight: 1.6 }}>{s.desc}</div>
+              <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: "24px 20px", boxShadow: C.shadow, display: "flex", gap: 16, alignItems: "flex-start" }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: C.accent, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, flexShrink: 0 }}>{s.num}</div>
+                <div>
+                  <div style={{ color: C.text, fontWeight: 700, fontSize: 15, marginBottom: 6 }}>{s.icon} {s.title}</div>
+                  <div style={{ color: C.muted, fontSize: 13, lineHeight: 1.6 }}>{s.desc}</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Categories */}
-        <div style={{ marginBottom: 80 }}>
-          <h2 style={{ color: C.text, fontSize: 28, fontWeight: 800, textAlign: "center", marginBottom: 12, letterSpacing: -0.5 }}>What can you decide?</h2>
-          <p style={{ color: C.muted, textAlign: "center", marginBottom: 36, fontSize: 15 }}>Click any category to start immediately</p>
+        <div>
+          <h2 style={{ color: C.text, fontSize: 24, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>What can you decide?</h2>
+          <p style={{ color: C.muted, textAlign: "center", marginBottom: 32, fontSize: 15 }}>Click any category to start immediately — no signup required</p>
           <CategoryGrid onSelect={(id) => onStart("tree", id)} />
         </div>
+      </div>
 
-        {/* Footer */}
-        <div style={{ borderTop: `1px solid ${C.border}`, padding: "32px 0", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+      {/* Footer */}
+      <div style={{ background: C.text, padding: "32px 24px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 16 }}>🧭</span>
-            <span style={{ color: C.muted, fontSize: 13 }}>DecisionPilot © 2026</span>
+            <span style={{ fontSize: 18 }}>🧭</span>
+            <span style={{ color: "#fff", fontWeight: 700 }}>DecisionPilot</span>
+            <span style={{ color: "#718096", fontSize: 13 }}>© 2026</span>
           </div>
-          <span style={{ color: C.muted, fontSize: 12 }}>Free forever · No signup required · AI-powered</span>
+          <span style={{ color: "#718096", fontSize: 12 }}>Free forever · No signup · AI-powered · Global recommendations</span>
         </div>
       </div>
     </div>
@@ -465,76 +504,85 @@ function TreeScreen({ onBack, startId }) {
   const hasResult = currentNode?.result;
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg, position: "relative", overflow: "hidden" }}>
-      <Orb style={{ width: 600, height: 600, background: C.accent, opacity: 0.07, top: -200, right: -200 }} />
-      <Orb style={{ width: 400, height: 400, background: C.gold, opacity: 0.05, bottom: 0, left: -100 }} />
+    <div style={{ minHeight: "100vh", background: C.bg }}>
+      <TopNav showBack onBack={back} />
+      <div style={{ maxWidth: 700, margin: "0 auto", padding: "40px 24px 80px" }}>
 
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 700, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "24px 0", borderBottom: `1px solid ${C.border}`, marginBottom: 48 }}>
-          <button onClick={back} style={{ background: C.card, border: `1px solid ${C.border}`, color: C.muted, borderRadius: 10, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.15s" }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.text; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.muted; }}>
-            ← Back
-          </button>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 16 }}>🧭</span>
-            <span style={{ color: C.text, fontWeight: 800, fontSize: 15 }}>DecisionPilot</span>
+        {/* Progress */}
+        {path.length > 0 && (
+          <div style={{ display: "flex", gap: 6, marginBottom: 32 }}>
+            {path.map((_, i) => (
+              <div key={i} style={{ height: 4, flex: 1, borderRadius: 2, background: i <= path.length - 1 ? C.accent : C.border, transition: "background 0.3s" }} />
+            ))}
+            <div style={{ height: 4, flex: 1, borderRadius: 2, background: C.border }} />
           </div>
-          {path.length > 0 && (
-            <div style={{ marginLeft: "auto", display: "flex", gap: 6, alignItems: "center" }}>
-              {path.map((_, i) => <div key={i} style={{ width: i === path.length - 1 ? 20 : 8, height: 8, borderRadius: 4, background: i === path.length - 1 ? C.accent : C.border, transition: "all 0.3s" }} />)}
-            </div>
-          )}
-        </div>
+        )}
 
-        <div key={animKey} style={{ animation: "fadeIn 0.3s ease", paddingBottom: 80 }}>
+        <div key={animKey} style={{ animation: "fadeSlide 0.3s ease" }}>
           {!hasResult ? (
             <>
               <div style={{ textAlign: "center", marginBottom: 40 }}>
-                <div style={{ fontSize: 56, marginBottom: 16, filter: "drop-shadow(0 4px 16px rgba(124,106,247,0.3))" }}>{currentNode?.emoji || "🧭"}</div>
-                <h2 style={{ color: C.text, fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 900, marginBottom: 10, letterSpacing: -1 }}>{currentNode?.question}</h2>
-                <p style={{ color: C.muted, fontSize: 15 }}>Choose the option that fits you best</p>
+                <div style={{ fontSize: 60, marginBottom: 16 }}>{currentNode?.emoji || "🧭"}</div>
+                <h2 style={{ color: C.text, fontSize: "clamp(22px, 4vw, 32px)", fontWeight: 900, marginBottom: 10, letterSpacing: -0.5 }}>{currentNode?.question}</h2>
+                <p style={{ color: C.muted, fontSize: 15 }}>Select the option that best describes you</p>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {currentNode?.options?.map((opt, i) => (
                   <button key={opt.id} onClick={() => choose(opt.id)}
-                    style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 16, padding: "20px 24px", textAlign: "left", cursor: "pointer", color: C.text, fontSize: 16, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "space-between", transition: "all 0.2s", animation: `slideIn 0.3s ease ${i * 0.05}s both` }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.background = C.accentGlow; e.currentTarget.style.transform = "translateX(6px)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.background = C.card; e.currentTarget.style.transform = "translateX(0)"; }}>
+                    style={{
+                      background: C.card, border: `1px solid ${C.border}`,
+                      borderRadius: 12, padding: "18px 22px", textAlign: "left",
+                      cursor: "pointer", color: C.text, fontSize: 16, fontWeight: 600,
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      transition: "all 0.15s", boxShadow: C.shadow,
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = C.accent;
+                      e.currentTarget.style.background = C.accentLight;
+                      e.currentTarget.style.transform = "translateX(4px)";
+                      e.currentTarget.style.boxShadow = `0 4px 12px ${C.accent}22`;
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = C.border;
+                      e.currentTarget.style.background = C.card;
+                      e.currentTarget.style.transform = "translateX(0)";
+                      e.currentTarget.style.boxShadow = C.shadow;
+                    }}>
                     <span>{opt.label}</span>
-                    <span style={{ color: C.accent, fontSize: 20 }}>→</span>
+                    <span style={{ color: C.accent, fontSize: 18 }}>›</span>
                   </button>
                 ))}
               </div>
             </>
           ) : (
             <>
-              <div style={{ background: `linear-gradient(135deg, ${C.accent}18, ${C.gold}0a)`, border: `1px solid ${C.accent}33`, borderRadius: 24, padding: "32px", marginBottom: 28, textAlign: "center" }}>
-                <div style={{ fontSize: 48, marginBottom: 16 }}>✨</div>
-                <h2 style={{ color: C.text, fontSize: 26, fontWeight: 900, marginBottom: 10, letterSpacing: -0.5 }}>{currentNode.result.title}</h2>
-                <p style={{ color: C.muted, fontSize: 15, lineHeight: 1.7, margin: 0 }}>{currentNode.result.description}</p>
+              <div style={{ background: C.accentLight, border: `1px solid ${C.accent}33`, borderRadius: 16, padding: "28px", marginBottom: 24, textAlign: "center" }}>
+                <div style={{ fontSize: 44, marginBottom: 12 }}>✨</div>
+                <h2 style={{ color: C.text, fontSize: 24, fontWeight: 900, marginBottom: 8 }}>{currentNode.result.title}</h2>
+                <p style={{ color: C.textSecondary, fontSize: 15, lineHeight: 1.6, margin: 0 }}>{currentNode.result.description}</p>
               </div>
               {currentNode.result.picks.map((pick, i) => <ResultCard key={i} pick={pick} index={i} />)}
               <button onClick={() => { setPath([]); setAnimKey(k => k + 1); }}
-                style={{ marginTop: 24, width: "100%", background: `linear-gradient(135deg, ${C.accent}, #9B8BFF)`, color: "#fff", border: "none", borderRadius: 16, padding: "16px", fontSize: 16, fontWeight: 700, cursor: "pointer", boxShadow: `0 8px 24px ${C.accent}44`, transition: "transform 0.15s" }}
-                onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-                onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+                style={{
+                  marginTop: 20, width: "100%", background: C.accent, color: "#fff",
+                  border: "none", borderRadius: 10, padding: "14px", fontSize: 15,
+                  fontWeight: 700, cursor: "pointer", transition: "background 0.15s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = C.accentHover}
+                onMouseLeave={e => e.currentTarget.style.background = C.accent}>
                 Make another decision →
               </button>
             </>
           )}
         </div>
       </div>
-      <style>{`
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-      `}</style>
+      <style>{`@keyframes fadeSlide { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }`}</style>
     </div>
   );
 }
 
 function ChatScreen({ onBack }) {
-  const [messages, setMessages] = useState([{ role: "assistant", content: "Hi! I'm your DecisionPilot AI. Tell me about any decision you're facing — vacation, laptop, TV, car, fitness, pets, dining, phone, or career. I'll ask a few questions and give you a personalized recommendation. 🧭" }]);
+  const [messages, setMessages] = useState([{ role: "assistant", content: "Hi! I'm your DecisionPilot AI. Tell me about any decision — vacation, laptop, TV, car, fitness, pets, dining, phone, or career. I'll ask a few questions and give you a personalized recommendation. 🧭" }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
@@ -560,32 +608,17 @@ function ChatScreen({ onBack }) {
 
   return (
     <div style={{ height: "100vh", background: C.bg, display: "flex", flexDirection: "column" }}>
-      <Orb style={{ width: 400, height: 400, background: C.accent, opacity: 0.06, top: -100, left: -100 }} />
-
-      <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", gap: 12, padding: "16px 24px", borderBottom: `1px solid ${C.border}`, background: C.surface }}>
-        <button onClick={onBack} style={{ background: C.card, border: `1px solid ${C.border}`, color: C.muted, borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>← Back</button>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 9, background: `linear-gradient(135deg, ${C.accent}, ${C.gold})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, boxShadow: `0 4px 12px ${C.accent}44` }}>🧭</div>
-          <div>
-            <div style={{ color: C.text, fontWeight: 800, fontSize: 14 }}>DecisionPilot AI</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 5, marginTop: 1 }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.success, boxShadow: `0 0 6px ${C.success}` }} />
-              <span style={{ color: C.success, fontSize: 11, fontWeight: 600 }}>Online</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style={{ flex: 1, overflowY: "auto", padding: "24px", position: "relative", zIndex: 1 }}>
+      <TopNav showBack onBack={onBack} />
+      <div style={{ flex: 1, overflowY: "auto", padding: "24px", maxWidth: 760, margin: "0 auto", width: "100%" }}>
         {messages.length === 1 && (
           <div style={{ marginBottom: 24 }}>
-            <p style={{ color: C.muted, fontSize: 12, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Try asking about</p>
+            <p style={{ color: C.muted, fontSize: 12, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Try asking</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {suggestions.map((s, i) => (
-                <button key={i} onClick={() => { setInput(s); }}
-                  style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 20, padding: "7px 14px", color: C.muted, fontSize: 13, cursor: "pointer", transition: "all 0.15s" }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.text; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.muted; }}>
+                <button key={i} onClick={() => setInput(s)}
+                  style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 20, padding: "7px 14px", color: C.textSecondary, fontSize: 13, cursor: "pointer", transition: "all 0.15s", boxShadow: C.shadow }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.accent; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textSecondary; }}>
                   {s}
                 </button>
               ))}
@@ -593,36 +626,45 @@ function ChatScreen({ onBack }) {
           </div>
         )}
         {messages.map((m, i) => (
-          <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", marginBottom: 16, animation: "fadeIn 0.3s ease" }}>
-            {m.role === "assistant" && <div style={{ width: 32, height: 32, borderRadius: 9, flexShrink: 0, background: `linear-gradient(135deg, ${C.accent}, ${C.gold})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, marginRight: 10, marginTop: 2, boxShadow: `0 4px 12px ${C.accent}33` }}>🧭</div>}
-            <div style={{ maxWidth: "78%", padding: "13px 17px", borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px", background: m.role === "user" ? `linear-gradient(135deg, ${C.accent}, #9B8BFF)` : C.card, border: m.role === "user" ? "none" : `1px solid ${C.border}`, color: C.text, fontSize: 14, lineHeight: 1.75, whiteSpace: "pre-wrap" }}>{m.content}</div>
+          <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", marginBottom: 16 }}>
+            {m.role === "assistant" && (
+              <div style={{ width: 34, height: 34, borderRadius: 8, flexShrink: 0, background: C.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, marginRight: 10, marginTop: 2 }}>🧭</div>
+            )}
+            <div style={{
+              maxWidth: "78%", padding: "12px 16px",
+              borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+              background: m.role === "user" ? C.accent : C.card,
+              border: m.role === "user" ? "none" : `1px solid ${C.border}`,
+              color: m.role === "user" ? "#fff" : C.text,
+              fontSize: 14, lineHeight: 1.75, whiteSpace: "pre-wrap",
+              boxShadow: C.shadow,
+            }}>{m.content}</div>
           </div>
         ))}
         {loading && (
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 9, background: `linear-gradient(135deg, ${C.accent}, ${C.gold})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>🧭</div>
-            <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: "18px 18px 18px 4px", padding: "14px 18px" }}>
-              <div style={{ display: "flex", gap: 5 }}>{[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />)}</div>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: C.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
+            <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: "18px 18px 18px 4px", padding: "12px 16px", boxShadow: C.shadow }}>
+              <div style={{ display: "flex", gap: 4 }}>{[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />)}</div>
             </div>
           </div>
         )}
         <div ref={bottomRef} />
       </div>
-
-      <div style={{ position: "relative", zIndex: 1, padding: "16px 24px", borderTop: `1px solid ${C.border}`, background: C.surface }}>
-        <div style={{ display: "flex", gap: 10, maxWidth: 700, margin: "0 auto" }}>
-          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()} placeholder="Ask me anything — vacation, phone, career..."
-            style={{ flex: 1, background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: "13px 18px", color: C.text, fontSize: 14, outline: "none", fontFamily: "inherit", transition: "border-color 0.15s" }}
+      <div style={{ background: C.card, borderTop: `1px solid ${C.border}`, padding: "16px 24px", boxShadow: "0 -2px 8px rgba(0,0,0,0.06)" }}>
+        <div style={{ display: "flex", gap: 10, maxWidth: 760, margin: "0 auto" }}>
+          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()}
+            placeholder="Ask me anything — vacation, phone, career..."
+            style={{ flex: 1, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: "12px 16px", color: C.text, fontSize: 14, outline: "none", fontFamily: "inherit", transition: "border-color 0.15s" }}
             onFocus={e => e.target.style.borderColor = C.accent}
             onBlur={e => e.target.style.borderColor = C.border} />
           <button onClick={send} disabled={loading || !input.trim()}
-            style={{ background: input.trim() ? `linear-gradient(135deg, ${C.accent}, #9B8BFF)` : C.card, color: input.trim() ? "#fff" : C.muted, border: "none", borderRadius: 14, padding: "13px 22px", cursor: input.trim() ? "pointer" : "default", fontSize: 18, transition: "all 0.15s", boxShadow: input.trim() ? `0 4px 16px ${C.accent}44` : "none" }}>↑</button>
+            style={{ background: input.trim() ? C.accent : C.border, color: "#fff", border: "none", borderRadius: 10, padding: "12px 20px", cursor: input.trim() ? "pointer" : "default", fontSize: 18, transition: "background 0.15s" }}
+            onMouseEnter={e => input.trim() && (e.currentTarget.style.background = C.accentHover)}
+            onMouseLeave={e => input.trim() && (e.currentTarget.style.background = C.accent)}>↑</button>
         </div>
       </div>
-      <style>{`
-        @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-      `}</style>
+      <style>{`@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }`}</style>
     </div>
   );
 }
