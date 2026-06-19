@@ -1,16 +1,17 @@
 import { useState, useEffect, useRef } from "react";
+import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
+import { HeroBanner, WorldwideSection } from "./HeroBanner";
 
 const C = {
   bg: "#F5F7FA", surface: "#FFFFFF", card: "#FFFFFF", border: "#E2E8F0",
-  borderHover: "#CBD5E1", accent: "#0066CC", accentLight: "#EBF4FF",
-  accentHover: "#0052A3", gold: "#F59E0B", text: "#1A202C",
-  textSecondary: "#4A5568", muted: "#718096", success: "#38A169",
+  accent: "#0066CC", accentLight: "#EBF4FF", accentHover: "#0052A3",
+  text: "#1A202C", textSecondary: "#4A5568", muted: "#718096", success: "#38A169",
   shadow: "0 1px 3px rgba(0,0,0,0.1)", shadowMd: "0 4px 6px rgba(0,0,0,0.07)",
 };
 
 function amz(k) { return `/go?url=${encodeURIComponent(`https://www.amazon.com/s?k=${encodeURIComponent(k)}`)}` }
 function bkg(ss) { return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(ss)}&aid=decisionpilot` }
-function img(id, w=400, h=220) { return `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format` }
+function img(id, w = 400, h = 220) { return `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format` }
 
 const CATEGORIES = [
   { id: "vacation", label: "Vacation", emoji: "🏖️", desc: "Hotels & destinations", color: "#0066CC", image: img("photo-1507525428034-b723cf961d3e") },
@@ -169,19 +170,19 @@ const TREE = {
       image: img("photo-1517836357463-d25dfeac3438"),
       options: [
         { label: "💪 Build Muscle", id: "fitness_muscle", image: img("photo-1534438327276-14e5300c3a48"), result: { title: "Best Home Gym Equipment", description: "Build serious muscle without leaving home.", picks: [
-          { name: "Adjustable Dumbbell Set", tag: "Most Versatile", desc: "Replaces 15 pairs of dumbbells. Bowflex or PowerBlock.", link: amz("adjustable dumbbell set"), image: img("photo-1534438327276-14e5300c3a48") },
-          { name: "Power Rack + Barbell", tag: "Most Effective", desc: "Squat, bench, deadlift. The holy trinity of muscle building.", link: amz("power rack barbell set"), image: img("photo-1517836357463-d25dfeac3438") },
+          { name: "Adjustable Dumbbell Set", tag: "Most Versatile", desc: "Replaces 15 pairs of dumbbells.", link: amz("adjustable dumbbell set"), image: img("photo-1534438327276-14e5300c3a48") },
+          { name: "Power Rack + Barbell", tag: "Most Effective", desc: "Squat, bench, deadlift. The holy trinity.", link: amz("power rack barbell set"), image: img("photo-1517836357463-d25dfeac3438") },
           { name: "Resistance Band Set", tag: "Best Budget", desc: "Surprisingly effective, portable, joint-friendly.", link: amz("resistance band set heavy"), image: img("photo-1571019614242-c5c5dee9f50b") },
         ]}},
-        { label: "🏃 Cardio & Weight Loss", id: "fitness_cardio", image: img("photo-1538805060514-97d9cc17730c"), result: { title: "Best Cardio Equipment 2026", description: "Burn calories efficiently at home.", picks: [
-          { name: "Concept2 RowErg", tag: "Best Overall", desc: "Full body workout, low impact, used by Olympic athletes.", link: amz("Concept2 RowErg rowing machine"), image: img("photo-1541534741688-6078c6bfb5c5") },
-          { name: "NordicTrack Treadmill", tag: "Most Popular", desc: "iFit classes, incline training, foldable design.", link: amz("NordicTrack treadmill"), image: img("photo-1538805060514-97d9cc17730c") },
-          { name: "Assault AirBike", tag: "Most Intense", desc: "HIIT king. 20 minutes burns as much as an hour of jogging.", link: amz("Assault AirBike"), image: img("photo-1517836357463-d25dfeac3438") },
+        { label: "🏃 Cardio", id: "fitness_cardio", image: img("photo-1538805060514-97d9cc17730c"), result: { title: "Best Cardio Equipment 2026", description: "Burn calories efficiently at home.", picks: [
+          { name: "Concept2 RowErg", tag: "Best Overall", desc: "Full body workout, low impact, Olympic-grade.", link: amz("Concept2 RowErg rowing machine"), image: img("photo-1541534741688-6078c6bfb5c5") },
+          { name: "NordicTrack Treadmill", tag: "Most Popular", desc: "iFit classes, incline training, foldable.", link: amz("NordicTrack treadmill"), image: img("photo-1538805060514-97d9cc17730c") },
+          { name: "Assault AirBike", tag: "Most Intense", desc: "HIIT king. 20 minutes = 1 hour jogging.", link: amz("Assault AirBike"), image: img("photo-1517836357463-d25dfeac3438") },
         ]}},
-        { label: "🧘 Flexibility & Wellness", id: "fitness_wellness", image: img("photo-1506126613408-eca07ce68773"), result: { title: "Best Wellness Equipment 2026", description: "Recovery, flexibility, mental health.", picks: [
+        { label: "🧘 Wellness", id: "fitness_wellness", image: img("photo-1506126613408-eca07ce68773"), result: { title: "Best Wellness Equipment 2026", description: "Recovery, flexibility, mental health.", picks: [
           { name: "Manduka PRO Yoga Mat", tag: "Essential", desc: "The last yoga mat you'll ever buy.", link: amz("Manduka PRO yoga mat"), image: img("photo-1506126613408-eca07ce68773") },
-          { name: "Theragun Pro", tag: "Best Recovery", desc: "Percussive therapy for muscle recovery. Used by pro athletes.", link: amz("Theragun Pro massage gun"), image: img("photo-1571019614242-c5c5dee9f50b") },
-          { name: "Hypervolt 2 Pro", tag: "Best Value", desc: "Quieter than Theragun, equally effective, better price.", link: amz("Hypervolt 2 Pro massage gun"), image: img("photo-1517836357463-d25dfeac3438") },
+          { name: "Theragun Pro", tag: "Best Recovery", desc: "Percussive therapy used by pro athletes.", link: amz("Theragun Pro massage gun"), image: img("photo-1571019614242-c5c5dee9f50b") },
+          { name: "Hypervolt 2 Pro", tag: "Best Value", desc: "Quieter than Theragun, equally effective.", link: amz("Hypervolt 2 Pro massage gun"), image: img("photo-1517836357463-d25dfeac3438") },
         ]}},
       ],
     },
@@ -191,25 +192,25 @@ const TREE = {
       options: [
         { label: "🐕 Dog", id: "pet_dog", question: "What's your lifestyle?", emoji: "🐕", image: img("photo-1587300003388-59208cc962cb"),
           options: [
-            { label: "🏃 Active lifestyle", id: "dog_active", image: img("photo-1548199973-03cce0bbc87b"), result: { title: "Best Dogs for Active People", description: "Dogs that match your energy.", picks: [
-              { name: "Border Collie", tag: "Most Intelligent", desc: "Needs 2+ hours exercise daily. Thrives with tasks.", link: amz("Border Collie dog supplies"), image: img("photo-1568572933382-74d440642117") },
+            { label: "🏃 Active", id: "dog_active", image: img("photo-1548199973-03cce0bbc87b"), result: { title: "Best Dogs for Active People", description: "Dogs that match your energy.", picks: [
+              { name: "Border Collie", tag: "Most Intelligent", desc: "Needs 2+ hours exercise daily.", link: amz("Border Collie dog supplies"), image: img("photo-1568572933382-74d440642117") },
               { name: "Labrador Retriever", tag: "Most Popular", desc: "Friendly, energetic, great with families.", link: amz("Labrador dog supplies"), image: img("photo-1587300003388-59208cc962cb") },
               { name: "Vizsla", tag: "Best Companion", desc: "Velcro dog. Excellent runner and swimmer.", link: amz("Vizsla dog supplies"), image: img("photo-1548199973-03cce0bbc87b") },
             ]}},
-            { label: "🏠 Homebody", id: "dog_calm", image: img("photo-1583511655826-05700d52f4d9"), result: { title: "Best Dogs for Relaxed Owners", description: "Dogs happy chilling at home.", picks: [
-              { name: "Bulldog", tag: "Most Relaxed", desc: "Minimal exercise, loves sofa time, great apartment dog.", link: amz("Bulldog dog supplies"), image: img("photo-1583511655826-05700d52f4d9") },
-              { name: "Shih Tzu", tag: "Best Lap Dog", desc: "Affectionate, low exercise needs, hypoallergenic.", link: amz("Shih Tzu dog supplies"), image: img("photo-1587300003388-59208cc962cb") },
+            { label: "🏠 Relaxed", id: "dog_calm", image: img("photo-1583511655826-05700d52f4d9"), result: { title: "Best Dogs for Relaxed Owners", description: "Dogs happy chilling at home.", picks: [
+              { name: "Bulldog", tag: "Most Relaxed", desc: "Minimal exercise, loves sofa time.", link: amz("Bulldog dog supplies"), image: img("photo-1583511655826-05700d52f4d9") },
+              { name: "Shih Tzu", tag: "Best Lap Dog", desc: "Affectionate, low exercise, hypoallergenic.", link: amz("Shih Tzu dog supplies"), image: img("photo-1587300003388-59208cc962cb") },
               { name: "Basset Hound", tag: "Most Chill", desc: "Easygoing, friendly, loves sleeping.", link: amz("Basset Hound dog supplies"), image: img("photo-1548199973-03cce0bbc87b") },
             ]}},
           ],
         },
         { label: "🐱 Cat", id: "pet_cat", image: img("photo-1514888286974-6c03e2ca1dba"), result: { title: "Best Cat Breeds 2026", description: "Find your perfect feline companion.", picks: [
-          { name: "Maine Coon", tag: "Most Sociable", desc: "Dog-like personality, loves people, gentle giant.", link: amz("Maine Coon cat supplies"), image: img("photo-1514888286974-6c03e2ca1dba") },
+          { name: "Maine Coon", tag: "Most Sociable", desc: "Dog-like personality, loves people.", link: amz("Maine Coon cat supplies"), image: img("photo-1514888286974-6c03e2ca1dba") },
           { name: "Ragdoll", tag: "Most Relaxed", desc: "Goes limp when held, extremely gentle.", link: amz("Ragdoll cat supplies"), image: img("photo-1543852786-1cf6624b9987") },
           { name: "British Shorthair", tag: "Most Independent", desc: "Calm, dignified, great for busy owners.", link: amz("British Shorthair cat supplies"), image: img("photo-1526336024174-e58f5cdd8e13") },
         ]}},
-        { label: "🐠 Fish / Other", id: "pet_other", image: img("photo-1522069169874-c58ec4b76be5"), result: { title: "Low Maintenance Pets", description: "Companionship without high commitment.", picks: [
-          { name: "Betta Fish", tag: "Most Beautiful", desc: "Stunning colors, small tank needed, interactive.", link: amz("Betta fish tank aquarium"), image: img("photo-1522069169874-c58ec4b76be5") },
+        { label: "🐠 Other", id: "pet_other", image: img("photo-1522069169874-c58ec4b76be5"), result: { title: "Low Maintenance Pets", description: "Companionship without high commitment.", picks: [
+          { name: "Betta Fish", tag: "Most Beautiful", desc: "Stunning colors, small tank, interactive.", link: amz("Betta fish tank aquarium"), image: img("photo-1522069169874-c58ec4b76be5") },
           { name: "Guinea Pig", tag: "Most Social", desc: "Gentle, social, great with children.", link: amz("guinea pig cage supplies"), image: img("photo-1548767797-d8c844163c4a") },
           { name: "Leopard Gecko", tag: "Most Unique", desc: "Low maintenance, long-lived, no smell.", link: amz("leopard gecko terrarium"), image: img("photo-1504450874802-0ba2bcd9b5ae") },
         ]}},
@@ -219,41 +220,41 @@ const TREE = {
       label: "🍽️ Dining Out", id: "dining", question: "What's the occasion?", emoji: "🍽️",
       image: img("photo-1414235077428-338989a2e8c0"),
       options: [
-        { label: "💑 Romantic Dinner", id: "dining_romantic", image: img("photo-1559339352-11d035aa65de"), result: { title: "Perfect Romantic Restaurant", description: "Make it unforgettable.", picks: [
-          { name: "OpenTable", tag: "Best Reservations", desc: "Filter by 'romantic', book 1 week ahead for weekends.", link: "https://www.opentable.com", image: img("photo-1559339352-11d035aa65de") },
-          { name: "TripAdvisor", tag: "Best Reviews", desc: "Sort by 'romantic atmosphere', look for candles/dim lighting.", link: "https://www.tripadvisor.com", image: img("photo-1414235077428-338989a2e8c0") },
+        { label: "💑 Romantic", id: "dining_romantic", image: img("photo-1559339352-11d035aa65de"), result: { title: "Perfect Romantic Restaurant", description: "Make it unforgettable.", picks: [
+          { name: "OpenTable", tag: "Best Reservations", desc: "Filter 'romantic', book 1 week ahead.", link: "https://www.opentable.com", image: img("photo-1559339352-11d035aa65de") },
+          { name: "TripAdvisor", tag: "Best Reviews", desc: "Sort by 'romantic atmosphere'.", link: "https://www.tripadvisor.com", image: img("photo-1414235077428-338989a2e8c0") },
           { name: "TheFork", tag: "Best Deals", desc: "Often 50% off at great restaurants.", link: "https://www.thefork.com", image: img("photo-1424847651672-bf20a4b0982b") },
         ]}},
-        { label: "👨‍👩‍👧 Family Dinner", id: "dining_family", image: img("photo-1547592180-85f173990554"), result: { title: "Perfect Family Restaurant", description: "Where everyone is happy.", picks: [
-          { name: "Yelp", tag: "Best for Families", desc: "Filter 'good for kids', 'high chairs available'.", link: "https://www.yelp.com", image: img("photo-1547592180-85f173990554") },
-          { name: "Google Maps", tag: "Most Convenient", desc: "Search 'family restaurant near me', check photos.", link: "https://maps.google.com", image: img("photo-1414235077428-338989a2e8c0") },
-          { name: "TheFork", tag: "Best Booking", desc: "Easy group reservations, special menus for children.", link: "https://www.thefork.com", image: img("photo-1424847651672-bf20a4b0982b") },
+        { label: "👨‍👩‍👧 Family", id: "dining_family", image: img("photo-1547592180-85f173990554"), result: { title: "Perfect Family Restaurant", description: "Where everyone is happy.", picks: [
+          { name: "Yelp", tag: "Best for Families", desc: "Filter 'good for kids', 'high chairs'.", link: "https://www.yelp.com", image: img("photo-1547592180-85f173990554") },
+          { name: "Google Maps", tag: "Most Convenient", desc: "Search 'family restaurant near me'.", link: "https://maps.google.com", image: img("photo-1414235077428-338989a2e8c0") },
+          { name: "TheFork", tag: "Best Booking", desc: "Easy group reservations.", link: "https://www.thefork.com", image: img("photo-1424847651672-bf20a4b0982b") },
         ]}},
-        { label: "🍕 Quick & Casual", id: "dining_casual", image: img("photo-1513104890138-7c749659a591"), result: { title: "Best Food Delivery & Quick Dining", description: "Great food without the fuss.", picks: [
-          { name: "Uber Eats", tag: "Most Options", desc: "Largest restaurant selection, real-time tracking.", link: "https://www.ubereats.com", image: img("photo-1513104890138-7c749659a591") },
-          { name: "Deliveroo", tag: "Best Quality", desc: "Premium restaurant partners, excellent packaging.", link: "https://deliveroo.com", image: img("photo-1414235077428-338989a2e8c0") },
-          { name: "Google Maps", tag: "Best Discovery", desc: "Search 'best pizza near me', sort by rating.", link: "https://maps.google.com", image: img("photo-1424847651672-bf20a4b0982b") },
+        { label: "🍕 Casual", id: "dining_casual", image: img("photo-1513104890138-7c749659a591"), result: { title: "Best Food Delivery 2026", description: "Great food without the fuss.", picks: [
+          { name: "Uber Eats", tag: "Most Options", desc: "Largest restaurant selection worldwide.", link: "https://www.ubereats.com", image: img("photo-1513104890138-7c749659a591") },
+          { name: "Deliveroo", tag: "Best Quality", desc: "Premium restaurant partners.", link: "https://deliveroo.com", image: img("photo-1414235077428-338989a2e8c0") },
+          { name: "Google Maps", tag: "Best Discovery", desc: "Sort by rating, check wait times.", link: "https://maps.google.com", image: img("photo-1424847651672-bf20a4b0982b") },
         ]}},
       ],
     },
     {
-      label: "💼 Career Move", id: "career", question: "What's your situation?", emoji: "💼",
+      label: "💼 Career", id: "career", question: "What's your situation?", emoji: "💼",
       image: img("photo-1454165804606-c3d57bc86b40"),
       options: [
         { label: "🚀 Switch Jobs", id: "career_switch", image: img("photo-1497366216548-37526070297c"), result: { title: "How to Navigate a Job Switch", description: "A structured approach.", picks: [
-          { name: "Evaluate Total Compensation", tag: "Step 1", desc: "Salary + equity + benefits + remote flexibility.", link: "https://www.levels.fyi", image: img("photo-1554224155-6726b3ff858f") },
-          { name: "Research Company Culture", tag: "Step 2", desc: "Glassdoor, Blind, LinkedIn. Talk to people who work there.", link: "https://www.glassdoor.com", image: img("photo-1497366216548-37526070297c") },
-          { name: "Negotiate Before Signing", tag: "Step 3", desc: "Always negotiate. First offer is rarely the best.", link: "https://www.linkedin.com/jobs", image: img("photo-1454165804606-c3d57bc86b40") },
+          { name: "Evaluate Total Compensation", tag: "Step 1", desc: "Salary + equity + benefits + remote.", link: "https://www.levels.fyi", image: img("photo-1554224155-6726b3ff858f") },
+          { name: "Research Culture", tag: "Step 2", desc: "Glassdoor, Blind, LinkedIn. Talk to insiders.", link: "https://www.glassdoor.com", image: img("photo-1497366216548-37526070297c") },
+          { name: "Negotiate", tag: "Step 3", desc: "Always negotiate. First offer is never final.", link: "https://www.linkedin.com/jobs", image: img("photo-1454165804606-c3d57bc86b40") },
         ]}},
         { label: "🌍 Relocate", id: "career_relocate", image: img("photo-1488646953014-85cb44e25828"), result: { title: "Best Cities for Career Growth 2026", description: "Location matters enormously.", picks: [
-          { name: "Dubai, UAE", tag: "Tax Free", desc: "Zero income tax, international hub, growing tech scene.", link: "https://www.linkedin.com/jobs/search/?location=Dubai", image: img("photo-1512453979798-5ea266f8880c") },
-          { name: "Berlin, Germany", tag: "Tech Hub", desc: "Strong startup ecosystem, good salaries, high quality of life.", link: "https://www.linkedin.com/jobs/search/?location=Berlin", image: img("photo-1560969184-10fe8719e047") },
-          { name: "Lisbon, Portugal", tag: "Best Quality of Life", desc: "Tech visa, lower cost, sun, safety.", link: "https://www.linkedin.com/jobs/search/?location=Lisbon", image: img("photo-1558642891-54be180ea339") },
+          { name: "Dubai, UAE", tag: "Tax Free", desc: "Zero income tax, international hub.", link: "https://www.linkedin.com/jobs/search/?location=Dubai", image: img("photo-1512453979798-5ea266f8880c") },
+          { name: "Berlin, Germany", tag: "Tech Hub", desc: "Strong startup ecosystem, great quality of life.", link: "https://www.linkedin.com/jobs/search/?location=Berlin", image: img("photo-1560969184-10fe8719e047") },
+          { name: "Lisbon, Portugal", tag: "Best QoL", desc: "Tech visa, lower cost, sun, safety.", link: "https://www.linkedin.com/jobs/search/?location=Lisbon", image: img("photo-1558642891-54be180ea339") },
         ]}},
-        { label: "📚 Learn New Skills", id: "career_learn", image: img("photo-1456513080510-7bf3a84b82f8"), result: { title: "Best Platforms to Learn New Skills", description: "Invest in yourself.", picks: [
-          { name: "Coursera", tag: "Best Certificates", desc: "University-backed courses, Google/Meta/IBM certificates.", link: "https://www.coursera.org", image: img("photo-1456513080510-7bf3a84b82f8") },
-          { name: "Udemy", tag: "Best Value", desc: "Lifetime access, frequent 90% sales, 200,000+ courses.", link: "https://www.udemy.com", image: img("photo-1498050108023-c5249f4df085") },
-          { name: "LinkedIn Learning", tag: "Best for Career", desc: "Skills show on your LinkedIn profile.", link: "https://www.linkedin.com/learning", image: img("photo-1454165804606-c3d57bc86b40") },
+        { label: "📚 Learn Skills", id: "career_learn", image: img("photo-1456513080510-7bf3a84b82f8"), result: { title: "Best Learning Platforms 2026", description: "Invest in yourself.", picks: [
+          { name: "Coursera", tag: "Best Certificates", desc: "University-backed, Google/Meta/IBM certs.", link: "https://www.coursera.org", image: img("photo-1456513080510-7bf3a84b82f8") },
+          { name: "Udemy", tag: "Best Value", desc: "Lifetime access, frequent 90% sales.", link: "https://www.udemy.com", image: img("photo-1498050108023-c5249f4df085") },
+          { name: "LinkedIn Learning", tag: "Best for Career", desc: "Skills shown on your LinkedIn profile.", link: "https://www.linkedin.com/learning", image: img("photo-1454165804606-c3d57bc86b40") },
         ]}},
       ],
     },
@@ -270,32 +271,81 @@ function findNode(tree, path) {
   return node;
 }
 
-function Badge({ children, color = C.accent }) {
+function Badge({ children, color = "#0066CC" }) {
   return <span style={{ background: color + "15", color, border: `1px solid ${color}30`, borderRadius: 6, padding: "2px 8px", fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase" }}>{children}</span>;
 }
 
-function TopNav({ onBack, showBack }) {
+function LanguageSwitcher({ lang, setLang }) {
+  const [open, setOpen] = useState(false);
+  const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
+
+  return (
+    <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 1000 }}>
+      {open && (
+        <div style={{
+          position: "absolute", bottom: 52, right: 0,
+          background: "#fff", border: `1px solid ${C.border}`,
+          borderRadius: 14, boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+          width: 200, maxHeight: 360, overflowY: "auto",
+          padding: "8px 0",
+        }}>
+          {LANGUAGES.map(l => (
+            <button key={l.code} onClick={() => { setLang(l.code); setOpen(false); }}
+              style={{
+                width: "100%", display: "flex", alignItems: "center", gap: 10,
+                padding: "9px 16px", border: "none", cursor: "pointer", textAlign: "left",
+                background: l.code === lang ? C.accentLight : "transparent",
+                color: l.code === lang ? C.accent : C.text,
+                fontSize: 14, fontWeight: l.code === lang ? 700 : 400,
+                transition: "background 0.1s",
+              }}
+              onMouseEnter={e => { if (l.code !== lang) e.currentTarget.style.background = "#F7FAFC"; }}
+              onMouseLeave={e => { if (l.code !== lang) e.currentTarget.style.background = "transparent"; }}>
+              <span style={{ fontSize: 18 }}>{l.flag}</span>
+              <span>{l.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      <button onClick={() => setOpen(!open)} style={{
+        display: "flex", alignItems: "center", gap: 8,
+        background: C.accent, color: "#fff", border: "none",
+        borderRadius: 12, padding: "10px 16px", cursor: "pointer",
+        fontSize: 14, fontWeight: 700, boxShadow: `0 4px 16px ${C.accent}44`,
+        transition: "all 0.2s",
+      }}
+        onMouseEnter={e => e.currentTarget.style.background = C.accentHover}
+        onMouseLeave={e => e.currentTarget.style.background = C.accent}>
+        <span style={{ fontSize: 20 }}>{current.flag}</span>
+        <span>{current.name}</span>
+        <span style={{ fontSize: 10 }}>{open ? "▲" : "▼"}</span>
+      </button>
+    </div>
+  );
+}
+
+function TopNav({ onBack, showBack, t, lang, setLang }) {
   return (
     <div style={{ background: C.accent, padding: "0 24px", boxShadow: "0 2px 8px rgba(0,102,204,0.3)", position: "sticky", top: 0, zIndex: 100 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", gap: 16, height: 60 }}>
         {showBack && (
           <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
             onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
-            onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>← Back</button>
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}> ← Back</button>
         )}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 34, height: 34, borderRadius: 8, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🧭</div>
           <span style={{ color: "#fff", fontWeight: 800, fontSize: 18 }}>DecisionPilot</span>
         </div>
-        <div style={{ marginLeft: "auto" }}>
-          <span style={{ background: "rgba(255,255,255,0.15)", color: "#fff", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 600 }}>🆓 Free Beta</span>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ background: "rgba(255,255,255,0.15)", color: "#fff", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 600 }}>🆓 {t.free}</span>
         </div>
       </div>
     </div>
   );
 }
 
-function CategoryGrid({ onSelect }) {
+function CategoryGrid({ onSelect, t }) {
   const [hovered, setHovered] = useState(null);
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16 }}>
@@ -329,14 +379,14 @@ function OptionCard({ opt, onClick }) {
       )}
       <div style={{ padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ color: C.text, fontWeight: 700, fontSize: 15 }}>{opt.label}</span>
-        <span style={{ color: C.accent, fontSize: 20, fontWeight: 700 }}>›</span>
+        <span style={{ color: C.accent, fontSize: 20 }}>›</span>
       </div>
     </button>
   );
 }
 
-function ResultCard({ pick, index }) {
-  const colors = [C.accent, "#7C3AED", C.success];
+function ResultCard({ pick, index, t }) {
+  const colors = [C.accent, "#7C3AED", "#38A169"];
   const c = colors[index % 3];
   const [hovered, setHovered] = useState(false);
   return (
@@ -363,14 +413,14 @@ function ResultCard({ pick, index }) {
           style={{ display: "inline-flex", alignItems: "center", gap: 6, background: c, color: "#fff", fontSize: 13, fontWeight: 700, textDecoration: "none", padding: "8px 18px", borderRadius: 8 }}
           onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
           onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-          View deals →
+          {t.view_deals || "View deals →"}
         </a>
       </div>
     </div>
   );
 }
 
-function Landing({ onStart }) {
+function Landing({ onStart, t, lang, setLang }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
     const target = 12847;
@@ -381,37 +431,19 @@ function Landing({ onStart }) {
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg }}>
-      <TopNav showBack={false} />
-      <div style={{ background: `linear-gradient(135deg, #0055AA 0%, #0077DD 50%, #0099FF 100%)`, padding: "60px 24px 80px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 24, padding: "6px 16px", marginBottom: 28, color: "#fff", fontSize: 13, fontWeight: 600 }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ADE80", display: "inline-block" }} />
-            AI-Powered Decision Making
-          </div>
-          <h1 style={{ color: "#fff", fontSize: "clamp(36px, 6vw, 64px)", fontWeight: 900, lineHeight: 1.1, letterSpacing: -2, margin: "0 0 16px" }}>
-            Stop hesitating.<br />Start deciding.
-          </h1>
-          <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 18, maxWidth: 520, margin: "0 auto 40px", lineHeight: 1.7 }}>
-            Your AI co-pilot for every major decision. Vacations, gadgets, cars, careers — personalized recommendations in seconds.
-          </p>
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <button onClick={() => onStart("tree")} style={{ background: "#fff", color: C.accent, border: "none", borderRadius: 10, padding: "14px 28px", fontSize: 16, fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 16px rgba(0,0,0,0.2)", transition: "all 0.2s" }}
-              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-              onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              🌳 Decision Tree
-            </button>
-            <button onClick={() => onStart("chat")} style={{ background: "rgba(255,255,255,0.15)", color: "#fff", border: "2px solid rgba(255,255,255,0.4)", borderRadius: 10, padding: "14px 28px", fontSize: 16, fontWeight: 700, cursor: "pointer", transition: "all 0.2s" }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
-              onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>
-              🤖 Chat with AI
-            </button>
-          </div>
-        </div>
-      </div>
+      <TopNav showBack={false} t={t} lang={lang} setLang={setLang} />
 
+      <HeroBanner onStart={onStart} t={t} lang={lang} />
+
+      {/* Stats bar */}
       <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "16px 24px" }}>
         <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "center", gap: 48, flexWrap: "wrap" }}>
-          {[{ value: `${count.toLocaleString()}+`, label: "Decisions made" }, { value: "9", label: "Categories" }, { value: "100%", label: "Free to use" }, { value: "AI", label: "Powered" }].map((s, i) => (
+          {[
+            { value: `${count.toLocaleString()}+`, label: t.decisions_made },
+            { value: "9", label: t.categories },
+            { value: "100%", label: t.free },
+            { value: "30+", label: "Languages" },
+          ].map((s, i) => (
             <div key={i} style={{ textAlign: "center" }}>
               <div style={{ color: C.accent, fontSize: 22, fontWeight: 900 }}>{s.value}</div>
               <div style={{ color: C.muted, fontSize: 12, marginTop: 2 }}>{s.label}</div>
@@ -420,15 +452,16 @@ function Landing({ onStart }) {
         </div>
       </div>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px 80px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px 0" }}>
+        {/* How it works */}
         <div style={{ marginBottom: 56 }}>
-          <h2 style={{ color: C.text, fontSize: 24, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>How it works</h2>
-          <p style={{ color: C.muted, textAlign: "center", marginBottom: 32, fontSize: 15 }}>Get your answer in under 60 seconds</p>
+          <h2 style={{ color: C.text, fontSize: 24, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>{t.how_title}</h2>
+          <p style={{ color: C.muted, textAlign: "center", marginBottom: 32, fontSize: 15 }}>{t.how_desc}</p>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
             {[
-              { num: "1", icon: "🎯", title: "Choose a category", desc: "Pick what you want to decide from our 9 categories." },
-              { num: "2", icon: "💬", title: "Answer questions", desc: "Navigate the tree or chat with AI about your preferences." },
-              { num: "3", icon: "✨", title: "Get recommendations", desc: "Receive personalized picks with direct links to the best deals." },
+              { num: "1", icon: "🎯", title: t.step1_title, desc: t.step1_desc },
+              { num: "2", icon: "💬", title: t.step2_title, desc: t.step2_desc },
+              { num: "3", icon: "✨", title: t.step3_title, desc: t.step3_desc },
             ].map((s, i) => (
               <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: "24px 20px", boxShadow: C.shadow, display: "flex", gap: 16, alignItems: "flex-start" }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: C.accent, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, fontSize: 16, flexShrink: 0 }}>{s.num}</div>
@@ -440,13 +473,21 @@ function Landing({ onStart }) {
             ))}
           </div>
         </div>
-        <div>
-          <h2 style={{ color: C.text, fontSize: 24, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>What can you decide?</h2>
-          <p style={{ color: C.muted, textAlign: "center", marginBottom: 32, fontSize: 15 }}>Click any category to start — no signup required</p>
-          <CategoryGrid onSelect={(id) => onStart("tree", id)} />
+
+        {/* Categories */}
+        <div style={{ marginBottom: 0 }}>
+          <h2 style={{ color: C.text, fontSize: 24, fontWeight: 800, marginBottom: 6, textAlign: "center" }}>{t.what_title}</h2>
+          <p style={{ color: C.muted, textAlign: "center", marginBottom: 32, fontSize: 15 }}>{t.what_desc}</p>
+          <CategoryGrid onSelect={(id) => onStart("tree", id)} t={t} />
         </div>
       </div>
 
+      {/* Worldwide section with globe */}
+      <div style={{ marginTop: 60 }}>
+        <WorldwideSection t={t} />
+      </div>
+
+      {/* Footer */}
       <div style={{ background: C.text, padding: "32px 24px" }}>
         <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -454,14 +495,16 @@ function Landing({ onStart }) {
             <span style={{ color: "#fff", fontWeight: 700 }}>DecisionPilot</span>
             <span style={{ color: "#718096", fontSize: 13 }}>© 2026</span>
           </div>
-          <span style={{ color: "#718096", fontSize: 12 }}>Free forever · No signup · AI-powered · Global recommendations</span>
+          <span style={{ color: "#718096", fontSize: 12 }}>{t.footer}</span>
         </div>
       </div>
+
+      <LanguageSwitcher lang={lang} setLang={setLang} />
     </div>
   );
 }
 
-function TreeScreen({ onBack, startId }) {
+function TreeScreen({ onBack, startId, t, lang, setLang }) {
   const [path, setPath] = useState(startId ? [startId] : []);
   const [animKey, setAnimKey] = useState(0);
   const currentNode = findNode(TREE, path);
@@ -471,7 +514,8 @@ function TreeScreen({ onBack, startId }) {
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg }}>
-      <TopNav showBack onBack={back} />
+      <TopNav showBack onBack={back} t={t} lang={lang} setLang={setLang} />
+
       {currentNode?.image && !hasResult && (
         <div style={{ height: 200, backgroundImage: `url(${currentNode.image})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6))" }} />
@@ -497,10 +541,10 @@ function TreeScreen({ onBack, startId }) {
                 <div style={{ textAlign: "center", marginBottom: 32 }}>
                   <div style={{ fontSize: 56, marginBottom: 12 }}>{currentNode?.emoji || "🧭"}</div>
                   <h2 style={{ color: C.text, fontSize: "clamp(22px, 4vw, 30px)", fontWeight: 900, marginBottom: 8 }}>{currentNode?.question}</h2>
-                  <p style={{ color: C.muted, fontSize: 15 }}>Select the option that best describes you</p>
+                  <p style={{ color: C.muted, fontSize: 15 }}>{t.select_option}</p>
                 </div>
               )}
-              {currentNode?.image && <p style={{ color: C.muted, fontSize: 15, marginBottom: 20, textAlign: "center" }}>Select the option that best describes you</p>}
+              {currentNode?.image && <p style={{ color: C.muted, fontSize: 15, marginBottom: 20, textAlign: "center" }}>{t.select_option}</p>}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
                 {currentNode?.options?.map((opt) => <OptionCard key={opt.id} opt={opt} onClick={() => choose(opt.id)} />)}
               </div>
@@ -512,24 +556,26 @@ function TreeScreen({ onBack, startId }) {
                 <h2 style={{ color: C.text, fontSize: 22, fontWeight: 900, marginBottom: 8 }}>{currentNode.result.title}</h2>
                 <p style={{ color: C.textSecondary, fontSize: 15, lineHeight: 1.6, margin: 0 }}>{currentNode.result.description}</p>
               </div>
-              {currentNode.result.picks.map((pick, i) => <ResultCard key={i} pick={pick} index={i} />)}
+              {currentNode.result.picks.map((pick, i) => <ResultCard key={i} pick={pick} index={i} t={t} />)}
               <button onClick={() => { setPath([]); setAnimKey(k => k + 1); }}
                 style={{ marginTop: 20, width: "100%", background: C.accent, color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
                 onMouseEnter={e => e.currentTarget.style.background = C.accentHover}
                 onMouseLeave={e => e.currentTarget.style.background = C.accent}>
-                Make another decision →
+                {t.another}
               </button>
             </>
           )}
         </div>
       </div>
+
+      <LanguageSwitcher lang={lang} setLang={setLang} />
       <style>{`@keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }`}</style>
     </div>
   );
 }
 
-function ChatScreen({ onBack }) {
-  const [messages, setMessages] = useState([{ role: "assistant", content: "Hi! I'm your DecisionPilot AI. Tell me about any decision — vacation, laptop, TV, car, fitness, pets, dining, phone, or career. I'll ask a few questions and give you a personalized recommendation. 🧭" }]);
+function ChatScreen({ onBack, t, lang, setLang }) {
+  const [messages, setMessages] = useState([{ role: "assistant", content: `Hi! I'm your DecisionPilot AI. Tell me about any decision — vacation, laptop, TV, car, fitness, pets, dining, phone, or career. 🧭` }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
@@ -543,7 +589,7 @@ function ChatScreen({ onBack }) {
     setMessages(newMessages);
     setLoading(true);
     try {
-      const response = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.content })) }) });
+      const response = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.content })), lang }) });
       const data = await response.json();
       setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
     } catch {
@@ -555,11 +601,11 @@ function ChatScreen({ onBack }) {
 
   return (
     <div style={{ height: "100vh", background: C.bg, display: "flex", flexDirection: "column" }}>
-      <TopNav showBack onBack={onBack} />
+      <TopNav showBack onBack={onBack} t={t} lang={lang} setLang={setLang} />
       <div style={{ flex: 1, overflowY: "auto", padding: "24px", maxWidth: 760, margin: "0 auto", width: "100%" }}>
         {messages.length === 1 && (
           <div style={{ marginBottom: 24 }}>
-            <p style={{ color: C.muted, fontSize: 12, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>Try asking</p>
+            <p style={{ color: C.muted, fontSize: 12, fontWeight: 600, letterSpacing: 1, textTransform: "uppercase", marginBottom: 10 }}>{t.try_asking}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {suggestions.map((s, i) => (
                 <button key={i} onClick={() => setInput(s)}
@@ -582,7 +628,7 @@ function ChatScreen({ onBack }) {
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
             <div style={{ width: 34, height: 34, borderRadius: 8, background: C.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
             <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: "18px 18px 18px 4px", padding: "12px 16px", boxShadow: C.shadow }}>
-              <div style={{ display: "flex", gap: 4 }}>{[0,1,2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />)}</div>
+              <div style={{ display: "flex", gap: 4 }}>{[0, 1, 2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />)}</div>
             </div>
           </div>
         )}
@@ -590,7 +636,7 @@ function ChatScreen({ onBack }) {
       </div>
       <div style={{ background: C.card, borderTop: `1px solid ${C.border}`, padding: "16px 24px", boxShadow: "0 -2px 8px rgba(0,0,0,0.06)" }}>
         <div style={{ display: "flex", gap: 10, maxWidth: 760, margin: "0 auto" }}>
-          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()} placeholder="Ask me anything — vacation, phone, career..."
+          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && !e.shiftKey && send()} placeholder={t.placeholder}
             style={{ flex: 1, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: "12px 16px", color: C.text, fontSize: 14, outline: "none", fontFamily: "inherit" }}
             onFocus={e => e.target.style.borderColor = C.accent}
             onBlur={e => e.target.style.borderColor = C.border} />
@@ -600,6 +646,7 @@ function ChatScreen({ onBack }) {
             onMouseLeave={e => input.trim() && (e.currentTarget.style.background = C.accent)}>↑</button>
         </div>
       </div>
+      <LanguageSwitcher lang={lang} setLang={setLang} />
       <style>{`@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }`}</style>
     </div>
   );
@@ -608,8 +655,18 @@ function ChatScreen({ onBack }) {
 export default function App() {
   const [screen, setScreen] = useState("landing");
   const [startId, setStartId] = useState(null);
+  const [lang, setLang] = useState("en");
+
+  useEffect(() => {
+    const detected = detectLanguage();
+    setLang(detected);
+  }, []);
+
+  const t = getTranslation(lang);
+
   function handleStart(mode, id = null) { setStartId(id); setScreen(mode); }
-  if (screen === "tree") return <TreeScreen onBack={() => setScreen("landing")} startId={startId} />;
-  if (screen === "chat") return <ChatScreen onBack={() => setScreen("landing")} />;
-  return <Landing onStart={handleStart} />;
+
+  if (screen === "tree") return <TreeScreen onBack={() => setScreen("landing")} startId={startId} t={t} lang={lang} setLang={setLang} />;
+  if (screen === "chat") return <ChatScreen onBack={() => setScreen("landing")} t={t} lang={lang} setLang={setLang} />;
+  return <Landing onStart={handleStart} t={t} lang={lang} setLang={setLang} />;
 }
