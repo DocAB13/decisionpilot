@@ -2,23 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
 import { HeroBanner, WorldwideSection } from "./HeroBanner";
 
-// ── Design tokens ─────────────────────────────────────────
 const C = {
-  bg: "#F8F9FC",
-  surface: "#FFFFFF",
-  card: "#FFFFFF",
-  border: "#E8ECF4",
-  accent: "#1A56DB",
-  accentDark: "#1240A8",
-  accentLight: "#EEF3FF",
-  text: "#0F172A",
-  textSecondary: "#475569",
-  muted: "#94A3B8",
-  success: "#059669",
-  gold: "#D97706",
-  purple: "#7C3AED",
-  shadow: "0 1px 4px rgba(15,23,42,0.08)",
-  shadowMd: "0 4px 16px rgba(15,23,42,0.10)",
+  bg: "#F8F9FC", surface: "#FFFFFF", card: "#FFFFFF", border: "#E8ECF4",
+  accent: "#1A56DB", accentDark: "#1240A8", accentLight: "#EEF3FF",
+  text: "#0F172A", textSecondary: "#475569", muted: "#94A3B8",
+  success: "#059669", gold: "#D97706", purple: "#7C3AED",
+  shadow: "0 1px 4px rgba(15,23,42,0.08)", shadowMd: "0 4px 16px rgba(15,23,42,0.10)",
   shadowLg: "0 12px 40px rgba(15,23,42,0.13)",
 };
 
@@ -28,7 +17,6 @@ function img(id, w = 800, h = 500) {
 function bkg(ss) { return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(ss)}&aid=decisionpilot`; }
 function amz(k) { return `/go?url=${encodeURIComponent(`https://www.amazon.com/s?k=${encodeURIComponent(k)}`)}` }
 
-// ── Decision Trees ────────────────────────────────────────
 const TREES = {
   vacation: {
     label: "Vacation", emoji: "🏖️",
@@ -124,7 +112,7 @@ const TREES = {
     label: "Pet", emoji: "🐕",
     image: img("photo-1587300003388-59208cc962cb"),
     questions: [
-      { id: "type", q: "What type of pet are you considering?", options: ["🐕 Dog", "🐱 Cat", "🐠 Fish / Aquatic", "🐦 Bird", "🐹 Small animal (hamster, rabbit)", "🦎 Reptile", "Surprise me — recommend based on my lifestyle"] },
+      { id: "type", q: "What type of pet are you considering?", options: ["🐕 Dog", "🐱 Cat", "🐠 Fish / Aquatic", "🐦 Bird", "🐹 Small animal (hamster, rabbit)", "🦎 Reptile", "Surprise me"] },
       { id: "living", q: "What's your living situation?", options: ["Large house with garden", "House without garden", "Large apartment", "Small apartment / studio", "Shared housing"] },
       { id: "activity", q: "How active is your lifestyle?", options: ["Very active (daily sport, hiking)", "Moderately active (regular walks)", "Lightly active (occasional walks)", "Sedentary (mostly indoors)"] },
       { id: "time", q: "How much time can you give daily to a pet?", options: ["Less than 1 hour", "1–2 hours", "2–4 hours", "4+ hours", "I work from home — lots of time"] },
@@ -167,7 +155,31 @@ const TREES = {
   },
 };
 
-// ── Components ────────────────────────────────────────────
+const CATEGORIES_LIST = [
+  { id: "vacation", label: "Vacation", emoji: "🏖️", desc: "Hotels & destinations worldwide", color: "#1A56DB", image: img("photo-1507525428034-b723cf961d3e") },
+  { id: "phone", label: "Smartphone", emoji: "📱", desc: "Find your perfect device", color: "#7C3AED", image: img("photo-1511707171634-5f897ff02aa9") },
+  { id: "laptop", label: "Laptop", emoji: "💻", desc: "Work, gaming & study", color: "#0891B2", image: img("photo-1496181133206-80ce9b88a853") },
+  { id: "tv", label: "TV", emoji: "📺", desc: "Picture-perfect viewing", color: "#059669", image: img("photo-1593784991095-a205069470b6") },
+  { id: "car", label: "Car", emoji: "🚗", desc: "Electric, sport & family", color: "#DC2626", image: img("photo-1494976388531-d1058494cdd8") },
+  { id: "fitness", label: "Fitness", emoji: "🏋️", desc: "Gym & wellness equipment", color: "#D97706", image: img("photo-1517836357463-d25dfeac3438") },
+  { id: "pet", label: "Pet", emoji: "🐕", desc: "Find your ideal companion", color: "#7C3AED", image: img("photo-1587300003388-59208cc962cb") },
+  { id: "dining", label: "Dining Out", emoji: "🍽️", desc: "Restaurants & experiences", color: "#DB2777", image: img("photo-1414235077428-338989a2e8c0") },
+  { id: "career", label: "Career", emoji: "💼", desc: "Jobs, skills & growth", color: "#1A56DB", image: img("photo-1454165804606-c3d57bc86b40") },
+];
+
+async function handleUpgrade() {
+  try {
+    const response = await fetch("/api/create-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await response.json();
+    if (data.url) window.location.href = data.url;
+    else alert("Something went wrong. Please try again.");
+  } catch {
+    alert("Connection error. Please try again.");
+  }
+}
 
 function Badge({ children, color = "#1A56DB" }) {
   return (
@@ -181,56 +193,17 @@ function Badge({ children, color = "#1A56DB" }) {
   );
 }
 
-function LanguageSwitcher({ lang, setLang }) {
-  const [open, setOpen] = useState(false);
+function TopNav({ onBack, showBack, t, lang, setLang }) {
+  const [langOpen, setLangOpen] = useState(false);
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
-  return (
-    <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 1000 }}>
-      {open && (
-        <div style={{
-          position: "absolute", bottom: 56, right: 0,
-          background: "#fff", border: `1px solid ${C.border}`,
-          borderRadius: 16, boxShadow: C.shadowLg,
-          width: 210, maxHeight: 380, overflowY: "auto", padding: "6px 0",
-        }}>
-          {LANGUAGES.map(l => (
-            <button key={l.code} onClick={() => { setLang(l.code); setOpen(false); }}
-              style={{
-                width: "100%", display: "flex", alignItems: "center", gap: 10,
-                padding: "9px 16px", border: "none", cursor: "pointer",
-                background: l.code === lang ? C.accentLight : "transparent",
-                color: l.code === lang ? C.accent : C.text,
-                fontSize: 14, fontWeight: l.code === lang ? 700 : 400,
-              }}>
-              <span style={{ fontSize: 20 }}>{l.flag}</span>
-              <span>{l.name}</span>
-            </button>
-          ))}
-        </div>
-      )}
-      <button onClick={() => setOpen(!open)} style={{
-        display: "flex", alignItems: "center", gap: 8,
-        background: C.accent, color: "#fff", border: "none",
-        borderRadius: 14, padding: "11px 18px", cursor: "pointer",
-        fontSize: 14, fontWeight: 700, boxShadow: `0 4px 20px ${C.accent}50`,
-        transition: "all 0.2s",
-      }}>
-        <span style={{ fontSize: 20 }}>{current.flag}</span>
-        <span>{current.name}</span>
-        <span style={{ fontSize: 9, opacity: 0.8 }}>{open ? "▲" : "▼"}</span>
-      </button>
-    </div>
-  );
-}
 
-function TopNav({ onBack, showBack, t }) {
   return (
     <div style={{
       background: "#fff", borderBottom: `1px solid ${C.border}`,
       padding: "0 32px", position: "sticky", top: 0, zIndex: 100,
       boxShadow: "0 1px 0 #E8ECF4",
     }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", gap: 16, height: 68 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, height: 68 }}>
         {showBack && (
           <button onClick={onBack} style={{
             display: "flex", alignItems: "center", gap: 6,
@@ -243,6 +216,8 @@ function TopNav({ onBack, showBack, t }) {
             ← Back
           </button>
         )}
+
+        {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{
             width: 36, height: 36, borderRadius: 10,
@@ -252,12 +227,70 @@ function TopNav({ onBack, showBack, t }) {
           }}>🧭</div>
           <span style={{ color: C.text, fontWeight: 800, fontSize: 19, letterSpacing: -0.5 }}>DecisionPilot</span>
         </div>
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
+
+        {/* Right side */}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+
+          {/* Upgrade button */}
+          <button onClick={handleUpgrade} style={{
+            background: `linear-gradient(135deg, #D97706, #F59E0B)`,
+            color: "#fff", border: "none", borderRadius: 10,
+            padding: "8px 16px", fontSize: 13, fontWeight: 700,
+            cursor: "pointer", boxShadow: "0 4px 12px rgba(217,119,6,0.4)",
+            transition: "all 0.2s", whiteSpace: "nowrap",
+          }}
+            onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
+            onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+            ✦ Upgrade Pro · $4.99
+          </button>
+
+          {/* Free badge */}
           <span style={{
             background: "#ECFDF5", color: "#059669",
             border: "1px solid #A7F3D0",
             borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 600,
-          }}>✦ {t?.free || "Free"}</span>
+          }}>Free</span>
+
+          {/* Language switcher */}
+          <div style={{ position: "relative" }}>
+            <button onClick={() => setLangOpen(!langOpen)} style={{
+              display: "flex", alignItems: "center", gap: 6,
+              background: C.bg, border: `1px solid ${C.border}`,
+              borderRadius: 10, padding: "7px 12px", cursor: "pointer",
+              fontSize: 13, fontWeight: 600, color: C.text, transition: "all 0.15s",
+            }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = C.accent}
+              onMouseLeave={e => e.currentTarget.style.borderColor = C.border}>
+              <span style={{ fontSize: 18 }}>{current.flag}</span>
+              <span style={{ fontSize: 9, color: C.muted }}>{langOpen ? "▲" : "▼"}</span>
+            </button>
+
+            {langOpen && (
+              <div style={{
+                position: "absolute", top: "calc(100% + 8px)", right: 0,
+                background: "#fff", border: `1px solid ${C.border}`,
+                borderRadius: 16, boxShadow: C.shadowLg,
+                width: 210, maxHeight: 360, overflowY: "auto",
+                padding: "6px 0", zIndex: 200,
+              }}>
+                {LANGUAGES.map(l => (
+                  <button key={l.code} onClick={() => { setLang(l.code); setLangOpen(false); }}
+                    style={{
+                      width: "100%", display: "flex", alignItems: "center", gap: 10,
+                      padding: "9px 16px", border: "none", cursor: "pointer",
+                      background: l.code === lang ? C.accentLight : "transparent",
+                      color: l.code === lang ? C.accent : C.text,
+                      fontSize: 14, fontWeight: l.code === lang ? 700 : 400,
+                    }}
+                    onMouseEnter={e => { if (l.code !== lang) e.currentTarget.style.background = C.bg; }}
+                    onMouseLeave={e => { if (l.code !== lang) e.currentTarget.style.background = "transparent"; }}>
+                    <span style={{ fontSize: 18 }}>{l.flag}</span>
+                    <span>{l.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -279,15 +312,10 @@ function CategoryCard({ cat, onClick }) {
         padding: 0, textAlign: "left",
       }}>
       <div style={{
-        height: 130,
-        backgroundImage: `url(${cat.image})`,
-        backgroundSize: "cover", backgroundPosition: "center",
-        position: "relative",
+        height: 130, backgroundImage: `url(${cat.image})`,
+        backgroundSize: "cover", backgroundPosition: "center", position: "relative",
       }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          background: `linear-gradient(160deg, transparent 30%, ${cat.color}DD 100%)`,
-        }} />
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg, transparent 30%, ${cat.color}DD 100%)` }} />
         <div style={{ position: "absolute", top: 12, left: 12, fontSize: 28 }}>{cat.emoji}</div>
         {hovered && (
           <div style={{
@@ -314,7 +342,7 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
 
   const question = tree.questions[step];
   const total = tree.questions.length;
-  const progress = ((step) / total) * 100;
+  const progress = (step / total) * 100;
 
   function handleSelect(option) {
     setSelected(option);
@@ -322,27 +350,19 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
       const newAnswers = { ...answers, [question.id]: option };
       setAnswers(newAnswers);
       setSelected(null);
-      if (step < total - 1) {
-        setStep(s => s + 1);
-        setAnimKey(k => k + 1);
-      } else {
-        onComplete(newAnswers);
-      }
+      if (step < total - 1) { setStep(s => s + 1); setAnimKey(k => k + 1); }
+      else onComplete(newAnswers);
     }, 220);
   }
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg }}>
-      {/* Hero image bar */}
       <div style={{
-        height: 180,
-        backgroundImage: `url(${tree.image})`,
-        backgroundSize: "cover", backgroundPosition: "center",
-        position: "relative",
+        height: 180, backgroundImage: `url(${tree.image})`,
+        backgroundSize: "cover", backgroundPosition: "center", position: "relative",
       }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.65))" }} />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
-          {/* Progress bar */}
           <div style={{ height: 3, background: "rgba(255,255,255,0.2)" }}>
             <div style={{ height: "100%", width: `${progress}%`, background: "#fff", transition: "width 0.4s ease" }} />
           </div>
@@ -365,9 +385,7 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
             color: C.text, fontSize: "clamp(22px, 3.5vw, 32px)",
             fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.25,
             marginBottom: 36, textAlign: "center",
-          }}>
-            {question.q}
-          </h2>
+          }}>{question.q}</h2>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {question.options.map((opt, i) => (
@@ -375,13 +393,11 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
                 style={{
                   background: selected === opt ? C.accentLight : C.card,
                   border: `1.5px solid ${selected === opt ? C.accent : C.border}`,
-                  borderRadius: 14, padding: "16px 22px",
-                  textAlign: "left", cursor: "pointer",
-                  color: selected === opt ? C.accent : C.text,
+                  borderRadius: 14, padding: "16px 22px", textAlign: "left",
+                  cursor: "pointer", color: selected === opt ? C.accent : C.text,
                   fontSize: 15, fontWeight: selected === opt ? 700 : 500,
                   display: "flex", alignItems: "center", justifyContent: "space-between",
-                  transition: "all 0.15s",
-                  boxShadow: selected === opt ? `0 4px 16px ${C.accent}22` : C.shadow,
+                  transition: "all 0.15s", boxShadow: selected === opt ? `0 4px 16px ${C.accent}22` : C.shadow,
                   animation: `fadeUp 0.3s ease ${i * 0.04}s both`,
                 }}
                 onMouseEnter={e => { if (selected !== opt) { e.currentTarget.style.borderColor = C.accent + "66"; e.currentTarget.style.transform = "translateX(4px)"; } }}
@@ -389,13 +405,11 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
                 <span>{opt}</span>
                 {selected === opt
                   ? <span style={{ color: C.accent, fontSize: 18 }}>✓</span>
-                  : <span style={{ color: C.muted, fontSize: 18 }}>›</span>
-                }
+                  : <span style={{ color: C.muted, fontSize: 18 }}>›</span>}
               </button>
             ))}
           </div>
 
-          {/* Skip */}
           <div style={{ textAlign: "center", marginTop: 24 }}>
             <button onClick={() => handleSelect("No preference")}
               style={{ background: "none", border: "none", color: C.muted, fontSize: 13, cursor: "pointer", textDecoration: "underline" }}>
@@ -428,8 +442,7 @@ function LoadingScreen({ category }) {
   return (
     <div style={{
       minHeight: "100vh", background: C.bg,
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      padding: 32,
+      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 32,
     }}>
       <div style={{ textAlign: "center", maxWidth: 480 }}>
         <div style={{ fontSize: 64, marginBottom: 32, animation: "spin 3s linear infinite" }}>{tree?.emoji || "🧭"}</div>
@@ -439,24 +452,15 @@ function LoadingScreen({ category }) {
         <p style={{ color: C.textSecondary, fontSize: 16, marginBottom: 48, lineHeight: 1.6 }}>
           Our AI is analyzing thousands of reviews from CNET, TechRadar, Wirecutter, and more.
         </p>
-
-        {/* Progress steps */}
         <div style={{ textAlign: "left", background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadowMd }}>
           {steps.map((s, i) => (
-            <div key={i} style={{
-              display: "flex", alignItems: "center", gap: 12,
-              padding: "8px 0", opacity: i <= step ? 1 : 0.3,
-              transition: "opacity 0.5s",
-            }}>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 0", opacity: i <= step ? 1 : 0.3, transition: "opacity 0.5s" }}>
               <div style={{
                 width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
                 background: i < step ? C.success : i === step ? C.accent : C.border,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 11, color: "#fff", fontWeight: 700,
-                transition: "background 0.5s",
-              }}>
-                {i < step ? "✓" : i + 1}
-              </div>
+                fontSize: 11, color: "#fff", fontWeight: 700, transition: "background 0.5s",
+              }}>{i < step ? "✓" : i + 1}</div>
               <span style={{ color: i <= step ? C.text : C.muted, fontSize: 14, fontWeight: i === step ? 600 : 400 }}>{s}</span>
             </div>
           ))}
@@ -470,7 +474,7 @@ function LoadingScreen({ category }) {
 function RecommendationCard({ pick, index }) {
   const [hovered, setHovered] = useState(false);
   const badgeColors = [C.gold, C.accent, C.success, C.purple, "#DC2626"];
-  const c = badgeColors[index];
+  const c = badgeColors[index] || C.accent;
 
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
@@ -480,82 +484,70 @@ function RecommendationCard({ pick, index }) {
         boxShadow: hovered ? `0 16px 48px ${c}18` : C.shadow,
         overflow: "hidden", transition: "all 0.25s cubic-bezier(.4,0,.2,1)",
         transform: hovered ? "translateY(-4px)" : "translateY(0)",
-        marginBottom: 20,
-        animation: `fadeUp 0.4s ease ${index * 0.1}s both`,
+        marginBottom: 20, animation: `fadeUp 0.4s ease ${index * 0.1}s both`,
       }}>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {/* Header */}
+      <div style={{
+        background: `linear-gradient(135deg, ${c}12, ${c}05)`,
+        borderBottom: `1px solid ${c}22`, padding: "20px 24px",
+        display: "flex", alignItems: "center", gap: 14,
+      }}>
         <div style={{
-          background: `linear-gradient(135deg, ${c}12, ${c}05)`,
-          borderBottom: `1px solid ${c}22`,
-          padding: "20px 24px",
-          display: "flex", alignItems: "center", gap: 14,
-        }}>
-          <div style={{
-            width: 44, height: 44, borderRadius: 12,
-            background: `linear-gradient(135deg, ${c}, ${c}CC)`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "#fff", fontSize: 18, fontWeight: 900, flexShrink: 0,
-          }}>
-            {index + 1}
+          width: 44, height: 44, borderRadius: 12,
+          background: `linear-gradient(135deg, ${c}, ${c}CC)`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          color: "#fff", fontSize: 18, fontWeight: 900, flexShrink: 0,
+        }}>{index + 1}</div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
+            <span style={{ color: C.text, fontWeight: 800, fontSize: 18 }}>{pick.name}</span>
+            <Badge color={c}>{pick.badge}</Badge>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-              <span style={{ color: C.text, fontWeight: 800, fontSize: 18 }}>{pick.name}</span>
-              <Badge color={c}>{pick.badge}</Badge>
-            </div>
-            <div style={{ color: C.muted, fontSize: 13, fontWeight: 500 }}>{pick.price}</div>
+          <div style={{ color: C.muted, fontSize: 13, fontWeight: 500 }}>{pick.price}</div>
+        </div>
+      </div>
+
+      <div style={{ padding: "20px 24px" }}>
+        <div style={{
+          background: C.accentLight, borderRadius: 10, padding: "12px 16px",
+          marginBottom: 16, borderLeft: `3px solid ${C.accent}`,
+        }}>
+          <span style={{ color: C.accent, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>Why this for you · </span>
+          <span style={{ color: C.textSecondary, fontSize: 14, lineHeight: 1.6 }}>{pick.why}</span>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+          <div>
+            <div style={{ color: C.success, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>✓ Pros</div>
+            {pick.pros?.map((p, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 5 }}>
+                <span style={{ color: C.success, fontSize: 13, marginTop: 1, flexShrink: 0 }}>✓</span>
+                <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
+              </div>
+            ))}
+          </div>
+          <div>
+            <div style={{ color: "#DC2626", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>✗ Cons</div>
+            {pick.cons?.map((p, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 5 }}>
+                <span style={{ color: "#DC2626", fontSize: 13, marginTop: 1, flexShrink: 0 }}>✗</span>
+                <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Body */}
-        <div style={{ padding: "20px 24px" }}>
-          {/* Why this for you */}
-          <div style={{
-            background: C.accentLight, borderRadius: 10, padding: "12px 16px",
-            marginBottom: 16, borderLeft: `3px solid ${C.accent}`,
-          }}>
-            <span style={{ color: C.accent, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>Why this for you · </span>
-            <span style={{ color: C.textSecondary, fontSize: 14, lineHeight: 1.6 }}>{pick.why}</span>
-          </div>
-
-          {/* Pros / Cons */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
-            <div>
-              <div style={{ color: C.success, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>✓ Pros</div>
-              {pick.pros?.map((p, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 5 }}>
-                  <span style={{ color: C.success, fontSize: 13, marginTop: 1, flexShrink: 0 }}>✓</span>
-                  <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
-                </div>
-              ))}
-            </div>
-            <div>
-              <div style={{ color: "#DC2626", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>✗ Cons</div>
-              {pick.cons?.map((p, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 5 }}>
-                  <span style={{ color: "#DC2626", fontSize: 13, marginTop: 1, flexShrink: 0 }}>✗</span>
-                  <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
-            <span style={{ color: C.muted, fontSize: 12 }}>Source: {pick.source}</span>
-            <a href={pick.link} target="_blank" rel="noopener noreferrer"
-              style={{
-                background: c, color: "#fff", textDecoration: "none",
-                padding: "9px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-                display: "inline-flex", alignItems: "center", gap: 6,
-                transition: "opacity 0.15s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-              View deal →
-            </a>
-          </div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+          <span style={{ color: C.muted, fontSize: 12 }}>Source: {pick.source}</span>
+          <a href={pick.link} target="_blank" rel="noopener noreferrer"
+            style={{
+              background: c, color: "#fff", textDecoration: "none",
+              padding: "9px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
+              display: "inline-flex", alignItems: "center", gap: 6, transition: "opacity 0.15s",
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+            onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+            View deal →
+          </a>
         </div>
       </div>
     </div>
@@ -572,21 +564,14 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
     async function fetchRecs() {
       try {
         const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ mode: "tree_result", category, answers }),
         });
         const result = await response.json();
-        if (result.type === "recommendations") {
-          setData(result.data);
-        } else {
-          setError("Could not load recommendations. Please try again.");
-        }
-      } catch {
-        setError("Connection error. Please try again.");
-      } finally {
-        setLoading(false);
-      }
+        if (result.type === "recommendations") setData(result.data);
+        else setError("Could not load recommendations. Please try again.");
+      } catch { setError("Connection error. Please try again."); }
+      finally { setLoading(false); }
     }
     fetchRecs();
   }, []);
@@ -603,7 +588,6 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg }}>
-      {/* Hero */}
       <div style={{
         height: 200, backgroundImage: `url(${tree.image})`,
         backgroundSize: "cover", backgroundPosition: "center", position: "relative",
@@ -618,9 +602,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
 
       <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px 80px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
-          <div>
-            <span style={{ color: C.muted, fontSize: 13 }}>Powered by AI · Sources: CNET, TechRadar, Wirecutter & more</span>
-          </div>
+          <span style={{ color: C.muted, fontSize: 13 }}>Powered by AI · Sources: CNET, TechRadar, Wirecutter & more</span>
           <button onClick={onRestart} style={{ background: C.accentLight, color: C.accent, border: `1px solid ${C.accent}33`, borderRadius: 10, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700 }}>
             🔄 Start over
           </button>
@@ -629,7 +611,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
         {data?.picks?.map((pick, i) => <RecommendationCard key={i} pick={pick} index={i} />)}
 
         <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
-          <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>Not satisfied with these results? Try our AI chat for a deeper conversation.</p>
+          <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>Want more personalized advice? Chat with our AI directly.</p>
           <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
             style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
             🤖 Chat with AI instead
@@ -639,18 +621,6 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
     </div>
   );
 }
-
-const CATEGORIES_LIST = [
-  { id: "vacation", label: "Vacation", emoji: "🏖️", desc: "Hotels & destinations worldwide", color: "#1A56DB", image: img("photo-1507525428034-b723cf961d3e") },
-  { id: "phone", label: "Smartphone", emoji: "📱", desc: "Find your perfect device", color: "#7C3AED", image: img("photo-1511707171634-5f897ff02aa9") },
-  { id: "laptop", label: "Laptop", emoji: "💻", desc: "Work, gaming & study", color: "#0891B2", image: img("photo-1496181133206-80ce9b88a853") },
-  { id: "tv", label: "TV", emoji: "📺", desc: "Picture-perfect viewing", color: "#059669", image: img("photo-1593784991095-a205069470b6") },
-  { id: "car", label: "Car", emoji: "🚗", desc: "Electric, sport & family", color: "#DC2626", image: img("photo-1494976388531-d1058494cdd8") },
-  { id: "fitness", label: "Fitness", emoji: "🏋️", desc: "Gym & wellness equipment", color: "#D97706", image: img("photo-1517836357463-d25dfeac3438") },
-  { id: "pet", label: "Pet", emoji: "🐕", desc: "Find your ideal companion", color: "#7C3AED", image: img("photo-1587300003388-59208cc962cb") },
-  { id: "dining", label: "Dining Out", emoji: "🍽️", desc: "Restaurants & experiences", color: "#DB2777", image: img("photo-1414235077428-338989a2e8c0") },
-  { id: "career", label: "Career", emoji: "💼", desc: "Jobs, skills & growth", color: "#1A56DB", image: img("photo-1454165804606-c3d57bc86b40") },
-];
 
 function Landing({ onStart, t, lang, setLang }) {
   const [count, setCount] = useState(0);
@@ -663,8 +633,7 @@ function Landing({ onStart, t, lang, setLang }) {
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
-      <TopNav showBack={false} t={t} />
-
+      <TopNav showBack={false} t={t} lang={lang} setLang={setLang} />
       <HeroBanner onStart={onStart} t={t} lang={lang} />
 
       {/* Stats bar */}
@@ -710,6 +679,49 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
         </div>
 
+        {/* Pricing */}
+        <div style={{ marginBottom: 80 }}>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Pricing</div>
+            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>Simple, transparent pricing</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20, maxWidth: 700, margin: "0 auto" }}>
+            {/* Free */}
+            <div style={{ background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow }}>
+              <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4 }}>Free</div>
+              <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20 }}>$0<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
+              {["3 AI decisions per day", "All 9 categories", "AI Chat (5 messages/day)", "Global recommendations"].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <span style={{ color: C.success }}>✓</span>
+                  <span style={{ color: C.textSecondary, fontSize: 14 }}>{f}</span>
+                </div>
+              ))}
+              <button style={{ width: "100%", marginTop: 20, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 12, padding: "12px", fontSize: 14, fontWeight: 700, cursor: "default" }}>
+                Current plan
+              </button>
+            </div>
+
+            {/* Pro */}
+            <div style={{ background: `linear-gradient(135deg, ${C.accent}, #3B5BDB)`, border: "none", borderRadius: 20, padding: "32px 28px", boxShadow: `0 16px 48px ${C.accent}33`, position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: 16, right: 16, background: C.gold, color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>POPULAR</div>
+              <div style={{ color: "#fff", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>Pro</div>
+              <div style={{ color: "#fff", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20 }}>$4.99<span style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span></div>
+              {["Unlimited AI decisions", "Unlimited AI Chat", "Priority processing", "Save decision history", "All 9 categories", "30+ languages"].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <span style={{ color: "#4ADE80" }}>✓</span>
+                  <span style={{ color: "rgba(255,255,255,0.9)", fontSize: 14 }}>{f}</span>
+                </div>
+              ))}
+              <button onClick={handleUpgrade}
+                style={{ width: "100%", marginTop: 20, background: "#fff", color: C.accent, border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 16px rgba(0,0,0,0.2)", transition: "all 0.2s" }}
+                onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
+                onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+                Upgrade to Pro →
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Categories */}
         <div style={{ marginBottom: 80 }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
@@ -741,11 +753,9 @@ function Landing({ onStart, t, lang, setLang }) {
               </p>
             </div>
             <button onClick={() => onStart("chat")} style={{
-              background: "#fff", color: C.accent,
-              border: "none", borderRadius: 14, padding: "16px 32px",
-              fontSize: 16, fontWeight: 800, cursor: "pointer",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s",
-              whiteSpace: "nowrap",
+              background: "#fff", color: C.accent, border: "none", borderRadius: 14,
+              padding: "16px 32px", fontSize: 16, fontWeight: 800, cursor: "pointer",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s", whiteSpace: "nowrap",
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
@@ -755,7 +765,6 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
       </div>
 
-      {/* Worldwide section */}
       <WorldwideSection t={t} />
 
       {/* Footer */}
@@ -769,8 +778,6 @@ function Landing({ onStart, t, lang, setLang }) {
           <span style={{ color: "#475569", fontSize: 12 }}>{t?.footer || "Free forever · No signup · AI-powered · Global"}</span>
         </div>
       </div>
-
-      <LanguageSwitcher lang={lang} setLang={setLang} />
     </div>
   );
 }
@@ -785,7 +792,6 @@ function ChatScreen({ onBack, t, lang, setLang }) {
   const bottomRef = useRef(null);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
-
   useEffect(() => {
     function handleOpenChat() {}
     window.addEventListener("openChat", handleOpenChat);
@@ -815,7 +821,7 @@ function ChatScreen({ onBack, t, lang, setLang }) {
 
   return (
     <div style={{ height: "100vh", background: C.bg, display: "flex", flexDirection: "column", fontFamily: "'Inter', system-ui, sans-serif" }}>
-      <TopNav showBack onBack={onBack} t={t} />
+      <TopNav showBack onBack={onBack} t={t} lang={lang} setLang={setLang} />
 
       <div style={{ flex: 1, overflowY: "auto", padding: "28px 24px", maxWidth: 800, margin: "0 auto", width: "100%" }}>
         {messages.length === 1 && (
@@ -824,12 +830,7 @@ function ChatScreen({ onBack, t, lang, setLang }) {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {suggestions.map((s, i) => (
                 <button key={i} onClick={() => setInput(s)}
-                  style={{
-                    background: C.card, border: `1px solid ${C.border}`,
-                    borderRadius: 20, padding: "8px 16px", color: C.textSecondary,
-                    fontSize: 13, cursor: "pointer", boxShadow: C.shadow,
-                    transition: "all 0.15s", fontWeight: 500,
-                  }}
+                  style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 20, padding: "8px 16px", color: C.textSecondary, fontSize: 13, cursor: "pointer", boxShadow: C.shadow, transition: "all 0.15s", fontWeight: 500 }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.accent; e.currentTarget.style.background = C.accentLight; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textSecondary; e.currentTarget.style.background = C.card; }}>
                   {s}
@@ -881,7 +882,6 @@ function ChatScreen({ onBack, t, lang, setLang }) {
         </div>
       </div>
 
-      <LanguageSwitcher lang={lang} setLang={setLang} />
       <style>{`
         @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
@@ -896,10 +896,7 @@ export default function App() {
   const [answers, setAnswers] = useState(null);
   const [lang, setLang] = useState("en");
 
-  useEffect(() => {
-    const detected = detectLanguage();
-    setLang(detected);
-  }, []);
+  useEffect(() => { setLang(detectLanguage()); }, []);
 
   useEffect(() => {
     function handleOpenChat() { setScreen("chat"); }
@@ -916,22 +913,11 @@ export default function App() {
   }
 
   if (screen === "questions" && category) {
-    return <QuestionScreen
-      category={category}
-      onComplete={(ans) => { setAnswers(ans); setScreen("results"); }}
-      onBack={() => setScreen("landing")}
-      t={t}
-    />;
+    return <QuestionScreen category={category} onComplete={(ans) => { setAnswers(ans); setScreen("results"); }} onBack={() => setScreen("landing")} t={t} />;
   }
 
   if (screen === "results" && category && answers) {
-    return <ResultsScreen
-      category={category}
-      answers={answers}
-      onRestart={() => { setAnswers(null); setScreen("questions"); }}
-      onBack={() => { setAnswers(null); setScreen("questions"); }}
-      t={t}
-    />;
+    return <ResultsScreen category={category} answers={answers} onRestart={() => { setAnswers(null); setScreen("questions"); }} onBack={() => { setAnswers(null); setScreen("questions"); }} t={t} />;
   }
 
   if (screen === "chat") return <ChatScreen onBack={() => setScreen("landing")} t={t} lang={lang} setLang={setLang} />;
