@@ -723,11 +723,29 @@ function Landing({ onStart, t, lang, setLang }) {
                   <span style={{ color: "rgba(255,255,255,0.9)", fontSize: 14 }}>{f}</span>
                 </div>
               ))}
-              <button onClick={handleUpgrade}
+              <button onClick={() => handleUpgrade("pro")}
                 style={{ width: "100%", marginTop: 20, background: "#fff", color: C.accent, border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 16px rgba(0,0,0,0.2)", transition: "all 0.2s" }}
                 onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
                 onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
                 Upgrade to Pro →
+              </button>
+            </div>
+
+            {/* Premium */}
+            <div style={{ background: `linear-gradient(135deg, #7C3AED, #A78BFA)`, border: "none", borderRadius: 20, padding: "32px 28px", boxShadow: `0 16px 48px rgba(124,58,237,0.3)`, position: "relative", overflow: "hidden" }}>
+              <div style={{ color: "#fff", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>Premium</div>
+              <div style={{ color: "#fff", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20 }}>$9.99<span style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span></div>
+              {["Everything in Pro", "PDF export of decisions", "Priority support", "Early access to new categories"].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <span style={{ color: "#4ADE80" }}>✓</span>
+                  <span style={{ color: "rgba(255,255,255,0.9)", fontSize: 14 }}>{f}</span>
+                </div>
+              ))}
+              <button onClick={() => handleUpgrade("premium")}
+                style={{ width: "100%", marginTop: 20, background: "#fff", color: "#7C3AED", border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 16px rgba(0,0,0,0.2)", transition: "all 0.2s" }}
+                onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
+                onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+                Upgrade to Premium →
               </button>
             </div>
           </div>
