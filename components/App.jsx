@@ -167,11 +167,12 @@ const CATEGORIES_LIST = [
   { id: "career", label: "Career", emoji: "💼", desc: "Jobs, skills & growth", color: "#1A56DB", image: img("photo-1454165804606-c3d57bc86b40") },
 ];
 
-async function handleUpgrade() {
+async function handleUpgrade(plan = "pro") {
   try {
     const response = await fetch("/api/create-checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan }),
     });
     const data = await response.json();
     if (data.url) window.location.href = data.url;
@@ -180,7 +181,6 @@ async function handleUpgrade() {
     alert("Connection error. Please try again.");
   }
 }
-
 function Badge({ children, color = "#1A56DB" }) {
   return (
     <span style={{
@@ -231,17 +231,28 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
         {/* Right side */}
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
 
-          {/* Upgrade button */}
-          <button onClick={handleUpgrade} style={{
+{/* Upgrade buttons */}
+          <button onClick={() => handleUpgrade("pro")} style={{
             background: `linear-gradient(135deg, #D97706, #F59E0B)`,
             color: "#fff", border: "none", borderRadius: 10,
-            padding: "8px 16px", fontSize: 13, fontWeight: 700,
+            padding: "8px 14px", fontSize: 13, fontWeight: 700,
             cursor: "pointer", boxShadow: "0 4px 12px rgba(217,119,6,0.4)",
             transition: "all 0.2s", whiteSpace: "nowrap",
           }}
             onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
             onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-            ✦ Upgrade Pro · $4.99
+            ✦ Pro · $4.99
+          </button>
+          <button onClick={() => handleUpgrade("premium")} style={{
+            background: `linear-gradient(135deg, #7C3AED, #A78BFA)`,
+            color: "#fff", border: "none", borderRadius: 10,
+            padding: "8px 14px", fontSize: 13, fontWeight: 700,
+            cursor: "pointer", boxShadow: "0 4px 12px rgba(124,58,237,0.4)",
+            transition: "all 0.2s", whiteSpace: "nowrap",
+          }}
+            onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
+            onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+            ★ Premium · $9.99
           </button>
 
           {/* Free badge */}
