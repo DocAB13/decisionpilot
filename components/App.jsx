@@ -919,11 +919,28 @@ function ChatScreen({ onBack, t, lang, setLang }) {
   );
 }
 
+const FREE_DAILY_LIMIT = 3;
+
+function getDecisionCount() {
+  if (typeof window === "undefined") return 0;
+  const today = new Date().toDateString();
+  const stored = JSON.parse(localStorage.getItem("dp_decisions") || "{}");
+  if (stored.date !== today) return 0;
+  return stored.count || 0;
+}
+
+function incrementDecisionCount() {
+  const today = new Date().toDateString();
+  const current = getDecisionCount();
+  localStorage.setItem("dp_decisions", JSON.stringify({ date: today, count: current + 1 }));
+}
+
 export default function App() {
   const [screen, setScreen] = useState("landing");
   const [category, setCategory] = useState(null);
   const [answers, setAnswers] = useState(null);
   const [lang, setLang] = useState("en");
+  const [showLimitModal, setShowLimitModal] = useState(false);
 
   useEffect(() => { setLang(detectLanguage()); }, []);
 
@@ -936,7 +953,15 @@ export default function App() {
   const t = getTranslation(lang);
 
   function handleStart(mode, id = null) {
-    if (mode === "tree" && id) { setCategory(id); setScreen("questions"); }
+    if (mode === "tree" && id) {
+      if (getDecisionCount() >= FREE_DAILY_LIMIT) {
+        setShowLimitModal(true);
+        return;
+      }
+      incrementDecisionCount();
+      setCategory(id);
+      setScreen("questions");
+    }
     else if (mode === "chat") { setScreen("chat"); }
     else { setScreen("landing"); }
   }
@@ -950,5 +975,43 @@ export default function App() {
   }
 
   if (screen === "chat") return <ChatScreen onBack={() => setScreen("landing")} t={t} lang={lang} setLang={setLang} />;
-  return <Landing onStart={handleStart} t={t} lang={lang} setLang={setLang} />;
+
+  return (
+    <>
+      <Landing onStart={handleStart} t={t} lang={lang} setLang={setLang} />
+      {showLimitModal && (
+        <div style={{
+          position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          zIndex: 1000, padding: 20,
+        }} onClick={() => setShowLimitModal(false)}>
+          <div style={{
+            background: "#fff", borderRadius: 20, padding: "36px 32px",
+            maxWidth: 380, textAlign: "center", boxShadow: "0 24px 60px rgba(0,0,0,0.3)",
+          }} onClick={(e) => e.stopPropagation()}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>⏳</div>
+            <h3 style={{ color: "#0F172A", fontSize: 20, fontWeight: 800, marginBottom: 8 }}>
+              Daily limit reached
+            </h3>
+            <p style={{ color: "#475569", fontSize: 14, marginBottom: 24, lineHeight: 1.5 }}>
+              You've used your {FREE_DAILY_LIMIT} free decisions for today. Upgrade for unlimited access, or come back tomorrow.
+            </p>
+            <button onClick={() => handleUpgrade("pro")} style={{
+              width: "100%", background: "linear-gradient(135deg, #1A56DB, #3B5BDB)",
+              color: "#fff", border: "none", borderRadius: 12, padding: "13px",
+              fontSize: 15, fontWeight: 800, cursor: "pointer", marginBottom: 10,
+            }}>
+              ✦ Upgrade to Pro · $4.99/mo
+            </button>
+            <button onClick={() => setShowLimitModal(false)} style={{
+              width: "100%", background: "transparent", color: "#94A3B8",
+              border: "none", padding: "8px", fontSize: 13, cursor: "pointer",
+            }}>
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
