@@ -1,8 +1,7 @@
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-
+import Link from 'next/link'
 const App = dynamic(() => import('../components/App'), { ssr: false })
-
 export default function Home() {
   return (
     <>
@@ -16,6 +15,11 @@ export default function Home() {
         <meta property="og:url" content="https://decisionpilot.tech" />
       </Head>
       <App />
+      <div style={{ textAlign: 'center', padding: '24px', background: '#F8F9FC' }}>
+        <Link href="/guides" style={{ color: '#1A56DB', fontSize: '14px', textDecoration: 'none' }}>
+          📚 Browse our Decision Guides →
+        </Link>
+      </div>
     </>
   )
 }
