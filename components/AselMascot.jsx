@@ -9,17 +9,28 @@ const IDLE_MESSAGES = [
 
 const WALK_SPOTS = [6, 24, 44, 62, 78, 50, 18];
 
+const CATEGORY_COPY = {
+  vacation: { acc: "beach", q: "Sun, sand, and smart savings — let's compare!", r: "Pack your bags — here are my top picks!" },
+  car: { acc: "auto", q: "Buckle up — let's find your best ride and save some cash.", r: "Here are my top rides — compared and ranked!" },
+  phone: { acc: "phone", q: "New phone? I'll help you save time and money.", r: "Here's my pick for your next phone!" },
+  laptop: { acc: "laptop", q: "Let's find the perfect laptop for your budget.", r: "Here are my top laptop picks!" },
+  tv: { acc: "tv", q: "Big screen, smart choice — let's compare TVs.", r: "Here's the best TV for your setup!" },
+  fitness: { acc: "fitness", q: "Let's get you moving with the right gear.", r: "Here's my top fitness pick!" },
+  pet: { acc: "pet", q: "Let's find what's best for your furry friend.", r: "Here are my top picks for your pet!" },
+  dining: { acc: "dining", q: "Hungry for a good decision? Let's compare.", r: "Bon appétit — here's my top pick!" },
+  career: { acc: "career", q: "Big career move? Let's think it through.", r: "Here's what I'd recommend for your career!" },
+};
+
 function messageForScreen(screen, category) {
-  if (screen === "questions") return "Pick what fits you — I'll keep the savings coming.";
-  if (screen === "results") return "Here are my top picks — saved you hours of research!";
+  const copy = CATEGORY_COPY[category];
+  if (!copy) return null;
+  if (screen === "questions") return copy.q;
+  if (screen === "results") return copy.r;
   return null;
 }
 
 function accessoryForCategory(category) {
-  if (category === "vacation") return "beach";
-  if (category === "car") return "auto";
-  if (category === "phone") return "phone";
-  return "none";
+  return CATEGORY_COPY[category]?.acc || "none";
 }
 
 export default function AselMascot({ screen, category }) {
@@ -182,6 +193,52 @@ export default function AselMascot({ screen, category }) {
               <g>
                 <rect x="29" y="102" width="11" height="19" rx="2.6" fill="#1B2A52" />
                 <rect x="31.5" y="105" width="6" height="13" fill="#5FD4FF" />
+              </g>
+            )}
+            {accessory === "laptop" && (
+              <g>
+                <rect x="24" y="98" width="18" height="13" rx="1.6" fill="#1B2A52" />
+                <rect x="26" y="100" width="14" height="9" fill="#5FD4FF" />
+                <rect x="21" y="111" width="24" height="3" rx="1.5" fill="#C9CEE0" />
+              </g>
+            )}
+            {accessory === "tv" && (
+              <g>
+                <rect x="23" y="98" width="22" height="14" rx="2" fill="#1B2A52" />
+                <rect x="25.5" y="100.5" width="17" height="9" fill="#5FD4FF" />
+                <rect x="32" y="112" width="4" height="4" fill="#C9CEE0" />
+                <rect x="27" y="116" width="14" height="2" rx="1" fill="#C9CEE0" />
+              </g>
+            )}
+            {accessory === "fitness" && (
+              <g>
+                <rect x="26" y="111.5" width="16" height="3" rx="1.5" fill="#1B2A52" />
+                <circle cx="25" cy="113" r="5" fill="#1B2A52" />
+                <circle cx="43" cy="113" r="5" fill="#1B2A52" />
+                <circle cx="25" cy="113" r="2" fill="#C9CEE0" />
+                <circle cx="43" cy="113" r="2" fill="#C9CEE0" />
+              </g>
+            )}
+            {accessory === "pet" && (
+              <g>
+                <circle cx="34" cy="111" r="4.4" fill="#1B2A52" />
+                <circle cx="27" cy="105" r="2.6" fill="#1B2A52" />
+                <circle cx="34" cy="102" r="2.6" fill="#1B2A52" />
+                <circle cx="41" cy="105" r="2.6" fill="#1B2A52" />
+              </g>
+            )}
+            {accessory === "dining" && (
+              <g>
+                <rect x="29" y="98" width="2.4" height="22" rx="1.2" fill="#1B2A52" />
+                <path d="M27.5 98 v6 M29.2 98 v6 M31 98 v6" stroke="#1B2A52" strokeWidth="1.6" strokeLinecap="round" />
+                <rect x="38" y="98" width="2.4" height="22" rx="1.2" fill="#1B2A52" />
+              </g>
+            )}
+            {accessory === "career" && (
+              <g>
+                <rect x="23" y="104" width="22" height="15" rx="2.5" fill="#1B2A52" />
+                <rect x="30" y="100" width="8" height="6" rx="1.8" fill="none" stroke="#1B2A52" strokeWidth="2.2" />
+                <rect x="32.5" y="110" width="3" height="3" fill="#D4AF37" />
               </g>
             )}
           </svg>

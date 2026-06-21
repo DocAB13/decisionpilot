@@ -317,30 +317,35 @@ function CategoryCard({ cat, onClick }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         background: C.card, border: `1.5px solid ${hovered ? cat.color : C.border}`,
-        borderRadius: 18, overflow: "hidden", cursor: "pointer",
+        borderRadius: 20, overflow: "hidden", cursor: "pointer",
         transition: "all 0.25s cubic-bezier(.4,0,.2,1)",
-        transform: hovered ? "translateY(-4px)" : "translateY(0)",
-        boxShadow: hovered ? `0 16px 40px ${cat.color}25` : C.shadow,
+        transform: hovered ? "translateY(-5px)" : "translateY(0)",
+        boxShadow: hovered ? `0 18px 44px ${cat.color}28` : C.shadow,
         padding: 0, textAlign: "left",
       }}>
-      <div style={{
-        height: 130, backgroundImage: `url(${cat.image})`,
-        backgroundSize: "cover", backgroundPosition: "center", position: "relative",
-      }}>
+      <div style={{ height: 130, position: "relative", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", inset: 0, backgroundImage: `url(${cat.image})`,
+          backgroundSize: "cover", backgroundPosition: "center",
+          transform: hovered ? "scale(1.08)" : "scale(1)",
+          transition: "transform 0.4s cubic-bezier(.4,0,.2,1)",
+        }} />
         <div style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg, transparent 30%, ${cat.color}DD 100%)` }} />
-        <div style={{ position: "absolute", top: 12, left: 12, fontSize: 28 }}>{cat.emoji}</div>
-        {hovered && (
-          <div style={{
-            position: "absolute", bottom: 10, right: 10,
-            background: cat.color, color: "#fff",
-            borderRadius: 8, padding: "4px 10px", fontSize: 11, fontWeight: 700,
-          }}>Start →</div>
-        )}
+        <div style={{ position: "absolute", top: 12, left: 12, fontSize: 28, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.25))" }}>{cat.emoji}</div>
+        <div style={{
+          position: "absolute", bottom: 10, right: 10,
+          background: "#fff", color: cat.color,
+          borderRadius: 999, padding: "5px 12px", fontSize: 11, fontWeight: 800,
+          display: "flex", alignItems: "center", gap: 4,
+          opacity: hovered ? 1 : 0, transform: hovered ? "translateX(0)" : "translateX(6px)",
+          transition: "all 0.2s ease", boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+        }}>Start <span style={{ animation: hovered ? "catNudge 0.8s ease-in-out infinite" : "none" }}>→</span></div>
       </div>
       <div style={{ padding: "14px 16px 16px" }}>
-        <div style={{ color: C.text, fontWeight: 700, fontSize: 15, marginBottom: 3 }}>{cat.label}</div>
+        <div style={{ color: C.text, fontWeight: 700, fontSize: 15, marginBottom: 3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{cat.label}</div>
         <div style={{ color: C.muted, fontSize: 12, lineHeight: 1.5 }}>{cat.desc}</div>
       </div>
+      <style>{`@keyframes catNudge { 0%,100%{transform:translateX(0);} 50%{transform:translateX(3px);} }`}</style>
     </button>
   );
 }
@@ -539,19 +544,29 @@ function RecommendationCard({ pick, index }) {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
           <div>
-            <div style={{ color: C.success, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>✓ Pros</div>
+            <div style={{ color: C.success, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>Pros</div>
             {pick.pros?.map((p, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 5 }}>
-                <span style={{ color: C.success, fontSize: 13, marginTop: 1, flexShrink: 0 }}>✓</span>
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 7 }}>
+                <span style={{
+                  width: 16, height: 16, minWidth: 16, borderRadius: "50%",
+                  background: "#DCFCE7", color: "#16A34A",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 10, fontWeight: 900, marginTop: 1,
+                }}>✓</span>
                 <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
               </div>
             ))}
           </div>
           <div>
-            <div style={{ color: "#DC2626", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>✗ Cons</div>
+            <div style={{ color: "#DC2626", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>Cons</div>
             {pick.cons?.map((p, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 5 }}>
-                <span style={{ color: "#DC2626", fontSize: 13, marginTop: 1, flexShrink: 0 }}>✗</span>
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 7 }}>
+                <span style={{
+                  width: 16, height: 16, minWidth: 16, borderRadius: "50%",
+                  background: "#FEE2E2", color: "#DC2626",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 10, fontWeight: 900, marginTop: 1,
+                }}>✕</span>
                 <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
               </div>
             ))}
