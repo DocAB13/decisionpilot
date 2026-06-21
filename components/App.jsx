@@ -226,7 +226,7 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 18, boxShadow: `0 4px 12px ${C.accent}40`,
           }}>🧭</div>
-          <span style={{ color: C.text, fontWeight: 800, fontSize: 19, letterSpacing: -0.5 }}>DecisionPilot</span>
+          <span style={{ color: C.text, fontWeight: 800, fontSize: 19, letterSpacing: -0.5, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
         </div>
 
         {/* Right side */}
@@ -520,7 +520,7 @@ function RecommendationCard({ pick, index }) {
         }}>{index + 1}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-            <span style={{ color: C.text, fontWeight: 800, fontSize: 18 }}>{pick.name}</span>
+            <span style={{ color: C.text, fontWeight: 800, fontSize: 18, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{pick.name}</span>
             {isTop && <Badge color={C.gold}>Top pick</Badge>}
             {pick.badge && <Badge color={c}>{pick.badge}</Badge>}
           </div>
@@ -655,6 +655,7 @@ function Landing({ onStart, t, lang, setLang }) {
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
+      <style>{`h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }`}</style>
       <TopNav showBack={false} t={t} lang={lang} setLang={setLang} />
       <HeroBanner onStart={onStart} t={t} lang={lang} />
 
@@ -668,7 +669,7 @@ function Landing({ onStart, t, lang, setLang }) {
             { value: "100%", label: t?.free || "Free" },
           ].map((s, i) => (
             <div key={i} style={{ textAlign: "center" }}>
-              <div style={{ color: C.accent, fontSize: 24, fontWeight: 900, letterSpacing: -0.5 }}>{s.value}</div>
+              <div style={{ color: C.accent, fontSize: 24, fontWeight: 900, letterSpacing: -0.5, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.value}</div>
               <div style={{ color: C.muted, fontSize: 12, marginTop: 3, fontWeight: 500 }}>{s.label}</div>
             </div>
           ))}
@@ -710,8 +711,8 @@ function Landing({ onStart, t, lang, setLang }) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20, maxWidth: 700, margin: "0 auto" }}>
             {/* Free */}
             <div style={{ background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow }}>
-              <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4 }}>Free</div>
-              <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20 }}>$0<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
+              <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Free</div>
+              <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$0<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
               {["3 AI decisions per day", "All 9 categories", "AI Chat (5 messages/day)", "Global recommendations"].map((f, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                   <span style={{ color: C.success }}>✓</span>
@@ -726,8 +727,8 @@ function Landing({ onStart, t, lang, setLang }) {
             {/* Pro */}
             <div style={{ background: `linear-gradient(135deg, ${C.accent}, #3B5BDB)`, border: "none", borderRadius: 20, padding: "32px 28px", boxShadow: `0 16px 48px ${C.accent}33`, position: "relative", overflow: "hidden" }}>
               <div style={{ position: "absolute", top: 16, right: 16, background: C.gold, color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>POPULAR</div>
-              <div style={{ color: "#fff", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>Pro</div>
-              <div style={{ color: "#fff", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20 }}>$4.99<span style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span></div>
+              <div style={{ color: "#fff", fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pro</div>
+              <div style={{ color: "#fff", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$4.99<span style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span></div>
               {["Unlimited AI decisions", "Unlimited AI Chat", "Priority processing", "Save decision history", "All 9 categories", "30+ languages"].map((f, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                   <span style={{ color: "#4ADE80" }}>✓</span>
@@ -747,8 +748,8 @@ function Landing({ onStart, t, lang, setLang }) {
               <div style={{ position: "absolute", top: 16, right: 16, display: "flex", alignItems: "center", gap: 5, background: "#1E1A0E", color: "#D4AF37", border: "1px solid #3A2F12", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>
                 ♛ PREMIUM
               </div>
-              <div style={{ color: "#F4E7C1", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>Premium</div>
-              <div style={{ color: "#F4E7C1", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20 }}>$9.99<span style={{ fontSize: 16, color: "#8A7B52", fontWeight: 500 }}>/month</span></div>
+              <div style={{ color: "#F4E7C1", fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Premium</div>
+              <div style={{ color: "#F4E7C1", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$9.99<span style={{ fontSize: 16, color: "#8A7B52", fontWeight: 500 }}>/month</span></div>
               {["Everything in Pro", "PDF export of decisions", "Priority support", "Early access to new categories"].map((f, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                   <span style={{ color: "#D4AF37" }}>✓</span>
@@ -829,7 +830,7 @@ function Landing({ onStart, t, lang, setLang }) {
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
-            <span style={{ color: "#fff", fontWeight: 800, fontSize: 16 }}>DecisionPilot</span>
+            <span style={{ color: "#fff", fontWeight: 800, fontSize: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
             <span style={{ color: "#475569", fontSize: 13 }}>© 2026</span>
           </div>
           <span style={{ color: "#475569", fontSize: 12 }}>{t?.footer || "Free forever · No signup · AI-powered · Global"}</span>
