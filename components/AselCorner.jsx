@@ -1,8 +1,24 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function AselCorner() {
+const FREE_DAILY_LIMIT = 3;
+
+function getDecisionCount() {
+  if (typeof window === "undefined") return 0;
+  const today = new Date().toDateString();
+  const stored = JSON.parse(localStorage.getItem("dp_decisions") || "{}");
+  if (stored.date !== today) return 0;
+  return stored.count || 0;
+}
+
+function scrollToId(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+export default function AselCorner({ screen = "landing" }) {
   const [hovered, setHovered] = useState(false);
   const [wave, setWave] = useState(false);
+  const [tip, setTip] = useState(null);
+  const tipTimers = useRef([]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -12,9 +28,50 @@ export default function AselCorner() {
     return () => clearInterval(id);
   }, []);
 
+  function showTip(key, text, action) {
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+    setTip({ text, action });
+    const hideTimer = setTimeout(() => setTip(t => (t?.text === text ? null : t)), 9000);
+    tipTimers.current.push(hideTimer);
+  }
+
+  useEffect(() => {
+    tipTimers.current.forEach(clearTimeout);
+    tipTimers.current = [];
+
+    if (screen === "landing") {
+      if (getDecisionCount() >= FREE_DAILY_LIMIT - 1) {
+        const t = setTimeout(() => showTip("asel_tip_limit", "Heads up — this may be your last free decision today. Pro unlocks unlimited 🚀", () => scrollToId("pricing")), 2500);
+        tipTimers.current.push(t);
+      } else {
+        const t = setTimeout(() => showTip("asel_tip_idle", "Stuck choosing? Pick a category above and I'll help 👆", () => scrollToId("categories")), 16000);
+        tipTimers.current.push(t);
+      }
+    } else if (screen === "results") {
+      const t = setTimeout(() => showTip("asel_tip_results", "Need a second opinion? Let's chat 💬", null), 6000);
+      tipTimers.current.push(t);
+    }
+
+    return () => tipTimers.current.forEach(clearTimeout);
+  }, [screen]);
+
   function handleClick() {
+    if (tip) {
+      const action = tip.action;
+      setTip(null);
+      if (action) { action(); return; }
+    }
     window.dispatchEvent(new Event("openChat"));
   }
+
+  function dismissTip(e) {
+    e.stopPropagation();
+    setTip(null);
+  }
+
+  const bubbleVisible = hovered || !!tip;
+  const bubbleText = tip ? tip.text : "💬 Chat with Asel";
 
   return (
     <div
@@ -27,14 +84,22 @@ export default function AselCorner() {
         alignItems: "flex-end", gap: 8,
       }}>
       <div style={{
-        background: "#fff", border: "1px solid #E8ECF4", borderRadius: 14,
-        padding: "8px 13px", fontSize: 12.5, fontWeight: 600, color: "#0F172A",
-        boxShadow: "0 8px 20px rgba(15,23,42,0.16)", whiteSpace: "nowrap",
-        opacity: hovered ? 1 : 0, transform: hovered ? "translateY(0)" : "translateY(6px)",
+        background: tip ? "#1A56DB" : "#fff", border: tip ? "1px solid #1A56DB" : "1px solid #E8ECF4", borderRadius: 14,
+        padding: "10px 14px", fontSize: 12.5, fontWeight: 600, color: tip ? "#fff" : "#0F172A",
+        boxShadow: "0 8px 20px rgba(15,23,42,0.16)", whiteSpace: tip ? "normal" : "nowrap",
+        maxWidth: tip ? 220 : "none", lineHeight: 1.5,
+        opacity: bubbleVisible ? 1 : 0, transform: bubbleVisible ? "translateY(0)" : "translateY(6px)",
         transition: "all 0.25s ease", position: "relative",
       }}>
-        💬 Chat with Asel
-        <div style={{ position: "absolute", right: 22, bottom: -6, width: 10, height: 10, background: "#fff", borderRight: "1px solid #E8ECF4", borderBottom: "1px solid #E8ECF4", transform: "rotate(45deg)" }} />
+        {bubbleText}
+        {tip && (
+          <span onClick={dismissTip} style={{
+            position: "absolute", top: -7, right: -7, width: 20, height: 20, borderRadius: "50%",
+            background: "#fff", color: "#475569", display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 12, fontWeight: 700, boxShadow: "0 2px 6px rgba(0,0,0,0.2)", cursor: "pointer",
+          }}>×</span>
+        )}
+        <div style={{ position: "absolute", right: 22, bottom: -6, width: 10, height: 10, background: tip ? "#1A56DB" : "#fff", borderRight: `1px solid ${tip ? "#1A56DB" : "#E8ECF4"}`, borderBottom: `1px solid ${tip ? "#1A56DB" : "#E8ECF4"}`, transform: "rotate(45deg)" }} />
       </div>
 
       <div style={{
@@ -42,8 +107,14 @@ export default function AselCorner() {
         border: "2px solid #E8ECF4", boxShadow: hovered ? "0 10px 28px rgba(26,86,219,0.25)" : "0 8px 20px rgba(15,23,42,0.18)",
         display: "flex", alignItems: "center", justifyContent: "center",
         transform: hovered ? "scale(1.06)" : "scale(1)",
-        transition: "all 0.2s ease",
+        transition: "all 0.2s ease", position: "relative",
       }}>
+        {tip && (
+          <span style={{
+            position: "absolute", inset: -6, borderRadius: "50%",
+            border: "2px solid #1A56DB", animation: "aselTipPulse 1.6s ease-out infinite",
+          }} />
+        )}
         <svg viewBox="0 0 140 130" width="46" height="44" style={{ animation: "aselCornerBob 2.8s ease-in-out infinite" }}>
           <defs>
             <linearGradient id="aselCornerGrad" x1="0" y1="0" x2="0" y2="1">
@@ -84,6 +155,7 @@ export default function AselCorner() {
       <style>{`
         @keyframes aselCornerBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);} }
         @keyframes aselCornerGem { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+        @keyframes aselTipPulse { 0%{opacity:0.7; transform:scale(1);} 100%{opacity:0; transform:scale(1.35);} }
       `}</style>
     </div>
   );

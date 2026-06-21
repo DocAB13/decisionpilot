@@ -1159,7 +1159,7 @@ export default function App() {
     return (
       <>
         <QuestionScreen category={category} onComplete={(ans) => { setAnswers(ans); setScreen("results"); }} onBack={() => setScreen("landing")} t={t} />
-        <AselCorner />
+        <AselCorner screen="questions" />
       </>
     );
   }
@@ -1168,7 +1168,7 @@ export default function App() {
     return (
       <>
         <ResultsScreen category={category} answers={answers} onRestart={() => { setAnswers(null); setScreen("questions"); }} onBack={() => { setAnswers(null); setScreen("questions"); }} t={t} />
-        <AselCorner />
+        <AselCorner screen="results" />
       </>
     );
   }
@@ -1178,7 +1178,7 @@ export default function App() {
   return (
     <>
       <Landing onStart={handleStart} t={t} lang={lang} setLang={setLang} />
-      <AselCorner />
+      <AselCorner screen="landing" />
       {showLimitModal && (
         <div style={{
           position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
