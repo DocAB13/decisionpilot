@@ -303,7 +303,7 @@ export function HeroBanner({ onStart, t, lang }) {
               border: "none", borderRadius: 10, padding: "13px 24px",
               fontSize: 15, fontWeight: 800, cursor: "pointer",
               boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-              transition: "all 0.2s",
+              transition: "all 0.2s", animation: "heroGlow 2.6s ease-in-out infinite",
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
@@ -320,6 +320,13 @@ export function HeroBanner({ onStart, t, lang }) {
               onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>
               {t.btn_chat}
             </button>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 18 }}>
+            <span style={{ color: "#FBBF24", fontSize: 13, letterSpacing: 1 }}>★★★★★</span>
+            <span style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 500 }}>
+              4.8/5 · Trusted by 50,000+ people
+            </span>
           </div>
         </div>
 
@@ -382,6 +389,10 @@ export function HeroBanner({ onStart, t, lang }) {
         @keyframes progress {
           from { width: 0%; }
           to { width: 100%; }
+        }
+        @keyframes heroGlow {
+          0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+          50% { box-shadow: 0 4px 26px rgba(255,255,255,0.45); }
         }
       `}</style>
     </div>
@@ -448,7 +459,7 @@ export function WorldwideSection({ t }) {
               { value: "9", label: "Categories" },
             ].map((s, i) => (
               <div key={i}>
-                <div style={{ color: "#66ffaa", fontSize: 28, fontWeight: 900, letterSpacing: -1 }}>{s.value}</div>
+                <div style={{ color: "#66ffaa", fontSize: 28, fontWeight: 900, letterSpacing: -1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.value}</div>
                 <div style={{ color: "rgba(180,210,255,0.7)", fontSize: 13, marginTop: 2 }}>{s.label}</div>
               </div>
             ))}
