@@ -98,7 +98,7 @@ export default function AselPose({ pose = "greet", accessory = "none", size = 11
 
   if (isPeek) {
     return (
-      <div style={{ width: size, height: size * 0.62, overflow: "hidden", pointerEvents: "none", ...style }}>
+      <div style={{ width: size, height: size * 0.62, overflow: "hidden", pointerEvents: "none", animation: "aselPopPeek 0.45s cubic-bezier(.34,1.56,.64,1) both", ...style }}>
         <svg viewBox="0 0 140 90" width={size} height={size * 0.62} style={{ transform: flip ? "scaleX(-1)" : "none" }}>
           <defs>
             <linearGradient id="aselPoseGradPeek" x1="0" y1="0" x2="0" y2="1">
@@ -124,6 +124,7 @@ export default function AselPose({ pose = "greet", accessory = "none", size = 11
           @keyframes aselGlance { 0%,100%{transform:rotate(0deg);} 25%{transform:rotate(-9deg);} 60%{transform:rotate(7deg);} }
           .asel-gem { animation: aselGemP 1.8s ease-in-out infinite; }
           @keyframes aselGemP { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+          @keyframes aselPopPeek { 0%{opacity:0; transform:translateY(8px);} 100%{opacity:1; transform:translateY(0);} }
         `}</style>
       </div>
     );
@@ -183,7 +184,8 @@ export default function AselPose({ pose = "greet", accessory = "none", size = 11
       </svg>
 
       <style>{`
-        .asel-pose-bob { animation: aselPoseBob 3s ease-in-out infinite; }
+        .asel-pose-bob { animation: aselPop 0.45s cubic-bezier(.34,1.56,.64,1) both, aselPoseBob 3s ease-in-out 0.45s infinite; }
+        @keyframes aselPop { 0%{opacity:0; transform:scale(0.55) translateY(10px) ${pose === "lean" ? "rotate(-6deg)" : ""};} 70%{opacity:1; transform:scale(1.08) translateY(-2px) ${pose === "lean" ? "rotate(-6deg)" : ""};} 100%{opacity:1; transform:scale(1) translateY(0) ${pose === "lean" ? "rotate(-6deg)" : ""};} }
         @keyframes aselPoseBob { 0%,100%{transform:translateY(0) ${pose === "lean" ? "rotate(-6deg)" : ""};} 50%{transform:translateY(-5px) ${pose === "lean" ? "rotate(-6deg)" : ""};} }
         .asel-wave-arm { transform-origin: 98px 80px; animation: aselWave 4.2s ease-in-out infinite; }
         @keyframes aselWave { 0%, 70%, 100% { transform: rotate(0deg); } 78% { transform: rotate(-8deg); } 86% { transform: rotate(6deg); } 94% { transform: rotate(-4deg); } }

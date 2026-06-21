@@ -13,6 +13,11 @@ const C = {
   shadowLg: "0 12px 40px rgba(15,23,42,0.13)",
 };
 
+const ASEL_ACCESSORY_Q = {
+  vacation: "beach", car: "auto", phone: "phone", laptop: "laptop",
+  tv: "tv", fitness: "fitness", pet: "pet", dining: "dining", career: "career",
+};
+
 function img(id, w = 800, h = 500) {
   return `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`;
 }
@@ -381,6 +386,9 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
         backgroundSize: "cover", backgroundPosition: "center", position: "relative",
       }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.65))" }} />
+        <div style={{ position: "absolute", top: 14, right: 24, zIndex: 2 }}>
+          <AselPose key={step} pose="greet" accessory={ASEL_ACCESSORY_Q[category] || "none"} size={64} />
+        </div>
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
           <div style={{ display: "flex", gap: 4, padding: "0 32px 10px" }}>
             {tree.questions.map((_, i) => (
@@ -706,13 +714,24 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
             {[
-              { num: "01", icon: "🎯", title: t?.step1_title || "Choose a category", desc: t?.step1_desc || "Pick from 9 decision categories" },
-              { num: "02", icon: "💬", title: t?.step2_title || "Answer 8–10 questions", desc: t?.step2_desc || "Our AI learns exactly what you need" },
-              { num: "03", icon: "🤖", title: "AI analyzes options", desc: "Searches CNET, Wirecutter, Booking & more in real-time" },
-              { num: "04", icon: "✨", title: t?.step3_title || "Get 5 perfect matches", desc: t?.step3_desc || "Personalized picks with pros, cons & direct links" },
+              { num: "01", icon: "🎯", title: t?.step1_title || "Choose a category", desc: t?.step1_desc || "Pick from 9 decision categories", grad: [C.accent, C.purple] },
+              { num: "02", icon: "💬", title: t?.step2_title || "Answer 8–10 questions", desc: t?.step2_desc || "Our AI learns exactly what you need", grad: [C.purple, C.gold] },
+              { num: "03", icon: "🤖", title: "AI analyzes options", desc: "Searches CNET, Wirecutter, Booking & more in real-time", grad: [C.gold, C.success] },
+              { num: "04", icon: "✨", title: t?.step3_title || "Get 5 perfect matches", desc: t?.step3_desc || "Personalized picks with pros, cons & direct links", grad: [C.success, C.accent] },
             ].map((s, i) => (
-              <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "28px 24px", boxShadow: C.shadow }}>
-                <div style={{ color: C.accent, fontSize: 12, fontWeight: 800, letterSpacing: 1.5, marginBottom: 14, opacity: 0.5 }}>{s.num}</div>
+              <div key={i} style={{
+                background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "28px 24px",
+                boxShadow: C.shadow, transition: "all 0.2s ease",
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = C.shadowMd; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = C.shadow; }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: "50%",
+                  background: `linear-gradient(135deg, ${s.grad[0]}, ${s.grad[1]})`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "#fff", fontSize: 13, fontWeight: 800, marginBottom: 14,
+                  boxShadow: `0 4px 14px ${s.grad[0]}40`, fontFamily: "'Plus Jakarta Sans', sans-serif",
+                }}>{s.num}</div>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>{s.icon}</div>
                 <div style={{ color: C.text, fontWeight: 700, fontSize: 16, marginBottom: 6 }}>{s.title}</div>
                 <div style={{ color: C.muted, fontSize: 13, lineHeight: 1.6 }}>{s.desc}</div>
@@ -791,7 +810,7 @@ function Landing({ onStart, t, lang, setLang }) {
         {/* Categories */}
         <div style={{ marginBottom: 80 }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Categories</div>
+            <div style={{ display: "inline-block", background: `linear-gradient(135deg, ${C.accent}, ${C.purple})`, color: "#fff", borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Categories</div>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
               <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.what_title || "What are you deciding today?"}</h2>
               <div style={{ marginBottom: 8 }}><AselPose pose="point" size={54} /></div>
