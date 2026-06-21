@@ -670,6 +670,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
 
 function Landing({ onStart, t, lang, setLang }) {
   const [count, setCount] = useState(0);
+  const [openFaq, setOpenFaq] = useState(0);
   useEffect(() => {
     const target = 24891;
     const step = Math.ceil(target / 60);
@@ -741,7 +742,7 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
 
         {/* Pricing */}
-        <div style={{ marginBottom: 80 }}>
+        <div id="pricing" style={{ marginBottom: 80 }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Pricing</div>
             <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>Simple, transparent pricing</h2>
@@ -808,7 +809,7 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
 
         {/* Categories */}
-        <div style={{ marginBottom: 80 }}>
+        <div id="categories" style={{ marginBottom: 80 }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div style={{ display: "inline-block", background: `linear-gradient(135deg, ${C.accent}, ${C.purple})`, color: "#fff", borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Categories</div>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
@@ -855,6 +856,40 @@ function Landing({ onStart, t, lang, setLang }) {
 
       <WorldwideSection t={t} />
 
+      {/* Testimonials */}
+      <div style={{ background: C.bg, padding: "64px 24px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Loved by users</div>
+            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>Real decisions, real results</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
+            {[
+              { name: "Maria K.", tag: "Vacation", grad: [C.accent, "#38BDF8"], stars: 5, quote: "Saved me hours comparing vacation deals. Booked my trip to Greece in 10 minutes!" },
+              { name: "Thomas B.", tag: "Car", grad: [C.purple, C.accent], stars: 5, quote: "I was stuck choosing between two cars for weeks. Asel sorted it out in one chat." },
+              { name: "Sophie L.", tag: "Phone", grad: [C.gold, "#F472B6"], stars: 4, quote: "Finally a comparison site that doesn't feel like an ad. Genuinely helpful." },
+            ].map((r, i) => (
+              <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "24px", boxShadow: C.shadow }}>
+                <div style={{ color: "#FBBF24", fontSize: 14, letterSpacing: 1, marginBottom: 12 }}>{"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}</div>
+                <p style={{ color: C.textSecondary, fontSize: 14.5, lineHeight: 1.65, marginBottom: 18 }}>"{r.quote}"</p>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{
+                    width: 38, height: 38, borderRadius: "50%",
+                    background: `linear-gradient(135deg, ${r.grad[0]}, ${r.grad[1]})`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#fff", fontWeight: 800, fontSize: 14, fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  }}>{r.name.split(" ").map(p => p[0]).join("")}</div>
+                  <div>
+                    <div style={{ color: C.text, fontWeight: 700, fontSize: 13.5 }}>{r.name}</div>
+                    <div style={{ color: C.muted, fontSize: 11.5 }}>{r.tag} decision</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Trusted partners */}
       <div style={{ background: "#fff", borderTop: `1px solid ${C.border}`, padding: "48px 24px" }}>
         <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
@@ -869,15 +904,94 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
       </div>
 
-      {/* Footer */}
-      <div style={{ background: "#0F172A", padding: "40px 24px 160px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
-            <span style={{ color: "#fff", fontWeight: 800, fontSize: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
-            <span style={{ color: "#475569", fontSize: 13 }}>© 2026</span>
+      {/* FAQ */}
+      <div style={{ background: "#fff", padding: "64px 24px" }}>
+        <div style={{ maxWidth: 760, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>FAQ</div>
+            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>Frequently asked questions</h2>
           </div>
-          <span style={{ color: "#475569", fontSize: 12 }}>{t?.footer || "Free forever · No signup · AI-powered · Global"}</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {[
+              { q: "Is DecisionPilot really free?", a: "Yes — our Free plan lets you make decisions every day with no signup required. Pro and Premium add extra features like saved history and PDF exports." },
+              { q: "How does the AI make recommendations?", a: "We analyze your answers alongside real-time data from trusted sources like CNET, Wirecutter, and Booking.com to suggest options that actually fit your situation." },
+              { q: "Do you sell my data?", a: "No. We don't sell your personal data to third parties. Some of our recommendations include affiliate links to partners like AutoScout24 or Booking.com, which helps keep DecisionPilot free." },
+              { q: "Which categories can I get help with?", a: "Right now: vacations, phones, laptops, TVs, cars, fitness gear, pets, dining, and career decisions — with more being added." },
+              { q: "Can I trust the recommendations?", a: "Our comparisons are independent — we never favor a partner just because of commission. Every pick includes pros, cons, and the source we used." },
+              { q: "What languages does it support?", a: "DecisionPilot automatically detects your language and supports over 30 languages." },
+            ].map((f, i) => {
+              const open = openFaq === i;
+              return (
+                <div key={i} style={{ border: `1px solid ${C.border}`, borderRadius: 14, overflow: "hidden", background: open ? C.accentLight : C.card }}>
+                  <button onClick={() => setOpenFaq(open ? -1 : i)} style={{
+                    width: "100%", textAlign: "left", background: "none", border: "none", cursor: "pointer",
+                    padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+                  }}>
+                    <span style={{ color: C.text, fontWeight: 700, fontSize: 15 }}>{f.q}</span>
+                    <span style={{
+                      color: C.accent, fontSize: 18, fontWeight: 700, flexShrink: 0,
+                      transform: open ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.2s ease",
+                    }}>+</span>
+                  </button>
+                  <div style={{
+                    maxHeight: open ? 200 : 0, overflow: "hidden", transition: "max-height 0.3s ease",
+                  }}>
+                    <p style={{ color: C.textSecondary, fontSize: 14, lineHeight: 1.65, margin: "0 20px 18px" }}>{f.a}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{ background: "#0F172A", padding: "56px 24px 160px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32, marginBottom: 40 }}>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                <div style={{ width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
+                <span style={{ color: "#fff", fontWeight: 800, fontSize: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
+              </div>
+              <p style={{ color: "#64748B", fontSize: 12.5, lineHeight: 1.6, maxWidth: 220 }}>
+                {t?.footer || "Free forever · No signup · AI-powered · Global"}
+              </p>
+            </div>
+
+            <div>
+              <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>Explore</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <a href="#" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Home</a>
+                <a href="/guides" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Decision Guides</a>
+                <a href="#categories" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Categories</a>
+                <a href="#pricing" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Pricing</a>
+              </div>
+            </div>
+
+            <div>
+              <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>Company</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <span style={{ color: "#64748B", fontSize: 13 }}>About</span>
+                <span style={{ color: "#64748B", fontSize: 13 }}>Contact</span>
+                <span style={{ color: "#64748B", fontSize: 13 }}>Partners</span>
+              </div>
+            </div>
+
+            <div>
+              <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>Legal</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <span style={{ color: "#64748B", fontSize: 13 }}>Privacy Policy</span>
+                <span style={{ color: "#64748B", fontSize: 13 }}>Terms of Service</span>
+                <span style={{ color: "#64748B", fontSize: 13 }}>Cookie Policy</span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ borderTop: "1px solid #1E293B", paddingTop: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+            <span style={{ color: "#475569", fontSize: 12 }}>© 2026 DecisionPilot. All rights reserved.</span>
+            <span style={{ color: "#475569", fontSize: 12 }}>Made with care · 30+ languages</span>
+          </div>
         </div>
       </div>
     </div>

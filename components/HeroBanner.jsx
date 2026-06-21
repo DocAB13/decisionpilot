@@ -337,6 +337,16 @@ export function HeroBanner({ onStart, t, lang }) {
               4.8/5 · Trusted by 50,000+ people
             </span>
           </div>
+
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 14 }}>
+            {["✓ Free forever", "✓ No signup needed", "✓ Private & secure"].map(label => (
+              <span key={label} style={{
+                background: "rgba(255,255,255,0.12)", backdropFilter: "blur(6px)",
+                border: "1px solid rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.9)",
+                borderRadius: 20, padding: "5px 12px", fontSize: 12, fontWeight: 600,
+              }}>{label}</span>
+            ))}
+          </div>
         </div>
 
         {/* Right: category thumbnails */}
