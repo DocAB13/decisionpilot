@@ -386,9 +386,6 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
         backgroundSize: "cover", backgroundPosition: "center", position: "relative",
       }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.65))" }} />
-        <div style={{ position: "absolute", top: 14, right: 24, zIndex: 2 }}>
-          <AselPose key={step} pose="greet" accessory={ASEL_ACCESSORY_Q[category] || "none"} size={64} />
-        </div>
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
           <div style={{ display: "flex", gap: 4, padding: "0 32px 10px" }}>
             {tree.questions.map((_, i) => (
@@ -416,11 +413,16 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 170px" }}>
         <div key={animKey} style={{ animation: "fadeUp 0.35s ease" }}>
-          <h2 style={{
-            color: C.text, fontSize: "clamp(22px, 3.5vw, 32px)",
-            fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.25,
-            marginBottom: 36, textAlign: "center",
-          }}>{question.q}</h2>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 36, flexWrap: "wrap" }}>
+            <h2 style={{
+              color: C.text, fontSize: "clamp(22px, 3.5vw, 32px)",
+              fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.25,
+              margin: 0, textAlign: "center",
+            }}>{question.q}</h2>
+            <div style={{ flexShrink: 0 }}>
+              <AselPose key={step} pose="greet" accessory={ASEL_ACCESSORY_Q[category] || "none"} size={56} />
+            </div>
+          </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {question.options.map((opt, i) => (
@@ -749,7 +751,7 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
             {/* Free */}
-            <div style={{ background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow }}>
+            <div style={{ background: `${C.gold}14`, border: `1.5px solid ${C.gold}40`, borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow }}>
               <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Free</div>
               <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$0<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
               {["3 AI decisions per day", "All 9 categories", "AI Chat (5 messages/day)", "Global recommendations"].map((f, i) => (
