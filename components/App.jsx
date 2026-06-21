@@ -974,8 +974,8 @@ function Landing({ onStart, t, lang, setLang }) {
             <div>
               <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>Company</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <span style={{ color: "#64748B", fontSize: 13 }}>About</span>
-                <span style={{ color: "#64748B", fontSize: 13 }}>Contact</span>
+                <a href="/about" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>About</a>
+                <a href="/contact" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Contact</a>
                 <span style={{ color: "#64748B", fontSize: 13 }}>Partners</span>
               </div>
             </div>
@@ -983,9 +983,9 @@ function Landing({ onStart, t, lang, setLang }) {
             <div>
               <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>Legal</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <span style={{ color: "#64748B", fontSize: 13 }}>Privacy Policy</span>
-                <span style={{ color: "#64748B", fontSize: 13 }}>Terms of Service</span>
-                <span style={{ color: "#64748B", fontSize: 13 }}>Cookie Policy</span>
+                <a href="/privacy" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Privacy Policy</a>
+                <a href="/terms" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Terms of Service</a>
+                <a href="/cookies" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Cookie Policy</a>
               </div>
             </div>
           </div>
