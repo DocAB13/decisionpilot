@@ -1,4 +1,10 @@
 import { useState, useEffect, useRef } from "react";
+import AselPose from "./AselPose";
+
+const ASEL_ACCESSORY = {
+  vacation: "beach", car: "auto", phone: "phone", laptop: "laptop",
+  tv: "tv", fitness: "fitness", pet: "pet", dining: "dining", career: "career",
+};
 
 const SLIDES = [
   { id: "vacation", emoji: "🏖️", image: "photo-1507525428034-b723cf961d3e", color: "#0055AA" },
@@ -251,9 +257,8 @@ export function HeroBanner({ onStart, t, lang }) {
         minHeight: 420,
       }}>
         {/* Left text */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
+        <div style={{ flex: 1, minWidth: 0, position: "relative" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8,
             background: "rgba(255,255,255,0.15)", backdropFilter: "blur(10px)",
             border: "1px solid rgba(255,255,255,0.3)",
             borderRadius: 24, padding: "6px 16px", marginBottom: 20,
@@ -261,6 +266,10 @@ export function HeroBanner({ onStart, t, lang }) {
           }}>
             <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ADE80", display: "inline-block", boxShadow: "0 0 8px #4ADE80" }} />
             {t.tagline}
+          </div>
+
+          <div style={{ position: "absolute", top: 28, right: -8, opacity: isAnimating ? 0 : 1, transition: "opacity 0.3s ease" }}>
+            <AselPose pose="greet" accessory={ASEL_ACCESSORY[slide.id] || "none"} size={72} />
           </div>
 
           <h1 style={{
