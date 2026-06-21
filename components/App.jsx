@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
 import { HeroBanner, WorldwideSection } from "./HeroBanner";
+import AselMascot from "./AselMascot";
 
 const C = {
   bg: "#F8F9FC", surface: "#FFFFFF", card: "#FFFFFF", border: "#E8ECF4",
@@ -346,6 +347,7 @@ function CategoryCard({ cat, onClick }) {
 
 function QuestionScreen({ category, onComplete, onBack, t }) {
   const tree = TREES[category];
+  const catColor = CATEGORIES_LIST.find(c => c.id === category)?.color || C.accent;
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [selected, setSelected] = useState(null);
@@ -374,23 +376,31 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
       }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.65))" }} />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
+          <div style={{ display: "flex", gap: 4, padding: "0 32px 10px" }}>
+            {tree.questions.map((_, i) => (
+              <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, background: i <= step ? catColor : "rgba(255,255,255,0.25)", transition: "background 0.3s" }} />
+            ))}
+          </div>
           <div style={{ height: 3, background: "rgba(255,255,255,0.2)" }}>
-            <div style={{ height: "100%", width: `${progress}%`, background: "#fff", transition: "width 0.4s ease" }} />
+            <div style={{ height: "100%", width: `${progress}%`, background: catColor, transition: "width 0.4s ease" }} />
           </div>
         </div>
-        <div style={{ position: "absolute", bottom: 20, left: 32, display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ position: "absolute", bottom: 28, left: 32, display: "flex", alignItems: "center", gap: 10 }}>
           <button onClick={onBack} style={{
             background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
             border: "1px solid rgba(255,255,255,0.3)", color: "#fff",
             borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 13, fontWeight: 600,
           }}>← Back</button>
-          <span style={{ color: "rgba(255,255,255,0.8)", fontSize: 13, fontWeight: 500 }}>
-            {tree.emoji} {tree.label} · Question {step + 1} of {total}
+          <span style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, letterSpacing: 0.4 }}>
+            Step {step + 1} of {total}
+          </span>
+          <span style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 500 }}>
+            {tree.emoji} {tree.label}
           </span>
         </div>
       </div>
 
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px" }}>
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 170px" }}>
         <div key={animKey} style={{ animation: "fadeUp 0.35s ease" }}>
           <h2 style={{
             color: C.text, fontSize: "clamp(22px, 3.5vw, 32px)",
@@ -402,20 +412,20 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
             {question.options.map((opt, i) => (
               <button key={opt} onClick={() => handleSelect(opt)}
                 style={{
-                  background: selected === opt ? C.accentLight : C.card,
-                  border: `1.5px solid ${selected === opt ? C.accent : C.border}`,
+                  background: selected === opt ? catColor + "14" : C.card,
+                  border: `1.5px solid ${selected === opt ? catColor : C.border}`,
                   borderRadius: 14, padding: "16px 22px", textAlign: "left",
-                  cursor: "pointer", color: selected === opt ? C.accent : C.text,
+                  cursor: "pointer", color: selected === opt ? catColor : C.text,
                   fontSize: 15, fontWeight: selected === opt ? 700 : 500,
                   display: "flex", alignItems: "center", justifyContent: "space-between",
-                  transition: "all 0.15s", boxShadow: selected === opt ? `0 4px 16px ${C.accent}22` : C.shadow,
+                  transition: "all 0.15s", boxShadow: selected === opt ? `0 4px 16px ${catColor}22` : C.shadow,
                   animation: `fadeUp 0.3s ease ${i * 0.04}s both`,
                 }}
-                onMouseEnter={e => { if (selected !== opt) { e.currentTarget.style.borderColor = C.accent + "66"; e.currentTarget.style.transform = "translateX(4px)"; } }}
+                onMouseEnter={e => { if (selected !== opt) { e.currentTarget.style.borderColor = catColor + "66"; e.currentTarget.style.transform = "translateX(4px)"; } }}
                 onMouseLeave={e => { if (selected !== opt) { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.transform = "translateX(0)"; } }}>
                 <span>{opt}</span>
                 {selected === opt
-                  ? <span style={{ color: C.accent, fontSize: 18 }}>✓</span>
+                  ? <span style={{ color: catColor, fontSize: 18 }}>✓</span>
                   : <span style={{ color: C.muted, fontSize: 18 }}>›</span>}
               </button>
             ))}
@@ -484,8 +494,8 @@ function LoadingScreen({ category }) {
 
 function RecommendationCard({ pick, index }) {
   const [hovered, setHovered] = useState(false);
-  const badgeColors = [C.gold, C.accent, C.success, C.purple, "#DC2626"];
-  const c = badgeColors[index] || C.accent;
+  const isTop = index === 0;
+  const c = isTop ? C.gold : C.accent;
 
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
@@ -511,7 +521,8 @@ function RecommendationCard({ pick, index }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
             <span style={{ color: C.text, fontWeight: 800, fontSize: 18 }}>{pick.name}</span>
-            <Badge color={c}>{pick.badge}</Badge>
+            {isTop && <Badge color={C.gold}>Top pick</Badge>}
+            {pick.badge && <Badge color={c}>{pick.badge}</Badge>}
           </div>
           <div style={{ color: C.muted, fontSize: 13, fontWeight: 500 }}>{pick.price}</div>
         </div>
@@ -611,7 +622,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
         </div>
       </div>
 
-      <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px 80px" }}>
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px 170px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
           <span style={{ color: C.muted, fontSize: 13 }}>Powered by AI · Sources: CNET, TechRadar, Wirecutter & more</span>
           <button onClick={onRestart} style={{ background: C.accentLight, color: C.accent, border: `1px solid ${C.accent}33`, borderRadius: 10, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700 }}>
@@ -732,17 +743,20 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
 
             {/* Premium */}
-            <div style={{ background: `linear-gradient(135deg, #7C3AED, #A78BFA)`, border: "none", borderRadius: 20, padding: "32px 28px", boxShadow: `0 16px 48px rgba(124,58,237,0.3)`, position: "relative", overflow: "hidden" }}>
-              <div style={{ color: "#fff", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>Premium</div>
-              <div style={{ color: "#fff", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20 }}>$9.99<span style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span></div>
+            <div style={{ background: "linear-gradient(160deg, #1A1A1E, #0B0B0E)", border: "1px solid #2A2A2E", borderRadius: 20, padding: "32px 28px", boxShadow: "0 16px 48px rgba(0,0,0,0.35)", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: 16, right: 16, display: "flex", alignItems: "center", gap: 5, background: "#1E1A0E", color: "#D4AF37", border: "1px solid #3A2F12", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>
+                ♛ PREMIUM
+              </div>
+              <div style={{ color: "#F4E7C1", fontWeight: 800, fontSize: 20, marginBottom: 4 }}>Premium</div>
+              <div style={{ color: "#F4E7C1", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20 }}>$9.99<span style={{ fontSize: 16, color: "#8A7B52", fontWeight: 500 }}>/month</span></div>
               {["Everything in Pro", "PDF export of decisions", "Priority support", "Early access to new categories"].map((f, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={{ color: "#4ADE80" }}>✓</span>
-                  <span style={{ color: "rgba(255,255,255,0.9)", fontSize: 14 }}>{f}</span>
+                  <span style={{ color: "#D4AF37" }}>✓</span>
+                  <span style={{ color: "#C9CEE0", fontSize: 14 }}>{f}</span>
                 </div>
               ))}
               <button onClick={() => handleUpgrade("premium")}
-                style={{ width: "100%", marginTop: 20, background: "#fff", color: "#7C3AED", border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 16px rgba(0,0,0,0.2)", transition: "all 0.2s" }}
+                style={{ width: "100%", marginTop: 20, background: "linear-gradient(135deg, #D4AF37, #F4E7C1)", color: "#1A1A1E", border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 16px rgba(212,175,55,0.35)", transition: "all 0.2s" }}
                 onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
                 onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
                 Upgrade to Premium →
@@ -796,8 +810,22 @@ function Landing({ onStart, t, lang, setLang }) {
 
       <WorldwideSection t={t} />
 
+      {/* Trusted partners */}
+      <div style={{ background: "#fff", borderTop: `1px solid ${C.border}`, padding: "48px 24px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+          <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Our partners</div>
+          <h2 style={{ color: C.text, fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 24px" }}>Compare across trusted platforms</h2>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, marginBottom: 18 }}>
+            {["AutoScout24", "CHECK24", "Booking.com", "Wayfair", "Sixt", "Europcar"].map(name => (
+              <div key={name} style={{ fontWeight: 700, fontSize: 13, color: C.textSecondary, background: C.bg, border: `1px solid ${C.border}`, padding: "10px 16px", borderRadius: 12 }}>{name}</div>
+            ))}
+          </div>
+          <p style={{ color: C.muted, fontSize: 12.5 }}>Independent comparisons — we never favor one partner over another.</p>
+        </div>
+      </div>
+
       {/* Footer */}
-      <div style={{ background: "#0F172A", padding: "40px 24px" }}>
+      <div style={{ background: "#0F172A", padding: "40px 24px 160px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
@@ -967,11 +995,21 @@ export default function App() {
   }
 
   if (screen === "questions" && category) {
-    return <QuestionScreen category={category} onComplete={(ans) => { setAnswers(ans); setScreen("results"); }} onBack={() => setScreen("landing")} t={t} />;
+    return (
+      <>
+        <QuestionScreen category={category} onComplete={(ans) => { setAnswers(ans); setScreen("results"); }} onBack={() => setScreen("landing")} t={t} />
+        <AselMascot screen={screen} category={category} />
+      </>
+    );
   }
 
   if (screen === "results" && category && answers) {
-    return <ResultsScreen category={category} answers={answers} onRestart={() => { setAnswers(null); setScreen("questions"); }} onBack={() => { setAnswers(null); setScreen("questions"); }} t={t} />;
+    return (
+      <>
+        <ResultsScreen category={category} answers={answers} onRestart={() => { setAnswers(null); setScreen("questions"); }} onBack={() => { setAnswers(null); setScreen("questions"); }} t={t} />
+        <AselMascot screen={screen} category={category} />
+      </>
+    );
   }
 
   if (screen === "chat") return <ChatScreen onBack={() => setScreen("landing")} t={t} lang={lang} setLang={setLang} />;
@@ -979,6 +1017,7 @@ export default function App() {
   return (
     <>
       <Landing onStart={handleStart} t={t} lang={lang} setLang={setLang} />
+      <AselMascot screen={screen} category={category} />
       {showLimitModal && (
         <div style={{
           position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",

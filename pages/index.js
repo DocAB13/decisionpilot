@@ -13,6 +13,9 @@ export default function Home() {
         <meta property="og:title" content="DecisionPilot – AI Decision Making" />
         <meta property="og:description" content="Get personalized AI recommendations for any decision." />
         <meta property="og:url" content="https://decisionpilot.tech" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </Head>
       <App />
       <div style={{ textAlign: 'center', padding: '24px', background: '#F8F9FC' }}>
