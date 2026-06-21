@@ -44,7 +44,8 @@ export default function CookieBanner({ onAccept, onReject }) {
       boxShadow: '0 -2px 10px rgba(0,0,0,0.3)'
     }}>
       <p style={{ margin: 0, flex: '1 1 300px', fontSize: '14px' }}>
-        Folosim cookie-uri pentru a analiza traficul și a îmbunătăți experiența ta. Poți accepta sau refuza utilizarea lor.
+        Folosim cookie-uri pentru a analiza traficul și a îmbunătăți experiența ta. Poți accepta sau refuza utilizarea lor.{' '}
+        Vezi <a href="/privacy" style={{ color: '#fff', textDecoration: 'underline' }}>politica de confidențialitate</a>.
       </p>
       <div style={{ display: 'flex', gap: '10px' }}>
         <button onClick={handleReject} style={{
