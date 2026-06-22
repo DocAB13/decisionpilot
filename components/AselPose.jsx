@@ -1,196 +1,241 @@
-const ACCESSORY_PATHS = {
+// Asel — penguin mascot, all poses and accessories
+
+const DARK = "#1A1A2E";
+const CREAM = "#F5F0E8";
+const ORANGE = "#FF8C00";
+const ACCENT = "#1A56DB";
+
+// Accessories held in the left wing area (around x=28, y=125)
+const ACCESSORIES = {
   beach: (
     <g>
-      <path d="M27 102 L41 102 L34 114 Z" fill="#F59E0B" />
-      <rect x="33" y="114" width="2" height="8" fill="#1B2A52" />
+      {/* Cocktail umbrella */}
+      <line x1="28" y1="110" x2="28" y2="134" stroke={DARK} strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M16 110 L28 110 L40 110 Z" fill="#F59E0B" opacity="0.9"/>
+      <path d="M19 110 L28 110 L37 110 Z" fill="#EF4444" opacity="0.8"/>
+      {/* Sunglasses on face */}
+      <rect x="58" y="43" width="10" height="6" rx="3" fill={DARK} opacity="0.85"/>
+      <rect x="72" y="43" width="10" height="6" rx="3" fill={DARK} opacity="0.85"/>
+      <line x1="68" y1="46" x2="72" y2="46" stroke={DARK} strokeWidth="1.5"/>
     </g>
   ),
   auto: (
     <g>
-      <circle cx="34" cy="114" r="9" fill="none" stroke="#1B2A52" strokeWidth="2.6" />
-      <line x1="34" y1="105" x2="34" y2="123" stroke="#1B2A52" strokeWidth="2" />
+      <circle cx="28" cy="122" r="11" fill="none" stroke={DARK} strokeWidth="2.5"/>
+      <line x1="28" y1="111" x2="28" y2="133" stroke={DARK} strokeWidth="2"/>
+      <line x1="17" y1="122" x2="39" y2="122" stroke={DARK} strokeWidth="2"/>
+      <circle cx="28" cy="122" r="4" fill={DARK}/>
     </g>
   ),
   phone: (
     <g>
-      <rect x="29" y="102" width="11" height="19" rx="2.6" fill="#1B2A52" />
-      <rect x="31.5" y="105" width="6" height="13" fill="#5FD4FF" />
+      <rect x="20" y="110" width="14" height="24" rx="3" fill={DARK}/>
+      <rect x="22" y="113" width="10" height="17" fill="#5FD4FF"/>
+      <circle cx="27" cy="131" r="1.5" fill="#888"/>
     </g>
   ),
   laptop: (
     <g>
-      <rect x="24" y="98" width="18" height="13" rx="1.6" fill="#1B2A52" />
-      <rect x="26" y="100" width="14" height="9" fill="#5FD4FF" />
-      <rect x="21" y="111" width="24" height="3" rx="1.5" fill="#C9CEE0" />
+      <rect x="16" y="113" width="22" height="15" rx="2" fill={DARK}/>
+      <rect x="18" y="115" width="18" height="11" fill="#5FD4FF"/>
+      <rect x="14" y="128" width="26" height="3" rx="1.5" fill={DARK}/>
     </g>
   ),
   tv: (
     <g>
-      <rect x="23" y="98" width="22" height="14" rx="2" fill="#1B2A52" />
-      <rect x="25.5" y="100.5" width="17" height="9" fill="#5FD4FF" />
-      <rect x="32" y="112" width="4" height="4" fill="#C9CEE0" />
-      <rect x="27" y="116" width="14" height="2" rx="1" fill="#C9CEE0" />
+      <rect x="15" y="110" width="26" height="18" rx="2.5" fill={DARK}/>
+      <rect x="17.5" y="112.5" width="21" height="13" fill="#5FD4FF"/>
+      <rect x="26" y="128" width="6" height="4" fill={DARK}/>
+      <rect x="20" y="132" width="18" height="2.5" rx="1.2" fill={DARK}/>
     </g>
   ),
   fitness: (
     <g>
-      <rect x="26" y="111.5" width="16" height="3" rx="1.5" fill="#1B2A52" />
-      <circle cx="25" cy="113" r="5" fill="#1B2A52" /><circle cx="43" cy="113" r="5" fill="#1B2A52" />
-      <circle cx="25" cy="113" r="2" fill="#C9CEE0" /><circle cx="43" cy="113" r="2" fill="#C9CEE0" />
+      <rect x="18" y="120" width="20" height="4" rx="2" fill={DARK}/>
+      <circle cx="17" cy="122" r="6" fill={DARK}/><circle cx="17" cy="122" r="3" fill={CREAM}/>
+      <circle cx="39" cy="122" r="6" fill={DARK}/><circle cx="39" cy="122" r="3" fill={CREAM}/>
     </g>
   ),
   pet: (
     <g>
-      <circle cx="34" cy="111" r="4.4" fill="#1B2A52" />
-      <circle cx="27" cy="105" r="2.6" fill="#1B2A52" /><circle cx="34" cy="102" r="2.6" fill="#1B2A52" /><circle cx="41" cy="105" r="2.6" fill="#1B2A52" />
+      <circle cx="28" cy="122" r="6" fill="#8B5E3C"/>
+      <circle cx="21" cy="115" r="4" fill="#8B5E3C"/>
+      <circle cx="28" cy="113" r="4" fill="#8B5E3C"/>
+      <circle cx="35" cy="115" r="4" fill="#8B5E3C"/>
+      <ellipse cx="28" cy="124" rx="3" ry="2" fill="#F9A8D4"/>
     </g>
   ),
   dining: (
     <g>
-      <rect x="29" y="98" width="2.4" height="22" rx="1.2" fill="#1B2A52" />
-      <path d="M27.5 98 v6 M29.2 98 v6 M31 98 v6" stroke="#1B2A52" strokeWidth="1.6" strokeLinecap="round" />
-      <rect x="38" y="98" width="2.4" height="22" rx="1.2" fill="#1B2A52" />
+      <rect x="22" y="108" width="3" height="26" rx="1.5" fill={DARK}/>
+      <path d="M20 108 v7 M22 108 v7 M24 108 v7" stroke={DARK} strokeWidth="1.8" strokeLinecap="round"/>
+      <rect x="30" y="108" width="3" height="26" rx="1.5" fill={DARK}/>
     </g>
   ),
   career: (
     <g>
-      <rect x="23" y="104" width="22" height="15" rx="2.5" fill="#1B2A52" />
-      <rect x="30" y="100" width="8" height="6" rx="1.8" fill="none" stroke="#1B2A52" strokeWidth="2.2" />
-      <rect x="32.5" y="110" width="3" height="3" fill="#D4AF37" />
+      <rect x="16" y="116" width="24" height="18" rx="3" fill={DARK}/>
+      <rect x="22" y="112" width="12" height="7" rx="2" fill="none" stroke={DARK} strokeWidth="2.2"/>
+      <rect x="26" y="122" width="6" height="6" fill="#D4AF37" rx="1"/>
     </g>
   ),
   premium: (
+    // Bowtie on neck
     <g>
-      <path d="M58 76 L67 80 L58 84 Z" fill="#D4AF37" />
-      <path d="M82 76 L73 80 L82 84 Z" fill="#D4AF37" />
-      <circle cx="70" cy="80" r="2.6" fill="#1B2A52" />
+      <path d="M58 70 L65 66 L65 74 Z" fill="#D4AF37"/>
+      <path d="M82 70 L75 66 L75 74 Z" fill="#D4AF37"/>
+      <ellipse cx="70" cy="70" rx="5" ry="4" fill="#B8860B"/>
     </g>
   ),
+  none: null,
 };
 
-const RIGHT_ARMS = {
-  greet: (
+// Right wing variants per pose
+function RightWing({ pose }) {
+  if (pose === "greet") return (
     <>
-      <path className="asel-wave-arm" d="M98 80 C112 82 118 64 108 50" stroke="url(#aselPoseGrad)" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="108" cy="48" r="9" fill="url(#aselPoseGrad)" stroke="#C9CEE0" strokeWidth="1" />
-      <rect x="103" y="32" width="9" height="17" rx="4.5" fill="url(#aselPoseGrad)" stroke="#C9CEE0" strokeWidth="1" />
+      <path className="asel-wave-arm"
+        d="M96 92 C108 80 116 64 108 50"
+        stroke={DARK} strokeWidth="14" strokeLinecap="round" fill="none"/>
+      {/* Wing tip / flipper */}
+      <ellipse cx="107" cy="47" rx="9" ry="6" fill={DARK} transform="rotate(-20 107 47)"/>
     </>
-  ),
-  point: (
+  );
+  if (pose === "point") return (
     <>
-      <path d="M98 80 C114 74 124 64 128 54" stroke="url(#aselPoseGrad)" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="128" cy="52" r="8" fill="url(#aselPoseGrad)" stroke="#C9CEE0" strokeWidth="1" />
-      <rect x="128" y="38" width="6" height="14" rx="3" fill="url(#aselPoseGrad)" stroke="#C9CEE0" strokeWidth="1" transform="rotate(25 131 45)" />
+      <path d="M96 92 C112 78 124 66 128 54"
+        stroke={DARK} strokeWidth="14" strokeLinecap="round" fill="none"/>
+      <ellipse cx="127" cy="51" rx="9" ry="6" fill={DARK} transform="rotate(-35 127 51)"/>
     </>
-  ),
-  lean: (
-    <>
-      <path d="M98 80 C110 86 112 102 106 112" stroke="url(#aselPoseGrad)" strokeWidth="15" strokeLinecap="round" fill="none" />
-      <circle cx="106" cy="114" r="9" fill="url(#aselPoseGrad)" stroke="#C9CEE0" strokeWidth="1" />
-    </>
-  ),
-};
+  );
+  // lean — wing down
+  return (
+    <path d="M96 92 C108 100 110 118 104 130"
+      stroke={DARK} strokeWidth="14" strokeLinecap="round" fill="none"/>
+  );
+}
 
 export default function AselPose({ pose = "greet", accessory = "none", size = 110, flip = false, style = {} }) {
   const isPeek = pose === "peek";
-  const acc = ACCESSORY_PATHS[accessory];
-  const showHeadAcc = accessory === "beach";
+  const acc = ACCESSORIES[accessory] || null;
 
   if (isPeek) {
     return (
-      <div style={{ width: size, height: size * 0.62, overflow: "hidden", pointerEvents: "none", animation: "aselPopPeek 0.45s cubic-bezier(.34,1.56,.64,1) both", ...style }}>
-        <svg viewBox="0 0 140 90" width={size} height={size * 0.62} style={{ transform: flip ? "scaleX(-1)" : "none" }}>
-          <defs>
-            <linearGradient id="aselPoseGradPeek" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#FFFFFF" /><stop offset="100%" stopColor="#E4E8F4" />
-            </linearGradient>
-          </defs>
+      <div style={{ width: size, height: size * 0.68, overflow: "hidden", pointerEvents: "none",
+        animation: "aselPopPeek 0.45s cubic-bezier(.34,1.56,.64,1) both", ...style }}>
+        <svg viewBox="0 0 140 95" width={size} height={size * 0.68}
+          style={{ transform: flip ? "scaleX(-1)" : "none" }}>
           <g className="asel-peek-glance">
-            <line x1="70" y1="10" x2="70" y2="23" stroke="#C9A24B" strokeWidth="3" strokeLinecap="round" />
-            <path d="M70 0 L73 6 L80 8 L73 10 L70 18 L67 10 L60 8 L67 6 Z" fill="#D4AF37" />
-            <circle cx="70" cy="8" r="2.2" fill="#1B2A52" className="asel-gem" />
-            <ellipse cx="70" cy="40" rx="34" ry="30" fill="url(#aselPoseGradPeek)" />
-            <circle cx="38" cy="42" r="7" fill="#D4AF37" /><circle cx="38" cy="42" r="2.6" fill="#5FD4FF" />
-            <circle cx="102" cy="42" r="7" fill="#D4AF37" /><circle cx="102" cy="42" r="2.6" fill="#5FD4FF" />
-            <rect x="48" y="28" width="44" height="26" rx="13" fill="#0B0F20" />
-            <path d="M56 40 Q62 32 68 40" stroke="#5FD4FF" strokeWidth="3.2" fill="none" strokeLinecap="round" />
-            <path d="M72 40 Q78 32 84 40" stroke="#5FD4FF" strokeWidth="3.2" fill="none" strokeLinecap="round" />
-            <path d="M60 47 Q70 53 80 47" stroke="#5FD4FF" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+            {/* Head */}
+            <ellipse cx="70" cy="52" rx="26" ry="24" fill={DARK}/>
+            {/* Face patch */}
+            <ellipse cx="70" cy="57" rx="17" ry="18" fill={CREAM}/>
+            {/* Eyes */}
+            <circle cx="62" cy="48" r="5.5" fill="white"/>
+            <circle cx="63.5" cy="48" r="3" fill={DARK}/>
+            <circle cx="64.5" cy="47" r="1.2" fill="white"/>
+            <circle cx="78" cy="48" r="5.5" fill="white"/>
+            <circle cx="79.5" cy="48" r="3" fill={DARK}/>
+            <circle cx="80.5" cy="47" r="1.2" fill="white"/>
+            {/* Beak */}
+            <ellipse cx="70" cy="61" rx="7" ry="5" fill={ORANGE}/>
+            <line x1="63" y1="61" x2="77" y2="61" stroke="#CC6600" strokeWidth="1.2"/>
+            {/* Top of body peeking */}
+            <ellipse cx="70" cy="85" rx="32" ry="18" fill={DARK}/>
+            <ellipse cx="70" cy="87" rx="18" ry="11" fill={CREAM}/>
           </g>
-          <ellipse cx="70" cy="78" rx="40" ry="20" fill="url(#aselPoseGradPeek)" />
+          <style>{`
+            .asel-peek-glance { transform-origin: 70px 55px; animation: aselGlance 4.5s ease-in-out infinite; }
+            @keyframes aselGlance { 0%,100%{transform:rotate(0deg);} 25%{transform:rotate(-9deg);} 60%{transform:rotate(7deg);} }
+            @keyframes aselPopPeek { 0%{opacity:0;transform:translateY(10px);} 100%{opacity:1;transform:translateY(0);} }
+          `}</style>
         </svg>
-        <style>{`
-          .asel-peek-glance { transform-origin: 70px 50px; animation: aselGlance 4.5s ease-in-out infinite; }
-          @keyframes aselGlance { 0%,100%{transform:rotate(0deg);} 25%{transform:rotate(-9deg);} 60%{transform:rotate(7deg);} }
-          .asel-gem { animation: aselGemP 1.8s ease-in-out infinite; }
-          @keyframes aselGemP { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
-          @keyframes aselPopPeek { 0%{opacity:0; transform:translateY(8px);} 100%{opacity:1; transform:translateY(0);} }
-        `}</style>
       </div>
     );
   }
 
   return (
-    <div style={{ width: size, height: size * 1.21, pointerEvents: "none", ...style }}>
-      <svg viewBox="0 0 140 170" width={size} height={size * 1.21}
+    <div style={{ width: size, height: size * 1.25, pointerEvents: "none", ...style }}>
+      <svg viewBox="0 0 140 175" width={size} height={size * 1.25}
         className="asel-pose-bob"
-        style={{ transform: `${flip ? "scaleX(-1) " : ""}${pose === "lean" ? "rotate(-6deg)" : ""}`, transformOrigin: "70px 130px" }}>
-        <defs>
-          <linearGradient id="aselPoseGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#FFFFFF" /><stop offset="100%" stopColor="#E4E8F4" />
-          </linearGradient>
-          <linearGradient id="aselPoseScreen" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#1C2238" /><stop offset="100%" stopColor="#0B0F20" />
-          </linearGradient>
-        </defs>
+        style={{ transform: `${flip ? "scaleX(-1) " : ""}${pose === "lean" ? "rotate(-6deg)" : ""}`, transformOrigin: "70px 140px" }}>
 
-        <rect x="52" y="118" width="14" height="32" rx="7" fill="url(#aselPoseGrad)" />
-        <rect x="74" y="118" width="14" height="32" rx="7" fill="url(#aselPoseGrad)" />
-        <circle cx="59" cy="140" r="4" fill="#D4AF37" /><circle cx="81" cy="140" r="4" fill="#D4AF37" />
-        <ellipse cx="59" cy="154" rx="13" ry="7" fill="#1B2A52" /><ellipse cx="81" cy="154" rx="13" ry="7" fill="#1B2A52" />
-        <rect x="49" y="151" width="20" height="3" fill="#D4AF37" /><rect x="71" y="151" width="20" height="3" fill="#D4AF37" />
+        {/* Feet */}
+        <ellipse cx="58" cy="162" rx="14" ry="6" fill={ORANGE}/>
+        <ellipse cx="82" cy="162" rx="14" ry="6" fill={ORANGE}/>
 
-        <path d="M42 80 C30 86 28 102 34 112" stroke="url(#aselPoseGrad)" strokeWidth="15" strokeLinecap="round" fill="none" />
-        <circle cx="34" cy="114" r="9" fill="url(#aselPoseGrad)" stroke="#C9CEE0" strokeWidth="1" />
-        {acc}
+        {/* Body */}
+        <ellipse cx="70" cy="114" rx="32" ry="44" fill={DARK}/>
+        {/* Belly */}
+        <ellipse cx="70" cy="118" rx="19" ry="30" fill={CREAM}/>
 
-        {RIGHT_ARMS[pose] || RIGHT_ARMS.greet}
+        {/* Left wing (static) */}
+        <path d="M40 90 C26 98 22 120 28 136 C32 144 40 140 42 132 C44 120 44 106 40 90"
+          fill={DARK}/>
 
-        <ellipse cx="70" cy="65" rx="22" ry="4" fill="#D4AF37" opacity="0.85" />
-        <rect x="40" y="66" width="60" height="56" rx="22" fill="url(#aselPoseGrad)" />
-        <circle cx="42" cy="72" r="6" fill="#D4AF37" /><circle cx="98" cy="72" r="6" fill="#D4AF37" />
-        <rect x="55" y="80" width="30" height="27" rx="10" fill="#1B2A52" stroke="#D4AF37" strokeWidth="2.2" />
-        <text x="70" y="100" textAnchor="middle" fontFamily="'Plus Jakarta Sans', sans-serif" fontWeight="700" fontSize="15" fill="#fff">AS</text>
+        {/* Accessory held in left wing */}
+        {acc && accessory !== "premium" && accessory !== "beach" && acc}
+        {/* Beach: umbrella in wing + sunglasses drawn over face */}
+        {accessory === "beach" && acc}
 
-        <g>
-          <line x1="70" y1="10" x2="70" y2="23" stroke="#C9A24B" strokeWidth="3" strokeLinecap="round" />
-          <path d="M70 0 L73 6 L80 8 L73 10 L70 18 L67 10 L60 8 L67 6 Z" fill="#D4AF37" />
-          <circle cx="70" cy="8" r="2.2" fill="#1B2A52" className="asel-gem" />
-          <ellipse cx="70" cy="40" rx="34" ry="30" fill="url(#aselPoseGrad)" />
-          <circle cx="38" cy="42" r="7" fill="#D4AF37" /><circle cx="38" cy="42" r="2.6" fill="#5FD4FF" />
-          <circle cx="102" cy="42" r="7" fill="#D4AF37" /><circle cx="102" cy="42" r="2.6" fill="#5FD4FF" />
-          <rect x="48" y="28" width="44" height="26" rx="13" fill="url(#aselPoseScreen)" />
-          <path d="M56 40 Q62 32 68 40" stroke="#5FD4FF" strokeWidth="3.2" fill="none" strokeLinecap="round" />
-          <path d="M72 40 Q78 32 84 40" stroke="#5FD4FF" strokeWidth="3.2" fill="none" strokeLinecap="round" />
-          <path d="M60 47 Q70 53 80 47" stroke="#5FD4FF" strokeWidth="2.6" fill="none" strokeLinecap="round" />
-          {showHeadAcc && (
-            <g>
-              <rect x="50" y="33" width="16" height="9" rx="3" fill="#1F2937" />
-              <rect x="74" y="33" width="16" height="9" rx="3" fill="#1F2937" />
-              <line x1="66" y1="37" x2="74" y2="37" stroke="#1F2937" strokeWidth="2" />
-            </g>
-          )}
-        </g>
+        {/* Right wing */}
+        <RightWing pose={pose}/>
+
+        {/* Head */}
+        <ellipse cx="70" cy="48" rx="26" ry="24" fill={DARK}/>
+        {/* Face patch */}
+        <ellipse cx="70" cy="53" rx="17" ry="18" fill={CREAM}/>
+        {/* Eyes */}
+        <circle cx="62" cy="44" r="5.5" fill="white"/>
+        <circle cx="63.5" cy="44" r="3" fill={DARK}/>
+        <circle cx="64.5" cy="43" r="1.2" fill="white"/>
+        <circle cx="78" cy="44" r="5.5" fill="white"/>
+        <circle cx="79.5" cy="44" r="3" fill={DARK}/>
+        <circle cx="80.5" cy="43" r="1.2" fill="white"/>
+        {/* Beak */}
+        <ellipse cx="70" cy="57" rx="7" ry="5" fill={ORANGE}/>
+        <line x1="63" y1="57" x2="77" y2="57" stroke="#CC6600" strokeWidth="1.2"/>
+
+        {/* Premium bowtie on neck */}
+        {accessory === "premium" && acc}
+
+        {/* Beach sunglasses over face */}
+        {accessory === "beach" && (
+          <>
+            <rect x="57" y="42" width="11" height="7" rx="3.5" fill={DARK} opacity="0.85"/>
+            <rect x="72" y="42" width="11" height="7" rx="3.5" fill={DARK} opacity="0.85"/>
+            <line x1="68" y1="45.5" x2="72" y2="45.5" stroke={DARK} strokeWidth="1.5"/>
+          </>
+        )}
+
+        {/* Shadow under feet */}
+        <ellipse cx="70" cy="170" rx="28" ry="6" fill="rgba(0,0,0,0.1)"/>
       </svg>
 
       <style>{`
-        .asel-pose-bob { animation: aselPop 0.45s cubic-bezier(.34,1.56,.64,1) both, aselPoseBob 3s ease-in-out 0.45s infinite; }
-        @keyframes aselPop { 0%{opacity:0; transform:scale(0.55) translateY(10px) ${pose === "lean" ? "rotate(-6deg)" : ""};} 70%{opacity:1; transform:scale(1.08) translateY(-2px) ${pose === "lean" ? "rotate(-6deg)" : ""};} 100%{opacity:1; transform:scale(1) translateY(0) ${pose === "lean" ? "rotate(-6deg)" : ""};} }
-        @keyframes aselPoseBob { 0%,100%{transform:translateY(0) ${pose === "lean" ? "rotate(-6deg)" : ""};} 50%{transform:translateY(-5px) ${pose === "lean" ? "rotate(-6deg)" : ""};} }
-        .asel-wave-arm { transform-origin: 98px 80px; animation: aselWave 4.2s ease-in-out infinite; }
-        @keyframes aselWave { 0%, 70%, 100% { transform: rotate(0deg); } 78% { transform: rotate(-8deg); } 86% { transform: rotate(6deg); } 94% { transform: rotate(-4deg); } }
-        .asel-gem { animation: aselGemP 1.8s ease-in-out infinite; }
-        @keyframes aselGemP { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+        .asel-pose-bob {
+          animation: aselPop 0.45s cubic-bezier(.34,1.56,.64,1) both,
+                     aselPoseBob 3s ease-in-out 0.45s infinite;
+        }
+        @keyframes aselPop {
+          0%  { opacity:0; transform: scale(0.55) translateY(10px) ${pose === "lean" ? "rotate(-6deg)" : ""}; }
+          70% { opacity:1; transform: scale(1.08) translateY(-2px) ${pose === "lean" ? "rotate(-6deg)" : ""}; }
+          100%{ opacity:1; transform: scale(1) translateY(0) ${pose === "lean" ? "rotate(-6deg)" : ""}; }
+        }
+        @keyframes aselPoseBob {
+          0%,100% { transform: translateY(0) ${pose === "lean" ? "rotate(-6deg)" : ""}; }
+          50%     { transform: translateY(-6px) ${pose === "lean" ? "rotate(-6deg)" : ""}; }
+        }
+        .asel-wave-arm {
+          transform-origin: 96px 92px;
+          animation: aselWave 4.2s ease-in-out infinite;
+        }
+        @keyframes aselWave {
+          0%,70%,100% { transform: rotate(0deg); }
+          78%  { transform: rotate(-10deg); }
+          86%  { transform: rotate(7deg); }
+          94%  { transform: rotate(-5deg); }
+        }
       `}</style>
     </div>
   );
