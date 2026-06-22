@@ -420,7 +420,7 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
               margin: 0, textAlign: "center",
             }}>{question.q}</h2>
             <div style={{ flexShrink: 0 }}>
-              <AselPose key={step} pose="greet" accessory={ASEL_ACCESSORY_Q[category] || "none"} size={56} />
+              <AselPose key={step} pose="greet" accessory={ASEL_ACCESSORY_Q[category] || "none"} size={110} />
             </div>
           </div>
 
@@ -707,13 +707,21 @@ function Landing({ onStart, t, lang, setLang }) {
 
         {/* How it works */}
         <div style={{ marginBottom: 80 }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: 4 }}>
-              <AselPose pose="greet" size={62} />
+          <div style={{ textAlign: "center", marginBottom: 48, position: "relative" }}>
+            <div style={{ position: "absolute", right: 0, top: -20, display: "none" }}
+              className="asel-desktop-only">
+              <AselPose pose="greet" size={140} />
             </div>
             <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>How it works</div>
-            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.how_title || "Decide smarter, faster"}</h2>
-            <p style={{ color: C.textSecondary, fontSize: 17, maxWidth: 500, margin: "0 auto", lineHeight: 1.65 }}>{t?.how_desc || "Get your personalized answer in under 60 seconds"}</p>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, flexWrap: "wrap" }}>
+              <div>
+                <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.how_title || "Decide smarter, faster"}</h2>
+                <p style={{ color: C.textSecondary, fontSize: 17, maxWidth: 500, margin: "0 auto", lineHeight: 1.65 }}>{t?.how_desc || "Get your personalized answer in under 60 seconds"}</p>
+              </div>
+              <div style={{ flexShrink: 0 }}>
+                <AselPose pose="greet" size={130} />
+              </div>
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
             {[
@@ -786,8 +794,8 @@ function Landing({ onStart, t, lang, setLang }) {
 
             {/* Premium */}
             <div style={{ background: "linear-gradient(160deg, #1A1A1E, #0B0B0E)", border: "1px solid #2A2A2E", borderRadius: 20, padding: "32px 28px", boxShadow: "0 16px 48px rgba(0,0,0,0.35)", position: "relative", overflow: "visible" }}>
-              <div style={{ position: "absolute", top: -36, left: "50%", transform: "translateX(-50%)", zIndex: 2 }}>
-                <AselPose pose="peek" accessory="premium" size={76} />
+              <div style={{ position: "absolute", top: -52, left: "50%", transform: "translateX(-50%)", zIndex: 2 }}>
+                <AselPose pose="peek" accessory="premium" size={106} />
               </div>
               <div style={{ position: "absolute", top: 16, right: 16, display: "flex", alignItems: "center", gap: 5, background: "#1E1A0E", color: "#D4AF37", border: "1px solid #3A2F12", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>
                 ♛ PREMIUM
@@ -816,7 +824,7 @@ function Landing({ onStart, t, lang, setLang }) {
             <div style={{ display: "inline-block", background: `linear-gradient(135deg, ${C.accent}, ${C.purple})`, color: "#fff", borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Categories</div>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
               <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.what_title || "What are you deciding today?"}</h2>
-              <div style={{ marginBottom: 8 }}><AselPose pose="point" size={54} /></div>
+              <div style={{ marginBottom: 8 }}><AselPose pose="point" size={120} /></div>
             </div>
             <p style={{ color: C.textSecondary, fontSize: 17, margin: "0 auto", lineHeight: 1.65 }}>{t?.what_desc || "Click any category to start — no signup required"}</p>
           </div>

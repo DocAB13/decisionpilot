@@ -268,8 +268,8 @@ export function HeroBanner({ onStart, t, lang }) {
             {t.tagline}
           </div>
 
-          <div style={{ position: "absolute", top: 28, right: -8, opacity: isAnimating ? 0 : 1, transition: "opacity 0.3s ease" }}>
-            <AselPose pose="greet" accessory={ASEL_ACCESSORY[slide.id] || "none"} size={72} />
+          <div style={{ position: "absolute", top: -10, right: -20, opacity: isAnimating ? 0 : 1, transition: "opacity 0.3s ease", zIndex: 2 }}>
+            <AselPose pose="greet" accessory={ASEL_ACCESSORY[slide.id] || "none"} size={130} />
           </div>
 
           <h1 style={{
