@@ -9,7 +9,7 @@ export default function Home() {
         <title>DecisionPilot – AI Decision Making</title>
         <meta name="description" content="AI-powered decision making for vacations, phones, cars, and more." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230066CC'/><text y='.9em' font-size='70' x='15'>🧭</text></svg>" />
+        <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%231A56DB'/%3E%3Cellipse cx='50' cy='50' rx='18' ry='46' fill='none' stroke='%2393C5FD' stroke-width='1.8' opacity='0.7'/%3E%3Cline x1='4' y1='50' x2='96' y2='50' stroke='%2393C5FD' stroke-width='1.8' opacity='0.7'/%3E%3Ccircle cx='50' cy='50' r='48' fill='none' stroke='%2360A5FA' stroke-width='2'/%3E%3Ctext x='50' y='56' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='26' fill='white'%3EDP%3C/text%3E%3Cpolygon points='74,68 74,90 78,83 83,94 87,92 82,81 88,81' fill='white' opacity='0.95'/%3E%3C/svg%3E" />
         <meta name="theme-color" content="#0066CC" />
         <meta property="og:title" content="DecisionPilot – AI Decision Making" />
         <meta property="og:description" content="Get personalized AI recommendations for any decision." />

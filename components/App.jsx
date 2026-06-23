@@ -238,7 +238,7 @@ const TREES = {
 
   perfume: {
     label: "Perfumes", emoji: "🌸",
-    image: img("photo-1541643600914-78b084683702"),
+    image: img("photo-1588405748880-b434562b3579"),
     questions: [
       { id: "gender", q: "Who is this fragrance for?", options: ["For me — women's", "For me — men's", "Unisex / gender-neutral", "A gift for her", "A gift for him", "A gift — unisex"] },
       { id: "family", q: "What scent family do you prefer?", options: ["🌸 Floral", "🌿 Fresh / green", "🪵 Woody / earthy", "🍊 Citrus / fruity", "🌙 Oriental / spicy", "🌊 Aquatic / marine", "No idea — surprise me"] },
@@ -327,7 +327,7 @@ const CATEGORIES_LIST = [
   { id: "clinic",      label: "Clinics & Health",  emoji: "🏥", desc: "Doctors, clinics & treatments",     color: "#0F766E", image: img("photo-1666214280557-f1b5022eb634") },
   { id: "insurance",   label: "Insurance",         emoji: "🛡️", desc: "Health, car & life coverage",       color: "#1E40AF", image: img("photo-1450101499163-c8848c66ca85") },
   { id: "loans",       label: "Loans & Credit",   emoji: "💳",  desc: "Personal loans & credit cards",     color: "#065F46", image: img("photo-1565514020179-026b92b84bb6") },
-  { id: "perfume",     label: "Perfumes",          emoji: "🌸",  desc: "Fragrances for every mood",         color: "#9D174D", image: img("photo-1541643600914-78b084683702") },
+  { id: "perfume",     label: "Perfumes",          emoji: "🌸",  desc: "Fragrances for every mood",         color: "#9D174D", image: img("photo-1588405748880-b434562b3579") },
   { id: "cruise",      label: "Cruises",           emoji: "🚢",  desc: "Mediterranean, Caribbean & beyond", color: "#0C4A6E", image: img("photo-1544551763-46a013bb70d5") },
   { id: "furniture",   label: "Furniture",         emoji: "🛋️", desc: "Home decor & interior design",      color: "#44403C", image: img("photo-1555041469-a586c61ea9bc") },
   { id: "restaurant",  label: "Restaurants",       emoji: "🍴",  desc: "Find the best table in town",       color: "#991B1B", image: img("photo-1517248135467-4c7edcad34c4") },
@@ -365,6 +365,20 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
   const [langOpen, setLangOpen] = useState(false);
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
 
+  const CURRENCY = {
+    en: "$ USD", "en-US": "$ USD", "en-GB": "£ GBP",
+    de: "€ EUR", fr: "€ EUR", es: "€ EUR", it: "€ EUR",
+    pt: "€ EUR", nl: "€ EUR", fi: "€ EUR", el: "€ EUR",
+    ro: "lei RON", pl: "zł PLN", cs: "Kč CZK", hu: "Ft HUF",
+    sk: "€ EUR", bg: "лв BGN", hr: "€ EUR",
+    sv: "kr SEK", da: "kr DKK", no: "kr NOK",
+    ru: "₽ RUB", uk: "₴ UAH",
+    zh: "¥ CNY", ja: "¥ JPY", ko: "₩ KRW",
+    ar: "﷼ SAR", tr: "₺ TRY", he: "₪ ILS",
+    th: "฿ THB", id: "Rp IDR", vi: "₫ VND",
+    hi: "₹ INR",
+  };
+
   return (
     <div style={{
       background: "#fff", borderBottom: `1px solid ${C.border}`,
@@ -401,26 +415,24 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
 
 {/* Upgrade buttons */}
           <button onClick={() => handleUpgrade("pro")} style={{
-            background: `linear-gradient(135deg, #D97706, #F59E0B)`,
-            color: "#fff", border: "none", borderRadius: 10,
+            background: `rgba(26,86,219,0.12)`,
+            color: C.accent, border: `1.5px solid rgba(26,86,219,0.4)`, borderRadius: 10,
             padding: "8px 14px", fontSize: 13, fontWeight: 700,
-            cursor: "pointer", boxShadow: "0 4px 12px rgba(217,119,6,0.4)",
-            transition: "all 0.2s", whiteSpace: "nowrap",
+            cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap",
           }}
-            onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
-            onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+            onMouseEnter={e => { e.currentTarget.style.background = C.accent; e.currentTarget.style.color = "#fff"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "rgba(26,86,219,0.12)"; e.currentTarget.style.color = C.accent; }}>
             ✦ Pro · $4.99
           </button>
           <button onClick={() => handleUpgrade("premium")} style={{
-            background: `linear-gradient(135deg, #7C3AED, #A78BFA)`,
-            color: "#fff", border: "none", borderRadius: 10,
+            background: `rgba(10,10,14,0.88)`,
+            color: "#D4AF37", border: `1.5px solid rgba(212,175,55,0.4)`, borderRadius: 10,
             padding: "8px 14px", fontSize: 13, fontWeight: 700,
-            cursor: "pointer", boxShadow: "0 4px 12px rgba(124,58,237,0.4)",
-            transition: "all 0.2s", whiteSpace: "nowrap",
+            cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap",
           }}
             onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
             onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-            ★ Premium · $9.99
+            ♛ Premium · $9.99
           </button>
 
           {/* Free badge */}
@@ -464,7 +476,8 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
                     onMouseEnter={e => { if (l.code !== lang) e.currentTarget.style.background = C.bg; }}
                     onMouseLeave={e => { if (l.code !== lang) e.currentTarget.style.background = "transparent"; }}>
                     <span style={{ fontSize: 18 }}>{l.flag}</span>
-                    <span>{l.name}</span>
+                    <span style={{ flex: 1 }}>{l.name}</span>
+                    {CURRENCY[l.code] && <span style={{ fontSize: 11, color: C.muted, fontWeight: 600, letterSpacing: 0.3 }}>{CURRENCY[l.code]}</span>}
                   </button>
                 ))}
               </div>
@@ -1129,8 +1142,9 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
         <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
           <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>Want more personalized advice? Chat with our AI directly.</p>
           <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
-            style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
-            🤖 Chat with AI instead
+            style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}>
+            <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="Asel" />
+            Chat with Asel
           </button>
         </div>
       </div>
@@ -1174,11 +1188,12 @@ function Landing({ onStart, t, lang, setLang }) {
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "72px 24px 0" }}>
 
         {/* How it works */}
-        <div style={{ marginBottom: 80 }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>How it works</div>
-            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.how_title || "Decide smarter, faster"}</h2>
-            <p style={{ color: C.textSecondary, fontSize: 17, maxWidth: 500, margin: "0 auto", lineHeight: 1.65 }}>{t?.how_desc || "Get your personalized answer in under 60 seconds"}</p>
+        <div style={{ marginBottom: 0 }}>
+          {/* Full-width section banner */}
+          <div style={{ background: `linear-gradient(135deg, ${C.accent} 0%, #7048E8 100%)`, padding: "40px 24px", textAlign: "center", margin: "0 -24px 48px" }}>
+            <div style={{ display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#fff", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Guide</div>
+            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>How it works</h2>
+            <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 17, margin: 0 }}>Get your answer in under 60 seconds</p>
           </div>
           <div className="steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
             {[
@@ -1200,7 +1215,7 @@ function Landing({ onStart, t, lang, setLang }) {
               },
             ].map((s, i) => (
               <div key={i} style={{
-                background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "28px 24px",
+                background: "rgba(26,86,219,0.07)", border: `1px solid rgba(26,86,219,0.18)`, borderRadius: 18, padding: "28px 24px",
                 boxShadow: C.shadow, transition: "all 0.2s ease",
               }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = C.shadowMd; }}
@@ -1223,16 +1238,20 @@ function Landing({ onStart, t, lang, setLang }) {
 
         {/* Pricing */}
         <div id="pricing" style={{ marginBottom: 80 }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Pricing</div>
-            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>Simple, transparent pricing</h2>
+          {/* Full-width pricing banner */}
+          <div style={{ background: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)", padding: "40px 24px", textAlign: "center", margin: "0 -24px 48px" }}>
+            <div style={{ display: "inline-block", background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.8)", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Plans</div>
+            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>Simple, transparent pricing</h2>
+            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 17, margin: 0 }}>Start free. Upgrade when you need more.</p>
           </div>
 
           {/* Grid + Asel leaning */}
           <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
             <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
             {/* Free */}
-            <div style={{ background: `${C.gold}14`, border: `1.5px solid ${C.gold}40`, borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow }}>
+            <div style={{ background: "rgba(212,175,55,0.12)", border: "1.5px solid rgba(212,175,55,0.45)", borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow, transition: "transform 0.25s ease, box-shadow 0.25s ease" }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.035)"; e.currentTarget.style.boxShadow = "0 20px 48px rgba(212,175,55,0.22)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = C.shadow; }}>
               <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Free</div>
               <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$0<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
               {["3 AI decisions per day", "All 9 categories", "AI Chat (5 messages/day)", "Global recommendations"].map((f, i) => (
@@ -1247,18 +1266,20 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
 
             {/* Pro */}
-            <div style={{ background: `linear-gradient(135deg, ${C.accent}, #3B5BDB)`, border: "none", borderRadius: 20, padding: "32px 28px", boxShadow: `0 16px 48px ${C.accent}33`, position: "relative", overflow: "hidden" }}>
-              <div style={{ position: "absolute", top: 16, right: 16, background: C.gold, color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>POPULAR</div>
-              <div style={{ color: "#fff", fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pro</div>
-              <div style={{ color: "#fff", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$4.99<span style={{ fontSize: 16, color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>/month</span></div>
-              {["Unlimited AI decisions", "Unlimited AI Chat", "Priority processing", "Save decision history", "All 9 categories", "30+ languages"].map((f, i) => (
+            <div style={{ background: "rgba(26,86,219,0.14)", border: "1.5px solid rgba(26,86,219,0.45)", borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow, position: "relative", overflow: "hidden", transition: "transform 0.25s ease, box-shadow 0.25s ease" }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.035)"; e.currentTarget.style.boxShadow = "0 20px 48px rgba(26,86,219,0.22)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = C.shadow; }}>
+              <div style={{ position: "absolute", top: 16, right: 16, background: C.accent, color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>POPULAR</div>
+              <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pro</div>
+              <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$4.99<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
+              {["Unlimited AI decisions", "Unlimited AI Chat", "Priority processing", "Save decision history", "All categories", "30+ languages"].map((f, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={{ color: "#4ADE80" }}>✓</span>
-                  <span style={{ color: "rgba(255,255,255,0.9)", fontSize: 14 }}>{f}</span>
+                  <span style={{ color: C.accent }}>✓</span>
+                  <span style={{ color: C.textSecondary, fontSize: 14 }}>{f}</span>
                 </div>
               ))}
               <button onClick={() => handleUpgrade("pro")}
-                style={{ width: "100%", marginTop: 20, background: "#fff", color: C.accent, border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 16px rgba(0,0,0,0.2)", transition: "all 0.2s" }}
+                style={{ width: "100%", marginTop: 20, background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: `0 4px 16px ${C.accent}40`, transition: "all 0.2s" }}
                 onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
                 onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
                 Upgrade to Pro →
@@ -1266,7 +1287,9 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
 
             {/* Premium */}
-            <div style={{ background: "linear-gradient(160deg, #1A1A1E, #0B0B0E)", border: "1px solid #2A2A2E", borderRadius: 20, padding: "32px 28px", boxShadow: "0 16px 48px rgba(0,0,0,0.35)", position: "relative", overflow: "hidden" }}>
+            <div style={{ background: "rgba(10,10,14,0.88)", border: "1px solid rgba(212,175,55,0.35)", borderRadius: 20, padding: "32px 28px", boxShadow: "0 16px 48px rgba(0,0,0,0.35)", position: "relative", overflow: "hidden", transition: "transform 0.25s ease, box-shadow 0.25s ease" }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.035)"; e.currentTarget.style.boxShadow = "0 24px 56px rgba(0,0,0,0.55)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(0,0,0,0.35)"; }}>
               <div style={{ position: "absolute", top: 16, right: 16, display: "flex", alignItems: "center", gap: 5, background: "#1E1A0E", color: "#D4AF37", border: "1px solid #3A2F12", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>
                 ♛ PREMIUM
               </div>
@@ -1291,10 +1314,11 @@ function Landing({ onStart, t, lang, setLang }) {
 
         {/* Categories */}
         <div id="categories" style={{ marginBottom: 80 }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <div style={{ display: "inline-block", background: `linear-gradient(135deg, ${C.accent}, ${C.purple})`, color: "#fff", borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Categories</div>
-            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.what_title || "What are you deciding today?"}</h2>
-            <p style={{ color: C.textSecondary, fontSize: 17, margin: "0 auto", lineHeight: 1.65 }}>{t?.what_desc || "Click any category to start — no signup required"}</p>
+          {/* Full-width categories banner */}
+          <div style={{ background: `linear-gradient(135deg, ${C.purple} 0%, ${C.accent} 100%)`, padding: "40px 24px", textAlign: "center", margin: "0 -24px 48px" }}>
+            <div style={{ display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#fff", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Explore</div>
+            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>{t?.what_title || "What can you decide?"}</h2>
+            <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 17, margin: 0 }}>Click any category to start — no signup required</p>
           </div>
           <div className="cats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
             {CATEGORIES_LIST.map(cat => (
@@ -1321,12 +1345,14 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
             <button onClick={() => onStart("chat")} style={{
               background: "#fff", color: C.accent, border: "none", borderRadius: 14,
-              padding: "16px 32px", fontSize: 16, fontWeight: 800, cursor: "pointer",
+              padding: "14px 28px", fontSize: 16, fontWeight: 800, cursor: "pointer",
               boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s", whiteSpace: "nowrap",
+              display: "flex", alignItems: "center", gap: 10,
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              🤖 {t?.btn_chat || "Chat with AI"} →
+              <img src="/asel-mascot.png" style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: `2px solid ${C.accent}33` }} alt="Asel" />
+              {t?.btn_chat || "Chat with Asel"} →
             </button>
           </div>
         </div>
