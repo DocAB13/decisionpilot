@@ -16,7 +16,7 @@ export default function Home() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<meta name="impact-site-verification" value="cf28bcc4-3df0-4385-b5f7-9374553d8f33" />
+<meta name='impact-site-verification' value='88b581a4-4f62-47c7-a431-be795bb3bb9e'>
 </Head>
       <App />
       <div style={{ textAlign: 'center', padding: '24px', background: '#F8F9FC' }}>
