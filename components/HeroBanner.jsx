@@ -296,22 +296,6 @@ export function HeroBanner({ onStart, t, lang }) {
             {t.tagline}
           </div>
 
-          <div style={{ position: "absolute", top: -10, right: -20, opacity: isAnimating ? 0 : 1, transition: "opacity 0.3s ease", zIndex: 2 }}>
-            <img
-              src="/asel-mascot.png"
-              alt="Asel"
-              style={{
-                width: "clamp(180px, 22vw, 320px)",
-                height: "auto",
-                display: "block",
-                filter: "drop-shadow(0 16px 32px rgba(0,0,0,0.35))",
-                animation: "aselFloat 4s ease-in-out infinite",
-                pointerEvents: "none",
-                userSelect: "none",
-              }}
-            />
-          </div>
-
           <h1 style={{
             color: "#fff", fontSize: "clamp(32px, 5vw, 58px)",
             fontWeight: 900, lineHeight: 1.08, letterSpacing: -2,

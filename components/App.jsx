@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
 import { HeroBanner, WorldwideSection } from "./HeroBanner";
 import AselCorner from "./AselCorner";
-import AselPose from "./AselPose";
 
 const C = {
   bg: "#F8F9FC", surface: "#FFFFFF", card: "#FFFFFF", border: "#E8ECF4",
@@ -581,9 +580,6 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
               fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.25,
               margin: 0, textAlign: "center",
             }}>{question.q}</h2>
-            <div style={{ flexShrink: 0 }}>
-              <AselPose key={step} pose="greet" accessory={ASEL_ACCESSORY_Q[category] || "none"} size={110} />
-            </div>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -644,12 +640,23 @@ function LoadingScreen({ category }) {
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 32,
     }}>
       <div style={{ textAlign: "center", maxWidth: 480 }}>
-        <div style={{ fontSize: 64, marginBottom: 32, animation: "spin 3s linear infinite" }}>{tree?.emoji || "🧭"}</div>
+        {/* Asel loading animation */}
+        <div style={{ marginBottom: 24, display: "flex", justifyContent: "center" }}>
+          <img
+            src="/asel-mascot.png"
+            alt="Asel thinking"
+            style={{
+              width: 130, height: "auto",
+              animation: "aselLoadPulse 1.6s ease-in-out infinite",
+              filter: "drop-shadow(0 8px 20px rgba(29,78,216,0.25))",
+            }}
+          />
+        </div>
         <h2 style={{ color: C.text, fontSize: 28, fontWeight: 800, marginBottom: 12, letterSpacing: -0.5 }}>
           Finding your perfect {tree?.label?.toLowerCase()}...
         </h2>
-        <p style={{ color: C.textSecondary, fontSize: 16, marginBottom: 48, lineHeight: 1.6 }}>
-          Our AI is analyzing thousands of reviews from CNET, TechRadar, Wirecutter, and more.
+        <p style={{ color: C.textSecondary, fontSize: 16, marginBottom: 32, lineHeight: 1.6 }}>
+          Asel is analyzing thousands of reviews from CNET, TechRadar, Wirecutter, and more.
         </p>
         <div style={{ textAlign: "left", background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadowMd }}>
           {steps.map((s, i) => (
@@ -665,7 +672,12 @@ function LoadingScreen({ category }) {
           ))}
         </div>
       </div>
-      <style>{`@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }`}</style>
+      <style>{`
+        @keyframes aselLoadPulse {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50%       { transform: translateY(-10px) scale(1.04); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -869,21 +881,10 @@ function Landing({ onStart, t, lang, setLang }) {
 
         {/* How it works */}
         <div style={{ marginBottom: 80 }}>
-          <div style={{ textAlign: "center", marginBottom: 48, position: "relative" }}>
-            <div style={{ position: "absolute", right: 0, top: -20, display: "none" }}
-              className="asel-desktop-only">
-              <AselPose pose="greet" size={140} />
-            </div>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>How it works</div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, flexWrap: "wrap" }}>
-              <div>
-                <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.how_title || "Decide smarter, faster"}</h2>
-                <p style={{ color: C.textSecondary, fontSize: 17, maxWidth: 500, margin: "0 auto", lineHeight: 1.65 }}>{t?.how_desc || "Get your personalized answer in under 60 seconds"}</p>
-              </div>
-              <div style={{ flexShrink: 0 }}>
-                <AselPose pose="greet" size={130} />
-              </div>
-            </div>
+            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.how_title || "Decide smarter, faster"}</h2>
+            <p style={{ color: C.textSecondary, fontSize: 17, maxWidth: 500, margin: "0 auto", lineHeight: 1.65 }}>{t?.how_desc || "Get your personalized answer in under 60 seconds"}</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
             {[
@@ -919,7 +920,10 @@ function Landing({ onStart, t, lang, setLang }) {
             <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Pricing</div>
             <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>Simple, transparent pricing</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
+
+          {/* Grid + Asel leaning */}
+          <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
             {/* Free */}
             <div style={{ background: `${C.gold}14`, border: `1.5px solid ${C.gold}40`, borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow }}>
               <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Free</div>
@@ -955,10 +959,7 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
 
             {/* Premium */}
-            <div style={{ background: "linear-gradient(160deg, #1A1A1E, #0B0B0E)", border: "1px solid #2A2A2E", borderRadius: 20, padding: "32px 28px", boxShadow: "0 16px 48px rgba(0,0,0,0.35)", position: "relative", overflow: "visible" }}>
-              <div style={{ position: "absolute", top: -52, left: "50%", transform: "translateX(-50%)", zIndex: 2 }}>
-                <AselPose pose="peek" accessory="premium" size={106} />
-              </div>
+            <div style={{ background: "linear-gradient(160deg, #1A1A1E, #0B0B0E)", border: "1px solid #2A2A2E", borderRadius: 20, padding: "32px 28px", boxShadow: "0 16px 48px rgba(0,0,0,0.35)", position: "relative", overflow: "hidden" }}>
               <div style={{ position: "absolute", top: 16, right: 16, display: "flex", alignItems: "center", gap: 5, background: "#1E1A0E", color: "#D4AF37", border: "1px solid #3A2F12", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>
                 ♛ PREMIUM
               </div>
@@ -978,16 +979,33 @@ function Landing({ onStart, t, lang, setLang }) {
               </button>
             </div>
           </div>
+
+          {/* Asel leaning with elbow on the cards */}
+          <div style={{
+            position: "absolute", right: -10, bottom: 0, zIndex: 3,
+            pointerEvents: "none",
+          }}>
+            <img
+              src="/asel-mascot.png"
+              alt="Asel"
+              style={{
+                width: "clamp(130px, 14vw, 200px)",
+                height: "auto",
+                display: "block",
+                transform: "scaleX(-1)",
+                filter: "drop-shadow(0 12px 24px rgba(29,78,216,0.2))",
+                animation: "aselLeanBob 3.5s ease-in-out infinite",
+              }}
+            />
+          </div>
+        </div>
         </div>
 
         {/* Categories */}
         <div id="categories" style={{ marginBottom: 80 }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div style={{ display: "inline-block", background: `linear-gradient(135deg, ${C.accent}, ${C.purple})`, color: "#fff", borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Categories</div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.what_title || "What are you deciding today?"}</h2>
-              <div style={{ marginBottom: 8 }}><AselPose pose="point" size={120} /></div>
-            </div>
+            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.what_title || "What are you deciding today?"}</h2>
             <p style={{ color: C.textSecondary, fontSize: 17, margin: "0 auto", lineHeight: 1.65 }}>{t?.what_desc || "Click any category to start — no signup required"}</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
@@ -1173,7 +1191,7 @@ function Landing({ onStart, t, lang, setLang }) {
 function ChatScreen({ onBack, t, lang, setLang }) {
   const [messages, setMessages] = useState([{
     role: "assistant",
-    content: "Hi! I'm your DecisionPilot AI. Tell me about any decision you're facing — vacation, phone, car, career, fitness, pets, laptop, TV, or anything else. I'll ask a few questions and give you a personalized recommendation. 🧭",
+    content: "Hi, I'm Asel! 👋 Tell me about any decision you're facing — vacation, car, home, phone, career, beauty, insurance, or anything else. I'll ask a few smart questions and give you a personalized recommendation.",
   }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -1231,7 +1249,9 @@ function ChatScreen({ onBack, t, lang, setLang }) {
         {messages.map((m, i) => (
           <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", marginBottom: 18, animation: "fadeUp 0.3s ease" }}>
             {m.role === "assistant" && (
-              <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, marginRight: 12, marginTop: 2, boxShadow: `0 4px 12px ${C.accent}33` }}>🧭</div>
+              <div style={{ width: 44, height: 44, borderRadius: "50%", flexShrink: 0, marginRight: 10, marginTop: 2, background: "#EEF3FF", border: "2px solid #E8ECF4", overflow: "hidden", boxShadow: "0 4px 12px rgba(29,78,216,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img src="/asel-mascot.png" alt="Asel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center" }} />
+              </div>
             )}
             <div style={{
               maxWidth: "78%", padding: "14px 18px",
@@ -1246,8 +1266,10 @@ function ChatScreen({ onBack, t, lang, setLang }) {
         ))}
 
         {loading && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+            <div style={{ width: 44, height: 44, borderRadius: "50%", flexShrink: 0, background: "#EEF3FF", border: "2px solid #E8ECF4", overflow: "hidden", boxShadow: "0 4px 12px rgba(29,78,216,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <img src="/asel-mascot.png" alt="Asel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center", animation: "aselLoadPulse 1.2s ease-in-out infinite" }} />
+            </div>
             <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: "20px 20px 20px 4px", padding: "14px 18px", boxShadow: C.shadow }}>
               <div style={{ display: "flex", gap: 5 }}>
                 {[0, 1, 2].map(i => <div key={i} style={{ width: 7, height: 7, borderRadius: "50%", background: C.accent, animation: `bounce 1.2s ease-in-out ${i * 0.18}s infinite` }} />)}
@@ -1273,6 +1295,8 @@ function ChatScreen({ onBack, t, lang, setLang }) {
       <style>{`
         @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes aselLeanBob { 0%,100%{transform:scaleX(-1) translateY(0);} 50%{transform:scaleX(-1) translateY(-6px);} }
+        @keyframes aselLoadPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
       `}</style>
     </div>
   );
