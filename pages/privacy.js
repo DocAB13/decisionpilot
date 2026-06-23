@@ -20,7 +20,7 @@ export default function Privacy() {
           The data controller responsible for this website is:<br />
           Nicolae-Abel Bolos-Ardeleanu<br />
           Leipziger Str. 35C, 01097 Dresden, Saxony, Germany<br />
-          bolos_abel@yahoo.com
+          contact@decisionpilot.tech
         </p>
 
         <h2>2. What data we collect</h2>
@@ -79,7 +79,7 @@ export default function Privacy() {
           <li>Lodge a complaint with your local data protection authority</li>
         </ul>
         <p>
-          To exercise any of these rights, contact us at bolos_abel@yahoo.com.
+          To exercise any of these rights, contact us at contact@decisionpilot.tech.
         </p>
 
         <h2>8. Children's privacy</h2>
@@ -90,7 +90,7 @@ export default function Privacy() {
 
         <h2>10. Contact</h2>
         <p>
-          Questions about this policy or your data? Reach us at bolos_abel@yahoo.com or via our{" "}
+          Questions about this policy or your data? Reach us at contact@decisionpilot.tech or via our{" "}
           <a href="/contact" style={{ color: "#1A56DB" }}>Contact page</a>.
         </p>
       </LegalLayout>

@@ -54,7 +54,7 @@ export default function Cookies() {
 
         <h2>6. Questions</h2>
         <p>
-          If you have questions about our use of cookies, contact us at bolos_abel@yahoo.com.
+          If you have questions about our use of cookies, contact us at contact@decisionpilot.tech.
         </p>
       </LegalLayout>
     </>

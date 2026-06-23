@@ -2,7 +2,7 @@ import Head from "next/head";
 import LegalLayout from "../components/LegalLayout";
 
 const C = { accent: "#1A56DB", accentLight: "#EEF3FF", border: "#E8ECF4", text: "#0F172A", muted: "#94A3B8" };
-const CONTACT_EMAIL = "bolos_abel@yahoo.com";
+const CONTACT_EMAIL = "contact@decisionpilot.tech";
 
 const REASONS = [
   { label: "General question", subject: "General question" },

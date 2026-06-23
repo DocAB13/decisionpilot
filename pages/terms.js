@@ -87,7 +87,7 @@ export default function Terms() {
 
         <h2>11. Contact</h2>
         <p>
-          Questions about these Terms? Reach us at bolos_abel@yahoo.com or via our{" "}
+          Questions about these Terms? Reach us at contact@decisionpilot.tech or via our{" "}
           <a href="/contact" style={{ color: "#1A56DB" }}>Contact page</a>.
         </p>
       </LegalLayout>
