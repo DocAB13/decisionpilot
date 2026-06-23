@@ -16,6 +16,9 @@ const C = {
 const ASEL_ACCESSORY_Q = {
   vacation: "beach", car: "auto", phone: "phone", laptop: "laptop",
   tv: "tv", fitness: "fitness", pet: "pet", dining: "dining", career: "career",
+  realestate: "career", land: "career", beauty: "none", clinic: "none",
+  insurance: "career", loans: "career", perfume: "none", cruise: "beach",
+  furniture: "none", restaurant: "dining", sports: "beach", outdoor: "fitness",
 };
 
 function img(id, w = 800, h = 500) {
@@ -160,18 +163,177 @@ const TREES = {
       { id: "priority", q: "What matters most?", options: ["🌟 Michelin stars / awards", "📸 Instagrammable food", "🍷 Wine list", "🎵 Ambiance & music", "⚡ Speed of service", "💰 Value for money"] },
     ],
   },
+
+  realestate: {
+    label: "Real Estate", emoji: "🏡",
+    image: img("photo-1613977257363-707ba9348227"),
+    questions: [
+      { id: "intent", q: "What are you looking to do?", options: ["Buy a property", "Rent a property", "Invest in real estate", "Just exploring"] },
+      { id: "type", q: "What type of property?", options: ["Apartment / flat", "House with garden", "Villa / luxury", "Studio", "Penthouse", "Townhouse"] },
+      { id: "budget", q: "What's your budget?", options: ["Under €100k", "€100k–€250k", "€250k–€500k", "€500k–€1M", "€1M+"] },
+      { id: "location", q: "Where are you looking?", options: ["City centre", "Suburbs", "Countryside / rural", "Coastal / seaside", "Abroad", "Flexible"] },
+      { id: "bedrooms", q: "How many bedrooms do you need?", options: ["Studio / 1 bedroom", "2 bedrooms", "3 bedrooms", "4+ bedrooms"] },
+      { id: "priority", q: "What matters most to you?", options: ["🏫 School / family area", "🚆 Transport links", "🌳 Green space & quiet", "💰 Investment potential", "🏖️ Lifestyle & amenities", "🏗️ New build only"] },
+    ],
+  },
+
+  land: {
+    label: "Land & Property", emoji: "🌍",
+    image: img("photo-1500382017468-9049fed747ef"),
+    questions: [
+      { id: "purpose", q: "What do you plan to do with the land?", options: ["Build a home", "Agricultural / farming", "Investment / speculation", "Commercial development", "Holiday / leisure", "Not decided yet"] },
+      { id: "size", q: "How much land do you need?", options: ["Under 500 m²", "500m²–2,000 m²", "2,000 m²–1 hectare", "1–10 hectares", "10+ hectares"] },
+      { id: "budget", q: "What's your budget?", options: ["Under €50k", "€50k–€150k", "€150k–€400k", "€400k–€1M", "€1M+"] },
+      { id: "location", q: "Preferred location?", options: ["Near a city", "Rural / countryside", "Coastal area", "Mountains", "Abroad", "No preference"] },
+      { id: "utilities", q: "How important is utility access?", options: ["Essential — fully connected", "Preferred but not critical", "Off-grid is fine", "Not sure yet"] },
+    ],
+  },
+
+  beauty: {
+    label: "Beauty & Salons", emoji: "💅",
+    image: img("photo-1560066984-138dadb4c035"),
+    questions: [
+      { id: "service", q: "What service are you looking for?", options: ["Hair salon", "Nail studio", "Spa & massage", "Skin & facial treatment", "Brow & lash", "Full beauty package"] },
+      { id: "budget", q: "What's your budget?", options: ["Under €30", "€30–€60", "€60–€120", "€120+", "Depends on the service"] },
+      { id: "occasion", q: "What's the occasion?", options: ["Regular maintenance", "Special event / wedding", "Pampering treat", "First time trying", "Gift for someone else"] },
+      { id: "location", q: "How far are you willing to travel?", options: ["Walking distance", "Within 5 km", "Within 20 km", "Anywhere — quality first"] },
+      { id: "priority", q: "What matters most?", options: ["⭐ Reviews & reputation", "💰 Best price", "📅 Easy booking & availability", "✨ Premium products used", "🌿 Natural / organic focus"] },
+    ],
+  },
+
+  clinic: {
+    label: "Clinics & Health", emoji: "🏥",
+    image: img("photo-1666214280557-f1b5022eb634"),
+    questions: [
+      { id: "type", q: "What type of care are you looking for?", options: ["General practitioner / family doctor", "Specialist / consultant", "Dental", "Vision / ophthalmology", "Mental health", "Physiotherapy", "Cosmetic / aesthetic"] },
+      { id: "urgency", q: "How urgent is your need?", options: ["Emergency — today", "Within a week", "Within a month", "Planning ahead / routine"] },
+      { id: "insurance", q: "Do you have health insurance?", options: ["Yes — public", "Yes — private", "Both", "No — paying out of pocket"] },
+      { id: "location", q: "Where are you located?", options: ["I want something nearby", "Happy to travel for quality", "Considering medical tourism", "Online / telehealth is fine"] },
+      { id: "priority", q: "What's most important?", options: ["📋 Specialist expertise", "⏱️ Short waiting times", "💰 Cost & affordability", "🌐 Languages spoken", "🏢 Modern facilities"] },
+    ],
+  },
+
+  insurance: {
+    label: "Insurance", emoji: "🛡️",
+    image: img("photo-1450101499163-c8848c66ca85"),
+    questions: [
+      { id: "type", q: "What type of insurance are you looking for?", options: ["Health insurance", "Car insurance", "Home / property", "Life insurance", "Travel insurance", "Business / liability"] },
+      { id: "coverage", q: "What level of coverage do you need?", options: ["Basic / legal minimum", "Standard", "Comprehensive / premium", "Not sure — need advice"] },
+      { id: "budget", q: "What's your monthly budget?", options: ["Under €30/month", "€30–€80/month", "€80–€200/month", "€200+/month", "Annual payment preferred"] },
+      { id: "situation", q: "Tell us about your situation:", options: ["Single, no dependants", "Couple", "Family with children", "Self-employed / freelancer", "Company / team coverage"] },
+      { id: "priority", q: "What matters most?", options: ["💰 Lowest premium", "🏆 Best coverage", "⚡ Fast claims process", "🌍 International coverage", "📞 24/7 support"] },
+    ],
+  },
+
+  loans: {
+    label: "Loans & Credit", emoji: "💳",
+    image: img("photo-1565514020179-026b92b84bb6"),
+    questions: [
+      { id: "type", q: "What are you looking for?", options: ["Personal loan", "Car loan", "Mortgage / home loan", "Business loan", "Credit card", "Debt consolidation"] },
+      { id: "amount", q: "How much do you need?", options: ["Under €5,000", "€5k–€20k", "€20k–€50k", "€50k–€150k", "€150k+"] },
+      { id: "term", q: "Over what period?", options: ["Under 12 months", "1–3 years", "3–7 years", "7–15 years", "15–30 years"] },
+      { id: "credit", q: "How would you describe your credit history?", options: ["Excellent", "Good", "Fair", "Limited / building credit", "Prefer not to say"] },
+      { id: "priority", q: "What's your priority?", options: ["📉 Lowest interest rate", "⚡ Fast approval", "🔄 Flexible repayments", "💼 No early repayment fee", "🌐 Online process only"] },
+    ],
+  },
+
+  perfume: {
+    label: "Perfumes", emoji: "🌸",
+    image: img("photo-1541643600914-78b084683702"),
+    questions: [
+      { id: "gender", q: "Who is this fragrance for?", options: ["For me — women's", "For me — men's", "Unisex / gender-neutral", "A gift for her", "A gift for him", "A gift — unisex"] },
+      { id: "family", q: "What scent family do you prefer?", options: ["🌸 Floral", "🌿 Fresh / green", "🪵 Woody / earthy", "🍊 Citrus / fruity", "🌙 Oriental / spicy", "🌊 Aquatic / marine", "No idea — surprise me"] },
+      { id: "occasion", q: "When will you wear it most?", options: ["Daily / everyday", "Office / work", "Evening & nights out", "Special occasions", "Summer", "Winter"] },
+      { id: "budget", q: "What's your budget?", options: ["Under €30", "€30–€70", "€70–€150", "€150–€300", "€300+ (niche / luxury)"] },
+      { id: "intensity", q: "How strong do you like your fragrance?", options: ["Light & subtle", "Moderate — noticeable", "Bold & long-lasting", "Very intense / statement"] },
+    ],
+  },
+
+  cruise: {
+    label: "Cruises", emoji: "🚢",
+    image: img("photo-1544551763-46a013bb70d5"),
+    questions: [
+      { id: "destination", q: "Which destination interests you most?", options: ["🌊 Mediterranean", "🏝️ Caribbean", "🛳️ Northern Europe / fjords", "🌏 Asia & Far East", "🧊 Arctic / Antarctic", "🌎 World cruise", "Open to ideas"] },
+      { id: "duration", q: "How long would you like to cruise?", options: ["Short break (3–5 nights)", "1 week", "2 weeks", "3–4 weeks", "Extended / world cruise"] },
+      { id: "budget", q: "What's your budget per person?", options: ["Under €800", "€800–€1,500", "€1,500–€3,000", "€3,000–€6,000", "€6,000+ (luxury line)"] },
+      { id: "style", q: "What cruise style suits you?", options: ["Family-friendly", "Adults-only / romantic", "Adventure & expedition", "Luxury & ultra-premium", "River cruise", "Party / entertainment"] },
+      { id: "priority", q: "What matters most on board?", options: ["🍽️ Dining & restaurants", "🎭 Entertainment & shows", "🏊 Pool & wellness spa", "🛳️ Shore excursions", "🌅 Cabin & suites quality", "💰 Best value for money"] },
+    ],
+  },
+
+  furniture: {
+    label: "Furniture", emoji: "🛋️",
+    image: img("photo-1555041469-a586c61ea9bc"),
+    questions: [
+      { id: "room", q: "Which room are you furnishing?", options: ["Living room", "Bedroom", "Home office", "Kitchen / dining", "Outdoor / garden", "Entire home"] },
+      { id: "style", q: "What interior style do you prefer?", options: ["Scandinavian / minimal", "Industrial", "Modern / contemporary", "Classic / traditional", "Bohemian / eclectic", "Luxury / designer"] },
+      { id: "budget", q: "What's your total budget?", options: ["Under €500", "€500–€1,500", "€1,500–€4,000", "€4,000–€10,000", "€10,000+"] },
+      { id: "priority", q: "What's most important to you?", options: ["💪 Durability & quality", "💰 Best price", "📦 Fast delivery", "🌿 Sustainable materials", "🎨 Design & aesthetics", "🔧 Easy assembly"] },
+      { id: "brand", q: "Do you have a brand preference?", options: ["IKEA / budget-friendly", "Mid-range brands", "Premium / designer only", "Handmade / artisan", "No preference"] },
+    ],
+  },
+
+  restaurant: {
+    label: "Restaurants", emoji: "🍴",
+    image: img("photo-1517248135467-4c7edcad34c4"),
+    questions: [
+      { id: "type", q: "What kind of restaurant?", options: ["Fine dining", "Casual bistro", "Street food / fast casual", "Sushi / Japanese", "Steakhouse", "Pizza & pasta", "Vegan / vegetarian"] },
+      { id: "occasion", q: "What's the occasion?", options: ["Date night", "Family outing", "Business dinner", "Birthday celebration", "Casual catch-up", "Solo meal"] },
+      { id: "budget", q: "Budget per person (food only)?", options: ["Under €15", "€15–€35", "€35–€70", "€70–€120", "€120+"] },
+      { id: "location", q: "Where are you?", options: ["City centre", "Neighbourhood", "Near the waterfront", "Hotel area", "Countryside", "No preference"] },
+      { id: "must_have", q: "Any must-haves?", options: ["Outdoor terrace", "Private room available", "Child-friendly", "Great cocktail bar", "Live music", "Parking nearby", "None"] },
+    ],
+  },
+
+  sports: {
+    label: "Sports Activities", emoji: "🏄",
+    image: img("photo-1530549387789-4c1017266635"),
+    questions: [
+      { id: "activity", q: "What activity are you interested in?", options: ["🏄 Surfing / water sports", "⛷️ Skiing / snowboarding", "🧗 Rock climbing", "🚵 Mountain biking", "🏇 Horse riding", "🤿 Scuba diving / snorkeling", "🪂 Skydiving / paragliding", "Other"] },
+      { id: "level", q: "What's your experience level?", options: ["Complete beginner", "Some experience", "Intermediate", "Advanced / expert"] },
+      { id: "duration", q: "How long is the activity?", options: ["A few hours", "Full day", "Weekend", "Week-long course / camp", "Multi-week programme"] },
+      { id: "group", q: "Who's joining?", options: ["Solo", "Couple", "Friends group", "Family with kids", "Corporate / team event"] },
+      { id: "budget", q: "What's your budget per person?", options: ["Under €50", "€50–€150", "€150–€400", "€400–€1,000", "€1,000+"] },
+    ],
+  },
+
+  outdoor: {
+    label: "Outdoor Adventures", emoji: "🧗",
+    image: img("photo-1551632811-561732d1e306"),
+    questions: [
+      { id: "type", q: "What kind of adventure?", options: ["🥾 Hiking / trekking", "⛺ Camping", "🏕️ Glamping", "🚣 Kayaking / rafting", "🌋 Volcano / extreme terrain", "🦁 Safari", "🗻 Mountaineering"] },
+      { id: "fitness", q: "How would you describe your fitness level?", options: ["Low — easy trails only", "Moderate", "Good — long days fine", "High — challenging terrain welcome"] },
+      { id: "duration", q: "How long?", options: ["Day trip", "Weekend escape", "1 week", "2+ weeks"] },
+      { id: "group", q: "Who's going?", options: ["Solo", "Couple", "Friends", "Family with children", "Guided group tour"] },
+      { id: "budget", q: "What's your budget per person?", options: ["Under €100", "€100–€400", "€400–€1,000", "€1,000–€3,000", "€3,000+"] },
+    ],
+  },
 };
 
 const CATEGORIES_LIST = [
-  { id: "vacation", label: "Vacation", emoji: "🏖️", desc: "Hotels & destinations worldwide", color: "#1A56DB", image: img("photo-1507525428034-b723cf961d3e") },
-  { id: "phone", label: "Smartphone", emoji: "📱", desc: "Find your perfect device", color: "#7C3AED", image: img("photo-1511707171634-5f897ff02aa9") },
-  { id: "laptop", label: "Laptop", emoji: "💻", desc: "Work, gaming & study", color: "#0891B2", image: img("photo-1496181133206-80ce9b88a853") },
-  { id: "tv", label: "TV", emoji: "📺", desc: "Picture-perfect viewing", color: "#059669", image: img("photo-1593784991095-a205069470b6") },
-  { id: "car", label: "Car", emoji: "🚗", desc: "Electric, sport & family", color: "#DC2626", image: img("photo-1494976388531-d1058494cdd8") },
-  { id: "fitness", label: "Fitness", emoji: "🏋️", desc: "Gym & wellness equipment", color: "#D97706", image: img("photo-1517836357463-d25dfeac3438") },
-  { id: "pet", label: "Pet", emoji: "🐕", desc: "Find your ideal companion", color: "#7C3AED", image: img("photo-1587300003388-59208cc962cb") },
-  { id: "dining", label: "Dining Out", emoji: "🍽️", desc: "Restaurants & experiences", color: "#DB2777", image: img("photo-1414235077428-338989a2e8c0") },
-  { id: "career", label: "Career", emoji: "💼", desc: "Jobs, skills & growth", color: "#1A56DB", image: img("photo-1454165804606-c3d57bc86b40") },
+  // — Existing —
+  { id: "vacation",    label: "Vacation",          emoji: "✈️",  desc: "Hotels & destinations worldwide",    color: "#0369A1", image: img("photo-1514282401047-d79a71a590e8") },
+  { id: "car",         label: "Cars",              emoji: "🚗",  desc: "Electric, sport & family",           color: "#111827", image: img("photo-1617469767053-d3b523a0b982") },
+  { id: "realestate",  label: "Real Estate",       emoji: "🏡",  desc: "Buy or rent your perfect home",     color: "#064E3B", image: img("photo-1613977257363-707ba9348227") },
+  { id: "phone",       label: "Smartphone",        emoji: "📱",  desc: "Find your perfect device",          color: "#7C3AED", image: img("photo-1511707171634-5f897ff02aa9") },
+  { id: "laptop",      label: "Laptop",            emoji: "💻",  desc: "Work, gaming & study",              color: "#0891B2", image: img("photo-1496181133206-80ce9b88a853") },
+  { id: "tv",          label: "TV",                emoji: "📺",  desc: "Picture-perfect viewing",           color: "#059669", image: img("photo-1593784991095-a205069470b6") },
+  { id: "fitness",     label: "Fitness",           emoji: "🏋️", desc: "Gym & wellness equipment",          color: "#D97706", image: img("photo-1517836357463-d25dfeac3438") },
+  { id: "pet",         label: "Pet",               emoji: "🐕",  desc: "Find your ideal companion",         color: "#7C3AED", image: img("photo-1587300003388-59208cc962cb") },
+  { id: "dining",      label: "Dining Out",        emoji: "🍽️", desc: "Restaurants & experiences",         color: "#DB2777", image: img("photo-1414235077428-338989a2e8c0") },
+  { id: "career",      label: "Career",            emoji: "💼",  desc: "Jobs, skills & growth",             color: "#1A56DB", image: img("photo-1454165804606-c3d57bc86b40") },
+  // — New —
+  { id: "land",        label: "Land & Property",  emoji: "🌍",  desc: "Plots, terrain & land investment",  color: "#78350F", image: img("photo-1500382017468-9049fed747ef") },
+  { id: "beauty",      label: "Beauty & Salons",  emoji: "💅",  desc: "Salons, spas & beauty services",    color: "#BE185D", image: img("photo-1560066984-138dadb4c035") },
+  { id: "clinic",      label: "Clinics & Health",  emoji: "🏥", desc: "Doctors, clinics & treatments",     color: "#0F766E", image: img("photo-1666214280557-f1b5022eb634") },
+  { id: "insurance",   label: "Insurance",         emoji: "🛡️", desc: "Health, car & life coverage",       color: "#1E40AF", image: img("photo-1450101499163-c8848c66ca85") },
+  { id: "loans",       label: "Loans & Credit",   emoji: "💳",  desc: "Personal loans & credit cards",     color: "#065F46", image: img("photo-1565514020179-026b92b84bb6") },
+  { id: "perfume",     label: "Perfumes",          emoji: "🌸",  desc: "Fragrances for every mood",         color: "#9D174D", image: img("photo-1541643600914-78b084683702") },
+  { id: "cruise",      label: "Cruises",           emoji: "🚢",  desc: "Mediterranean, Caribbean & beyond", color: "#0C4A6E", image: img("photo-1544551763-46a013bb70d5") },
+  { id: "furniture",   label: "Furniture",         emoji: "🛋️", desc: "Home decor & interior design",      color: "#44403C", image: img("photo-1555041469-a586c61ea9bc") },
+  { id: "restaurant",  label: "Restaurants",       emoji: "🍴",  desc: "Find the best table in town",       color: "#991B1B", image: img("photo-1517248135467-4c7edcad34c4") },
+  { id: "sports",      label: "Sports Activities", emoji: "🏄",  desc: "Surfing, climbing, skiing & more",  color: "#1D4ED8", image: img("photo-1530549387789-4c1017266635") },
+  { id: "outdoor",     label: "Outdoor Adventures",emoji: "🧗",  desc: "Hiking, camping & expeditions",     color: "#166534", image: img("photo-1551632811-561732d1e306") },
 ];
 
 async function handleUpgrade(plan = "pro") {

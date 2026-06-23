@@ -1,21 +1,40 @@
 import { useState, useEffect, useRef } from "react";
-import AselPose from "./AselPose";
 
 const ASEL_ACCESSORY = {
-  vacation: "beach", car: "auto", phone: "phone", laptop: "laptop",
-  tv: "tv", fitness: "fitness", pet: "pet", dining: "dining", career: "career",
+  vacation: "beach", car: "auto", realestate: "career",
 };
 
 const SLIDES = [
-  { id: "vacation", emoji: "🏖️", image: "photo-1507525428034-b723cf961d3e", color: "#0055AA" },
-  { id: "phone", emoji: "📱", image: "photo-1511707171634-5f897ff02aa9", color: "#7C3AED" },
-  { id: "laptop", emoji: "💻", image: "photo-1496181133206-80ce9b88a853", color: "#0891B2" },
-  { id: "tv", emoji: "📺", image: "photo-1593784991095-a205069470b6", color: "#059669" },
-  { id: "car", emoji: "🚗", image: "photo-1494976388531-d1058494cdd8", color: "#DC2626" },
-  { id: "fitness", emoji: "🏋️", image: "photo-1517836357463-d25dfeac3438", color: "#D97706" },
-  { id: "pet", emoji: "🐕", image: "photo-1587300003388-59208cc962cb", color: "#7C3AED" },
-  { id: "dining", emoji: "🍽️", image: "photo-1414235077428-338989a2e8c0", color: "#DB2777" },
-  { id: "career", emoji: "💼", image: "photo-1454165804606-c3d57bc86b40", color: "#0066CC" },
+  {
+    id: "vacation",
+    label: "Vacations",
+    emoji: "✈️",
+    image: "photo-1514282401047-d79a71a590e8",
+    color: "#0369A1",
+    gradient: "linear-gradient(120deg, rgba(3,105,161,0.82) 0%, rgba(6,182,212,0.55) 100%)",
+    price: "from €999",
+    slowZoom: false,
+  },
+  {
+    id: "car",
+    label: "Cars",
+    emoji: "🚗",
+    image: "photo-1617469767053-d3b523a0b982",
+    color: "#0F0F0F",
+    gradient: "linear-gradient(120deg, rgba(10,10,10,0.88) 0%, rgba(30,30,60,0.65) 100%)",
+    price: null,
+    slowZoom: false,
+  },
+  {
+    id: "realestate",
+    label: "Houses",
+    emoji: "🏡",
+    image: "photo-1613977257363-707ba9348227",
+    color: "#064E3B",
+    gradient: "linear-gradient(120deg, rgba(6,78,59,0.80) 0%, rgba(16,185,129,0.5) 100%)",
+    price: null,
+    slowZoom: true,
+  },
 ];
 
 const GLOBE_POINTS = Array.from({ length: 40 }, (_, i) => ({
@@ -199,15 +218,9 @@ export function HeroBanner({ onStart, t, lang }) {
   const timerRef = useRef(null);
 
   const CATEGORIES = [
-    { id: "vacation", label: t.categories_data?.vacation ? "🏖️ Vacation" : "🏖️ Vacation" },
-    { id: "phone", label: "📱 Smartphone" },
-    { id: "laptop", label: "💻 Laptop" },
-    { id: "tv", label: "📺 TV" },
-    { id: "car", label: "🚗 Car" },
-    { id: "fitness", label: "🏋️ Fitness" },
-    { id: "pet", label: "🐕 Pet" },
-    { id: "dining", label: "🍽️ Dining" },
-    { id: "career", label: "💼 Career" },
+    { id: "vacation", label: "✈️ Vacation" },
+    { id: "car", label: "🚗 Cars" },
+    { id: "realestate", label: "🏡 Houses" },
   ];
 
   function goTo(idx) {
@@ -220,7 +233,7 @@ export function HeroBanner({ onStart, t, lang }) {
     if (isPaused) return;
     timerRef.current = setInterval(() => {
       goTo((current + 1) % SLIDES.length);
-    }, 4500);
+    }, 6000);
     return () => clearInterval(timerRef.current);
   }, [current, isPaused]);
 
@@ -232,21 +245,36 @@ export function HeroBanner({ onStart, t, lang }) {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}>
 
-      {/* Background image */}
+      {/* Background image - with optional slow zoom for house slide */}
       <div style={{
         position: "absolute", inset: 0,
-        backgroundImage: `url(https://images.unsplash.com/${slide.image}?w=1400&h=600&fit=crop&auto=format)`,
+        backgroundImage: `url(https://images.unsplash.com/${slide.image}?w=1600&h=700&fit=crop&auto=format)`,
         backgroundSize: "cover", backgroundPosition: "center",
-        transition: "opacity 0.5s ease",
         opacity: isAnimating ? 0 : 1,
+        animation: slide.slowZoom ? "heroSlowZoom 14s ease-in-out infinite alternate" : "none",
+        transition: "opacity 0.5s ease",
       }} />
 
       {/* Gradient overlay */}
       <div style={{
         position: "absolute", inset: 0,
-        background: `linear-gradient(135deg, ${slide.color}EE 0%, ${slide.color}99 40%, rgba(0,0,0,0.3) 100%)`,
+        background: slide.gradient || `linear-gradient(135deg, ${slide.color}EE 0%, ${slide.color}99 40%, rgba(0,0,0,0.3) 100%)`,
         transition: "background 0.5s ease",
       }} />
+
+      {/* Price badge (vacation only) */}
+      {slide.price && (
+        <div style={{
+          position: "absolute", bottom: 28, right: 28, zIndex: 5,
+          background: "rgba(255,255,255,0.15)", backdropFilter: "blur(12px)",
+          border: "1.5px solid rgba(255,255,255,0.4)",
+          borderRadius: 14, padding: "10px 18px",
+          animation: "heroGlow 2.6s ease-in-out infinite",
+        }}>
+          <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 2 }}>Best deal</div>
+          <div style={{ color: "#fff", fontSize: 22, fontWeight: 900, letterSpacing: -0.5 }}>{slide.price}</div>
+        </div>
+      )}
 
       {/* Content */}
       <div style={{
@@ -269,7 +297,19 @@ export function HeroBanner({ onStart, t, lang }) {
           </div>
 
           <div style={{ position: "absolute", top: -10, right: -20, opacity: isAnimating ? 0 : 1, transition: "opacity 0.3s ease", zIndex: 2 }}>
-            <AselPose pose="greet" accessory={ASEL_ACCESSORY[slide.id] || "none"} size={130} />
+            <img
+              src="/asel-mascot.png"
+              alt="Asel"
+              style={{
+                width: "clamp(180px, 22vw, 320px)",
+                height: "auto",
+                display: "block",
+                filter: "drop-shadow(0 16px 32px rgba(0,0,0,0.35))",
+                animation: "aselFloat 4s ease-in-out infinite",
+                pointerEvents: "none",
+                userSelect: "none",
+              }}
+            />
           </div>
 
           <h1 style={{
@@ -413,6 +453,15 @@ export function HeroBanner({ onStart, t, lang }) {
           0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
           50% { box-shadow: 0 4px 26px rgba(255,255,255,0.45); }
         }
+        @keyframes heroSlowZoom {
+          0%   { transform: scale(1);    background-position: center; }
+          100% { transform: scale(1.10); background-position: 55% 50%; }
+        }
+        @keyframes aselFloat {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          33%      { transform: translateY(-10px) rotate(1deg); }
+          66%      { transform: translateY(-5px) rotate(-0.5deg); }
+        }
       `}</style>
     </div>
   );
@@ -475,7 +524,7 @@ export function WorldwideSection({ t }) {
               { value: "30+", label: "Languages" },
               { value: "190+", label: "Countries" },
               { value: "1M+", label: "Decisions" },
-              { value: "9", label: "Categories" },
+              { value: "21+", label: "Categories" },
             ].map((s, i) => (
               <div key={i}>
                 <div style={{ color: "#66ffaa", fontSize: 28, fontWeight: 900, letterSpacing: -1, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.value}</div>
