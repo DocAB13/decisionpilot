@@ -47,8 +47,8 @@ const TREES = {
     image: img("photo-1511707171634-5f897ff02aa9"),
     questions: [
       { id: "budget", q: "What's your budget for a new phone?", options: ["Under $300", "$300–$500", "$500–$800", "$800–$1,200", "$1,200+"] },
-      { id: "os", q: "Which operating system do you prefer?", options: ["🍎 iOS (Apple)", "🤖 Android", "No preference — show me the best"] },
-      { id: "priority", q: "What matters most to you?", options: ["📸 Camera quality", "🔋 Battery life", "⚡ Raw performance", "💎 Premium design & build", "🤖 AI & smart features", "💰 Best value"] },
+      { id: "os", q: "Which operating system do you prefer?", options: ["🍎 iOS (Apple)", "Android", "No preference — show me the best"] },
+      { id: "priority", q: "What matters most to you?", options: ["📸 Camera quality", "🔋 Battery life", "⚡ Raw performance", "💎 Premium design & build", "AI & smart features", "💰 Best value"] },
       { id: "camera_use", q: "How do you mainly use your camera?", options: ["Social media & everyday shots", "Professional photography", "Video & content creation", "Low-light & night photography", "I rarely use the camera"] },
       { id: "usage", q: "How do you primarily use your phone?", options: ["Social media & browsing", "Gaming", "Work & productivity", "Photography & video", "Calls & messaging only"] },
       { id: "size", q: "What screen size do you prefer?", options: ["Compact (under 6\")", "Standard (6\"–6.5\")", "Large (6.5\"+)", "No preference"] },
@@ -238,7 +238,7 @@ const TREES = {
 
   perfume: {
     label: "Perfumes", emoji: "🌸",
-    image: img("photo-1588405748880-b434562b3579"),
+    image: img("photo-1523293182086-7651a899d37f"),
     questions: [
       { id: "gender", q: "Who is this fragrance for?", options: ["For me — women's", "For me — men's", "Unisex / gender-neutral", "A gift for her", "A gift for him", "A gift — unisex"] },
       { id: "family", q: "What scent family do you prefer?", options: ["🌸 Floral", "🌿 Fresh / green", "🪵 Woody / earthy", "🍊 Citrus / fruity", "🌙 Oriental / spicy", "🌊 Aquatic / marine", "No idea — surprise me"] },
@@ -327,7 +327,7 @@ const CATEGORIES_LIST = [
   { id: "clinic",      label: "Clinics & Health",  emoji: "🏥", desc: "Doctors, clinics & treatments",     color: "#0F766E", image: img("photo-1666214280557-f1b5022eb634") },
   { id: "insurance",   label: "Insurance",         emoji: "🛡️", desc: "Health, car & life coverage",       color: "#1E40AF", image: img("photo-1450101499163-c8848c66ca85") },
   { id: "loans",       label: "Loans & Credit",   emoji: "💳",  desc: "Personal loans & credit cards",     color: "#065F46", image: img("photo-1565514020179-026b92b84bb6") },
-  { id: "perfume",     label: "Perfumes",          emoji: "🌸",  desc: "Fragrances for every mood",         color: "#9D174D", image: img("photo-1588405748880-b434562b3579") },
+  { id: "perfume",     label: "Perfumes",          emoji: "🌸",  desc: "Fragrances for every mood",         color: "#9D174D", image: img("photo-1523293182086-7651a899d37f") },
   { id: "cruise",      label: "Cruises",           emoji: "🚢",  desc: "Mediterranean, Caribbean & beyond", color: "#0C4A6E", image: img("photo-1544551763-46a013bb70d5") },
   { id: "furniture",   label: "Furniture",         emoji: "🛋️", desc: "Home decor & interior design",      color: "#44403C", image: img("photo-1555041469-a586c61ea9bc") },
   { id: "restaurant",  label: "Restaurants",       emoji: "🍴",  desc: "Find the best table in town",       color: "#991B1B", image: img("photo-1517248135467-4c7edcad34c4") },
@@ -1284,34 +1284,34 @@ function Landing({ onStart, t, lang, setLang }) {
           <div style={{
             background: `linear-gradient(135deg, ${C.accent} 0%, #3B5BDB 50%, #7048E8 100%)`,
             borderRadius: 24, overflow: "hidden",
-            display: "flex", alignItems: "stretch",
-            boxShadow: `0 20px 60px ${C.accent}30`, minHeight: 160,
+            display: "flex", flexDirection: "column", alignItems: "center",
+            boxShadow: `0 20px 60px ${C.accent}30`, padding: "40px 32px 0",
+            textAlign: "center", position: "relative",
           }}>
-            {/* Asel - full banner height on left */}
-            <div style={{ flexShrink: 0, width: 140, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingLeft: 16, paddingBottom: 0 }}>
-              <img src="/asel-mascot.png" alt="Asel" style={{ width: 130, height: "auto", display: "block", objectFit: "contain", filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.3))" }} />
-            </div>
             {/* Text + button */}
-            <div style={{ flex: 1, padding: "40px 32px 40px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
-              <div>
-                <h2 style={{ color: "#fff", fontSize: "clamp(20px, 3vw, 32px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 10px" }}>
-                  Can't find your category?
-                </h2>
-                <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 15, margin: 0, lineHeight: 1.6, maxWidth: 400 }}>
-                  Chat with Asel about any decision — from choosing a university to planning a wedding.
-                </p>
-              </div>
-              <button onClick={() => onStart("chat")} style={{
-                background: "#fff", color: C.accent, border: "none", borderRadius: 14,
-                padding: "14px 28px", fontSize: 16, fontWeight: 800, cursor: "pointer",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s", whiteSpace: "nowrap",
-                display: "flex", alignItems: "center", gap: 10, flexShrink: 0,
-              }}
-                onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-                onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-                <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="Asel" />
-                {t?.btn_chat || "Chat with Asel"} →
-              </button>
+            <h2 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 12px" }}>
+              Can't find your category?
+            </h2>
+            <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 16, margin: "0 0 28px", lineHeight: 1.6, maxWidth: 480 }}>
+              Chat with Asel about any decision — from choosing a university to planning a wedding.
+            </p>
+            <button onClick={() => onStart("chat")} style={{
+              background: "#fff", color: C.accent, border: "none", borderRadius: 14,
+              padding: "14px 32px", fontSize: 16, fontWeight: 800, cursor: "pointer",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s", whiteSpace: "nowrap",
+              display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 32,
+            }}
+              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
+              onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+              <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="Asel" />
+              {t?.btn_chat || "Chat with Asel"} →
+            </button>
+            {/* Asel centered at bottom of banner */}
+            <div style={{ lineHeight: 0 }}>
+              <img src="/asel-mascot.png" alt="Asel" style={{
+                width: "clamp(120px, 18vw, 200px)", height: "auto",
+                display: "block", filter: "drop-shadow(0 -8px 20px rgba(0,0,0,0.25))",
+              }} />
             </div>
           </div>
         </div>
