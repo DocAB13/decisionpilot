@@ -361,13 +361,12 @@ function Badge({ children, color = "#1A56DB" }) {
   );
 }
 
-function TopNav({ onBack, showBack, t, lang, setLang }) {
+function TopNav({ onBack, showBack, t, lang, setLang, count }) {
   const [langOpen, setLangOpen] = useState(false);
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
 
   const CURRENCY = {
-    en: "$ USD", "en-US": "$ USD", "en-GB": "£ GBP",
-    de: "€ EUR", fr: "€ EUR", es: "€ EUR", it: "€ EUR",
+    en: "$ USD", de: "€ EUR", fr: "€ EUR", es: "€ EUR", it: "€ EUR",
     pt: "€ EUR", nl: "€ EUR", fi: "€ EUR", el: "€ EUR",
     ro: "lei RON", pl: "zł PLN", cs: "Kč CZK", hu: "Ft HUF",
     sk: "€ EUR", bg: "лв BGN", hr: "€ EUR",
@@ -375,23 +374,33 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
     ru: "₽ RUB", uk: "₴ UAH",
     zh: "¥ CNY", ja: "¥ JPY", ko: "₩ KRW",
     ar: "﷼ SAR", tr: "₺ TRY", he: "₪ ILS",
-    th: "฿ THB", id: "Rp IDR", vi: "₫ VND",
-    hi: "₹ INR",
+    th: "฿ THB", id: "Rp IDR", vi: "₫ VND", hi: "₹ INR",
   };
+
+  const FLAG_MAP = {
+    en: "🇬🇧", de: "🇩🇪", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹",
+    pt: "🇵🇹", nl: "🇳🇱", fi: "🇫🇮", el: "🇬🇷", ro: "🇷🇴",
+    pl: "🇵🇱", cs: "🇨🇿", hu: "🇭🇺", sk: "🇸🇰", bg: "🇧🇬",
+    hr: "🇭🇷", sv: "🇸🇪", da: "🇩🇰", no: "🇳🇴", ru: "🇷🇺",
+    uk: "🇺🇦", zh: "🇨🇳", ja: "🇯🇵", ko: "🇰🇷", ar: "🇸🇦",
+    tr: "🇹🇷", he: "🇮🇱", th: "🇹🇭", id: "🇮🇩", vi: "🇻🇳", hi: "🇮🇳",
+  };
+
+  const currentFlag = FLAG_MAP[lang] || current.flag || "🌐";
 
   return (
     <div style={{
       background: "#fff", borderBottom: `1px solid ${C.border}`,
-      padding: "0 32px", position: "sticky", top: 0, zIndex: 100,
+      padding: "0 16px", position: "sticky", top: 0, zIndex: 100,
       boxShadow: "0 1px 0 #E8ECF4",
     }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, height: 68 }}>
+      <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", alignItems: "center", gap: 10, height: 64 }}>
         {showBack && (
           <button onClick={onBack} style={{
             display: "flex", alignItems: "center", gap: 6,
             background: "transparent", border: `1px solid ${C.border}`,
             color: C.textSecondary, borderRadius: 10, padding: "7px 14px",
-            cursor: "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.15s",
+            cursor: "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.15s", flexShrink: 0,
           }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.accent; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textSecondary; }}>
@@ -399,25 +408,40 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
           </button>
         )}
 
-        {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        {/* Logo - far left */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
           <div style={{
-            width: 36, height: 36, borderRadius: 10,
+            width: 34, height: 34, borderRadius: 9,
             background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`,
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 18, boxShadow: `0 4px 12px ${C.accent}40`,
-          }}>🧭</div>
-          <span style={{ color: C.text, fontWeight: 800, fontSize: 19, letterSpacing: -0.5, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
+            boxShadow: `0 4px 12px ${C.accent}40`, overflow: "hidden",
+          }}>
+            <img src="/asel-mascot.png" style={{ width: 30, height: 30, objectFit: "cover", objectPosition: "30% 8%" }} alt="" />
+          </div>
+          <span style={{ color: C.text, fontWeight: 800, fontSize: 17, letterSpacing: -0.5, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
+        </div>
+
+        {/* Inline stats */}
+        <div className="nav-stats" style={{ display: "flex", gap: 16, marginLeft: 12, alignItems: "center" }}>
+          {[
+            { value: count ? `${count.toLocaleString()}+` : "24,891+", label: "Decisions" },
+            { value: "21+", label: "Categories" },
+            { value: "30+", label: "Languages" },
+            { value: "100%", label: "Free" },
+          ].map((s, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 4, borderRight: i < 3 ? `1px solid ${C.border}` : "none", paddingRight: i < 3 ? 16 : 0 }}>
+              <span style={{ color: C.accent, fontSize: 14, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.value}</span>
+              <span style={{ color: C.muted, fontSize: 11, fontWeight: 500 }}>{s.label}</span>
+            </div>
+          ))}
         </div>
 
         {/* Right side */}
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-
-{/* Upgrade buttons */}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
           <button onClick={() => handleUpgrade("pro")} style={{
-            background: `rgba(26,86,219,0.12)`,
-            color: C.accent, border: `1.5px solid rgba(26,86,219,0.4)`, borderRadius: 10,
-            padding: "8px 14px", fontSize: 13, fontWeight: 700,
+            background: "rgba(26,86,219,0.12)", color: C.accent,
+            border: "1.5px solid rgba(26,86,219,0.4)", borderRadius: 10,
+            padding: "7px 12px", fontSize: 12, fontWeight: 700,
             cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap",
           }}
             onMouseEnter={e => { e.currentTarget.style.background = C.accent; e.currentTarget.style.color = "#fff"; }}
@@ -425,9 +449,9 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
             ✦ Pro · $4.99
           </button>
           <button onClick={() => handleUpgrade("premium")} style={{
-            background: `rgba(10,10,14,0.88)`,
-            color: "#D4AF37", border: `1.5px solid rgba(212,175,55,0.4)`, borderRadius: 10,
-            padding: "8px 14px", fontSize: 13, fontWeight: 700,
+            background: "rgba(10,10,14,0.88)", color: "#D4AF37",
+            border: "1.5px solid rgba(212,175,55,0.4)", borderRadius: 10,
+            padding: "7px 12px", fontSize: 12, fontWeight: 700,
             cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap",
           }}
             onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
@@ -435,24 +459,17 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
             ♛ Premium · $9.99
           </button>
 
-          {/* Free badge */}
-          <span style={{
-            background: "#ECFDF5", color: "#059669",
-            border: "1px solid #A7F3D0",
-            borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 600,
-          }}>Free</span>
-
-          {/* Language switcher */}
+          {/* Language switcher with real flags */}
           <div style={{ position: "relative" }}>
             <button onClick={() => setLangOpen(!langOpen)} style={{
               display: "flex", alignItems: "center", gap: 6,
               background: C.bg, border: `1px solid ${C.border}`,
-              borderRadius: 10, padding: "7px 12px", cursor: "pointer",
+              borderRadius: 10, padding: "7px 10px", cursor: "pointer",
               fontSize: 13, fontWeight: 600, color: C.text, transition: "all 0.15s",
             }}
               onMouseEnter={e => e.currentTarget.style.borderColor = C.accent}
               onMouseLeave={e => e.currentTarget.style.borderColor = C.border}>
-              <span style={{ fontSize: 18 }}>{current.flag}</span>
+              <span style={{ fontSize: 18, lineHeight: 1 }}>{currentFlag}</span>
               <span style={{ fontSize: 9, color: C.muted }}>{langOpen ? "▲" : "▼"}</span>
             </button>
 
@@ -461,7 +478,7 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
                 position: "absolute", top: "calc(100% + 8px)", right: 0,
                 background: "#fff", border: `1px solid ${C.border}`,
                 borderRadius: 16, boxShadow: C.shadowLg,
-                width: 210, maxHeight: 360, overflowY: "auto",
+                width: 220, maxHeight: 360, overflowY: "auto",
                 padding: "6px 0", zIndex: 200,
               }}>
                 {LANGUAGES.map(l => (
@@ -475,9 +492,9 @@ function TopNav({ onBack, showBack, t, lang, setLang }) {
                     }}
                     onMouseEnter={e => { if (l.code !== lang) e.currentTarget.style.background = C.bg; }}
                     onMouseLeave={e => { if (l.code !== lang) e.currentTarget.style.background = "transparent"; }}>
-                    <span style={{ fontSize: 18 }}>{l.flag}</span>
+                    <span style={{ fontSize: 18, lineHeight: 1 }}>{FLAG_MAP[l.code] || l.flag || "🌐"}</span>
                     <span style={{ flex: 1 }}>{l.name}</span>
-                    {CURRENCY[l.code] && <span style={{ fontSize: 11, color: C.muted, fontWeight: 600, letterSpacing: 0.3 }}>{CURRENCY[l.code]}</span>}
+                    {CURRENCY[l.code] && <span style={{ fontSize: 10, color: C.muted, fontWeight: 600 }}>{CURRENCY[l.code]}</span>}
                   </button>
                 ))}
               </div>
@@ -1165,23 +1182,34 @@ function Landing({ onStart, t, lang, setLang }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
       <style>{`h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }`}</style>
-      <TopNav showBack={false} t={t} lang={lang} setLang={setLang} />
+      <TopNav showBack={false} t={t} lang={lang} setLang={setLang} count={count} />
       <HeroBanner onStart={onStart} t={t} lang={lang} />
 
-      {/* Stats bar */}
-      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "18px 24px" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", justifyContent: "center", gap: 56, flexWrap: "wrap" }}>
-          {[
-            { value: `${count.toLocaleString()}+`, label: t?.decisions_made || "Decisions made" },
-            { value: "9", label: t?.categories || "Categories" },
-            { value: "30+", label: "Languages" },
-            { value: "100%", label: t?.free || "Free" },
-          ].map((s, i) => (
-            <div key={i} style={{ textAlign: "center" }}>
-              <div style={{ color: C.accent, fontSize: 24, fontWeight: 900, letterSpacing: -0.5, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.value}</div>
-              <div style={{ color: C.muted, fontSize: 12, marginTop: 3, fontWeight: 500 }}>{s.label}</div>
-            </div>
-          ))}
+      {/* Search bar - replaces stats strip */}
+      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", gap: 10 }}>
+          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10, background: C.bg, border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "0 16px", transition: "border-color 0.2s" }}
+            onFocus={() => {}} onBlur={() => {}}>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={C.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+            <input
+              type="text"
+              placeholder="Search a decision topic... (e.g. best SUV under €40k)"
+              style={{
+                flex: 1, border: "none", background: "transparent", outline: "none",
+                fontSize: 14, color: C.text, padding: "12px 0",
+                fontFamily: "inherit",
+              }}
+            />
+          </div>
+          <button style={{
+            background: C.accent, color: "#fff", border: "none", borderRadius: 12,
+            padding: "0 22px", fontSize: 14, fontWeight: 700, cursor: "pointer",
+            whiteSpace: "nowrap", transition: "all 0.2s",
+          }}
+            onMouseEnter={e => e.currentTarget.style.background = "#1547C0"}
+            onMouseLeave={e => e.currentTarget.style.background = C.accent}>
+            Search
+          </button>
         </div>
       </div>
 
@@ -1236,7 +1264,59 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
         </div>
 
-        {/* Pricing */}
+        {/* Categories - immediately after How it works */}
+        <div id="categories" style={{ marginTop: 48, marginBottom: 80 }}>
+          {/* Full-width categories banner */}
+          <div style={{ background: `linear-gradient(135deg, ${C.purple} 0%, ${C.accent} 100%)`, padding: "40px 24px", textAlign: "center", margin: "0 -24px 48px" }}>
+            <div style={{ display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#fff", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Explore</div>
+            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>{t?.what_title || "What can you decide?"}</h2>
+            <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 17, margin: 0 }}>Click any category to start — no signup required</p>
+          </div>
+          <div className="cats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
+            {CATEGORIES_LIST.map(cat => (
+              <CategoryCard key={cat.id} cat={cat} onClick={() => onStart("tree", cat.id)} />
+            ))}
+          </div>
+        </div>
+
+        {/* AI Chat CTA - Can't find your category? */}
+        <div style={{ marginBottom: 80 }}>
+          <div style={{
+            background: `linear-gradient(135deg, ${C.accent} 0%, #3B5BDB 50%, #7048E8 100%)`,
+            borderRadius: 24, overflow: "hidden",
+            display: "flex", alignItems: "stretch",
+            boxShadow: `0 20px 60px ${C.accent}30`, minHeight: 160,
+          }}>
+            {/* Asel - full banner height on left */}
+            <div style={{ flexShrink: 0, width: 140, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingLeft: 16, paddingBottom: 0 }}>
+              <img src="/asel-mascot.png" alt="Asel" style={{ width: 130, height: "auto", display: "block", objectFit: "contain", filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.3))" }} />
+            </div>
+            {/* Text + button */}
+            <div style={{ flex: 1, padding: "40px 32px 40px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
+              <div>
+                <h2 style={{ color: "#fff", fontSize: "clamp(20px, 3vw, 32px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 10px" }}>
+                  Can't find your category?
+                </h2>
+                <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 15, margin: 0, lineHeight: 1.6, maxWidth: 400 }}>
+                  Chat with Asel about any decision — from choosing a university to planning a wedding.
+                </p>
+              </div>
+              <button onClick={() => onStart("chat")} style={{
+                background: "#fff", color: C.accent, border: "none", borderRadius: 14,
+                padding: "14px 28px", fontSize: 16, fontWeight: 800, cursor: "pointer",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s", whiteSpace: "nowrap",
+                display: "flex", alignItems: "center", gap: 10, flexShrink: 0,
+              }}
+                onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
+                onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+                <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="Asel" />
+                {t?.btn_chat || "Chat with Asel"} →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Pricing - after CTA */}
         <div id="pricing" style={{ marginBottom: 80 }}>
           {/* Full-width pricing banner */}
           <div style={{ background: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)", padding: "40px 24px", textAlign: "center", margin: "0 -24px 48px" }}>
@@ -1245,7 +1325,7 @@ function Landing({ onStart, t, lang, setLang }) {
             <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 17, margin: 0 }}>Start free. Upgrade when you need more.</p>
           </div>
 
-          {/* Grid + Asel leaning */}
+          {/* Grid */}
           <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
             <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
             {/* Free */}
@@ -1254,7 +1334,7 @@ function Landing({ onStart, t, lang, setLang }) {
               onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = C.shadow; }}>
               <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Free</div>
               <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$0<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
-              {["3 AI decisions per day", "All 9 categories", "AI Chat (5 messages/day)", "Global recommendations"].map((f, i) => (
+              {["3 AI decisions per day", "All categories", "AI Chat (5 messages/day)", "Global recommendations"].map((f, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                   <span style={{ color: C.success }}>✓</span>
                   <span style={{ color: C.textSecondary, fontSize: 14 }}>{f}</span>
@@ -1310,51 +1390,6 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
           </div>
         </div>
-        </div>
-
-        {/* Categories */}
-        <div id="categories" style={{ marginBottom: 80 }}>
-          {/* Full-width categories banner */}
-          <div style={{ background: `linear-gradient(135deg, ${C.purple} 0%, ${C.accent} 100%)`, padding: "40px 24px", textAlign: "center", margin: "0 -24px 48px" }}>
-            <div style={{ display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#fff", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Explore</div>
-            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>{t?.what_title || "What can you decide?"}</h2>
-            <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 17, margin: 0 }}>Click any category to start — no signup required</p>
-          </div>
-          <div className="cats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
-            {CATEGORIES_LIST.map(cat => (
-              <CategoryCard key={cat.id} cat={cat} onClick={() => onStart("tree", cat.id)} />
-            ))}
-          </div>
-        </div>
-
-        {/* AI Chat CTA */}
-        <div style={{ marginBottom: 80 }}>
-          <div style={{
-            background: `linear-gradient(135deg, ${C.accent} 0%, #3B5BDB 50%, #7048E8 100%)`,
-            borderRadius: 24, padding: "52px 40px",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            flexWrap: "wrap", gap: 28, boxShadow: `0 20px 60px ${C.accent}30`,
-          }}>
-            <div>
-              <h2 style={{ color: "#fff", fontSize: "clamp(22px, 3.5vw, 34px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 10px" }}>
-                Can't find your category?
-              </h2>
-              <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 16, margin: 0, lineHeight: 1.6, maxWidth: 440 }}>
-                Chat with our AI about any decision — from choosing a university to planning a wedding.
-              </p>
-            </div>
-            <button onClick={() => onStart("chat")} style={{
-              background: "#fff", color: C.accent, border: "none", borderRadius: 14,
-              padding: "14px 28px", fontSize: 16, fontWeight: 800, cursor: "pointer",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s", whiteSpace: "nowrap",
-              display: "flex", alignItems: "center", gap: 10,
-            }}
-              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-              onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              <img src="/asel-mascot.png" style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: `2px solid ${C.accent}33` }} alt="Asel" />
-              {t?.btn_chat || "Chat with Asel"} →
-            </button>
-          </div>
         </div>
       </div>
 

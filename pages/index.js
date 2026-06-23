@@ -9,7 +9,7 @@ export default function Home() {
         <title>DecisionPilot – AI Decision Making</title>
         <meta name="description" content="AI-powered decision making for vacations, phones, cars, and more." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-        <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%231A56DB'/%3E%3Cellipse cx='50' cy='50' rx='18' ry='46' fill='none' stroke='%2393C5FD' stroke-width='1.8' opacity='0.7'/%3E%3Cline x1='4' y1='50' x2='96' y2='50' stroke='%2393C5FD' stroke-width='1.8' opacity='0.7'/%3E%3Ccircle cx='50' cy='50' r='48' fill='none' stroke='%2360A5FA' stroke-width='2'/%3E%3Ctext x='50' y='56' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='26' fill='white'%3EDP%3C/text%3E%3Cpolygon points='74,68 74,90 78,83 83,94 87,92 82,81 88,81' fill='white' opacity='0.95'/%3E%3C/svg%3E" />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%231A56DB'/><ellipse cx='16' cy='16' rx='6' ry='14' fill='none' stroke='%2393C5FD' stroke-width='1' opacity='.7'/><line x1='2' y1='16' x2='30' y2='16' stroke='%2393C5FD' stroke-width='1' opacity='.7'/><text x='16' y='20' text-anchor='middle' font-family='Arial' font-weight='900' font-size='9' fill='white'>DP</text><polygon points='22,21 22,29 24,26 26,30 28,29 26,25 28,25' fill='white'/></svg>" />
         <meta name="theme-color" content="#0066CC" />
         <meta property="og:title" content="DecisionPilot – AI Decision Making" />
         <meta property="og:description" content="Get personalized AI recommendations for any decision." />
@@ -21,7 +21,10 @@ export default function Home() {
           *, *::before, *::after { box-sizing: border-box; }
           body { margin: 0; overflow-x: hidden; }
 
-          /* ── Mobile responsive ── */
+          /* Nav stats hide on small screens */
+          @media (max-width: 900px) {
+            .nav-stats { display: none !important; }
+          }
           @media (max-width: 640px) {
             /* Hide hero thumbnails on mobile */
             .hero-thumbs { display: none !important; }

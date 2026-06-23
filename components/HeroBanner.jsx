@@ -12,7 +12,7 @@ const SLIDES = [
     image: "photo-1514282401047-d79a71a590e8",
     color: "#0369A1",
     gradient: "linear-gradient(120deg, rgba(3,105,161,0.68) 0%, rgba(6,182,212,0.42) 100%)",
-    price: "from €999",
+    price: null,
     slowZoom: false,
   },
   {
@@ -345,12 +345,14 @@ export function HeroBanner({ onStart, t, lang }) {
             <button onClick={() => onStart("chat")} style={{
               background: "rgba(255,255,255,0.15)", color: "#fff",
               border: "2px solid rgba(255,255,255,0.4)",
-              borderRadius: 10, padding: "13px 24px",
+              borderRadius: 10, padding: "10px 20px",
               fontSize: 15, fontWeight: 700, cursor: "pointer",
               backdropFilter: "blur(8px)", transition: "all 0.2s",
+              display: "flex", alignItems: "center", gap: 8,
             }}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
               onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>
+              <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.5)" }} alt="Asel" />
               {t.btn_chat}
             </button>
           </div>
