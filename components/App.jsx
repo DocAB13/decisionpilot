@@ -1283,36 +1283,28 @@ function Landing({ onStart, t, lang, setLang }) {
         <div style={{ marginBottom: 80 }}>
           <div style={{
             background: `linear-gradient(135deg, ${C.accent} 0%, #3B5BDB 50%, #7048E8 100%)`,
-            borderRadius: 24, overflow: "hidden",
-            display: "flex", flexDirection: "column", alignItems: "center",
-            boxShadow: `0 20px 60px ${C.accent}30`, padding: "40px 32px 0",
-            textAlign: "center", position: "relative",
+            borderRadius: 24,
+            boxShadow: `0 20px 60px ${C.accent}30`,
+            padding: "52px 40px",
+            textAlign: "center",
           }}>
-            {/* Text + button */}
             <h2 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 12px" }}>
               Can't find your category?
             </h2>
-            <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 16, margin: "0 0 28px", lineHeight: 1.6, maxWidth: 480 }}>
+            <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 16, margin: "0 0 28px", lineHeight: 1.6 }}>
               Chat with Asel about any decision — from choosing a university to planning a wedding.
             </p>
             <button onClick={() => onStart("chat")} style={{
               background: "#fff", color: C.accent, border: "none", borderRadius: 14,
               padding: "14px 32px", fontSize: 16, fontWeight: 800, cursor: "pointer",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s", whiteSpace: "nowrap",
-              display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 32,
+              boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s",
+              display: "inline-flex", alignItems: "center", gap: 10,
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
               <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="Asel" />
               {t?.btn_chat || "Chat with Asel"} →
             </button>
-            {/* Asel centered at bottom of banner */}
-            <div style={{ lineHeight: 0 }}>
-              <img src="/asel-mascot.png" alt="Asel" style={{
-                width: "clamp(120px, 18vw, 200px)", height: "auto",
-                display: "block", filter: "drop-shadow(0 -8px 20px rgba(0,0,0,0.25))",
-              }} />
-            </div>
           </div>
         </div>
 

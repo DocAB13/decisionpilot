@@ -345,14 +345,12 @@ export function HeroBanner({ onStart, t, lang }) {
             <button onClick={() => onStart("chat")} style={{
               background: "rgba(255,255,255,0.15)", color: "#fff",
               border: "2px solid rgba(255,255,255,0.4)",
-              borderRadius: 10, padding: "10px 20px",
+              borderRadius: 10, padding: "13px 24px",
               fontSize: 15, fontWeight: 700, cursor: "pointer",
               backdropFilter: "blur(8px)", transition: "all 0.2s",
-              display: "flex", alignItems: "center", gap: 8,
             }}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
               onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>
-              <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.5)" }} alt="Asel" />
               {t.btn_chat}
             </button>
           </div>
