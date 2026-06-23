@@ -1303,7 +1303,7 @@ function Landing({ onStart, t, lang, setLang }) {
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
               <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="Asel" />
-              {t?.btn_chat || "Chat with Asel"} →
+              Chat with Asel →
             </button>
           </div>
         </div>
