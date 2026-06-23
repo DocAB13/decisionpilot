@@ -577,7 +577,7 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 36, flexWrap: "wrap" }}>
             <h2 style={{
               color: C.text, fontSize: "clamp(22px, 3.5vw, 32px)",
-              fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.25,
+              fontWeight: 900, letterSpacing: -0.8, lineHeight: 1.25,
               margin: 0, textAlign: "center",
             }}>{question.q}</h2>
           </div>
@@ -618,9 +618,289 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
   );
 }
 
+function getCategoryAnimation(category) {
+  const anims = {
+    vacation: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadFly 3s ease-in-out infinite" }}>
+          <path d="M100 100 L60 120 L40 110 L60 105 Z" fill="#1A56DB" opacity="0.8"/>
+          <path d="M100 100 L140 80 L160 90 L140 95 Z" fill="#1A56DB"/>
+          <ellipse cx="100" cy="100" rx="35" ry="12" fill="#2563EB"/>
+          <ellipse cx="100" cy="96" rx="16" ry="10" fill="#3B82F6"/>
+          <path d="M70 100 L130 100 L120 90 L80 90 Z" fill="#60A5FA" opacity="0.6"/>
+          <circle cx="105" cy="96" r="3" fill="#fff" opacity="0.9"/>
+          <circle cx="115" cy="96" r="3" fill="#fff" opacity="0.9"/>
+          <circle cx="125" cy="96" r="3" fill="#fff" opacity="0.9"/>
+        </g>
+        <g style={{ opacity: 0.3 }}>
+          {[0,1,2,3].map(i => <line key={i} x1={30 + i*40} y1="140" x2={50 + i*40} y2="150" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round" style={{ animation: `loadCloud 2s ease-in-out ${i*0.4}s infinite` }}/>)}
+        </g>
+      </svg>
+    ),
+    car: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadDrive 2s ease-in-out infinite" }}>
+          <rect x="30" y="100" width="140" height="45" rx="10" fill="#1A1A2E"/>
+          <path d="M50 100 L70 70 L130 70 L150 100" fill="#2563EB"/>
+          <rect x="40" y="100" width="30" height="20" rx="4" fill="#60A5FA" opacity="0.7"/>
+          <rect x="80" y="100" width="40" height="20" rx="4" fill="#60A5FA" opacity="0.7"/>
+          <rect x="130" y="100" width="30" height="20" rx="4" fill="#60A5FA" opacity="0.7"/>
+          <circle cx="65" cy="148" r="18" fill="#1E293B" stroke="#475569" strokeWidth="3"/>
+          <circle cx="65" cy="148" r="10" fill="#334155" style={{ animation: "loadSpin 1.5s linear infinite" }}/>
+          <line x1="65" y1="138" x2="65" y2="158" stroke="#64748B" strokeWidth="2" style={{ animation: "loadSpin 1.5s linear infinite" }}/>
+          <line x1="55" y1="148" x2="75" y2="148" stroke="#64748B" strokeWidth="2" style={{ animation: "loadSpin 1.5s linear infinite" }}/>
+          <circle cx="135" cy="148" r="18" fill="#1E293B" stroke="#475569" strokeWidth="3"/>
+          <circle cx="135" cy="148" r="10" fill="#334155" style={{ animation: "loadSpin 1.5s linear infinite" }}/>
+          <line x1="135" y1="138" x2="135" y2="158" stroke="#64748B" strokeWidth="2" style={{ animation: "loadSpin 1.5s linear infinite" }}/>
+          <line x1="125" y1="148" x2="145" y2="148" stroke="#64748B" strokeWidth="2" style={{ animation: "loadSpin 1.5s linear infinite" }}/>
+          <ellipse cx="40" cy="107" rx="5" ry="4" fill="#FBBF24"/>
+          <ellipse cx="160" cy="107" rx="4" ry="3" fill="#EF4444" opacity="0.8"/>
+        </g>
+      </svg>
+    ),
+    realestate: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadFloat 3s ease-in-out infinite" }}>
+          <rect x="55" y="110" width="90" height="70" rx="4" fill="#064E3B"/>
+          <polygon points="40,110 100,55 160,110" fill="#065F46"/>
+          <rect x="45" y="90" width="110" height="20" fill="#047857" opacity="0.5"/>
+          <rect x="80" y="130" width="20" height="30" rx="2" fill="#6EE7B7"/>
+          <rect x="110" y="130" width="20" height="20" rx="2" fill="#34D399" opacity="0.8"/>
+          <rect x="110" y="130" width="9" height="9" rx="1" fill="#6EE7B7"/>
+          <rect x="121" y="130" width="9" height="9" rx="1" fill="#6EE7B7"/>
+          <rect x="110" y="141" width="9" height="9" rx="1" fill="#6EE7B7"/>
+          <rect x="121" y="141" width="9" height="9" rx="1" fill="#6EE7B7"/>
+          <circle cx="90" cy="158" r="3" fill="#059669"/>
+          <g style={{ animation: "loadSpin 4s linear infinite", transformOrigin: "100px 55px" }}>
+            <circle cx="100" cy="42" r="5" fill="#FBBF24"/>
+            <line x1="100" y1="42" x2="100" y2="30" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round"/>
+          </g>
+        </g>
+      </svg>
+    ),
+    phone: (
+      <svg viewBox="0 0 200 200" width="180" height="180" style={{ animation: "loadSpin 4s ease-in-out infinite" }}>
+        <rect x="65" y="30" width="70" height="130" rx="14" fill="#1E293B" stroke="#334155" strokeWidth="2"/>
+        <rect x="70" y="45" width="60" height="100" rx="6" fill="#1A56DB"/>
+        <rect x="83" y="35" width="34" height="4" rx="2" fill="#475569"/>
+        <circle cx="100" cy="147" r="5" fill="#475569"/>
+        <rect x="80" y="65" width="40" height="6" rx="3" fill="#60A5FA" opacity="0.8"/>
+        <rect x="80" y="78" width="30" height="4" rx="2" fill="#93C5FD" opacity="0.6"/>
+        <rect x="80" y="88" width="35" height="4" rx="2" fill="#93C5FD" opacity="0.6"/>
+        <circle cx="90" cy="105" r="12" fill="#3B82F6"/>
+        <path d="m86 105 3 3 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      </svg>
+    ),
+    laptop: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadLaptop 3s ease-in-out infinite", transformOrigin: "100px 140px" }}>
+          <rect x="35" y="60" width="130" height="90" rx="8" fill="#1E293B"/>
+          <rect x="42" y="67" width="116" height="76" rx="4" fill="#1A56DB"/>
+          <rect x="48" y="73" width="104" height="64" rx="3" fill="#0F172A"/>
+          <rect x="52" y="77" width="96" height="56" rx="2" fill="#1D4ED8"/>
+          <rect x="56" y="83" width="40" height="4" rx="2" fill="#93C5FD" opacity="0.8"/>
+          <rect x="56" y="92" width="60" height="4" rx="2" fill="#60A5FA" opacity="0.6"/>
+          <rect x="56" y="101" width="50" height="4" rx="2" fill="#60A5FA" opacity="0.6"/>
+          <rect x="130" y="83" width="14" height="14" rx="3" fill="#3B82F6"/>
+          <path d="m133 90 2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        </g>
+        <rect x="20" y="148" width="160" height="10" rx="5" fill="#334155"/>
+        <rect x="75" y="148" width="50" height="6" rx="3" fill="#1E293B"/>
+      </svg>
+    ),
+    fitness: (
+      <svg viewBox="0 0 200 200" width="180" height="180" style={{ animation: "loadSpin 2s linear infinite", transformOrigin: "100px 100px" }}>
+        <rect x="30" y="90" width="140" height="20" rx="10" fill="#D97706"/>
+        <rect x="20" y="70" width="30" height="60" rx="8" fill="#92400E"/>
+        <rect x="150" y="70" width="30" height="60" rx="8" fill="#92400E"/>
+        <rect x="10" y="80" width="20" height="40" rx="6" fill="#78350F"/>
+        <rect x="170" y="80" width="20" height="40" rx="6" fill="#78350F"/>
+        <circle cx="100" cy="100" r="8" fill="#FCD34D"/>
+      </svg>
+    ),
+    pet: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadBounce 1.2s ease-in-out infinite" }}>
+          <ellipse cx="100" cy="120" rx="40" ry="35" fill="#8B5E3C"/>
+          <ellipse cx="78" cy="92" rx="12" ry="15" fill="#8B5E3C"/>
+          <ellipse cx="122" cy="92" rx="12" ry="15" fill="#8B5E3C"/>
+          <ellipse cx="78" cy="90" rx="7" ry="10" fill="#F9A8D4"/>
+          <ellipse cx="122" cy="90" rx="7" ry="10" fill="#F9A8D4"/>
+          <ellipse cx="100" cy="115" rx="28" ry="22" fill="#A0714F"/>
+          <circle cx="92" cy="112" r="5" fill="#1A1A1A"/>
+          <circle cx="108" cy="112" r="5" fill="#1A1A1A"/>
+          <circle cx="93" cy="111" r="2" fill="#fff"/>
+          <circle cx="109" cy="111" r="2" fill="#fff"/>
+          <ellipse cx="100" cy="122" rx="8" ry="5" fill="#F9A8D4"/>
+          <path d="M90 128 Q100 135 110 128" stroke="#A0714F" strokeWidth="2" fill="none" strokeLinecap="round"/>
+          <g style={{ animation: "loadWag 0.8s ease-in-out infinite", transformOrigin: "100px 140px" }}>
+            <path d="M100 140 Q120 150 115 165" stroke="#8B5E3C" strokeWidth="10" strokeLinecap="round" fill="none"/>
+          </g>
+        </g>
+      </svg>
+    ),
+    dining: (
+      <svg viewBox="0 0 200 200" width="180" height="180" style={{ animation: "loadSpin 3s ease-in-out infinite", transformOrigin: "100px 100px" }}>
+        <circle cx="100" cy="100" r="60" fill="#FEF3C7" stroke="#FCD34D" strokeWidth="3"/>
+        <circle cx="100" cy="100" r="50" fill="#FFFBEB" stroke="#FDE68A" strokeWidth="1"/>
+        <rect x="80" y="60" width="6" height="80" rx="3" fill="#D97706"/>
+        <path d="M70 60 v30 Q70 100 80 100" stroke="#D97706" strokeWidth="5" fill="none" strokeLinecap="round"/>
+        <path d="M120 60 v20 Q120 90 114 95 Q108 100 114 105 v35" stroke="#D97706" strokeWidth="5" fill="none" strokeLinecap="round"/>
+        <circle cx="100" cy="100" r="6" fill="#FBBF24"/>
+      </svg>
+    ),
+    career: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadSwing 2s ease-in-out infinite", transformOrigin: "100px 80px" }}>
+          <rect x="55" y="95" width="90" height="70" rx="8" fill="#1E3A8A"/>
+          <rect x="55" y="95" width="90" height="15" rx="8" fill="#1D4ED8"/>
+          <rect x="75" y="78" width="50" height="20" rx="6" fill="none" stroke="#1E3A8A" strokeWidth="4"/>
+          <rect x="62" y="102" width="76" height="4" rx="2" fill="#3B82F6" opacity="0.5"/>
+          <rect x="66" y="118" width="28" height="20" rx="3" fill="#DBEAFE" opacity="0.3"/>
+          <rect x="66" y="118" width="13" height="9" rx="1" fill="#93C5FD" opacity="0.4"/>
+          <rect x="80" y="118" width="13" height="9" rx="1" fill="#93C5FD" opacity="0.4"/>
+          <rect x="66" y="128" width="13" height="9" rx="1" fill="#93C5FD" opacity="0.4"/>
+          <rect x="80" y="128" width="13" height="9" rx="1" fill="#93C5FD" opacity="0.4"/>
+          <rect x="104" y="118" width="26" height="30" rx="3" fill="#D4AF37" opacity="0.8"/>
+          <text x="117" y="138" textAnchor="middle" fontSize="14" fontWeight="900" fill="#1E3A8A">$</text>
+        </g>
+      </svg>
+    ),
+    insurance: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadFloat 3s ease-in-out infinite" }}>
+          <path d="M100 40 L150 65 L150 110 Q150 150 100 170 Q50 150 50 110 L50 65 Z" fill="#1E3A8A"/>
+          <path d="M100 55 L138 75 L138 110 Q138 140 100 155 Q62 140 62 110 L62 75 Z" fill="#1D4ED8"/>
+          <path d="m82 105 12 12 24-24" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        </g>
+      </svg>
+    ),
+    cruise: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadWave 3s ease-in-out infinite" }}>
+          <rect x="30" y="115" width="140" height="40" rx="20" fill="#0C4A6E"/>
+          <rect x="50" y="80" width="100" height="40" rx="8" fill="#0369A1"/>
+          <rect x="60" y="88" width="80" height="24" rx="4" fill="#0284C7"/>
+          {[0,1,2,3].map(i => <rect key={i} x={66 + i*20} y="92" width="12" height="16" rx="2" fill="#BAE6FD" opacity="0.8"/>)}
+          <rect x="95" y="40" width="6" height="42" fill="#0C4A6E"/>
+          <path d="M101 55 L130 70 L101 70 Z" fill="#DC2626"/>
+          <path d="M20 145 Q35 135 50 145 Q65 155 80 145 Q95 135 110 145 Q125 155 140 145 Q155 135 170 145 Q180 150 185 155"
+            stroke="#38BDF8" strokeWidth="3" fill="none" strokeLinecap="round"
+            style={{ animation: "loadWavePath 2s ease-in-out infinite" }}/>
+        </g>
+      </svg>
+    ),
+    loans: (
+      <svg viewBox="0 0 200 200" width="180" height="180" style={{ animation: "loadFloat 2.5s ease-in-out infinite" }}>
+        <rect x="30" y="70" width="140" height="90" rx="12" fill="#065F46"/>
+        <rect x="30" y="70" width="140" height="30" rx="12" fill="#047857"/>
+        <rect x="30" y="88" width="140" height="12" fill="#047857"/>
+        <rect x="45" y="80" width="40" height="6" rx="3" fill="#6EE7B7" opacity="0.7"/>
+        <text x="155" y="88" textAnchor="end" fontSize="11" fill="#34D399" fontWeight="700" fontFamily="monospace">VISA</text>
+        <rect x="45" y="115" width="50" height="6" rx="3" fill="#6EE7B7" opacity="0.5"/>
+        <rect x="45" y="128" width="70" height="5" rx="2" fill="#34D399" opacity="0.4"/>
+        <circle cx="148" cy="128" r="12" fill="#059669" opacity="0.6"/>
+        <circle cx="160" cy="128" r="12" fill="#10B981" opacity="0.8"/>
+      </svg>
+    ),
+    perfume: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadFloat 3s ease-in-out infinite" }}>
+          <rect x="75" y="90" width="50" height="80" rx="10" fill="#9D174D"/>
+          <rect x="75" y="90" width="50" height="20" rx="10" fill="#BE185D"/>
+          <rect x="85" y="70" width="30" height="25" rx="6" fill="#BE185D"/>
+          <rect x="93" y="60" width="14" height="14" rx="4" fill="#9D174D"/>
+          <rect x="98" y="52" width="4" height="12" rx="2" fill="#831843"/>
+          <ellipse cx="100" cy="52" rx="6" ry="4" fill="#F9A8D4"/>
+          <rect x="80" y="100" width="40" height="5" rx="2" fill="#F9A8D4" opacity="0.4"/>
+          <text x="100" y="145" textAnchor="middle" fontSize="9" fill="#FCE7F3" fontWeight="700" fontFamily="serif">ASEL</text>
+        </g>
+        {[[40,60],[155,75],[35,120],[165,110],[100,45]].map(([x,y],i) => (
+          <circle key={i} cx={x} cy={y} r="3" fill="#F9A8D4"
+            style={{ animation: `loadSparkle 2s ease-in-out ${i*0.4}s infinite` }} opacity="0.8"/>
+        ))}
+      </svg>
+    ),
+    beauty: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadFloat 3s ease-in-out infinite" }}>
+          <ellipse cx="100" cy="140" rx="40" ry="8" fill="#DB2777" opacity="0.15"/>
+          <rect x="80" y="70" width="40" height="70" rx="12" fill="#DB2777"/>
+          <rect x="85" y="75" width="30" height="50" rx="8" fill="#EC4899"/>
+          <rect x="87" y="78" width="26" height="40" rx="6" fill="#F9A8D4" opacity="0.5"/>
+          <ellipse cx="100" cy="68" rx="14" ry="6" fill="#BE185D"/>
+          <rect x="94" y="56" width="12" height="14" rx="4" fill="#9D174D"/>
+          <rect x="98" y="50" width="4" height="8" rx="2" fill="#831843"/>
+          <ellipse cx="100" cy="50" rx="5" ry="3" fill="#F472B6"/>
+        </g>
+        {[[45,55],[155,65],[50,140],[155,130]].map(([x,y],i) => (
+          <g key={i} style={{ animation: `loadSparkle 1.8s ease-in-out ${i*0.5}s infinite` }}>
+            <line x1={x} y1={y-6} x2={x} y2={y+6} stroke="#F9A8D4" strokeWidth="2" strokeLinecap="round"/>
+            <line x1={x-6} y1={y} x2={x+6} y2={y} stroke="#F9A8D4" strokeWidth="2" strokeLinecap="round"/>
+          </g>
+        ))}
+      </svg>
+    ),
+    furniture: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadFloat 4s ease-in-out infinite" }}>
+          <rect x="25" y="120" width="150" height="40" rx="10" fill="#44403C"/>
+          <rect x="35" y="100" width="130" height="28" rx="6" fill="#57534E"/>
+          <rect x="35" y="100" width="130" height="12" rx="6" fill="#78716C"/>
+          <rect x="30" y="155" width="12" height="20" rx="4" fill="#292524"/>
+          <rect x="158" y="155" width="12" height="20" rx="4" fill="#292524"/>
+          <rect x="60" y="88" width="30" height="20" rx="6" fill="#57534E"/>
+          <rect x="110" y="88" width="30" height="20" rx="6" fill="#57534E"/>
+          <circle cx="75" cy="108" r="4" fill="#A8A29E" opacity="0.5"/>
+          <circle cx="125" cy="108" r="4" fill="#A8A29E" opacity="0.5"/>
+        </g>
+      </svg>
+    ),
+    sports: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadWave 2.5s ease-in-out infinite" }}>
+          <path d="M20 160 Q50 130 80 155 Q110 180 140 150 Q165 125 180 140" stroke="#1D4ED8" strokeWidth="8" fill="none" strokeLinecap="round" opacity="0.4"/>
+          <path d="M20 145 Q50 115 80 140 Q110 165 140 135 Q165 110 180 125" stroke="#2563EB" strokeWidth="6" fill="none" strokeLinecap="round" opacity="0.6"/>
+          <g style={{ animation: "loadSurf 2.5s ease-in-out infinite", transformOrigin: "100px 120px" }}>
+            <path d="M50 130 Q100 100 150 120" stroke="#0EA5E9" strokeWidth="8" strokeLinecap="round" fill="none"/>
+            <ellipse cx="100" cy="118" rx="40" ry="6" fill="#0284C7" opacity="0.8" transform="rotate(-5 100 118)"/>
+            <rect x="90" y="95" width="8" height="25" rx="4" fill="#F59E0B" transform="rotate(10 94 108)"/>
+            <circle cx="92" cy="90" r="12" fill="#FDE68A"/>
+            <rect x="85" y="90" width="16" height="8" rx="3" fill="#1D4ED8"/>
+          </g>
+        </g>
+      </svg>
+    ),
+    outdoor: (
+      <svg viewBox="0 0 200 200" width="180" height="180">
+        <g style={{ animation: "loadFloat 4s ease-in-out infinite" }}>
+          <polygon points="100,30 30,160 170,160" fill="#166534" opacity="0.9"/>
+          <polygon points="100,55 45,160 155,160" fill="#15803D"/>
+          <polygon points="100,80 60,160 140,160" fill="#16A34A"/>
+          <rect x="93" y="155" width="14" height="30" rx="3" fill="#92400E"/>
+          <circle cx="60" cy="70" r="20" fill="#FCD34D" opacity="0.9"/>
+          <circle cx="60" cy="70" r="14" fill="#FBBF24"/>
+          {[0,1,2,3,4,5,6,7].map(i => {
+            const a = i * 45 * Math.PI / 180;
+            return <line key={i} x1={60 + 18*Math.cos(a)} y1={70 + 18*Math.sin(a)} x2={60 + 24*Math.cos(a)} y2={70 + 24*Math.sin(a)} stroke="#FCD34D" strokeWidth="2" strokeLinecap="round"/>;
+          })}
+        </g>
+      </svg>
+    ),
+  };
+  return anims[category] || (
+    <svg viewBox="0 0 200 200" width="180" height="180" style={{ animation: "loadSpin 3s linear infinite", transformOrigin: "100px 100px" }}>
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#1A56DB" strokeWidth="8" strokeDasharray="30 20"/>
+      <circle cx="100" cy="100" r="45" fill="#EEF3FF"/>
+      <circle cx="100" cy="100" r="12" fill="#1A56DB"/>
+    </svg>
+  );
+}
+
 function LoadingScreen({ category }) {
   const tree = TREES[category];
   const [step, setStep] = useState(0);
+  const catColor = CATEGORIES_LIST.find(c => c.id === category)?.color || "#1A56DB";
   const steps = [
     `Analyzing your ${tree?.label?.toLowerCase()} preferences...`,
     "Searching trusted review sources...",
@@ -639,31 +919,36 @@ function LoadingScreen({ category }) {
       minHeight: "100vh", background: C.bg,
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 32,
     }}>
-      <div style={{ textAlign: "center", maxWidth: 480 }}>
-        {/* Asel loading animation */}
-        <div style={{ marginBottom: 24, display: "flex", justifyContent: "center" }}>
-          <img
-            src="/asel-mascot.png"
-            alt="Asel thinking"
-            style={{
-              width: 130, height: "auto",
-              animation: "aselLoadPulse 1.6s ease-in-out infinite",
-              filter: "drop-shadow(0 8px 20px rgba(29,78,216,0.25))",
-            }}
-          />
+      <div style={{ textAlign: "center", maxWidth: 520, width: "100%" }}>
+        {/* Animated category object banner */}
+        <div style={{
+          background: `linear-gradient(135deg, ${catColor}18, ${catColor}08)`,
+          border: `1.5px solid ${catColor}30`,
+          borderRadius: 24, padding: "32px 24px 24px",
+          marginBottom: 28, display: "flex",
+          flexDirection: "column", alignItems: "center", gap: 12,
+          boxShadow: `0 8px 32px ${catColor}15`,
+        }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 180 }}>
+            {getCategoryAnimation(category)}
+          </div>
+          <div style={{ color: catColor, fontWeight: 800, fontSize: 13, letterSpacing: 1.2, textTransform: "uppercase" }}>
+            {tree?.label} · AI Analysis
+          </div>
         </div>
-        <h2 style={{ color: C.text, fontSize: 28, fontWeight: 800, marginBottom: 12, letterSpacing: -0.5 }}>
+
+        <h2 style={{ color: C.text, fontSize: 26, fontWeight: 900, marginBottom: 8, letterSpacing: -0.5 }}>
           Finding your perfect {tree?.label?.toLowerCase()}...
         </h2>
-        <p style={{ color: C.textSecondary, fontSize: 16, marginBottom: 32, lineHeight: 1.6 }}>
-          Asel is analyzing thousands of reviews from CNET, TechRadar, Wirecutter, and more.
+        <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 28, lineHeight: 1.6 }}>
+          Asel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.
         </p>
-        <div style={{ textAlign: "left", background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadowMd }}>
+        <div style={{ textAlign: "left", background: C.card, borderRadius: 16, padding: "20px 24px", boxShadow: C.shadowMd }}>
           {steps.map((s, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 0", opacity: i <= step ? 1 : 0.3, transition: "opacity 0.5s" }}>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "7px 0", opacity: i <= step ? 1 : 0.3, transition: "opacity 0.5s" }}>
               <div style={{
                 width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
-                background: i < step ? C.success : i === step ? C.accent : C.border,
+                background: i < step ? C.success : i === step ? catColor : C.border,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 11, color: "#fff", fontWeight: 700, transition: "background 0.5s",
               }}>{i < step ? "✓" : i + 1}</div>
@@ -673,10 +958,18 @@ function LoadingScreen({ category }) {
         </div>
       </div>
       <style>{`
-        @keyframes aselLoadPulse {
-          0%, 100% { transform: translateY(0) scale(1); }
-          50%       { transform: translateY(-10px) scale(1.04); }
-        }
+        @keyframes loadSpin   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes loadFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+        @keyframes loadBounce { 0%,100%{transform:translateY(0) scaleY(1)} 40%{transform:translateY(-20px) scaleY(1.05)} 80%{transform:translateY(0) scaleY(0.95)} }
+        @keyframes loadDrive  { 0%,100%{transform:translateX(0)} 50%{transform:translateX(8px)} }
+        @keyframes loadFly    { 0%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(6px,-8px) rotate(3deg)} 100%{transform:translate(0,0) rotate(0deg)} }
+        @keyframes loadSwing  { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)} }
+        @keyframes loadWave   { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-6px) rotate(2deg)} }
+        @keyframes loadWag    { 0%,100%{transform:rotate(-20deg)} 50%{transform:rotate(20deg)} }
+        @keyframes loadLaptop { 0%,100%{transform:rotateX(0deg)} 50%{transform:rotateX(-15deg)} }
+        @keyframes loadSurf   { 0%,100%{transform:rotate(-5deg) translateY(0)} 50%{transform:rotate(5deg) translateY(-8px)} }
+        @keyframes loadSparkle{ 0%,100%{opacity:0.2;transform:scale(0.6)} 50%{opacity:1;transform:scale(1.2)} }
+        @keyframes loadWavePath{ 0%,100%{stroke-dashoffset:0} 50%{stroke-dashoffset:-20} }
       `}</style>
     </div>
   );
@@ -728,31 +1021,27 @@ function RecommendationCard({ pick, index }) {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
-          <div>
-            <div style={{ color: C.success, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>Pros</div>
+          <div style={{ background: "#F0FDF4", border: "1.5px solid #86EFAC", borderRadius: 14, padding: "16px 18px" }}>
+            <div style={{ color: "#15803D", fontWeight: 800, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="none"><circle cx="8" cy="8" r="7" stroke="#15803D" strokeWidth="1.5"/><path d="m5 8 2 2 4-4" stroke="#15803D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              Pros
+            </div>
             {pick.pros?.map((p, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 7 }}>
-                <span style={{
-                  width: 16, height: 16, minWidth: 16, borderRadius: "50%",
-                  background: "#DCFCE7", color: "#16A34A",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 10, fontWeight: 900, marginTop: 1,
-                }}>✓</span>
-                <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
+                <span style={{ width: 16, height: 16, minWidth: 16, borderRadius: "50%", background: "#DCFCE7", color: "#16A34A", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, marginTop: 1 }}>✓</span>
+                <span style={{ color: "#166534", fontSize: 13, lineHeight: 1.5 }}>{p}</span>
               </div>
             ))}
           </div>
-          <div>
-            <div style={{ color: "#DC2626", fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>Cons</div>
+          <div style={{ background: "#FFF5F5", border: "1.5px solid #FCA5A5", borderRadius: 14, padding: "16px 18px" }}>
+            <div style={{ color: "#B91C1C", fontWeight: 800, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+              <svg viewBox="0 0 16 16" width="14" height="14" fill="none"><circle cx="8" cy="8" r="7" stroke="#B91C1C" strokeWidth="1.5"/><path d="m5.5 5.5 5 5M10.5 5.5l-5 5" stroke="#B91C1C" strokeWidth="1.8" strokeLinecap="round"/></svg>
+              Cons
+            </div>
             {pick.cons?.map((p, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 7 }}>
-                <span style={{
-                  width: 16, height: 16, minWidth: 16, borderRadius: "50%",
-                  background: "#FEE2E2", color: "#DC2626",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 10, fontWeight: 900, marginTop: 1,
-                }}>✕</span>
-                <span style={{ color: C.textSecondary, fontSize: 13, lineHeight: 1.5 }}>{p}</span>
+                <span style={{ width: 16, height: 16, minWidth: 16, borderRadius: "50%", background: "#FEE2E2", color: "#DC2626", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, marginTop: 1 }}>✕</span>
+                <span style={{ color: "#991B1B", fontSize: 13, lineHeight: 1.5 }}>{p}</span>
               </div>
             ))}
           </div>
@@ -888,10 +1177,22 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
             {[
-              { num: "01", icon: "🎯", title: t?.step1_title || "Choose a category", desc: t?.step1_desc || "Pick from 9 decision categories", grad: [C.accent, C.purple] },
-              { num: "02", icon: "💬", title: t?.step2_title || "Answer 8–10 questions", desc: t?.step2_desc || "Our AI learns exactly what you need", grad: [C.purple, C.gold] },
-              { num: "03", icon: "🤖", title: "AI analyzes options", desc: "Searches CNET, Wirecutter, Booking & more in real-time", grad: [C.gold, C.success] },
-              { num: "04", icon: "✨", title: t?.step3_title || "Get 5 perfect matches", desc: t?.step3_desc || "Personalized picks with pros, cons & direct links", grad: [C.success, C.accent] },
+              {
+                num: "Step 1", title: t?.step1_title || "Choose a category", desc: t?.step1_desc || "Pick from 21 decision categories", grad: [C.accent, C.purple],
+                icon: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+              },
+              {
+                num: "Step 2", title: t?.step2_title || "Answer a few questions", desc: t?.step2_desc || "Our AI learns exactly what you need", grad: [C.purple, C.gold],
+                icon: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="13" x2="12" y2="13"/></svg>
+              },
+              {
+                num: "Step 3", title: "AI analyzes options", desc: "Searches CNET, Wirecutter, Booking & more in real-time", grad: [C.gold, C.success],
+                icon: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6"/><path d="M11 8v6"/></svg>
+              },
+              {
+                num: "Step 4", title: t?.step3_title || "Get your top matches", desc: t?.step3_desc || "Personalized picks with pros, cons & direct links", grad: [C.success, C.accent],
+                icon: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
+              },
             ].map((s, i) => (
               <div key={i} style={{
                 background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "28px 24px",
@@ -899,14 +1200,15 @@ function Landing({ onStart, t, lang, setLang }) {
               }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = C.shadowMd; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = C.shadow; }}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: "50%",
-                  background: `linear-gradient(135deg, ${s.grad[0]}, ${s.grad[1]})`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  color: "#fff", fontSize: 13, fontWeight: 800, marginBottom: 14,
-                  boxShadow: `0 4px 14px ${s.grad[0]}40`, fontFamily: "'Plus Jakarta Sans', sans-serif",
-                }}>{s.num}</div>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>{s.icon}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                    background: `linear-gradient(135deg, ${s.grad[0]}, ${s.grad[1]})`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#fff", boxShadow: `0 4px 14px ${s.grad[0]}40`,
+                  }}>{s.icon}</div>
+                  <span style={{ color: s.grad[0], fontWeight: 800, fontSize: 12, letterSpacing: 1.2, textTransform: "uppercase" }}>{s.num}</span>
+                </div>
                 <div style={{ color: C.text, fontWeight: 700, fontSize: 16, marginBottom: 6 }}>{s.title}</div>
                 <div style={{ color: C.muted, fontSize: 13, lineHeight: 1.6 }}>{s.desc}</div>
               </div>
@@ -980,20 +1282,16 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
           </div>
 
-          {/* Asel leaning with elbow on the cards */}
-          <div style={{
-            position: "absolute", right: -10, bottom: 0, zIndex: 3,
-            pointerEvents: "none",
-          }}>
+          {/* Asel below pricing on white background - right aligned, no overlap */}
+          <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "clamp(20px, 6vw, 80px)", marginTop: -20, lineHeight: 0, pointerEvents: "none" }}>
             <img
               src="/asel-mascot.png"
               alt="Asel"
               style={{
-                width: "clamp(130px, 14vw, 200px)",
+                width: "clamp(180px, 18vw, 260px)",
                 height: "auto",
                 display: "block",
-                transform: "scaleX(-1)",
-                filter: "drop-shadow(0 12px 24px rgba(29,78,216,0.2))",
+                filter: "drop-shadow(0 4px 16px rgba(29,78,216,0.15))",
                 animation: "aselLeanBob 3.5s ease-in-out infinite",
               }}
             />
@@ -1295,7 +1593,7 @@ function ChatScreen({ onBack, t, lang, setLang }) {
       <style>{`
         @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes aselLeanBob { 0%,100%{transform:scaleX(-1) translateY(0);} 50%{transform:scaleX(-1) translateY(-6px);} }
+        @keyframes aselLeanBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
         @keyframes aselLoadPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
       `}</style>
     </div>

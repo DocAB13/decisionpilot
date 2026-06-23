@@ -101,7 +101,7 @@ export default function AselCorner({ screen = "landing" }) {
         }}/>
       </div>
 
-      {/* Penguin avatar button */}
+      {/* Asel avatar button */}
       <div style={{
         width: 68, height: 68, borderRadius: "50%", background: "#fff",
         border: "2px solid #E8ECF4",
@@ -118,40 +118,17 @@ export default function AselCorner({ screen = "landing" }) {
             pointerEvents: "none",
           }}/>
         )}
-        <svg viewBox="0 0 100 110" width="52" height="58"
-          style={{ animation: "aselCornerBob 2.8s ease-in-out infinite" }}>
-          {/* Feet */}
-          <ellipse cx="38" cy="104" rx="11" ry="5" fill={ORANGE}/>
-          <ellipse cx="62" cy="104" rx="11" ry="5" fill={ORANGE}/>
-          {/* Body */}
-          <ellipse cx="50" cy="75" rx="24" ry="32" fill={DARK}/>
-          {/* Belly */}
-          <ellipse cx="50" cy="78" rx="14" ry="21" fill={CREAM}/>
-          {/* Left wing */}
-          <path d="M28 60 C18 68 16 84 20 94 C23 100 28 98 30 92 C32 84 30 72 28 60" fill={DARK}/>
-          {/* Right wing - waving */}
-          <path className="asel-corner-wave"
-            d={wave ? "M72 60 C84 52 90 40 83 30" : "M72 60 C82 56 88 44 80 34"}
-            stroke={DARK} strokeWidth="12" strokeLinecap="round" fill="none"
-            style={{ transition: "d 0.3s ease" }}/>
-          <ellipse cx={wave ? 82 : 79} cy={wave ? 28 : 32} rx="8" ry="6"
-            fill={DARK} transform={wave ? "rotate(-20 82 28)" : "rotate(-10 79 32)"}
-            style={{ transition: "all 0.3s ease" }}/>
-          {/* Head */}
-          <ellipse cx="50" cy="34" rx="22" ry="20" fill={DARK}/>
-          {/* Face patch */}
-          <ellipse cx="50" cy="38" rx="14" ry="15" fill={CREAM}/>
-          {/* Eyes */}
-          <circle cx="43" cy="30" r="5" fill="white"/>
-          <circle cx="44.5" cy="30" r="2.8" fill={DARK}/>
-          <circle cx="45.5" cy="29" r="1.1" fill="white"/>
-          <circle cx="57" cy="30" r="5" fill="white"/>
-          <circle cx="58.5" cy="30" r="2.8" fill={DARK}/>
-          <circle cx="59.5" cy="29" r="1.1" fill="white"/>
-          {/* Beak */}
-          <ellipse cx="50" cy="42" rx="6" ry="4.5" fill={ORANGE}/>
-          <line x1="44" y1="42" x2="56" y2="42" stroke="#CC6600" strokeWidth="1"/>
-        </svg>
+        <img
+          src="/asel-mascot.png"
+          alt="Asel"
+          style={{
+            width: 60, height: 60,
+            objectFit: "cover",
+            objectPosition: "30% 8%",
+            animation: "aselCornerBob 2.8s ease-in-out infinite",
+            borderRadius: "50%",
+          }}
+        />
       </div>
 
       <style>{`
