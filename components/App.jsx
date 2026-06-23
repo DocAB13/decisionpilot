@@ -1611,6 +1611,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
 function Landing({ onStart, t, lang, setLang }) {
   const [count, setCount] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
+  const [showPricing, setShowPricing] = useState(false);
   useEffect(() => {
     const target = 24891;
     const step = Math.ceil(target / 60);
@@ -1800,16 +1801,40 @@ function Landing({ onStart, t, lang, setLang }) {
 
         {/* Pricing - after CTA */}
         <div id="pricing" style={{ marginBottom: 80 }}>
-          {/* Full-width pricing banner */}
-          <div style={{ background: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)", padding: "40px 24px", textAlign: "center", margin: "0 -24px 48px" }}>
+          {/* Full-width pricing banner - clickable */}
+          <div
+            onClick={() => setShowPricing(p => !p)}
+            style={{
+              background: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
+              padding: "40px 24px", textAlign: "center", margin: "0 -24px 0",
+              cursor: "pointer", position: "relative",
+              transition: "opacity 0.2s",
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = "0.92"}
+            onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+          >
             <div style={{ display: "inline-block", background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.8)", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Plans</div>
             <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>Simple, transparent pricing</h2>
-            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 17, margin: 0 }}>Start free. Upgrade when you need more.</p>
+            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 17, margin: "0 0 20px" }}>Start free. Upgrade when you need more.</p>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)",
+              borderRadius: 12, padding: "10px 20px", color: "#fff", fontSize: 14, fontWeight: 700,
+              transition: "background 0.2s",
+            }}>
+              {showPricing ? "▲ Hide plans" : "▼ See all plans"}
+            </div>
           </div>
 
-          {/* Grid */}
-          <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
-            <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
+          {/* Pricing grid — visible only when banner clicked */}
+          <div style={{
+            maxHeight: showPricing ? "1000px" : "0",
+            overflow: "hidden",
+            transition: "max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+          }}>
+            <div style={{ padding: "48px 0 0" }}>
+              <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
+                <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
             {/* Free */}
             <div style={{ background: "rgba(212,175,55,0.12)", border: "1.5px solid rgba(212,175,55,0.45)", borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow, transition: "transform 0.25s ease, box-shadow 0.25s ease" }}
               onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.035)"; e.currentTarget.style.boxShadow = "0 20px 48px rgba(212,175,55,0.22)"; }}
@@ -1872,6 +1897,8 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
           </div>
         </div>
+          </div>
+          </div>
         </div>
       </div>
 
