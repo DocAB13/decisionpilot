@@ -543,31 +543,36 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg }}>
       <div style={{
-        height: 180, backgroundImage: `url(${tree.image})`,
-        backgroundSize: "cover", backgroundPosition: "center", position: "relative",
+        height: 260, backgroundImage: `url(${tree.image})`,
+        backgroundSize: "cover", backgroundPosition: "center", position: "relative", overflow: "hidden",
       }}>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.65))" }} />
+        {/* Light overlay - keeps image visible and catchy */}
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg, ${catColor}CC 0%, rgba(0,0,0,0.45) 100%)` }} />
+
+        {/* Category title prominent center */}
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingBottom: 40 }}>
+          <div style={{ fontSize: 44, marginBottom: 8, filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.4))" }}>{tree.emoji}</div>
+          <div style={{ color: "#fff", fontSize: "clamp(22px, 4vw, 34px)", fontWeight: 900, letterSpacing: -0.5, textShadow: "0 2px 16px rgba(0,0,0,0.5)" }}>{tree.label}</div>
+        </div>
+
+        {/* Progress bars at bottom */}
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
-          <div style={{ display: "flex", gap: 4, padding: "0 32px 10px" }}>
+          <div style={{ display: "flex", gap: 3, padding: "0 20px 8px" }}>
             {tree.questions.map((_, i) => (
-              <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, background: i <= step ? catColor : "rgba(255,255,255,0.25)", transition: "background 0.3s" }} />
+              <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, background: i < step ? catColor : i === step ? "#fff" : "rgba(255,255,255,0.3)", transition: "background 0.3s", boxShadow: i === step ? `0 0 8px ${catColor}` : "none" }} />
             ))}
           </div>
-          <div style={{ height: 3, background: "rgba(255,255,255,0.2)" }}>
-            <div style={{ height: "100%", width: `${progress}%`, background: catColor, transition: "width 0.4s ease" }} />
-          </div>
         </div>
-        <div style={{ position: "absolute", bottom: 28, left: 32, display: "flex", alignItems: "center", gap: 10 }}>
+
+        {/* Top bar: Back + Step counter */}
+        <div style={{ position: "absolute", top: 16, left: 16, right: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <button onClick={onBack} style={{
-            background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,0.3)", color: "#fff",
-            borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 13, fontWeight: 600,
+            background: "rgba(255,255,255,0.18)", backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255,255,255,0.35)", color: "#fff",
+            borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 13, fontWeight: 700,
           }}>← Back</button>
-          <span style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, letterSpacing: 0.4 }}>
-            Step {step + 1} of {total}
-          </span>
-          <span style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 500 }}>
-            {tree.emoji} {tree.label}
+          <span style={{ background: "rgba(0,0,0,0.3)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", borderRadius: 10, padding: "7px 14px", fontSize: 12, fontWeight: 800, letterSpacing: 0.5 }}>
+            {step + 1} / {total}
           </span>
         </div>
       </div>
@@ -1020,28 +1025,28 @@ function RecommendationCard({ pick, index }) {
           <span style={{ color: C.textSecondary, fontSize: 14, lineHeight: 1.6 }}>{pick.why}</span>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
-          <div style={{ background: "#F0FDF4", border: "1.5px solid #86EFAC", borderRadius: 14, padding: "16px 18px" }}>
-            <div style={{ color: "#15803D", fontWeight: 800, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-              <svg viewBox="0 0 16 16" width="14" height="14" fill="none"><circle cx="8" cy="8" r="7" stroke="#15803D" strokeWidth="1.5"/><path d="m5 8 2 2 4-4" stroke="#15803D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <div className="pros-cons-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
+          <div style={{ background: "#DCFCE7", border: "2px solid #4ADE80", borderRadius: 14, padding: "16px 18px" }}>
+            <div style={{ color: "#15803D", fontWeight: 900, fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+              <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><circle cx="8" cy="8" r="7" fill="#15803D"/><path d="m5 8 2 2 4-4" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
               Pros
             </div>
             {pick.pros?.map((p, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 7 }}>
-                <span style={{ width: 16, height: 16, minWidth: 16, borderRadius: "50%", background: "#DCFCE7", color: "#16A34A", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, marginTop: 1 }}>✓</span>
-                <span style={{ color: "#166534", fontSize: 13, lineHeight: 1.5 }}>{p}</span>
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+                <span style={{ color: "#15803D", fontSize: 14, fontWeight: 900, marginTop: 0, flexShrink: 0 }}>+</span>
+                <span style={{ color: "#14532D", fontSize: 13.5, lineHeight: 1.55, fontWeight: 700 }}>{p}</span>
               </div>
             ))}
           </div>
-          <div style={{ background: "#FFF5F5", border: "1.5px solid #FCA5A5", borderRadius: 14, padding: "16px 18px" }}>
-            <div style={{ color: "#B91C1C", fontWeight: 800, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-              <svg viewBox="0 0 16 16" width="14" height="14" fill="none"><circle cx="8" cy="8" r="7" stroke="#B91C1C" strokeWidth="1.5"/><path d="m5.5 5.5 5 5M10.5 5.5l-5 5" stroke="#B91C1C" strokeWidth="1.8" strokeLinecap="round"/></svg>
+          <div style={{ background: "#FEE2E2", border: "2px solid #F87171", borderRadius: 14, padding: "16px 18px" }}>
+            <div style={{ color: "#B91C1C", fontWeight: 900, fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+              <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><circle cx="8" cy="8" r="7" fill="#B91C1C"/><path d="m5.5 5.5 5 5M10.5 5.5l-5 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>
               Cons
             </div>
             {pick.cons?.map((p, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 7 }}>
-                <span style={{ width: 16, height: 16, minWidth: 16, borderRadius: "50%", background: "#FEE2E2", color: "#DC2626", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, marginTop: 1 }}>✕</span>
-                <span style={{ color: "#991B1B", fontSize: 13, lineHeight: 1.5 }}>{p}</span>
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+                <span style={{ color: "#DC2626", fontSize: 14, fontWeight: 900, marginTop: 0, flexShrink: 0 }}>−</span>
+                <span style={{ color: "#7F1D1D", fontSize: 13.5, lineHeight: 1.55, fontWeight: 700 }}>{p}</span>
               </div>
             ))}
           </div>
@@ -1175,7 +1180,7 @@ function Landing({ onStart, t, lang, setLang }) {
             <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.how_title || "Decide smarter, faster"}</h2>
             <p style={{ color: C.textSecondary, fontSize: 17, maxWidth: 500, margin: "0 auto", lineHeight: 1.65 }}>{t?.how_desc || "Get your personalized answer in under 60 seconds"}</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
+          <div className="steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
             {[
               {
                 num: "Step 1", title: t?.step1_title || "Choose a category", desc: t?.step1_desc || "Pick from 21 decision categories", grad: [C.accent, C.purple],
@@ -1225,7 +1230,7 @@ function Landing({ onStart, t, lang, setLang }) {
 
           {/* Grid + Asel leaning */}
           <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
+            <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
             {/* Free */}
             <div style={{ background: `${C.gold}14`, border: `1.5px solid ${C.gold}40`, borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow }}>
               <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Free</div>
@@ -1281,22 +1286,6 @@ function Landing({ onStart, t, lang, setLang }) {
               </button>
             </div>
           </div>
-
-          {/* Asel below pricing on white background - right aligned, no overlap */}
-          <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "clamp(20px, 6vw, 80px)", marginTop: -20, lineHeight: 0, pointerEvents: "none" }}>
-            <img
-              src="/asel-mascot.png"
-              alt="Asel"
-              style={{
-                width: "clamp(180px, 18vw, 260px)",
-                height: "auto",
-                display: "block",
-                filter: "drop-shadow(0 4px 16px rgba(29,78,216,0.15))",
-                animation: "aselLeanBob 3.5s ease-in-out infinite",
-              }}
-            />
-          </div>
-        </div>
         </div>
 
         {/* Categories */}
@@ -1306,7 +1295,7 @@ function Landing({ onStart, t, lang, setLang }) {
             <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>{t?.what_title || "What are you deciding today?"}</h2>
             <p style={{ color: C.textSecondary, fontSize: 17, margin: "0 auto", lineHeight: 1.65 }}>{t?.what_desc || "Click any category to start — no signup required"}</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
+          <div className="cats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
             {CATEGORIES_LIST.map(cat => (
               <CategoryCard key={cat.id} cat={cat} onClick={() => onStart("tree", cat.id)} />
             ))}

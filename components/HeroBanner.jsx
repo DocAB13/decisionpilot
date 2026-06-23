@@ -11,7 +11,7 @@ const SLIDES = [
     emoji: "✈️",
     image: "photo-1514282401047-d79a71a590e8",
     color: "#0369A1",
-    gradient: "linear-gradient(120deg, rgba(3,105,161,0.82) 0%, rgba(6,182,212,0.55) 100%)",
+    gradient: "linear-gradient(120deg, rgba(3,105,161,0.68) 0%, rgba(6,182,212,0.42) 100%)",
     price: "from €999",
     slowZoom: false,
   },
@@ -19,9 +19,9 @@ const SLIDES = [
     id: "car",
     label: "Cars",
     emoji: "🚗",
-    image: "photo-1617469767053-d3b523a0b982",
+    image: "photo-1558618666-fcd25c85cd64",
     color: "#0F0F0F",
-    gradient: "linear-gradient(120deg, rgba(10,10,10,0.88) 0%, rgba(30,30,60,0.65) 100%)",
+    gradient: "linear-gradient(120deg, rgba(10,10,10,0.72) 0%, rgba(20,20,40,0.50) 100%)",
     price: null,
     slowZoom: false,
   },
@@ -31,7 +31,7 @@ const SLIDES = [
     emoji: "🏡",
     image: "photo-1613977257363-707ba9348227",
     color: "#064E3B",
-    gradient: "linear-gradient(120deg, rgba(6,78,59,0.80) 0%, rgba(16,185,129,0.5) 100%)",
+    gradient: "linear-gradient(120deg, rgba(6,78,59,0.65) 0%, rgba(16,185,129,0.38) 100%)",
     price: null,
     slowZoom: true,
   },
@@ -277,7 +277,7 @@ export function HeroBanner({ onStart, t, lang }) {
       )}
 
       {/* Content */}
-      <div style={{
+      <div className="hero-content" style={{
         position: "relative", zIndex: 1,
         maxWidth: 1100, margin: "0 auto",
         padding: "60px 32px",
@@ -374,7 +374,7 @@ export function HeroBanner({ onStart, t, lang }) {
         </div>
 
         {/* Right: category thumbnails */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, flexShrink: 0 }}>
+        <div className="hero-thumbs" style={{ display: "flex", flexDirection: "column", gap: 8, flexShrink: 0 }}>
           {SLIDES.map((s, i) => (
             <button key={s.id} onClick={() => goTo(i)} style={{
               width: 120, height: 36, borderRadius: 8, overflow: "hidden",
@@ -391,29 +391,29 @@ export function HeroBanner({ onStart, t, lang }) {
               }} />
               <div style={{
                 position: "absolute", inset: 0,
-                background: i === current ? `${s.color}99` : "rgba(0,0,0,0.4)",
+                background: i === current ? `${s.color}80` : "rgba(0,0,0,0.35)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                color: "#fff", fontSize: 11, fontWeight: 700,
-                gap: 4,
+                color: "#fff", fontSize: 11, fontWeight: 700, gap: 4,
               }}>
                 <span>{s.emoji}</span>
+                <span style={{ fontSize: 10 }}>{s.label}</span>
               </div>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Bottom dots */}
+      {/* Bottom dots - bigger and more clickable */}
       <div style={{
-        position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)",
-        display: "flex", gap: 6,
+        position: "absolute", bottom: 20, left: "50%", transform: "translateX(-50%)",
+        display: "flex", gap: 8, zIndex: 5,
       }}>
-        {SLIDES.map((_, i) => (
+        {SLIDES.map((s, i) => (
           <button key={i} onClick={() => goTo(i)} style={{
-            width: i === current ? 24 : 8, height: 8, borderRadius: 4,
-            background: i === current ? "#fff" : "rgba(255,255,255,0.4)",
+            width: i === current ? 32 : 10, height: 10, borderRadius: 5,
+            background: i === current ? "#fff" : "rgba(255,255,255,0.5)",
             border: "none", cursor: "pointer", padding: 0,
-            transition: "all 0.3s",
+            transition: "all 0.3s", boxShadow: i === current ? "0 2px 8px rgba(0,0,0,0.3)" : "none",
           }} />
         ))}
       </div>
