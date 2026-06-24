@@ -3385,7 +3385,6 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
       </div>
     </div>
-    </div>
   </div>
   );
 }
