@@ -1811,8 +1811,9 @@ function Badge({ children, color = "#1A56DB" }) {
   );
 }
 
-function TopNav({ onBack, showBack, t, lang, setLang, count }) {
+function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch }) {
   const [langOpen, setLangOpen] = useState(false);
+  const [searchVal, setSearchVal] = useState("");
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
 
   const CURRENCY = {
@@ -1826,125 +1827,82 @@ function TopNav({ onBack, showBack, t, lang, setLang, count }) {
     ar: "﷼ SAR", tr: "₺ TRY", he: "₪ ILS",
     th: "฿ THB", id: "Rp IDR", vi: "₫ VND", hi: "₹ INR",
   };
-
   const FLAG_MAP = {
-    en: "🇬🇧", de: "🇩🇪", fr: "🇫🇷", es: "🇪🇸", it: "🇮🇹",
-    pt: "🇵🇹", nl: "🇳🇱", fi: "🇫🇮", el: "🇬🇷", ro: "🇷🇴",
-    pl: "🇵🇱", cs: "🇨🇿", hu: "🇭🇺", sk: "🇸🇰", bg: "🇧🇬",
-    hr: "🇭🇷", sv: "🇸🇪", da: "🇩🇰", no: "🇳🇴", ru: "🇷🇺",
-    uk: "🇺🇦", zh: "🇨🇳", ja: "🇯🇵", ko: "🇰🇷", ar: "🇸🇦",
-    tr: "🇹🇷", he: "🇮🇱", th: "🇹🇭", id: "🇮🇩", vi: "🇻🇳", hi: "🇮🇳",
+    en:"🇬🇧",de:"🇩🇪",fr:"🇫🇷",es:"🇪🇸",it:"🇮🇹",pt:"🇵🇹",nl:"🇳🇱",fi:"🇫🇮",
+    el:"🇬🇷",ro:"🇷🇴",pl:"🇵🇱",cs:"🇨🇿",hu:"🇭🇺",sk:"🇸🇰",bg:"🇧🇬",hr:"🇭🇷",
+    sv:"🇸🇪",da:"🇩🇰",no:"🇳🇴",ru:"🇷🇺",uk:"🇺🇦",zh:"🇨🇳",ja:"🇯🇵",ko:"🇰🇷",
+    ar:"🇸🇦",tr:"🇹🇷",he:"🇮🇱",th:"🇹🇭",id:"🇮🇩",vi:"🇻🇳",hi:"🇮🇳",
   };
-
   const currentFlag = FLAG_MAP[lang] || current.flag || "🌐";
 
   return (
     <div style={{
       background: "#fff", borderBottom: `1px solid ${C.border}`,
-      padding: "0 16px", position: "sticky", top: 0, zIndex: 100,
-      boxShadow: "0 1px 0 #E8ECF4",
+      position: "sticky", top: 0, zIndex: 100, boxShadow: "0 1px 8px rgba(15,23,42,0.06)",
     }}>
-      <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", alignItems: "center", gap: 10, height: 64 }}>
+      <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 16px", display: "flex", alignItems: "center", gap: 12, height: 60 }}>
+
         {showBack && (
-          <button onClick={onBack} style={{
-            display: "flex", alignItems: "center", gap: 6,
-            background: "transparent", border: `1px solid ${C.border}`,
-            color: C.textSecondary, borderRadius: 10, padding: "7px 14px",
-            cursor: "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.15s", flexShrink: 0,
-          }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = C.accent; e.currentTarget.style.color = C.accent; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textSecondary; }}>
+          <button onClick={onBack} style={{ display:"flex",alignItems:"center",gap:6,background:"transparent",border:`1px solid ${C.border}`,color:C.textSecondary,borderRadius:10,padding:"7px 12px",cursor:"pointer",fontSize:13,fontWeight:600,flexShrink:0 }}
+            onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;e.currentTarget.style.color=C.accent;}}
+            onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.textSecondary;}}>
             ← Back
           </button>
         )}
 
-        {/* Logo - far left */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          <div style={{
-            width: 34, height: 34, borderRadius: 9,
-            background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: `0 4px 12px ${C.accent}40`, overflow: "hidden",
-          }}>
-            <img src="/asel-mascot.png" style={{ width: 30, height: 30, objectFit: "cover", objectPosition: "30% 8%" }} alt="" />
+        {/* Logo */}
+        <div style={{ display:"flex",alignItems:"center",gap:8,flexShrink:0,textDecoration:"none",cursor:"pointer" }} onClick={()=>onBack&&onBack()}>
+          <div style={{ width:32,height:32,borderRadius:8,background:`linear-gradient(135deg,${C.accent},#6B8EFF)`,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden" }}>
+            <img src="/asel-mascot.png" style={{ width:28,height:28,objectFit:"cover",objectPosition:"30% 8%" }} alt="" />
           </div>
-          <span style={{ color: C.text, fontWeight: 800, fontSize: 17, letterSpacing: -0.5, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
+          <span style={{ color:C.text,fontWeight:900,fontSize:16,letterSpacing:-0.5,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>DecisionPilot</span>
         </div>
 
-        {/* Inline stats */}
-        <div className="nav-stats" style={{ display: "flex", gap: 16, marginLeft: 12, alignItems: "center" }}>
-          {[
-            { value: count ? `${count.toLocaleString()}+` : "24,891+", label: "Decisions" },
-            { value: "21+", label: "Categories" },
-            { value: "30+", label: "Languages" },
-            { value: "100%", label: "Free" },
-          ].map((s, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 4, borderRight: i < 3 ? `1px solid ${C.border}` : "none", paddingRight: i < 3 ? 16 : 0 }}>
-              <span style={{ color: C.accent, fontSize: 14, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{s.value}</span>
-              <span style={{ color: C.muted, fontSize: 11, fontWeight: 500 }}>{s.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Right side */}
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
-          <button onClick={() => handleUpgrade("pro")} style={{
-            background: "rgba(26,86,219,0.12)", color: C.accent,
-            border: "1.5px solid rgba(26,86,219,0.4)", borderRadius: 10,
-            padding: "7px 12px", fontSize: 12, fontWeight: 700,
-            cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = C.accent; e.currentTarget.style.color = "#fff"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "rgba(26,86,219,0.12)"; e.currentTarget.style.color = C.accent; }}>
-            ✦ Pro · $4.99
-          </button>
-          <button onClick={() => handleUpgrade("premium")} style={{
-            background: "rgba(10,10,14,0.88)", color: "#D4AF37",
-            border: "1.5px solid rgba(212,175,55,0.4)", borderRadius: 10,
-            padding: "7px 12px", fontSize: 12, fontWeight: 700,
-            cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap",
-          }}
-            onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
-            onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-            ♛ Premium · $9.99
-          </button>
-
-          {/* Language switcher with real flags */}
-          <div style={{ position: "relative" }}>
-            <button onClick={() => setLangOpen(!langOpen)} style={{
-              display: "flex", alignItems: "center", gap: 6,
-              background: C.bg, border: `1px solid ${C.border}`,
-              borderRadius: 10, padding: "7px 10px", cursor: "pointer",
-              fontSize: 13, fontWeight: 600, color: C.text, transition: "all 0.15s",
-            }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = C.accent}
-              onMouseLeave={e => e.currentTarget.style.borderColor = C.border}>
-              <span style={{ fontSize: 18, lineHeight: 1 }}>{currentFlag}</span>
-              <span style={{ fontSize: 9, color: C.muted }}>{langOpen ? "▲" : "▼"}</span>
+        {/* ── CENTERED SEARCH BAR (CHECK24 style) ── */}
+        <div style={{ flex:1,maxWidth:580,margin:"0 auto" }}>
+          <div style={{ display:"flex",alignItems:"center",background:C.bg,border:`1.5px solid ${C.border}`,borderRadius:24,padding:"0 16px",transition:"border-color 0.2s,box-shadow 0.2s" }}
+            onFocus={()=>{}} onBlur={()=>{}}>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke={C.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" value={searchVal} onChange={e=>setSearchVal(e.target.value)}
+              placeholder={lang==="de"?"Suchen oder fragen...":lang==="ro"?"Caută sau întreabă...":lang==="fr"?"Chercher ou demander...":"Search or ask anything..."}
+              style={{ flex:1,border:"none",background:"transparent",outline:"none",fontSize:14,color:C.text,padding:"10px 10px",fontFamily:"inherit" }}
+              onKeyDown={e=>e.key==="Enter"&&searchVal.trim()&&onStartSearch&&onStartSearch(searchVal)} />
+            <button onClick={()=>searchVal.trim()&&onStartSearch&&onStartSearch(searchVal)}
+              style={{ background:C.accent,color:"#fff",border:"none",borderRadius:18,padding:"5px 14px",fontSize:13,fontWeight:700,cursor:"pointer",flexShrink:0 }}>
+              {lang==="de"?"Suchen":lang==="ro"?"Caută":"Search"}
             </button>
+          </div>
+        </div>
 
+        {/* Right: Pro, Premium, Lang */}
+        <div style={{ display:"flex",alignItems:"center",gap:6,flexShrink:0 }}>
+          <button onClick={()=>handleUpgrade("pro")} style={{ background:"rgba(26,86,219,0.1)",color:C.accent,border:"1.5px solid rgba(26,86,219,0.35)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s",whiteSpace:"nowrap" }}
+            onMouseEnter={e=>{e.currentTarget.style.background=C.accent;e.currentTarget.style.color="#fff";}}
+            onMouseLeave={e=>{e.currentTarget.style.background="rgba(26,86,219,0.1)";e.currentTarget.style.color=C.accent;}}>
+            ✦ Pro
+          </button>
+          <button onClick={()=>handleUpgrade("premium")} style={{ background:"rgba(10,10,14,0.9)",color:"#D4AF37",border:"1.5px solid rgba(212,175,55,0.4)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap" }}>
+            ♛ Premium
+          </button>
+
+          {/* Language flag only */}
+          <div style={{ position:"relative" }}>
+            <button onClick={()=>setLangOpen(!langOpen)} style={{ display:"flex",alignItems:"center",gap:4,background:"transparent",border:`1px solid ${C.border}`,borderRadius:20,padding:"6px 10px",cursor:"pointer",fontSize:18,lineHeight:1 }}
+              onMouseEnter={e=>e.currentTarget.style.borderColor=C.accent}
+              onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
+              {currentFlag}
+              <span style={{ fontSize:9,color:C.muted }}>{langOpen?"▲":"▼"}</span>
+            </button>
             {langOpen && (
-              <div style={{
-                position: "absolute", top: "calc(100% + 8px)", right: 0,
-                background: "#fff", border: `1px solid ${C.border}`,
-                borderRadius: 16, boxShadow: C.shadowLg,
-                width: 220, maxHeight: 360, overflowY: "auto",
-                padding: "6px 0", zIndex: 200,
-              }}>
-                {LANGUAGES.map(l => (
-                  <button key={l.code} onClick={() => { setLang(l.code); setLangOpen(false); }}
-                    style={{
-                      width: "100%", display: "flex", alignItems: "center", gap: 10,
-                      padding: "9px 16px", border: "none", cursor: "pointer",
-                      background: l.code === lang ? C.accentLight : "transparent",
-                      color: l.code === lang ? C.accent : C.text,
-                      fontSize: 14, fontWeight: l.code === lang ? 700 : 400,
-                    }}
-                    onMouseEnter={e => { if (l.code !== lang) e.currentTarget.style.background = C.bg; }}
-                    onMouseLeave={e => { if (l.code !== lang) e.currentTarget.style.background = "transparent"; }}>
-                    <span style={{ fontSize: 18, lineHeight: 1 }}>{FLAG_MAP[l.code] || l.flag || "🌐"}</span>
-                    <span style={{ flex: 1 }}>{l.name}</span>
-                    {CURRENCY[l.code] && <span style={{ fontSize: 10, color: C.muted, fontWeight: 600 }}>{CURRENCY[l.code]}</span>}
+              <div style={{ position:"absolute",top:"calc(100% + 8px)",right:0,background:"#fff",border:`1px solid ${C.border}`,borderRadius:16,boxShadow:C.shadowLg,width:220,maxHeight:360,overflowY:"auto",padding:"6px 0",zIndex:200 }}>
+                {LANGUAGES.map(l=>(
+                  <button key={l.code} onClick={()=>{setLang(l.code);setLangOpen(false);}}
+                    style={{ width:"100%",display:"flex",alignItems:"center",gap:10,padding:"9px 16px",border:"none",cursor:"pointer",background:l.code===lang?C.accentLight:"transparent",color:l.code===lang?C.accent:C.text,fontSize:14,fontWeight:l.code===lang?700:400 }}
+                    onMouseEnter={e=>{if(l.code!==lang)e.currentTarget.style.background=C.bg;}}
+                    onMouseLeave={e=>{if(l.code!==lang)e.currentTarget.style.background="transparent";}}>
+                    <span style={{ fontSize:18,lineHeight:1 }}>{FLAG_MAP[l.code]||l.flag||"🌐"}</span>
+                    <span style={{ flex:1 }}>{l.name}</span>
+                    {CURRENCY[l.code]&&<span style={{ fontSize:10,color:C.muted,fontWeight:600 }}>{CURRENCY[l.code]}</span>}
                   </button>
                 ))}
               </div>
@@ -1952,10 +1910,24 @@ function TopNav({ onBack, showBack, t, lang, setLang, count }) {
           </div>
         </div>
       </div>
+
+      {/* ── CATEGORY PILLS ROW (CHECK24 style "Beliebteste Vergleiche") ── */}
+      <div style={{ borderTop:`1px solid ${C.border}`,background:"#fff",overflowX:"auto",scrollbarWidth:"none" }}>
+        <div style={{ display:"flex",gap:0,padding:"0 16px",maxWidth:1400,margin:"0 auto",minWidth:"max-content" }}>
+          {CATEGORY_GROUPS.map(g=>(
+            <button key={g.id}
+              style={{ display:"flex",flexDirection:"column",alignItems:"center",gap:4,padding:"8px 18px",border:"none",borderBottom:"2px solid transparent",background:"transparent",cursor:"pointer",transition:"all 0.15s",flexShrink:0,color:C.textSecondary }}
+              onMouseEnter={e=>{e.currentTarget.style.borderBottomColor=g.color;e.currentTarget.style.color=g.color;e.currentTarget.style.background=`${g.color}08`;}}
+              onMouseLeave={e=>{e.currentTarget.style.borderBottomColor="transparent";e.currentTarget.style.color=C.textSecondary;e.currentTarget.style.background="transparent";}}>
+              <span style={{ fontSize:20 }}>{g.emoji}</span>
+              <span style={{ fontSize:11,fontWeight:600,whiteSpace:"nowrap" }}>{catName(g.id,lang)}</span>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
-
 function CategoryCard({ cat, onClick }) {
   const [hovered, setHovered] = useState(false);
   return (
@@ -2668,33 +2640,11 @@ function Landing({ onStart, t, lang, setLang }) {
       <HeroBanner onStart={onStart} t={t} lang={lang} />
 
       {/* Search bar */}
-      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", gap: 10 }}>
-          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10, background: C.bg, border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "0 16px" }}>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={C.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-            <input type="text" placeholder="Search a decision topic... (e.g. best SUV under €40k)"
-              style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontSize: 14, color: C.text, padding: "12px 0", fontFamily: "inherit" }} />
-          </div>
-          <button style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "0 22px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}
-            onMouseEnter={e => e.currentTarget.style.background = "#1547C0"}
-            onMouseLeave={e => e.currentTarget.style.background = C.accent}>Search</button>
-        </div>
+      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px", display: "none" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto" }}></div>
       </div>
 
-      {/* ① QUICK-ACCESS CATEGORY BAR */}
-      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "0 24px", overflowX: "auto" }}>
-        <div style={{ display: "flex", gap: 0, minWidth: "max-content", maxWidth: 1400, margin: "0 auto" }}>
-          {CATEGORY_GROUPS.map(g => (
-            <button key={g.id} onClick={() => { setSelectedGroup(g.id); document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}); }}
-              style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "14px 20px", border: "none", borderBottom: "3px solid transparent", background: "transparent", cursor: "pointer", transition: "all 0.2s", flexShrink: 0 }}
-              onMouseEnter={e => { e.currentTarget.style.borderBottomColor = g.color; e.currentTarget.style.background = `${g.color}08`; }}
-              onMouseLeave={e => { e.currentTarget.style.borderBottomColor = "transparent"; e.currentTarget.style.background = "transparent"; }}>
-              <span style={{ fontSize: 24 }}>{g.emoji}</span>
-              <span style={{ fontSize: 11, fontWeight: 600, color: C.textSecondary, whiteSpace: "nowrap" }}>{catName(g.id, lang)}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* ① QUICK-ACCESS now in TopNav — remove standalone */}
 
       {/* ② RECENT SEARCHES BANNER */}
       {recentSearches.length > 0 && (
@@ -3254,27 +3204,46 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
       </div>
 
-      {/* Footer */}
-      <div style={{ background: "#0F172A", padding: "56px 24px 160px" }}>
+      {/* Footer — CHECK24 style */}
+      <div style={{ background: "#0F172A", padding: "56px 24px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          {/* Top row: logo + columns */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32, marginBottom: 40 }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🧭</div>
+                <div style={{ width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, overflow: "hidden" }}>
+                  <img src="/asel-mascot.png" style={{ width: 28, height: 28, objectFit: "cover", objectPosition: "30% 8%" }} alt="" />
+                </div>
                 <span style={{ color: "#fff", fontWeight: 800, fontSize: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
               </div>
-              <p style={{ color: "#64748B", fontSize: 12.5, lineHeight: 1.6, maxWidth: 220 }}>
-                {t?.footer || "Free forever · No signup · AI-powered · Global"}
+              <p style={{ color: "#64748B", fontSize: 13, lineHeight: 1.6, marginTop: 0, maxWidth: 200 }}>
+                AI-powered decisions. 66+ categories. 30+ languages. Free forever.
               </p>
             </div>
 
             <div>
               <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>Explore</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                <a href="#" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Home</a>
-                <a href="/guides" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Decision Guides</a>
-                <a href="#categories" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Categories</a>
-                <a href="#pricing" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Pricing</a>
+                {CATEGORY_GROUPS.slice(0,5).map(g => (
+                  <a key={g.id} href="#categories" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}
+                    onMouseEnter={e=>e.currentTarget.style.color="#fff"}
+                    onMouseLeave={e=>e.currentTarget.style.color="#94A3B8"}>
+                    {g.emoji} {catName(g.id, "en")}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>More</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {CATEGORY_GROUPS.slice(5,10).map(g => (
+                  <a key={g.id} href="#categories" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}
+                    onMouseEnter={e=>e.currentTarget.style.color="#fff"}
+                    onMouseLeave={e=>e.currentTarget.style.color="#94A3B8"}>
+                    {g.emoji} {catName(g.id, "en")}
+                  </a>
+                ))}
               </div>
             </div>
 
@@ -3297,12 +3266,41 @@ function Landing({ onStart, t, lang, setLang }) {
             </div>
           </div>
 
+          {/* Bottom bar — CHECK24 style */}
           <div style={{ borderTop: "1px solid #1E293B", paddingTop: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-            <span style={{ color: "#475569", fontSize: 12 }}>© 2026 DecisionPilot. All rights reserved.</span>
-            <span style={{ color: "#475569", fontSize: 12 }}>Made with care · 30+ languages</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <span style={{ color: "#334155", fontSize: 12 }}>© 2026 DecisionPilot.tech</span>
+              {/* Impressum — very small, discrete, legally required */}
+              <a href="/impressum" style={{ color: "#334155", fontSize: 11, textDecoration: "none" }}
+                onMouseEnter={e=>e.currentTarget.style.color="#64748B"}
+                onMouseLeave={e=>e.currentTarget.style.color="#334155"}>
+                Impressum
+              </a>
+              <span style={{ color: "#1E293B", fontSize: 11 }}>·</span>
+              <a href="/privacy" style={{ color: "#334155", fontSize: 11, textDecoration: "none" }}>Privacy</a>
+              <span style={{ color: "#1E293B", fontSize: 11 }}>·</span>
+              <a href="/terms" style={{ color: "#334155", fontSize: 11, textDecoration: "none" }}>Terms</a>
+            </div>
+            {/* Social icons — CHECK24 style */}
+            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+              {[
+                { icon: "f", label: "Facebook", href: "#" },
+                { icon: "▶", label: "YouTube", href: "#" },
+                { icon: "◉", label: "Instagram", href: "#" },
+                { icon: "♪", label: "TikTok", href: "#" },
+              ].map(s => (
+                <a key={s.label} href={s.href} aria-label={s.label}
+                  style={{ width: 32, height: 32, borderRadius: "50%", background: "#1E293B", border: "1px solid #334155", display: "flex", alignItems: "center", justifyContent: "center", color: "#64748B", fontSize: 13, textDecoration: "none", transition: "all 0.2s" }}
+                  onMouseEnter={e=>{e.currentTarget.style.background="#334155";e.currentTarget.style.color="#fff";}}
+                  onMouseLeave={e=>{e.currentTarget.style.background="#1E293B";e.currentTarget.style.color="#64748B";}}>
+                  {s.icon}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
   </div>
   );
 }
