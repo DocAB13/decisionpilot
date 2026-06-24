@@ -2452,7 +2452,7 @@ function LoadingScreen({ category }) {
           Finding your perfect {tree?.label?.toLowerCase()}...
         </h2>
         <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 28, lineHeight: 1.6 }}>
-          AIsel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.
+          Ai·sel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.
         </p>
         <div style={{ textAlign: "left", background: C.card, borderRadius: 16, padding: "20px 24px", boxShadow: C.shadowMd }}>
           {steps.map((s, i) => (
@@ -2636,8 +2636,8 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
           <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>Want more personalized advice? Chat with our AI directly.</p>
           <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
             style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}>
-            <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="AIsel" />
-            Chat with AIsel
+            <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="Ai·sel" />
+            Chat with Ai·sel
           </button>
         </div>
       </div>
@@ -3041,7 +3041,7 @@ function Landing({ onStart, t, lang, setLang }) {
               Can't find your category?
             </h2>
             <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 16, margin: "0 0 28px", lineHeight: 1.6 }}>
-              Chat with AIsel about any decision — from choosing a university to planning a wedding.
+              Chat with Ai·sel about any decision — from choosing a university to planning a wedding.
             </p>
             <button onClick={() => onStart("chat")} style={{
               background: "#fff", color: C.accent, border: "none", borderRadius: 14,
@@ -3051,113 +3051,13 @@ function Landing({ onStart, t, lang, setLang }) {
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="AIsel" />
-              Chat with AIsel →
+              <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="Ai·sel" />
+              Chat with Ai·sel →
             </button>
           </div>
         </div>
 
-        {/* Pricing - TEMPORARILY HIDDEN for testing */}
-        <div id="pricing" style={{ marginBottom: 80, display: "none" }}>
-          {/* Full-width pricing banner - clickable */}
-          <div
-            onClick={() => setShowPricing(p => !p)}
-            style={{
-              background: "linear-gradient(135deg, #0F172A 0%, #1E293B 100%)",
-              padding: "40px 24px", textAlign: "center", margin: "0 -24px 0",
-              cursor: "pointer", position: "relative",
-              transition: "opacity 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.opacity = "0.92"}
-            onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-          >
-            <div style={{ display: "inline-block", background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.8)", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Plans</div>
-            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>Simple, transparent pricing</h2>
-            <p style={{ color: "rgba(255,255,255,0.65)", fontSize: 17, margin: "0 0 20px" }}>Start free. Upgrade when you need more.</p>
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)",
-              borderRadius: 12, padding: "10px 20px", color: "#fff", fontSize: 14, fontWeight: 700,
-              transition: "background 0.2s",
-            }}>
-              {showPricing ? "▲ Hide plans" : "▼ See all plans"}
-            </div>
-          </div>
-
-          {/* Pricing grid — visible only when banner clicked */}
-          <div style={{
-            maxHeight: showPricing ? "1000px" : "0",
-            overflow: "hidden",
-            transition: "max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-          }}>
-            <div style={{ padding: "48px 0 0" }}>
-              <div style={{ position: "relative", maxWidth: 1100, margin: "0 auto" }}>
-                <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20, maxWidth: 960, margin: "0 auto" }}>
-            {/* Free */}
-            <div style={{ background: "rgba(212,175,55,0.12)", border: "1.5px solid rgba(212,175,55,0.45)", borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow, transition: "transform 0.25s ease, box-shadow 0.25s ease" }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.035)"; e.currentTarget.style.boxShadow = "0 20px 48px rgba(212,175,55,0.22)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = C.shadow; }}>
-              <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Free</div>
-              <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$0<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
-              {["3 AI decisions per day", "All categories", "AI Chat (5 messages/day)", "Global recommendations"].map((f, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={{ color: C.success }}>✓</span>
-                  <span style={{ color: C.textSecondary, fontSize: 14 }}>{f}</span>
-                </div>
-              ))}
-              <button style={{ width: "100%", marginTop: 20, background: C.bg, color: C.text, border: `1px solid ${C.border}`, borderRadius: 12, padding: "12px", fontSize: 14, fontWeight: 700, cursor: "default" }}>
-                Current plan
-              </button>
-            </div>
-
-            {/* Pro */}
-            <div style={{ background: "rgba(26,86,219,0.14)", border: "1.5px solid rgba(26,86,219,0.45)", borderRadius: 20, padding: "32px 28px", boxShadow: C.shadow, position: "relative", overflow: "hidden", transition: "transform 0.25s ease, box-shadow 0.25s ease" }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.035)"; e.currentTarget.style.boxShadow = "0 20px 48px rgba(26,86,219,0.22)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = C.shadow; }}>
-              <div style={{ position: "absolute", top: 16, right: 16, background: C.accent, color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>POPULAR</div>
-              <div style={{ color: C.text, fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Pro</div>
-              <div style={{ color: C.accent, fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$4.99<span style={{ fontSize: 16, color: C.muted, fontWeight: 500 }}>/month</span></div>
-              {["Unlimited AI decisions", "Unlimited AI Chat", "Priority processing", "Save decision history", "All categories", "30+ languages"].map((f, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={{ color: C.accent }}>✓</span>
-                  <span style={{ color: C.textSecondary, fontSize: 14 }}>{f}</span>
-                </div>
-              ))}
-              <button onClick={() => handleUpgrade("pro")}
-                style={{ width: "100%", marginTop: 20, background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: `0 4px 16px ${C.accent}40`, transition: "all 0.2s" }}
-                onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
-                onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-                Upgrade to Pro →
-              </button>
-            </div>
-
-            {/* Premium */}
-            <div style={{ background: "rgba(10,10,14,0.88)", border: "1px solid rgba(212,175,55,0.35)", borderRadius: 20, padding: "32px 28px", boxShadow: "0 16px 48px rgba(0,0,0,0.35)", position: "relative", overflow: "hidden", transition: "transform 0.25s ease, box-shadow 0.25s ease" }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.035)"; e.currentTarget.style.boxShadow = "0 24px 56px rgba(0,0,0,0.55)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(0,0,0,0.35)"; }}>
-              <div style={{ position: "absolute", top: 16, right: 16, display: "flex", alignItems: "center", gap: 5, background: "#1E1A0E", color: "#D4AF37", border: "1px solid #3A2F12", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700 }}>
-                ♛ PREMIUM
-              </div>
-              <div style={{ color: "#F4E7C1", fontWeight: 800, fontSize: 20, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Premium</div>
-              <div style={{ color: "#F4E7C1", fontSize: 36, fontWeight: 900, letterSpacing: -1, marginBottom: 20, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>$9.99<span style={{ fontSize: 16, color: "#8A7B52", fontWeight: 500 }}>/month</span></div>
-              {["Everything in Pro", "PDF export of decisions", "Priority support", "Early access to new categories"].map((f, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <span style={{ color: "#D4AF37" }}>✓</span>
-                  <span style={{ color: "#C9CEE0", fontSize: 14 }}>{f}</span>
-                </div>
-              ))}
-              <button onClick={() => handleUpgrade("premium")}
-                style={{ width: "100%", marginTop: 20, background: "linear-gradient(135deg, #D4AF37, #F4E7C1)", color: "#1A1A1E", border: "none", borderRadius: 12, padding: "13px", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 16px rgba(212,175,55,0.35)", transition: "all 0.2s" }}
-                onMouseEnter={e => e.currentTarget.style.transform = "translateY(-1px)"}
-                onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-                Upgrade to Premium →
-              </button>
-            </div>
-          </div>
-        </div>
-          </div>
-          </div>
-        </div>
+        {/* Pricing — hidden until launch */}
       </div>
 
       {/* ═══════════════════════════════════════════════════════════
@@ -3181,7 +3081,7 @@ function Landing({ onStart, t, lang, setLang }) {
               <span style={{ background: "linear-gradient(90deg, #60A5FA, #A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Every decision. Everywhere.</span>
             </h2>
             <p style={{ color: "#94A3B8", fontSize: 17, maxWidth: 560, margin: "0 auto", lineHeight: 1.7 }}>
-              DecisionPilot is built for a world without borders — whether you're choosing a phone in Tokyo, a mortgage in Berlin, or a hotel in Dubai, AIsel speaks your language and understands your market.
+              DecisionPilot is built for a world without borders — whether you're choosing a phone in Tokyo, a mortgage in Berlin, or a hotel in Dubai, Ai·sel speaks your language and understands your market.
             </p>
           </div>
 
@@ -3190,7 +3090,7 @@ function Landing({ onStart, t, lang, setLang }) {
             {[
               { icon: "🌍", title: "30+ Languages", sub: "Full UI and AI responses in your native language — from Arabic to Vietnamese.", color: "#3B82F6" },
               { icon: "🗂️", title: "66+ Categories", sub: "Finance, tech, travel, health, education and more — every major life decision covered.", color: "#8B5CF6" },
-              { icon: "🤖", title: "AI-Personalized", sub: "No generic lists. AIsel learns your priorities and tailors every recommendation to you.", color: "#10B981" },
+              { icon: "🤖", title: "AI-Personalized", sub: "No generic lists. Ai·sel learns your priorities and tailors every recommendation to you.", color: "#10B981" },
               { icon: "🔒", title: "No Account Needed", sub: "Zero signup, zero tracking. Your decisions stay private — always.", color: "#F59E0B" },
             ].map((p, i) => (
               <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 18, padding: "28px 24px", transition: "all 0.25s" }}
@@ -3234,7 +3134,7 @@ function Landing({ onStart, t, lang, setLang }) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
             {[
               { name: "Maria K.", tag: "Vacation", grad: [C.accent, "#38BDF8"], stars: 5, quote: "Saved me hours comparing vacation deals. Booked my trip to Greece in 10 minutes!" },
-              { name: "Thomas B.", tag: "Car", grad: [C.purple, C.accent], stars: 5, quote: "I was stuck choosing between two cars for weeks. AIsel sorted it out in one chat." },
+              { name: "Thomas B.", tag: "Car", grad: [C.purple, C.accent], stars: 5, quote: "I was stuck choosing between two cars for weeks. Ai·sel sorted it out in one chat." },
               { name: "Sophie L.", tag: "Phone", grad: [C.gold, "#F472B6"], stars: 4, quote: "Finally a comparison site that doesn't feel like an ad. Genuinely helpful." },
             ].map((r, i) => (
               <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "24px", boxShadow: C.shadow }}>
@@ -3281,7 +3181,7 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {[
-              { q: "Is DecisionPilot really free?", a: "Yes — our Free plan lets you make decisions every day with no signup required. Pro and Premium add extra features like saved history and PDF exports." },
+              { q: "Is DecisionPilot really free?", a: "Yes — DecisionPilot is completely free to use. No account needed, no limits. Advanced features coming soon." },
               { q: "How does the AI make recommendations?", a: "We analyze your answers alongside real-time data from trusted sources like CNET, Wirecutter, and Booking.com to suggest options that actually fit your situation." },
               { q: "Do you sell my data?", a: "No. We don't sell your personal data to third parties. Some of our recommendations include affiliate links to partners like AutoScout24 or Booking.com, which helps keep DecisionPilot free." },
               { q: "Which categories can I get help with?", a: "Right now: vacations, phones, laptops, TVs, cars, fitness gear, pets, dining, and career decisions — with more being added." },
@@ -3417,7 +3317,7 @@ function Landing({ onStart, t, lang, setLang }) {
 function ChatScreen({ onBack, t, lang, setLang }) {
   const [messages, setMessages] = useState([{
     role: "assistant",
-    content: "Hi, I'm AIsel! 👋 Tell me about any decision you're facing — vacation, car, home, phone, career, beauty, insurance, or anything else. I'll ask a few smart questions and give you a personalized recommendation.",
+    content: "Hi, I'm Ai·sel! 👋 Tell me about any decision you're facing — vacation, car, home, phone, career, beauty, insurance, or anything else. I'll ask a few smart questions and give you a personalized recommendation.",
   }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -3476,7 +3376,7 @@ function ChatScreen({ onBack, t, lang, setLang }) {
           <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", marginBottom: 18, animation: "fadeUp 0.3s ease" }}>
             {m.role === "assistant" && (
               <div style={{ width: 44, height: 44, borderRadius: "50%", flexShrink: 0, marginRight: 10, marginTop: 2, background: "#EEF3FF", border: "2px solid #E8ECF4", overflow: "hidden", boxShadow: "0 4px 12px rgba(29,78,216,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <img src="/asel-mascot.png" alt="AIsel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center" }} />
+                <img src="/asel-mascot.png" alt="Ai·sel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center" }} />
               </div>
             )}
             <div style={{
@@ -3494,7 +3394,7 @@ function ChatScreen({ onBack, t, lang, setLang }) {
         {loading && (
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
             <div style={{ width: 44, height: 44, borderRadius: "50%", flexShrink: 0, background: "#EEF3FF", border: "2px solid #E8ECF4", overflow: "hidden", boxShadow: "0 4px 12px rgba(29,78,216,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <img src="/asel-mascot.png" alt="AIsel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center", animation: "aselLoadPulse 1.2s ease-in-out infinite" }} />
+              <img src="/asel-mascot.png" alt="Ai·sel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center", animation: "aselLoadPulse 1.2s ease-in-out infinite" }} />
             </div>
             <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: "20px 20px 20px 4px", padding: "14px 18px", boxShadow: C.shadow }}>
               <div style={{ display: "flex", gap: 5 }}>
@@ -3528,7 +3428,7 @@ function ChatScreen({ onBack, t, lang, setLang }) {
   );
 }
 
-const FREE_DAILY_LIMIT = 3;
+const FREE_DAILY_LIMIT = Infinity; // Unlimited — pricing not active
 
 function getDecisionCount() {
   if (typeof window === "undefined") return 0;
@@ -3563,10 +3463,6 @@ export default function App() {
 
   function handleStart(mode, id = null) {
     if (mode === "tree" && id) {
-      if (getDecisionCount() >= FREE_DAILY_LIMIT) {
-        setShowLimitModal(true);
-        return;
-      }
       incrementDecisionCount();
       setCategory(id);
       setScreen("questions");
@@ -3611,23 +3507,17 @@ export default function App() {
           }} onClick={(e) => e.stopPropagation()}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>⏳</div>
             <h3 style={{ color: "#0F172A", fontSize: 20, fontWeight: 800, marginBottom: 8 }}>
-              Daily limit reached
+              All decisions are free
             </h3>
             <p style={{ color: "#475569", fontSize: 14, marginBottom: 24, lineHeight: 1.5 }}>
-              You've used your {FREE_DAILY_LIMIT} free decisions for today. Upgrade for unlimited access, or come back tomorrow.
+              Enjoy unlimited AI decisions — no account needed, completely free.
             </p>
-            <button onClick={() => handleUpgrade("pro")} style={{
+            <button onClick={() => setShowLimitModal(false)} style={{
               width: "100%", background: "linear-gradient(135deg, #1A56DB, #3B5BDB)",
               color: "#fff", border: "none", borderRadius: 12, padding: "13px",
-              fontSize: 15, fontWeight: 800, cursor: "pointer", marginBottom: 10,
+              fontSize: 15, fontWeight: 800, cursor: "pointer",
             }}>
-              ✦ Upgrade to Pro · $4.99/mo
-            </button>
-            <button onClick={() => setShowLimitModal(false)} style={{
-              width: "100%", background: "transparent", color: "#94A3B8",
-              border: "none", padding: "8px", fontSize: 13, cursor: "pointer",
-            }}>
-              Maybe later
+              Continue deciding →
             </button>
           </div>
         </div>
