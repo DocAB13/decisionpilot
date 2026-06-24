@@ -1811,7 +1811,38 @@ function Badge({ children, color = "#1A56DB" }) {
   );
 }
 
-function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch }) {
+// ── Professional SVG icons for category bar ──────────────────────────────────
+const I = (d, extra="") => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html:d}} style={{display:"block"}} {...(extra?{style:{display:"block"}}:{})} />
+);
+const CAT_SVG_ICONS = {
+  // Technology — laptop
+  tech: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M0 21h24"/><path d="M8 21h8"/></svg>,
+  // Appliances — washing machine
+  appliances: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="12" cy="13" r="4"/><circle cx="7" cy="6" r="1" fill="currentColor"/><circle cx="10" cy="6" r="1" fill="currentColor"/><path d="M16 5h2"/></svg>,
+  // Cars — car side view
+  auto: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 17H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 .293-.707l3-3A1 1 0 0 1 6 8h12l3 4v2a1 1 0 0 1-1 1h-2"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/><path d="M6 8l2-4h8l2 4"/></svg>,
+  // Financial — credit card + coin
+  financial: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="5" width="22" height="14" rx="2"/><path d="M1 10h22"/><path d="M7 15h.01M11 15h2"/></svg>,
+  // Telecom — signal/phone
+  telecom: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/><path d="M18 6c1.5 1.5 2 3 2 6s-.5 4.5-2 6"/><path d="M6 6C4.5 7.5 4 9 4 12s.5 4.5 2 6"/></svg>,
+  // Energy — lightning bolt
+  energy: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>,
+  // Tourism — airplane
+  tourism: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>,
+  // Software & Online — code brackets
+  software: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="12" y1="2" x2="12" y2="22" transform="rotate(-15 12 12)"/></svg>,
+  // Home & Garden — house
+  home: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+  // Health & Fitness — heart pulse
+  health: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><polyline points="8 14 10 11 12 14 14 9 16 12" strokeWidth="1.3"/></svg>,
+  // Education — graduation cap
+  education: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>,
+  // E-commerce — shopping bag
+  ecommerce: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>,
+};
+
+function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCategoryClick }) {
   const [langOpen, setLangOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
@@ -1914,16 +1945,25 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch }) {
         </div>
       </div>
 
-      {/* ── CATEGORY PILLS ROW (CHECK24 style "Beliebteste Vergleiche") ── */}
+      {/* ── CATEGORY PILLS ROW — professional SVG icons + hover zoom + click fix ── */}
       <div style={{ borderTop:`1px solid ${C.border}`,background:"#fff",overflowX:"auto",scrollbarWidth:"none" }}>
-        <div style={{ display:"flex",gap:0,padding:"0 16px",maxWidth:1400,margin:"0 auto",minWidth:"max-content" }}>
+        <style>{`
+          .cat-pill { display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 16px;border:none;border-bottom:2.5px solid transparent;background:transparent;cursor:pointer;transition:border-color 0.18s,color 0.18s,background 0.18s;flex-shrink:0;color:#64748B;min-height:0; }
+          .cat-pill:hover { background:var(--pill-bg); border-bottom-color:var(--pill-color); color:var(--pill-color); }
+          .cat-pill:hover .cat-icon-wrap { transform:translateY(-3px) scale(1.14); }
+          .cat-icon-wrap { transition:transform 0.22s cubic-bezier(.34,1.56,.64,1); display:flex;align-items:center;justify-content:center;width:28px;height:28px; }
+          .cat-pill:hover .cat-icon-wrap svg { stroke:var(--pill-color); }
+          .cat-label { font-size:11px;font-weight:600;white-space:nowrap; }
+        `}</style>
+        <div style={{ display:"flex",gap:0,padding:"0 12px",maxWidth:1400,margin:"0 auto",minWidth:"max-content" }}>
           {CATEGORY_GROUPS.map(g=>(
-            <button key={g.id}
-              style={{ display:"flex",flexDirection:"column",alignItems:"center",gap:4,padding:"8px 18px",border:"none",borderBottom:"2px solid transparent",background:"transparent",cursor:"pointer",transition:"all 0.15s",flexShrink:0,color:C.textSecondary }}
-              onMouseEnter={e=>{e.currentTarget.style.borderBottomColor=g.color;e.currentTarget.style.color=g.color;e.currentTarget.style.background=`${g.color}08`;}}
-              onMouseLeave={e=>{e.currentTarget.style.borderBottomColor="transparent";e.currentTarget.style.color=C.textSecondary;e.currentTarget.style.background="transparent";}}>
-              <span style={{ fontSize:20 }}>{g.emoji}</span>
-              <span style={{ fontSize:11,fontWeight:600,whiteSpace:"nowrap" }}>{catName(g.id,lang)}</span>
+            <button key={g.id} className="cat-pill"
+              style={{"--pill-color":g.color,"--pill-bg":`${g.color}0c`}}
+              onClick={()=>{ onCategoryClick&&onCategoryClick(g.id); }}>
+              <span className="cat-icon-wrap">
+                {CAT_SVG_ICONS[g.id] || <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/></svg>}
+              </span>
+              <span className="cat-label">{catName(g.id,lang)}</span>
             </button>
           ))}
         </div>
@@ -2639,7 +2679,11 @@ function Landing({ onStart, t, lang, setLang }) {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
       <style>{`h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }`}</style>
-      <TopNav showBack={false} t={t} lang={lang} setLang={setLang} count={count} />
+      <TopNav showBack={false} t={t} lang={lang} setLang={setLang} count={count}
+        onCategoryClick={(gid) => {
+          setSelectedGroup(gid);
+          setTimeout(() => document.getElementById("categories")?.scrollIntoView({behavior:"smooth", block:"start"}), 80);
+        }} />
       <HeroBanner onStart={onStart} t={t} lang={lang} />
 
       {/* Search bar */}
@@ -2692,7 +2736,7 @@ function Landing({ onStart, t, lang, setLang }) {
               The future of decision-making is <span style={{ color: C.accent }}>here</span>
             </h2>
             <p style={{ color: C.textSecondary, fontSize: 15, lineHeight: 1.7, margin: "0 0 20px", maxWidth: 520 }}>
-              While others have been comparing since 1999, we're redefining what comparison means in the AI era — personalized intelligence, zero bias, always evolving.
+              Comparison tools have evolved — and so have your needs. DecisionPilot brings the next step: personalized AI intelligence that understands your priorities, cuts through the noise, and helps you decide with confidence.
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               {[
