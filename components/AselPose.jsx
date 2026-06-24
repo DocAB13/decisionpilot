@@ -1,4 +1,4 @@
-// Asel — blue furry mascot, all poses
+// Ai·sel — blue furry mascot, all poses
 
 const B1 = "#1D4ED8"; // deep blue (shadows, outline)
 const B2 = "#2563EB"; // main body blue

@@ -4,7 +4,7 @@ const DARK = "#1A1A2E";
 const CREAM = "#F5F0E8";
 const ORANGE = "#FF8C00";
 
-const FREE_DAILY_LIMIT = 3;
+const FREE_DAILY_LIMIT = Infinity; // Pricing paused — unlimited for all users
 function getDecisionCount() {
   if (typeof window === "undefined") return 0;
   const today = new Date().toDateString();
@@ -42,13 +42,8 @@ export default function AselCorner({ screen = "landing" }) {
     tipTimers.current.forEach(clearTimeout);
     tipTimers.current = [];
     if (screen === "landing") {
-      if (getDecisionCount() >= FREE_DAILY_LIMIT - 1) {
-        const t = setTimeout(() => showTip("asel_limit", "Heads up — this may be your last free decision today. Pro unlocks unlimited 🚀", () => scrollToId("pricing")), 2500);
-        tipTimers.current.push(t);
-      } else {
-        const t = setTimeout(() => showTip("asel_idle", "Stuck choosing? Pick a category above and I'll help 👆", () => scrollToId("categories")), 16000);
-        tipTimers.current.push(t);
-      }
+      const t = setTimeout(() => showTip("asel_idle", "Stuck choosing? Pick a category above and I'll help 👆", () => scrollToId("categories")), 16000);
+      tipTimers.current.push(t);
     } else if (screen === "results") {
       const t = setTimeout(() => showTip("asel_results", "Need a second opinion? Let's chat 💬", null), 6000);
       tipTimers.current.push(t);
@@ -64,7 +59,7 @@ export default function AselCorner({ screen = "landing" }) {
   function dismissTip(e) { e.stopPropagation(); setTip(null); }
 
   const bubbleVisible = hovered || !!tip;
-  const bubbleText = tip ? tip.text : "💬 Chat with AIsel";
+  const bubbleText = tip ? tip.text : "💬 Chat with Ai·sel";
 
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
@@ -101,7 +96,7 @@ export default function AselCorner({ screen = "landing" }) {
         }}/>
       </div>
 
-      {/* Asel avatar button */}
+      {/* Ai·sel avatar button */}
       <div style={{
         width: 68, height: 68, borderRadius: "50%", background: "#fff",
         border: "2px solid #E8ECF4",
@@ -120,7 +115,7 @@ export default function AselCorner({ screen = "landing" }) {
         )}
         <img
           src="/asel-mascot.png"
-          alt="AIsel"
+          alt="Ai·sel"
           style={{
             width: 60, height: 60,
             objectFit: "cover",

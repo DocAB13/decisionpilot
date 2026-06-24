@@ -58,7 +58,7 @@ export default function Terms() {
 
         <h2>6. Intellectual property</h2>
         <p>
-          All content, branding, and design on DecisionPilot — including the Asel character — belong to{" "}
+          All content, branding, and design on DecisionPilot — including the Ai·sel character — belong to{" "}
           Nicolae-Abel Bolos-Ardeleanu unless otherwise credited. You may not copy, resell, or
           redistribute the Service without permission.
         </p>
