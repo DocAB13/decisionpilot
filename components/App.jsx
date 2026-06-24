@@ -2452,7 +2452,7 @@ function LoadingScreen({ category }) {
           Finding your perfect {tree?.label?.toLowerCase()}...
         </h2>
         <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 28, lineHeight: 1.6 }}>
-          Asel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.
+          AIsel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.
         </p>
         <div style={{ textAlign: "left", background: C.card, borderRadius: 16, padding: "20px 24px", boxShadow: C.shadowMd }}>
           {steps.map((s, i) => (
@@ -2636,8 +2636,8 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
           <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>Want more personalized advice? Chat with our AI directly.</p>
           <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
             style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}>
-            <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="Asel" />
-            Chat with Asel
+            <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="AIsel" />
+            Chat with AIsel
           </button>
         </div>
       </div>
@@ -3041,7 +3041,7 @@ function Landing({ onStart, t, lang, setLang }) {
               Can't find your category?
             </h2>
             <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 16, margin: "0 0 28px", lineHeight: 1.6 }}>
-              Chat with Asel about any decision — from choosing a university to planning a wedding.
+              Chat with AIsel about any decision — from choosing a university to planning a wedding.
             </p>
             <button onClick={() => onStart("chat")} style={{
               background: "#fff", color: C.accent, border: "none", borderRadius: 14,
@@ -3051,8 +3051,8 @@ function Landing({ onStart, t, lang, setLang }) {
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="Asel" />
-              Chat with Asel →
+              <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="AIsel" />
+              Chat with AIsel →
             </button>
           </div>
         </div>
@@ -3160,6 +3160,68 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
       </div>
 
+      {/* ═══════════════════════════════════════════════════════════
+          CONCEPT SECTION — International platform for every need
+      ═══════════════════════════════════════════════════════════ */}
+      <div style={{ background: `linear-gradient(135deg, #0F172A 0%, #1E2D4A 50%, #0F172A 100%)`, padding: "72px 24px", overflow: "hidden", position: "relative" }}>
+
+        {/* Decorative globe grid lines */}
+        <div style={{ position: "absolute", inset: 0, opacity: 0.07, backgroundImage: "radial-gradient(circle at 50% 50%, #1A56DB 1px, transparent 1px)", backgroundSize: "40px 40px", pointerEvents: "none" }} />
+
+        <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
+
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(26,86,219,0.2)", border: "1px solid rgba(26,86,219,0.4)", borderRadius: 24, padding: "5px 16px", fontSize: 11, fontWeight: 700, color: "#60A5FA", letterSpacing: 1.2, textTransform: "uppercase", marginBottom: 20 }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#60A5FA", display: "inline-block", animation: "aselLoadPulse 1.5s ease-in-out infinite" }} />
+              Global Vision · Local Intelligence
+            </div>
+            <h2 style={{ color: "#fff", fontSize: "clamp(28px, 4vw, 46px)", fontWeight: 900, margin: "0 0 16px", letterSpacing: -1, fontFamily: "'Plus Jakarta Sans', sans-serif", lineHeight: 1.1 }}>
+              One platform.<br />
+              <span style={{ background: "linear-gradient(90deg, #60A5FA, #A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Every decision. Everywhere.</span>
+            </h2>
+            <p style={{ color: "#94A3B8", fontSize: 17, maxWidth: 560, margin: "0 auto", lineHeight: 1.7 }}>
+              DecisionPilot is built for a world without borders — whether you're choosing a phone in Tokyo, a mortgage in Berlin, or a hotel in Dubai, AIsel speaks your language and understands your market.
+            </p>
+          </div>
+
+          {/* 4 pillars */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20, marginBottom: 52 }}>
+            {[
+              { icon: "🌍", title: "30+ Languages", sub: "Full UI and AI responses in your native language — from Arabic to Vietnamese.", color: "#3B82F6" },
+              { icon: "🗂️", title: "66+ Categories", sub: "Finance, tech, travel, health, education and more — every major life decision covered.", color: "#8B5CF6" },
+              { icon: "🤖", title: "AI-Personalized", sub: "No generic lists. AIsel learns your priorities and tailors every recommendation to you.", color: "#10B981" },
+              { icon: "🔒", title: "No Account Needed", sub: "Zero signup, zero tracking. Your decisions stay private — always.", color: "#F59E0B" },
+            ].map((p, i) => (
+              <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 18, padding: "28px 24px", transition: "all 0.25s" }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.borderColor = `${p.color}44`; e.currentTarget.style.transform = "translateY(-4px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                <div style={{ fontSize: 36, marginBottom: 14 }}>{p.icon}</div>
+                <div style={{ color: "#fff", fontSize: 17, fontWeight: 800, marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{p.title}</div>
+                <div style={{ color: "#64748B", fontSize: 14, lineHeight: 1.6 }}>{p.sub}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Global reach strip */}
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "24px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
+            <div>
+              <div style={{ color: "#fff", fontSize: 16, fontWeight: 800, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Available worldwide — free forever</div>
+              <div style={{ color: "#475569", fontSize: 13 }}>No country restrictions. No premium wall for basic decisions. Built for everyone, everywhere.</div>
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {["🇩🇪","🇺🇸","🇫🇷","🇬🇧","🇷🇴","🇪🇸","🇮🇹","🇯🇵","🇨🇳","🇧🇷","🇸🇦","🇮🇳"].map((f, i) => (
+                <span key={i} style={{ fontSize: 22, filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.5))", transition: "transform 0.2s" }}
+                  onMouseEnter={e => e.currentTarget.style.transform = "scale(1.25)"}
+                  onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>{f}</span>
+              ))}
+              <span style={{ color: "#475569", fontSize: 13, alignSelf: "center", paddingLeft: 4 }}>+18 more</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <WorldwideSection t={t} />
 
       {/* Testimonials */}
@@ -3172,7 +3234,7 @@ function Landing({ onStart, t, lang, setLang }) {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
             {[
               { name: "Maria K.", tag: "Vacation", grad: [C.accent, "#38BDF8"], stars: 5, quote: "Saved me hours comparing vacation deals. Booked my trip to Greece in 10 minutes!" },
-              { name: "Thomas B.", tag: "Car", grad: [C.purple, C.accent], stars: 5, quote: "I was stuck choosing between two cars for weeks. Asel sorted it out in one chat." },
+              { name: "Thomas B.", tag: "Car", grad: [C.purple, C.accent], stars: 5, quote: "I was stuck choosing between two cars for weeks. AIsel sorted it out in one chat." },
               { name: "Sophie L.", tag: "Phone", grad: [C.gold, "#F472B6"], stars: 4, quote: "Finally a comparison site that doesn't feel like an ad. Genuinely helpful." },
             ].map((r, i) => (
               <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "24px", boxShadow: C.shadow }}>
@@ -3355,7 +3417,7 @@ function Landing({ onStart, t, lang, setLang }) {
 function ChatScreen({ onBack, t, lang, setLang }) {
   const [messages, setMessages] = useState([{
     role: "assistant",
-    content: "Hi, I'm Asel! 👋 Tell me about any decision you're facing — vacation, car, home, phone, career, beauty, insurance, or anything else. I'll ask a few smart questions and give you a personalized recommendation.",
+    content: "Hi, I'm AIsel! 👋 Tell me about any decision you're facing — vacation, car, home, phone, career, beauty, insurance, or anything else. I'll ask a few smart questions and give you a personalized recommendation.",
   }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -3414,7 +3476,7 @@ function ChatScreen({ onBack, t, lang, setLang }) {
           <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", marginBottom: 18, animation: "fadeUp 0.3s ease" }}>
             {m.role === "assistant" && (
               <div style={{ width: 44, height: 44, borderRadius: "50%", flexShrink: 0, marginRight: 10, marginTop: 2, background: "#EEF3FF", border: "2px solid #E8ECF4", overflow: "hidden", boxShadow: "0 4px 12px rgba(29,78,216,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <img src="/asel-mascot.png" alt="Asel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center" }} />
+                <img src="/asel-mascot.png" alt="AIsel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center" }} />
               </div>
             )}
             <div style={{
@@ -3432,7 +3494,7 @@ function ChatScreen({ onBack, t, lang, setLang }) {
         {loading && (
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
             <div style={{ width: 44, height: 44, borderRadius: "50%", flexShrink: 0, background: "#EEF3FF", border: "2px solid #E8ECF4", overflow: "hidden", boxShadow: "0 4px 12px rgba(29,78,216,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <img src="/asel-mascot.png" alt="Asel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center", animation: "aselLoadPulse 1.2s ease-in-out infinite" }} />
+              <img src="/asel-mascot.png" alt="AIsel" style={{ width: 38, height: 38, objectFit: "cover", objectPosition: "top center", animation: "aselLoadPulse 1.2s ease-in-out infinite" }} />
             </div>
             <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: "20px 20px 20px 4px", padding: "14px 18px", boxShadow: C.shadow }}>
               <div style={{ display: "flex", gap: 5 }}>

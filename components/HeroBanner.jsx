@@ -352,8 +352,8 @@ export function HeroBanner({ onStart, t, lang }) {
             }}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
               onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>
-              <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.4)" }} alt="Asel" />
-              Chat with Asel
+              <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.4)" }} alt="AIsel" />
+              Chat with AIsel
             </button>
           </div>
 

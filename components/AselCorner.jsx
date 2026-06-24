@@ -64,7 +64,7 @@ export default function AselCorner({ screen = "landing" }) {
   function dismissTip(e) { e.stopPropagation(); setTip(null); }
 
   const bubbleVisible = hovered || !!tip;
-  const bubbleText = tip ? tip.text : "💬 Chat with Asel";
+  const bubbleText = tip ? tip.text : "💬 Chat with AIsel";
 
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
@@ -120,7 +120,7 @@ export default function AselCorner({ screen = "landing" }) {
         )}
         <img
           src="/asel-mascot.png"
-          alt="Asel"
+          alt="AIsel"
           style={{
             width: 60, height: 60,
             objectFit: "cover",
