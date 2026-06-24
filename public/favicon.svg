@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="110" fill="#1A56DB"/>
+
+  <!-- Globe: outer circle -->
+  <circle cx="256" cy="256" r="165" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+
+  <!-- Globe: latitude lines -->
+  <ellipse cx="256" cy="174" rx="144" ry="32" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="3"/>
+  <ellipse cx="256" cy="256" rx="165" ry="42" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="3"/>
+  <ellipse cx="256" cy="338" rx="144" ry="32" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="3"/>
+
+  <!-- Globe: longitude lines -->
+  <ellipse cx="256" cy="256" rx="48" ry="165" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="3"/>
+  <ellipse cx="256" cy="256" rx="132" ry="165" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"/>
+  <line x1="256" y1="91" x2="256" y2="421" stroke="rgba(255,255,255,0.14)" stroke-width="3"/>
+
+  <!-- DP text -->
+  <text x="256" y="316"
+    font-family="Arial Black, sans-serif"
+    font-size="188"
+    font-weight="900"
+    fill="white"
+    text-anchor="middle"
+    letter-spacing="-10">DP</text>
+
+  <!-- Cursor arrow — bottom right -->
+  <g transform="translate(355, 345)">
+    <!-- Shadow -->
+    <polygon points="0,0 0,80 20,64 34,98 46,93 32,59 58,59"
+      fill="#0F172A" opacity="0.4" transform="translate(4,4)"/>
+    <!-- White body -->
+    <polygon points="0,0 0,80 20,64 34,98 46,93 32,59 58,59"
+      fill="white"/>
+    <!-- Blue outline -->
+    <polygon points="0,0 0,80 20,64 34,98 46,93 32,59 58,59"
+      fill="none" stroke="#1A56DB" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+</svg>

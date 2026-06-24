@@ -8,7 +8,9 @@ export default function Home() {
         <title>DecisionPilot – AI Decision Making</title>
         <meta name="description" content="AI-powered decision making for vacations, phones, cars, and more." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%231A56DB'/><ellipse cx='16' cy='16' rx='6' ry='14' fill='none' stroke='%2393C5FD' stroke-width='1' opacity='.7'/><line x1='2' y1='16' x2='30' y2='16' stroke='%2393C5FD' stroke-width='1' opacity='.7'/><text x='16' y='20' text-anchor='middle' font-family='Arial' font-weight='900' font-size='9' fill='white'>DP</text><polygon points='22,21 22,29 24,26 26,30 28,29 26,25 28,25' fill='white'/></svg>" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
         <meta name="theme-color" content="#1A56DB" />
         <meta property="og:title" content="DecisionPilot – AI-Powered Decision Making" />
         <meta property="og:description" content="Get personalized AI recommendations for any decision. 66+ categories, 30+ languages." />
