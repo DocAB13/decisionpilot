@@ -1718,6 +1718,24 @@ const CAT_I18N = {
     delivery: 'Teslimat Hizmetleri',
     dropshipping: 'Dropshipping Platformları',
   },
+  // ── Extra 17 languages to reach 30 total ──
+  sv: { tech:"Teknik",appliances:"Hushållsapparater",auto:"Bilar",financial:"Ekonomi",telecom:"Telekommunikation",energy:"Energi",tourism:"Turism",software:"Programvara",home:"Hem & Trädgård",health:"Hälsa & Fitness",education:"Utbildning",ecommerce:"E-handel",phone:"Smartphones",laptop:"Laptops",tablet:"Surfplattor",smartwatch:"Smartwatches",headphones:"Hörlurar",tv:"TV-apparater",gaming:"Spelkonsoler",monitor:"Skärmar",printer:"Skrivare",fridge:"Kylskåp",washing_machine:"Tvättmaskiner",dryer:"Torktumlare",vacuum:"Dammsugare",espresso:"Kaffemaskiner",oven:"Ugnar & Spis",aircon:"Luftkonditionering",new_car:"Nya bilar",used_car:"Begagnade bilar",tires:"Däck",car_insurance:"Bilförsäkring",ev_charger:"EV-laddare",car_service:"Bilverkstad",personal_loan:"Personliga lån",mortgage:"Bolån",credit_card:"Kreditkort",bank_account:"Bankkonton",deposit:"Sparkonton",broker:"Investeringsmäklare",insurance:"Försäkringar",mobile_plan:"Mobilabonnemang",prepaid:"Kontantkort",internet:"Fast bredband",tv_package:"TV-paket",phone_provider:"Telefonoperatörer",electricity:"Elleverantörer",gas_provider:"Gasleverantörer",solar:"Solpaneler",battery_storage:"Batterilager",hotel:"Hotell",airline:"Flygbolag",travel_agency:"Resebyråer",travel_insurance:"Reseförsäkring",car_rental:"Biluthyrning",vpn:"VPN-tjänster",hosting:"Webbhotell",website_builder:"Webbplatsbyggare",crm:"CRM",email_marketing:"E-postmarknadsföring",ai_solutions:"AI-lösningar",antivirus:"Antivirusprogram",furniture:"Möbler",mattress:"Madrasser",power_tools:"Elverktyg",security_system:"Säkerhetssystem",robot_mower:"Robotgräsklippare",gym:"Gym",fitness_watch:"Fitnessklockor",supplements:"Kosttillskott",health_app:"Hälsoappar",online_courses:"Onlinekurser",university:"Universitet",private_school:"Privatskolor",language_courses:"Språkkurser",online_store:"Nätbutiker",delivery:"Leveranstjänster",dropshipping:"Dropshipping" },
+  da: { tech:"Teknologi",appliances:"Husholdningsapparater",auto:"Biler",financial:"Økonomi",telecom:"Telekommunikation",energy:"Energi",tourism:"Turisme",software:"Software",home:"Hjem & Have",health:"Sundhed & Fitness",education:"Uddannelse",ecommerce:"E-handel",phone:"Smartphones",laptop:"Laptops",tablet:"Tablets",smartwatch:"Smartwatches",headphones:"Høretelefoner",tv:"Fjernsyn",gaming:"Spillekonsoller",monitor:"Skærme",printer:"Printere",fridge:"Køleskabe",washing_machine:"Vaskemaskiner",dryer:"Tørretumblere",vacuum:"Støvsugere",espresso:"Kaffemaskiner",oven:"Ovne & Komfurer",aircon:"Aircondition",new_car:"Nye biler",used_car:"Brugte biler",tires:"Dæk",car_insurance:"Bilforsikring",ev_charger:"EV-ladere",car_service:"Autoværksteder",personal_loan:"Personlige lån",mortgage:"Realkreditlån",credit_card:"Kreditkort",bank_account:"Bankkonti",deposit:"Opsparingskonto",broker:"Investeringsmæglere",insurance:"Forsikringer",mobile_plan:"Mobilabonnementer",prepaid:"Taletidskort",internet:"Fastnet internet",tv_package:"TV-pakker",phone_provider:"Telefonudbydere",electricity:"Eludbydere",gas_provider:"Gasudbydere",solar:"Solpaneler",battery_storage:"Batterilager",hotel:"Hoteller",airline:"Flyselskaber",travel_agency:"Rejsebureauer",travel_insurance:"Rejseforsikring",car_rental:"Biludlejning",vpn:"VPN",hosting:"Webhosting",website_builder:"Hjemmesidebyggere",crm:"CRM",email_marketing:"E-mailmarkedsføring",ai_solutions:"AI-løsninger",antivirus:"Antivirusprogrammer",furniture:"Møbler",mattress:"Madrasser",power_tools:"Elværktøj",security_system:"Sikkerhedssystemer",robot_mower:"Robotplæneklippere",gym:"Fitnesscentre",fitness_watch:"Fitnessure",supplements:"Kosttilskud",health_app:"Sundhedsapps",online_courses:"Onlinekurser",university:"Universiteter",private_school:"Privatskoler",language_courses:"Sprogkurser",online_store:"Netbutikker",delivery:"Leveringstjenester",dropshipping:"Dropshipping" },
+  no: { tech:"Teknologi",appliances:"Husholdningsapparater",auto:"Biler",financial:"Økonomi",telecom:"Telekommunikasjon",energy:"Energi",tourism:"Turisme",software:"Programvare",home:"Hjem & Hage",health:"Helse & Fitness",education:"Utdanning",ecommerce:"E-handel",phone:"Smarttelefoner",laptop:"Bærbare PC-er",tablet:"Nettbrett",smartwatch:"Smartklokker",headphones:"Hodetelefoner",tv:"TV-er",gaming:"Spillkonsoller",monitor:"Skjermer",printer:"Skrivere",fridge:"Kjøleskap",washing_machine:"Vaskemaskiner",dryer:"Tørketromler",vacuum:"Støvsugere",espresso:"Kaffemaskiner",oven:"Ovner & Komfyrer",aircon:"Klimaanlegg",new_car:"Nye biler",used_car:"Brukte biler",tires:"Dekk",car_insurance:"Bilforsikring",ev_charger:"EV-ladere",car_service:"Bilverksteder",personal_loan:"Personlige lån",mortgage:"Boliglån",credit_card:"Kredittkort",bank_account:"Bankkontoer",deposit:"Sparekontoer",broker:"Investeringsmeglere",insurance:"Forsikringer",mobile_plan:"Mobilabonnementer",prepaid:"Kontantkort",internet:"Fast bredbånd",tv_package:"TV-pakker",phone_provider:"Telefonleverandører",electricity:"Strømleverandører",gas_provider:"Gassleverandører",solar:"Solpaneler",battery_storage:"Batterilager",hotel:"Hoteller",airline:"Flyselskaper",travel_agency:"Reisebyråer",travel_insurance:"Reiseforsikring",car_rental:"Bilutleie",vpn:"VPN",hosting:"Webhotell",website_builder:"Nettstedsbyggere",crm:"CRM",email_marketing:"E-postmarkedsføring",ai_solutions:"AI-løsninger",antivirus:"Antivirusprogrammer",furniture:"Møbler",mattress:"Madrasser",power_tools:"Elektroverktøy",security_system:"Sikkerhetssystemer",robot_mower:"Robotgressklipper",gym:"Treningssentre",fitness_watch:"Treningsklokker",supplements:"Kosttilskudd",health_app:"Helseapper",online_courses:"Nettkurs",university:"Universiteter",private_school:"Privatskoler",language_courses:"Språkkurs",online_store:"Nettbutikker",delivery:"Leveringstjenester",dropshipping:"Dropshipping" },
+  fi: { tech:"Teknologia",appliances:"Kodinkoneet",auto:"Autot",financial:"Talous",telecom:"Televiestintä",energy:"Energia",tourism:"Matkailu",software:"Ohjelmistot",home:"Koti & Puutarha",health:"Terveys & Fitness",education:"Koulutus",ecommerce:"Verkkokauppa",phone:"Älypuhelimet",laptop:"Kannettavat",tablet:"Tabletit",smartwatch:"Älykellot",headphones:"Kuulokkeet",tv:"Televisiot",gaming:"Pelikonsolit",monitor:"Näytöt",printer:"Tulostimet",fridge:"Jääkaapit",washing_machine:"Pesukoneet",dryer:"Kuivausrummut",vacuum:"Pölynimurit",espresso:"Kahvikoneet",oven:"Uunit & Liedet",aircon:"Ilmastointi",new_car:"Uudet autot",used_car:"Käytetyt autot",tires:"Renkaat",car_insurance:"Autovakuutus",ev_charger:"Sähköauton laturit",car_service:"Autokorjaamot",personal_loan:"Henkilökohtaiset lainat",mortgage:"Asuntolainat",credit_card:"Luottokortit",bank_account:"Pankkitilit",deposit:"Säästötilit",broker:"Sijoitusvälittäjät",insurance:"Vakuutukset",mobile_plan:"Puhelinliittymät",prepaid:"Prepaid-liittymät",internet:"Kiinteä laajakaista",tv_package:"TV-paketit",phone_provider:"Puhelinoperaattorit",electricity:"Sähköntoimittajat",gas_provider:"Kaasuntoimittajat",solar:"Aurinkopaneelit",battery_storage:"Akkuvarastointi",hotel:"Hotellit",airline:"Lentoyhtiöt",travel_agency:"Matkatoimistot",travel_insurance:"Matkavakuutus",car_rental:"Autonvuokraus",vpn:"VPN-palvelut",hosting:"Webhotellit",website_builder:"Sivustorakentajat",crm:"CRM",email_marketing:"Sähköpostimarkkinointi",ai_solutions:"AI-ratkaisut",antivirus:"Virustorjuntaohjelmat",furniture:"Huonekalut",mattress:"Patjat",power_tools:"Sähkötyökalut",security_system:"Turvajärjestelmät",robot_mower:"Robottileikkurit",gym:"Kuntosalit",fitness_watch:"Fitnesskellot",supplements:"Ravintolisät",health_app:"Terveyssovellukset",online_courses:"Verkkokurssit",university:"Yliopistot",private_school:"Yksityiskoulut",language_courses:"Kielikurssit",online_store:"Verkkokaupat",delivery:"Toimituspalvelut",dropshipping:"Dropshipping" },
+  cs: { tech:"Technologie",appliances:"Domácí spotřebiče",auto:"Automobily",financial:"Finance",telecom:"Telekomunikace",energy:"Energie",tourism:"Cestovní ruch",software:"Software",home:"Dům & Zahrada",health:"Zdraví & Fitness",education:"Vzdělání",ecommerce:"E-commerce",phone:"Smartphony",laptop:"Notebooky",tablet:"Tablety",smartwatch:"Chytré hodinky",headphones:"Sluchátka",tv:"Televizory",gaming:"Herní konzole",monitor:"Monitory",printer:"Tiskárny",fridge:"Lednice",washing_machine:"Pračky",dryer:"Sušičky",vacuum:"Vysavače",espresso:"Kávovary",oven:"Trouby a varné desky",aircon:"Klimatizace",new_car:"Nová auta",used_car:"Ojetá auta",tires:"Pneumatiky",car_insurance:"Pojištění vozidla",ev_charger:"Nabíječky EV",car_service:"Autoservisy",personal_loan:"Osobní půjčky",mortgage:"Hypotéky",credit_card:"Kreditní karty",bank_account:"Bankovní účty",deposit:"Spořicí vklady",broker:"Investiční makléři",insurance:"Pojištění",mobile_plan:"Mobilní tarify",prepaid:"Předplacené SIM",internet:"Pevný internet",tv_package:"TV balíčky",phone_provider:"Telefonní operátoři",electricity:"Dodavatelé elektřiny",gas_provider:"Dodavatelé plynu",solar:"Solární panely",battery_storage:"Bateriové zásoby",hotel:"Hotely",airline:"Letecké společnosti",travel_agency:"Cestovní kanceláře",travel_insurance:"Cestovní pojištění",car_rental:"Půjčovna aut",vpn:"VPN",hosting:"Webhosting",website_builder:"Tvůrci webů",crm:"CRM",email_marketing:"E-mail marketing",ai_solutions:"AI řešení",antivirus:"Antivirové programy",furniture:"Nábytek",mattress:"Matrace",power_tools:"Elektrické nářadí",security_system:"Bezpečnostní systémy",robot_mower:"Robotické sekačky",gym:"Fitness centra",fitness_watch:"Fitness hodinky",supplements:"Doplňky stravy",health_app:"Zdravotní aplikace",online_courses:"Online kurzy",university:"Univerzity",private_school:"Soukromé školy",language_courses:"Jazykové kurzy",online_store:"Internetové obchody",delivery:"Doručovací služby",dropshipping:"Dropshipping" },
+  hu: { tech:"Technológia",appliances:"Háztartási gépek",auto:"Autók",financial:"Pénzügyek",telecom:"Telekommunikáció",energy:"Energia",tourism:"Turizmus",software:"Szoftver",home:"Otthon & Kert",health:"Egészség & Fitness",education:"Oktatás",ecommerce:"E-kereskedelem",phone:"Okostelefonok",laptop:"Laptopok",tablet:"Táblagépek",smartwatch:"Okosórák",headphones:"Fejhallgatók",tv:"Televíziók",gaming:"Játékkonzolok",monitor:"Monitorok",printer:"Nyomtatók",fridge:"Hűtőszekrények",washing_machine:"Mosógépek",dryer:"Szárítógépek",vacuum:"Porszívók",espresso:"Kávéfőzők",oven:"Sütők és tűzhelyek",aircon:"Légkondicionálók",new_car:"Új autók",used_car:"Használt autók",tires:"Gumiabroncsok",car_insurance:"Gépjármű-biztosítás",ev_charger:"Elektromos töltők",car_service:"Autószerelők",personal_loan:"Személyi kölcsön",mortgage:"Lakáshitel",credit_card:"Hitelkártyák",bank_account:"Bankszámlák",deposit:"Betétek",broker:"Befektetési brókerek",insurance:"Biztosítások",mobile_plan:"Mobil előfizetések",prepaid:"Feltöltőkártyák",internet:"Vezetékes internet",tv_package:"TV-csomagok",phone_provider:"Telefonszolgáltatók",electricity:"Áramszolgáltatók",gas_provider:"Gázszolgáltatók",solar:"Napelem",battery_storage:"Akkumulátor tárolás",hotel:"Szállodák",airline:"Légitársaságok",travel_agency:"Utazási irodák",travel_insurance:"Utazási biztosítás",car_rental:"Autókölcsönzés",vpn:"VPN",hosting:"Webhosting",website_builder:"Weboldalkészítők",crm:"CRM",email_marketing:"E-mail marketing",ai_solutions:"AI megoldások",antivirus:"Vírusirtók",furniture:"Bútorok",mattress:"Matracok",power_tools:"Elektromos szerszámok",security_system:"Biztonsági rendszerek",robot_mower:"Robot fűnyírók",gym:"Edzőtermek",fitness_watch:"Fitness órák",supplements:"Étrend-kiegészítők",health_app:"Egészségügyi alkalmazások",online_courses:"Online kurzusok",university:"Egyetemek",private_school:"Magániskolák",language_courses:"Nyelvi kurzusok",online_store:"Webáruházak",delivery:"Csomagküldő szolgálatok",dropshipping:"Dropshipping" },
+  uk: { tech:"Технології",appliances:"Побутова техніка",auto:"Автомобілі",financial:"Фінанси",telecom:"Телекомунікації",energy:"Енергетика",tourism:"Туризм",software:"Програмне забезпечення",home:"Дім та Сад",health:"Здоров'я та Фітнес",education:"Освіта",ecommerce:"Електронна торгівля",phone:"Смартфони",laptop:"Ноутбуки",tablet:"Планшети",smartwatch:"Смарт-годинники",headphones:"Навушники",tv:"Телевізори",gaming:"Ігрові консолі",monitor:"Монітори",printer:"Принтери",fridge:"Холодильники",washing_machine:"Пральні машини",dryer:"Сушильні машини",vacuum:"Пилососи",espresso:"Кавомашини",oven:"Духовки та Плити",aircon:"Кондиціонери",new_car:"Нові авто",used_car:"Вживані авто",tires:"Шини",car_insurance:"Автострахування",ev_charger:"Зарядні для ЕВ",car_service:"Автосервіси",personal_loan:"Особисті кредити",mortgage:"Іпотека",credit_card:"Кредитні картки",bank_account:"Банківські рахунки",deposit:"Депозити",broker:"Інвестиційні брокери",insurance:"Страхування",mobile_plan:"Мобільні тарифи",prepaid:"Передплачені SIM",internet:"Стаціонарний інтернет",tv_package:"ТВ-пакети",phone_provider:"Оператори зв'язку",electricity:"Постачальники електроенергії",gas_provider:"Постачальники газу",solar:"Сонячні панелі",battery_storage:"Батарейні накопичувачі",hotel:"Готелі",airline:"Авіакомпанії",travel_agency:"Туристичні агентства",travel_insurance:"Туристичне страхування",car_rental:"Оренда авто",vpn:"VPN-сервіси",hosting:"Веб-хостинг",website_builder:"Конструктори сайтів",crm:"CRM",email_marketing:"Email-маркетинг",ai_solutions:"AI-рішення",antivirus:"Антивіруси",furniture:"Меблі",mattress:"Матраци",power_tools:"Електроінструменти",security_system:"Системи безпеки",robot_mower:"Роботи-газонокосарки",gym:"Тренажерні зали",fitness_watch:"Фітнес-годинники",supplements:"Харчові добавки",health_app:"Додатки для здоров'я",online_courses:"Онлайн-курси",university:"Університети",private_school:"Приватні школи",language_courses:"Мовні курси",online_store:"Інтернет-магазини",delivery:"Служби доставки",dropshipping:"Дропшипінг" },
+  ko: { tech:"기술",appliances:"가전제품",auto:"자동차",financial:"금융",telecom:"통신",energy:"에너지",tourism:"관광",software:"소프트웨어",home:"홈 & 가든",health:"건강 & 피트니스",education:"교육",ecommerce:"전자상거래",phone:"스마트폰",laptop:"노트북",tablet:"태블릿",smartwatch:"스마트워치",headphones:"헤드폰",tv:"TV",gaming:"게임 콘솔",monitor:"모니터",printer:"프린터",fridge:"냉장고",washing_machine:"세탁기",dryer:"건조기",vacuum:"진공청소기",espresso:"커피머신",oven:"오븐 & 레인지",aircon:"에어컨",new_car:"신차",used_car:"중고차",tires:"타이어",car_insurance:"자동차보험",ev_charger:"EV 충전기",car_service:"자동차 정비소",personal_loan:"개인 대출",mortgage:"주택담보대출",credit_card:"신용카드",bank_account:"은행 계좌",deposit:"예금",broker:"투자 브로커",insurance:"보험",mobile_plan:"모바일 요금제",prepaid:"선불 SIM",internet:"유선 인터넷",tv_package:"TV 패키지",phone_provider:"통신사",electricity:"전기 공급업체",gas_provider:"가스 공급업체",solar:"태양광 패널",battery_storage:"배터리 저장",hotel:"호텔",airline:"항공사",travel_agency:"여행사",travel_insurance:"여행자보험",car_rental:"렌터카",vpn:"VPN",hosting:"웹호스팅",website_builder:"웹사이트 빌더",crm:"CRM",email_marketing:"이메일 마케팅",ai_solutions:"AI 솔루션",antivirus:"백신 소프트웨어",furniture:"가구",mattress:"매트리스",power_tools:"전동 공구",security_system:"보안 시스템",robot_mower:"로봇 잔디깎기",gym:"헬스장",fitness_watch:"피트니스 워치",supplements:"건강보조식품",health_app:"건강 앱",online_courses:"온라인 강좌",university:"대학교",private_school:"사립학교",language_courses:"어학 과정",online_store:"온라인 쇼핑몰",delivery:"배송 서비스",dropshipping:"드롭쉬핑" },
+  ja: { tech:"テクノロジー",appliances:"家電",auto:"自動車",financial:"金融",telecom:"通信",energy:"エネルギー",tourism:"旅行",software:"ソフトウェア",home:"ホーム＆ガーデン",health:"健康＆フィットネス",education:"教育",ecommerce:"Eコマース",phone:"スマートフォン",laptop:"ノートパソコン",tablet:"タブレット",smartwatch:"スマートウォッチ",headphones:"ヘッドフォン",tv:"テレビ",gaming:"ゲーム機",monitor:"モニター",printer:"プリンター",fridge:"冷蔵庫",washing_machine:"洗濯機",dryer:"乾燥機",vacuum:"掃除機",espresso:"コーヒーメーカー",oven:"オーブン＆コンロ",aircon:"エアコン",new_car:"新車",used_car:"中古車",tires:"タイヤ",car_insurance:"自動車保険",ev_charger:"EV充電器",car_service:"自動車整備",personal_loan:"個人ローン",mortgage:"住宅ローン",credit_card:"クレジットカード",bank_account:"銀行口座",deposit:"定期預金",broker:"投資ブローカー",insurance:"保険",mobile_plan:"携帯プラン",prepaid:"プリペイドSIM",internet:"固定インターネット",tv_package:"TVパッケージ",phone_provider:"通信キャリア",electricity:"電力会社",gas_provider:"ガス会社",solar:"ソーラーパネル",battery_storage:"蓄電池",hotel:"ホテル",airline:"航空会社",travel_agency:"旅行代理店",travel_insurance:"旅行保険",car_rental:"レンタカー",vpn:"VPN",hosting:"ウェブホスティング",website_builder:"ウェブサイトビルダー",crm:"CRM",email_marketing:"メールマーケティング",ai_solutions:"AIソリューション",antivirus:"アンチウイルス",furniture:"家具",mattress:"マットレス",power_tools:"電動工具",security_system:"セキュリティシステム",robot_mower:"ロボット芝刈り機",gym:"ジム",fitness_watch:"フィットネスウォッチ",supplements:"サプリメント",health_app:"ヘルスアプリ",online_courses:"オンライン講座",university:"大学",private_school:"私立学校",language_courses:"語学コース",online_store:"オンラインショップ",delivery:"配送サービス",dropshipping:"ドロップシッピング" },
+  id: { tech:"Teknologi",appliances:"Peralatan Rumah",auto:"Otomotif",financial:"Keuangan",telecom:"Telekomunikasi",energy:"Energi",tourism:"Pariwisata",software:"Perangkat Lunak",home:"Rumah & Taman",health:"Kesehatan & Kebugaran",education:"Pendidikan",ecommerce:"E-commerce",phone:"Smartphone",laptop:"Laptop",tablet:"Tablet",smartwatch:"Smartwatch",headphones:"Headphone",tv:"Televisi",gaming:"Konsol Game",monitor:"Monitor",printer:"Printer",fridge:"Kulkas",washing_machine:"Mesin Cuci",dryer:"Pengering Pakaian",vacuum:"Penyedot Debu",espresso:"Mesin Kopi",oven:"Oven & Kompor",aircon:"AC",new_car:"Mobil Baru",used_car:"Mobil Bekas",tires:"Ban",car_insurance:"Asuransi Mobil",ev_charger:"Pengisi Daya EV",car_service:"Bengkel Mobil",personal_loan:"KTA",mortgage:"KPR",credit_card:"Kartu Kredit",bank_account:"Rekening Bank",deposit:"Deposito",broker:"Broker Investasi",insurance:"Asuransi",mobile_plan:"Paket Data",prepaid:"Kartu Perdana",internet:"Internet Rumah",tv_package:"Paket TV",phone_provider:"Operator Telepon",electricity:"PLN",gas_provider:"Penyedia Gas",solar:"Panel Surya",battery_storage:"Baterai Penyimpan",hotel:"Hotel",airline:"Maskapai",travel_agency:"Agen Perjalanan",travel_insurance:"Asuransi Perjalanan",car_rental:"Rental Mobil",vpn:"VPN",hosting:"Hosting Web",website_builder:"Pembuat Website",crm:"CRM",email_marketing:"Email Marketing",ai_solutions:"Solusi AI",antivirus:"Antivirus",furniture:"Furnitur",mattress:"Kasur",power_tools:"Perkakas Listrik",security_system:"Sistem Keamanan",robot_mower:"Robot Pemotong Rumput",gym:"Gym",fitness_watch:"Jam Tangan Fitness",supplements:"Suplemen",health_app:"Aplikasi Kesehatan",online_courses:"Kursus Online",university:"Universitas",private_school:"Sekolah Swasta",language_courses:"Kursus Bahasa",online_store:"Toko Online",delivery:"Layanan Pengiriman",dropshipping:"Dropshipping" },
+  vi: { tech:"Công nghệ",appliances:"Đồ gia dụng",auto:"Ô tô",financial:"Tài chính",telecom:"Viễn thông",energy:"Năng lượng",tourism:"Du lịch",software:"Phần mềm",home:"Nhà & Vườn",health:"Sức khỏe & Thể dục",education:"Giáo dục",ecommerce:"Thương mại điện tử",phone:"Điện thoại thông minh",laptop:"Máy tính xách tay",tablet:"Máy tính bảng",smartwatch:"Đồng hồ thông minh",headphones:"Tai nghe",tv:"TV",gaming:"Máy chơi game",monitor:"Màn hình",printer:"Máy in",fridge:"Tủ lạnh",washing_machine:"Máy giặt",dryer:"Máy sấy",vacuum:"Máy hút bụi",espresso:"Máy pha cà phê",oven:"Lò nướng & Bếp",aircon:"Điều hòa",new_car:"Xe mới",used_car:"Xe cũ",tires:"Lốp xe",car_insurance:"Bảo hiểm xe",ev_charger:"Trạm sạc xe điện",car_service:"Gara ô tô",personal_loan:"Vay cá nhân",mortgage:"Vay mua nhà",credit_card:"Thẻ tín dụng",bank_account:"Tài khoản ngân hàng",deposit:"Tiết kiệm",broker:"Môi giới đầu tư",insurance:"Bảo hiểm",mobile_plan:"Gói di động",prepaid:"SIM trả trước",internet:"Internet cố định",tv_package:"Gói truyền hình",phone_provider:"Nhà mạng",electricity:"Điện lực",gas_provider:"Nhà cung cấp gas",solar:"Pin mặt trời",battery_storage:"Lưu trữ pin",hotel:"Khách sạn",airline:"Hãng hàng không",travel_agency:"Công ty du lịch",travel_insurance:"Bảo hiểm du lịch",car_rental:"Thuê xe",vpn:"VPN",hosting:"Hosting",website_builder:"Công cụ tạo web",crm:"CRM",email_marketing:"Email marketing",ai_solutions:"Giải pháp AI",antivirus:"Phần mềm diệt virus",furniture:"Nội thất",mattress:"Nệm",power_tools:"Dụng cụ điện",security_system:"Hệ thống bảo mật",robot_mower:"Robot cắt cỏ",gym:"Phòng gym",fitness_watch:"Đồng hồ thể thao",supplements:"Thực phẩm chức năng",health_app:"App sức khỏe",online_courses:"Khóa học online",university:"Đại học",private_school:"Trường tư thục",language_courses:"Khóa học ngôn ngữ",online_store:"Cửa hàng online",delivery:"Dịch vụ giao hàng",dropshipping:"Dropshipping" },
+  hi: { tech:"प्रौद्योगिकी",appliances:"घरेलू उपकरण",auto:"वाहन",financial:"वित्त",telecom:"दूरसंचार",energy:"ऊर्जा",tourism:"पर्यटन",software:"सॉफ्टवेयर",home:"घर & बगीचा",health:"स्वास्थ्य & फिटनेस",education:"शिक्षा",ecommerce:"ई-कॉमर्स",phone:"स्मार्टफोन",laptop:"लैपटॉप",tablet:"टैबलेट",smartwatch:"स्मार्टवॉच",headphones:"हेडफोन",tv:"टीवी",gaming:"गेमिंग कंसोल",monitor:"मॉनिटर",printer:"प्रिंटर",fridge:"रेफ्रिजरेटर",washing_machine:"वॉशिंग मशीन",dryer:"ड्रायर",vacuum:"वैक्यूम क्लीनर",espresso:"कॉफी मशीन",oven:"ओवन & चूल्हा",aircon:"एयर कंडीशनर",new_car:"नई कार",used_car:"पुरानी कार",tires:"टायर",car_insurance:"कार बीमा",ev_charger:"EV चार्जर",car_service:"कार सर्विस",personal_loan:"व्यक्तिगत ऋण",mortgage:"होम लोन",credit_card:"क्रेडिट कार्ड",bank_account:"बैंक खाता",deposit:"जमा राशि",broker:"निवेश दलाल",insurance:"बीमा",mobile_plan:"मोबाइल प्लान",prepaid:"प्रीपेड SIM",internet:"ब्रॉडबैंड",tv_package:"TV पैकेज",phone_provider:"फोन कंपनी",electricity:"बिजली",gas_provider:"गैस",solar:"सौर पैनल",battery_storage:"बैटरी स्टोरेज",hotel:"होटल",airline:"एयरलाइन",travel_agency:"ट्रैवल एजेंसी",travel_insurance:"यात्रा बीमा",car_rental:"कार किराया",vpn:"VPN",hosting:"वेब होस्टिंग",website_builder:"वेबसाइट बिल्डर",crm:"CRM",email_marketing:"ईमेल मार्केटिंग",ai_solutions:"AI समाधान",antivirus:"एंटीवायरस",furniture:"फर्नीचर",mattress:"गद्दा",power_tools:"बिजली के उपकरण",security_system:"सुरक्षा प्रणाली",robot_mower:"रोबोट लॉनमोवर",gym:"जिम",fitness_watch:"फिटनेस वॉच",supplements:"सप्लीमेंट्स",health_app:"स्वास्थ्य ऐप",online_courses:"ऑनलाइन कोर्स",university:"विश्वविद्यालय",private_school:"निजी स्कूल",language_courses:"भाषा पाठ्यक्रम",online_store:"ऑनलाइन स्टोर",delivery:"डिलीवरी सेवाएं",dropshipping:"ड्रॉपशिपिंग" },
+  th: { tech:"เทคโนโลยี",appliances:"เครื่องใช้ไฟฟ้า",auto:"ยานยนต์",financial:"การเงิน",telecom:"โทรคมนาคม",energy:"พลังงาน",tourism:"การท่องเที่ยว",software:"ซอฟต์แวร์",home:"บ้านและสวน",health:"สุขภาพและฟิตเนส",education:"การศึกษา",ecommerce:"อีคอมเมิร์ซ",phone:"สมาร์ทโฟน",laptop:"แล็ปท็อป",tablet:"แท็บเล็ต",smartwatch:"สมาร์ทวอทช์",headphones:"หูฟัง",tv:"โทรทัศน์",gaming:"เครื่องเล่นเกม",monitor:"มอนิเตอร์",printer:"เครื่องพิมพ์",fridge:"ตู้เย็น",washing_machine:"เครื่องซักผ้า",dryer:"เครื่องอบผ้า",vacuum:"เครื่องดูดฝุ่น",espresso:"เครื่องชงกาแฟ",oven:"เตาอบและเตาแก๊ส",aircon:"เครื่องปรับอากาศ",new_car:"รถยนต์ใหม่",used_car:"รถยนต์มือสอง",tires:"ยางรถยนต์",car_insurance:"ประกันรถยนต์",ev_charger:"เครื่องชาร์จ EV",car_service:"ศูนย์บริการรถยนต์",personal_loan:"สินเชื่อส่วนบุคคล",mortgage:"สินเชื่อบ้าน",credit_card:"บัตรเครดิต",bank_account:"บัญชีธนาคาร",deposit:"เงินฝาก",broker:"นายหน้าลงทุน",insurance:"ประกันภัย",mobile_plan:"แพ็คเกจมือถือ",prepaid:"ซิมเติมเงิน",internet:"อินเทอร์เน็ตบ้าน",tv_package:"แพ็คเกจทีวี",phone_provider:"ผู้ให้บริการโทรศัพท์",electricity:"ผู้ให้บริการไฟฟ้า",gas_provider:"ผู้ให้บริการแก๊ส",solar:"แผงโซลาร์เซลล์",battery_storage:"แบตเตอรี่สำรอง",hotel:"โรงแรม",airline:"สายการบิน",travel_agency:"บริษัทท่องเที่ยว",travel_insurance:"ประกันการเดินทาง",car_rental:"เช่ารถ",vpn:"VPN",hosting:"เว็บโฮสติ้ง",website_builder:"ตัวสร้างเว็บไซต์",crm:"CRM",email_marketing:"อีเมลมาร์เกตติ้ง",ai_solutions:"โซลูชัน AI",antivirus:"แอนตี้ไวรัส",furniture:"เฟอร์นิเจอร์",mattress:"ที่นอน",power_tools:"เครื่องมือไฟฟ้า",security_system:"ระบบรักษาความปลอดภัย",robot_mower:"หุ่นยนต์ตัดหญ้า",gym:"ฟิตเนส",fitness_watch:"นาฬิกาฟิตเนส",supplements:"อาหารเสริม",health_app:"แอปสุขภาพ",online_courses:"คอร์สออนไลน์",university:"มหาวิทยาลัย",private_school:"โรงเรียนเอกชน",language_courses:"คอร์สภาษา",online_store:"ร้านค้าออนไลน์",delivery:"บริการจัดส่ง",dropshipping:"ดรอปชิปปิ้ง" },
+  he: { tech:"טכנולוגיה",appliances:"מוצרי חשמל",auto:"רכבים",financial:"פיננסים",telecom:"תקשורת",energy:"אנרגיה",tourism:"תיירות",software:"תוכנה",home:"בית וגן",health:"בריאות וכושר",education:"חינוך",ecommerce:"מסחר אלקטרוני",phone:"סמארטפונים",laptop:"מחשבים ניידים",tablet:"טאבלטים",smartwatch:"שעונים חכמים",headphones:"אוזניות",tv:"טלוויזיות",gaming:"קונסולות משחק",monitor:"מסכים",printer:"מדפסות",fridge:"מקררים",washing_machine:"מכונות כביסה",dryer:"מייבשי כביסה",vacuum:"שואבי אבק",espresso:"מכונות קפה",oven:"תנורים וכיריים",aircon:"מזגנים",new_car:"רכבים חדשים",used_car:"רכבים יד שנייה",tires:"צמיגים",car_insurance:"ביטוח רכב",ev_charger:"עמדות טעינה",car_service:"מוסכים",personal_loan:"הלוואות אישיות",mortgage:"משכנתאות",credit_card:"כרטיסי אשראי",bank_account:"חשבונות בנק",deposit:"פיקדונות",broker:"ברוקרים",insurance:"ביטוחים",mobile_plan:"חבילות סלולר",prepaid:"כרטיס שים",internet:"אינטרנט קווי",tv_package:"חבילות טלוויזיה",phone_provider:"ספקי טלפון",electricity:"ספקי חשמל",gas_provider:"ספקי גז",solar:"פאנלים סולאריים",battery_storage:"אגירת אנרגיה",hotel:"מלונות",airline:"חברות תעופה",travel_agency:"סוכנויות נסיעות",travel_insurance:"ביטוח נסיעות",car_rental:"השכרת רכב",vpn:"VPN",hosting:"אחסון אתרים",website_builder:"בוני אתרים",crm:"CRM",email_marketing:"שיווק במייל",ai_solutions:"פתרונות AI",antivirus:"אנטי וירוס",furniture:"רהיטים",mattress:"מזרנים",power_tools:"כלי עבודה",security_system:"מערכות אבטחה",robot_mower:"רובוט כיסוח",gym:"חדרי כושר",fitness_watch:"שעוני כושר",supplements:"תוספי תזונה",health_app:"אפליקציות בריאות",online_courses:"קורסים אונליין",university:"אוניברסיטאות",private_school:"בתי ספר פרטיים",language_courses:"קורסי שפות",online_store:"חנויות אונליין",delivery:"שירותי משלוח",dropshipping:"דרופשיפינג" },
+  bg: { tech:"Технологии",appliances:"Домакински уреди",auto:"Автомобили",financial:"Финанси",telecom:"Телекомуникации",energy:"Енергия",tourism:"Туризъм",software:"Софтуер",home:"Дом и Градина",health:"Здраве и Фитнес",education:"Образование",ecommerce:"Е-търговия",phone:"Смартфони",laptop:"Лаптопи",tablet:"Таблети",smartwatch:"Смарт часовници",headphones:"Слушалки",tv:"Телевизори",gaming:"Игрови конзоли",monitor:"Монитори",printer:"Принтери",fridge:"Хладилници",washing_machine:"Перални машини",dryer:"Сушилни машини",vacuum:"Прахосмукачки",espresso:"Кафемашини",oven:"Фурни и Котлони",aircon:"Климатици",new_car:"Нови коли",used_car:"Употребявани коли",tires:"Гуми",car_insurance:"Автозастраховане",ev_charger:"Зарядни за ЕВ",car_service:"Автосервизи",personal_loan:"Потребителски кредити",mortgage:"Ипотечни кредити",credit_card:"Кредитни карти",bank_account:"Банкови сметки",deposit:"Депозити",broker:"Инвестиционни брокери",insurance:"Застраховки",mobile_plan:"Мобилни абонаменти",prepaid:"Предплатени карти",internet:"Стационарен интернет",tv_package:"ТВ пакети",phone_provider:"Телефонни оператори",electricity:"Доставчици на ток",gas_provider:"Доставчици на газ",solar:"Соларни панели",battery_storage:"Батерийно съхранение",hotel:"Хотели",airline:"Авиокомпании",travel_agency:"Туристически агенции",travel_insurance:"Пътническа застраховка",car_rental:"Коли под наем",vpn:"VPN",hosting:"Уеб хостинг",website_builder:"Конструктори на сайтове",crm:"CRM",email_marketing:"Имейл маркетинг",ai_solutions:"AI решения",antivirus:"Антивирусни програми",furniture:"Мебели",mattress:"Матраци",power_tools:"Електроинструменти",security_system:"Системи за сигурност",robot_mower:"Роботи косачки",gym:"Фитнес центрове",fitness_watch:"Фитнес часовници",supplements:"Хранителни добавки",health_app:"Здравни приложения",online_courses:"Онлайн курсове",university:"Университети",private_school:"Частни училища",language_courses:"Езикови курсове",online_store:"Онлайн магазини",delivery:"Куриерски услуги",dropshipping:"Дропшипинг" },
+  sk: { tech:"Technológia",appliances:"Domáce spotrebiče",auto:"Automobily",financial:"Financie",telecom:"Telekomunikácie",energy:"Energia",tourism:"Cestovný ruch",software:"Softvér",home:"Dom a záhrada",health:"Zdravie a fitness",education:"Vzdelávanie",ecommerce:"E-commerce",phone:"Smartfóny",laptop:"Notebooky",tablet:"Tablety",smartwatch:"Inteligentné hodinky",headphones:"Slúchadlá",tv:"Televízory",gaming:"Herné konzoly",monitor:"Monitory",printer:"Tlačiarne",fridge:"Chladničky",washing_machine:"Práčky",dryer:"Sušičky",vacuum:"Vysávače",espresso:"Kávovary",oven:"Rúry a sporáky",aircon:"Klimatizácia",new_car:"Nové autá",used_car:"Ojazené autá",tires:"Pneumatiky",car_insurance:"Poistenie vozidla",ev_charger:"Nabíjačky pre EV",car_service:"Autoservisy",personal_loan:"Osobné pôžičky",mortgage:"Hypotéky",credit_card:"Kreditné karty",bank_account:"Bankové účty",deposit:"Vklady",broker:"Investiční makléri",insurance:"Poistenie",mobile_plan:"Mobilné tarify",prepaid:"Predplatené SIM",internet:"Pevný internet",tv_package:"TV balíčky",phone_provider:"Operátori",electricity:"Dodávatelia elektriny",gas_provider:"Dodávatelia plynu",solar:"Solárne panely",battery_storage:"Batériové zásobníky",hotel:"Hotely",airline:"Letecké spoločnosti",travel_agency:"Cestovné kancelárie",travel_insurance:"Cestovné poistenie",car_rental:"Požičovne áut",vpn:"VPN",hosting:"Webhosting",website_builder:"Tvorcovia stránok",crm:"CRM",email_marketing:"E-mail marketing",ai_solutions:"AI riešenia",antivirus:"Antivírusový softvér",furniture:"Nábytok",mattress:"Matrace",power_tools:"Elektrické náradie",security_system:"Bezpečnostné systémy",robot_mower:"Robotické kosačky",gym:"Fitnescentrá",fitness_watch:"Fitness hodinky",supplements:"Výživové doplnky",health_app:"Zdravotné aplikácie",online_courses:"Online kurzy",university:"Univerzity",private_school:"Súkromné školy",language_courses:"Jazykové kurzy",online_store:"Internetové obchody",delivery:"Doručovacie služby",dropshipping:"Dropshipping" },
+  hr: { tech:"Tehnologija",appliances:"Kućanski aparati",auto:"Automobili",financial:"Financije",telecom:"Telekomunikacije",energy:"Energija",tourism:"Turizam",software:"Softver",home:"Dom i vrt",health:"Zdravlje i fitness",education:"Obrazovanje",ecommerce:"E-trgovina",phone:"Pametni telefoni",laptop:"Prijenosna računala",tablet:"Tableti",smartwatch:"Pametni satovi",headphones:"Slušalice",tv:"Televizori",gaming:"Igraće konzole",monitor:"Monitori",printer:"Pisači",fridge:"Hladnjaci",washing_machine:"Perilice rublja",dryer:"Sušilice",vacuum:"Usisavači",espresso:"Aparati za kavu",oven:"Pećnice i štednjaci",aircon:"Klima uređaji",new_car:"Novi automobili",used_car:"Rabljeni automobili",tires:"Gume",car_insurance:"Osiguranje vozila",ev_charger:"Punjači za EV",car_service:"Autoservisi",personal_loan:"Osobni zajmovi",mortgage:"Stambeni krediti",credit_card:"Kreditne kartice",bank_account:"Bankovni računi",deposit:"Štedni depoziti",broker:"Investicijski brokeri",insurance:"Osiguranje",mobile_plan:"Mobilni paketi",prepaid:"Prepaid SIM",internet:"Fiksni internet",tv_package:"TV paketi",phone_provider:"Telefonski operateri",electricity:"Opskrbljivači strujom",gas_provider:"Opskrbljivači plinom",solar:"Solarne ploče",battery_storage:"Pohrana energije",hotel:"Hoteli",airline:"Zrakoplovne tvrtke",travel_agency:"Putničke agencije",travel_insurance:"Putno osiguranje",car_rental:"Najam automobila",vpn:"VPN",hosting:"Web hosting",website_builder:"Graditelji web stranica",crm:"CRM",email_marketing:"E-mail marketing",ai_solutions:"AI rješenja",antivirus:"Antivirusi",furniture:"Namještaj",mattress:"Madraci",power_tools:"Električni alati",security_system:"Sigurnosni sustavi",robot_mower:"Robotski kosilica",gym:"Teretane",fitness_watch:"Fitness satovi",supplements:"Dodaci prehrani",health_app:"Zdravstvene aplikacije",online_courses:"Online tečajevi",university:"Sveučilišta",private_school:"Privatne škole",language_courses:"Jezični tečajevi",online_store:"Online trgovine",delivery:"Dostavne usluge",dropshipping:"Dropshipping" },
 };
 
 function catName(id, lang) {
@@ -2039,6 +2057,17 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
   const [answers, setAnswers] = useState({});
   const [selected, setSelected] = useState(null);
   const [animKey, setAnimKey] = useState(0);
+
+  if (!tree) {
+    return (
+      <div style={{ minHeight: "100vh", background: C.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 }}>
+        <div style={{ fontSize: 48 }}>🔧</div>
+        <h2 style={{ color: C.text, fontWeight: 800, margin: 0 }}>Category coming soon</h2>
+        <p style={{ color: C.muted }}>We're building questions for <strong>{catName(category, "en")}</strong>. Check back soon!</p>
+        <button onClick={onBack} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>← Go back</button>
+      </div>
+    );
+  }
 
   const question = tree.questions[step];
   const total = tree.questions.length;
@@ -2659,6 +2688,25 @@ function Landing({ onStart, t, lang, setLang }) {
   const [openFaq, setOpenFaq] = useState(0);
   const [showPricing, setShowPricing] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
+  const [recentSearches, setRecentSearches] = useState([]);
+
+  // Load recent searches from localStorage
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("dp_recent") || "[]");
+      setRecentSearches(saved.filter(id => CATEGORIES_LIST.some(c => c.id === id)));
+    } catch(e) {}
+  }, []);
+
+  const startWithTracking = (id) => {
+    try {
+      const recent = JSON.parse(localStorage.getItem("dp_recent") || "[]");
+      const updated = [id, ...recent.filter(x => x !== id)].slice(0, 10);
+      localStorage.setItem("dp_recent", JSON.stringify(updated));
+      setRecentSearches(updated);
+    } catch(e) {}
+    onStart("tree", id);
+  };
   useEffect(() => {
     const target = 24891;
     const step = Math.ceil(target / 60);
@@ -2700,7 +2748,211 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
       </div>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "72px 24px 0" }}>
+      {/* Search bar */}
+      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px" }}>
+        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", gap: 10 }}>
+          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10, background: C.bg, border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "0 16px" }}>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={C.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" placeholder="Search a decision topic... (e.g. best SUV under €40k)"
+              style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontSize: 14, color: C.text, padding: "12px 0", fontFamily: "inherit" }} />
+          </div>
+          <button style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "0 22px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}
+            onMouseEnter={e => e.currentTarget.style.background = "#1547C0"}
+            onMouseLeave={e => e.currentTarget.style.background = C.accent}>Search</button>
+        </div>
+      </div>
+
+      {/* ① QUICK-ACCESS CATEGORY BAR */}
+      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "0 24px", overflowX: "auto" }}>
+        <div style={{ display: "flex", gap: 0, minWidth: "max-content", maxWidth: 1400, margin: "0 auto" }}>
+          {CATEGORY_GROUPS.map(g => (
+            <button key={g.id} onClick={() => { setSelectedGroup(g.id); document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}); }}
+              style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "14px 20px", border: "none", borderBottom: "3px solid transparent", background: "transparent", cursor: "pointer", transition: "all 0.2s", flexShrink: 0 }}
+              onMouseEnter={e => { e.currentTarget.style.borderBottomColor = g.color; e.currentTarget.style.background = `${g.color}08`; }}
+              onMouseLeave={e => { e.currentTarget.style.borderBottomColor = "transparent"; e.currentTarget.style.background = "transparent"; }}>
+              <span style={{ fontSize: 24 }}>{g.emoji}</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: C.textSecondary, whiteSpace: "nowrap" }}>{catName(g.id, lang)}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ② RECENT SEARCHES BANNER */}
+      {recentSearches.length > 0 && (
+        <div style={{ background: `linear-gradient(135deg, #F8FAFF, #EEF3FF)`, borderBottom: `1px solid ${C.border}`, padding: "16px 24px" }}>
+          <div style={{ maxWidth: 1400, margin: "0 auto" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 16, overflowX: "auto" }}>
+              <span style={{ color: C.muted, fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.8, flexShrink: 0 }}>
+                {lang === "de" ? "Zuletzt gesucht" : lang === "ro" ? "Căutări recente" : lang === "fr" ? "Récemment consulté" : "Recently viewed"}
+              </span>
+              {recentSearches.map(id => {
+                const sub = CATEGORIES_LIST.find(c => c.id === id);
+                if (!sub) return null;
+                const grp = CATEGORY_GROUPS.find(g => g.subs?.some(s => s.id === id));
+                return (
+                  <button key={id} onClick={() => startWithTracking(id)}
+                    style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", border: `1px solid ${C.border}`, borderRadius: 20, padding: "6px 14px", cursor: "pointer", flexShrink: 0, transition: "all 0.18s", fontSize: 13, fontWeight: 600, color: C.text }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = grp?.color || C.accent; e.currentTarget.style.color = grp?.color || C.accent; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.text; }}>
+                    <span style={{ fontSize: 16 }}>{sub.emoji}</span>
+                    {catName(id, lang)}
+                  </button>
+                );
+              })}
+              <button onClick={() => { localStorage.removeItem("dp_recent"); setRecentSearches([]); }}
+                style={{ marginLeft: "auto", background: "none", border: "none", color: C.muted, fontSize: 12, cursor: "pointer", flexShrink: 0 }}>✕ Clear</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
+
+      {/* ③ AI POSITIONING — why we're different */}
+      <div style={{ padding: "40px 0 32px", borderBottom: `1px solid ${C.border}` }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
+          <div style={{ flex: 1, minWidth: 260 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: `${C.accent}12`, border: `1px solid ${C.accent}30`, borderRadius: 20, padding: "4px 12px", fontSize: 11, fontWeight: 700, color: C.accent, letterSpacing: 0.8, textTransform: "uppercase", marginBottom: 14 }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.accent, display: "inline-block", animation: "aselLoadPulse 1.4s ease-in-out infinite" }} />
+              AI-Powered · Not just comparison
+            </div>
+            <h2 style={{ color: C.text, fontSize: "clamp(22px, 3vw, 34px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 10px" }}>
+              The future of decision-making is <span style={{ color: C.accent }}>here</span>
+            </h2>
+            <p style={{ color: C.textSecondary, fontSize: 15, lineHeight: 1.7, margin: "0 0 20px", maxWidth: 520 }}>
+              While others have been comparing since 1999, we're redefining what comparison means in the AI era — personalized intelligence, zero bias, always evolving.
+            </p>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {[
+                { icon: "🧠", text: "AI learns your priorities" },
+                { icon: "⚡", text: "Answer in under 60 seconds" },
+                { icon: "🌍", text: "30 languages supported" },
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: C.text }}>
+                  <span>{item.icon}</span>{item.text}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 16, flexShrink: 0 }}>
+            {[
+              { num: "66+", label: lang === "de" ? "Kategorien" : lang === "ro" ? "Subcategorii" : "Categories", color: C.accent },
+              { num: "30+", label: lang === "de" ? "Sprachen" : lang === "ro" ? "Limbi" : "Languages", color: "#7048E8" },
+              { num: "AI", label: lang === "de" ? "Powered" : "Powered", color: "#059669" },
+            ].map((s, i) => (
+              <div key={i} style={{ textAlign: "center", padding: "20px 24px", background: C.card, border: `1px solid ${C.border}`, borderRadius: 16, minWidth: 80 }}>
+                <div style={{ color: s.color, fontSize: 28, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif", letterSpacing: -1 }}>{s.num}</div>
+                <div style={{ color: C.muted, fontSize: 11, marginTop: 4, fontWeight: 600 }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ④ SPLIT PROMO BANNERS */}
+      <div style={{ padding: "32px 0 0" }}>
+        <h2 style={{ color: C.text, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 800, margin: "0 0 16px", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          {lang === "de" ? "Beliebte Vergleiche" : lang === "ro" ? "Comparații populare" : lang === "fr" ? "Comparaisons populaires" : "Popular Comparisons"}
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 32 }}>
+          {[
+            { id: "new_car", gid: "auto", title: lang === "de" ? "Auto vergleichen & sparen" : "Compare cars & save", sub: "New & used · Insurance · EV", img: "photo-1558618666-fcd25c85cd64", color: "#1A1A2E" },
+            { id: "credit_card", gid: "financial", title: lang === "de" ? "Kredite von 300+ Banken" : "Loans from 300+ banks", sub: "Mortgages · Cards · Deposits", img: "photo-1611974789855-9c2a0a7236a3", color: "#0F3460" },
+            { id: "mobile_plan", gid: "telecom", title: lang === "de" ? "Handyverträge vergleichen" : "Compare mobile plans", sub: "5G · Unlimited · SIM-only", img: "photo-1511707171634-5f897ff02aa9", color: "#16213E" },
+            { id: "hotel", gid: "tourism", title: lang === "de" ? "Hotels & Reisen finden" : "Find hotels & travel deals", sub: "Hotels · Flights · Packages", img: "photo-1566073771259-6a8506099945", color: "#0C1445" },
+          ].map(promo => (
+            <div key={promo.id} onClick={() => startWithTracking(promo.id)}
+              style={{ position: "relative", borderRadius: 16, overflow: "hidden", height: 100, cursor: "pointer", transition: "transform 0.2s, box-shadow 0.2s" }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.2)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ position: "absolute", inset: 0, backgroundImage: `url(https://images.unsplash.com/${promo.img}?w=600&h=200&fit=crop&auto=format)`, backgroundSize: "cover", backgroundPosition: "center" }} />
+              <div style={{ position: "absolute", inset: 0, background: `linear-gradient(100deg, ${promo.color}EE 40%, ${promo.color}88 70%, transparent 100%)` }} />
+              <div style={{ position: "relative", zIndex: 1, padding: "16px 20px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <div style={{ color: "#fff", fontSize: 15, fontWeight: 800, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{promo.title}</div>
+                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 12 }}>{promo.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ⑤ POPULAR PRODUCT COMPARISONS — concrete cards like CHECK24 */}
+      {[
+        { section: lang === "de" ? "Handys vergleichen" : lang === "ro" ? "Compară telefoane" : "Compare Smartphones", gid: "tech", items: [
+          { id: "phone", label: "Apple iPhone 17", sub: "ab 1,00€ / Handyeinmalig", img: "photo-1510557880182-3d4d3cba35a5", rating: "4.8", reviews: "12.431" },
+          { id: "phone", label: "Samsung Galaxy S26", sub: "ab 1,00€ / Handyeinmalig", img: "photo-1610945415295-d9bbf067e59c", rating: "4.7", reviews: "8.922" },
+          { id: "phone", label: "Google Pixel 10", sub: "ab 1,00€ / Handyeinmalig", img: "photo-1598300042247-d088f8ab3a91", rating: "4.6", reviews: "4.211" },
+        ]},
+        { section: lang === "de" ? "Kredite vergleichen" : lang === "ro" ? "Compară credite" : "Compare Loans", gid: "financial", items: [
+          { id: "personal_loan", label: "10.000 €", sub: "ab 314,18€ / Monat · 36 Monate", img: null, badge: "€", rating: null },
+          { id: "personal_loan", label: "20.000 €", sub: "ab 489,92€ / Monat · 48 Monate", img: null, badge: "€€", rating: null },
+          { id: "personal_loan", label: "50.000 €", sub: "ab 783,72€ / Monat · 84 Monate", img: null, badge: "€€€", rating: null },
+        ]},
+      ].map(sec => {
+        const grp = CATEGORY_GROUPS.find(g => g.id === sec.gid);
+        return (
+          <div key={sec.section} style={{ marginBottom: 36 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+              <h2 style={{ color: C.text, fontSize: "clamp(16px, 2.2vw, 22px)", fontWeight: 800, margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{sec.section}</h2>
+              <button onClick={() => { setSelectedGroup(sec.gid); document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}); }}
+                style={{ background: "none", border: "none", color: C.accent, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                {lang === "de" ? "Alle Angebote →" : lang === "ro" ? "Vezi toate →" : "See all →"}
+              </button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
+              {sec.items.map((item, i) => (
+                <div key={i} onClick={() => startWithTracking(item.id)}
+                  style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: "16px", cursor: "pointer", transition: "all 0.2s", display: "flex", gap: 14, alignItems: "center" }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = grp?.color || C.accent; e.currentTarget.style.boxShadow = `0 4px 16px ${grp?.color || C.accent}18`; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                  {item.img ? (
+                    <div style={{ width: 60, height: 60, borderRadius: 10, overflow: "hidden", flexShrink: 0, background: C.bg }}>
+                      <img src={`https://images.unsplash.com/${item.img}?w=120&h=120&fit=crop&auto=format`} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="" />
+                    </div>
+                  ) : (
+                    <div style={{ width: 60, height: 60, borderRadius: 10, flexShrink: 0, background: `${grp?.color || C.accent}15`, border: `1px solid ${grp?.color || C.accent}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 900, color: grp?.color || C.accent }}>
+                      {item.badge}
+                    </div>
+                  )}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ color: C.text, fontSize: 14, fontWeight: 700, marginBottom: 3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{item.label}</div>
+                    <div style={{ color: C.muted, fontSize: 12, lineHeight: 1.4 }}>{item.sub}</div>
+                    {item.rating && <div style={{ color: "#F59E0B", fontSize: 11, marginTop: 4 }}>★ {item.rating} · {item.reviews} reviews</div>}
+                  </div>
+                  <span style={{ color: C.accent, fontSize: 16 }}>›</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* ⑥ TRUST RATINGS */}
+      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 16, padding: "24px 28px", marginBottom: 40, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
+        <div style={{ flex: 1, minWidth: 200 }}>
+          <div style={{ color: C.text, fontSize: 16, fontWeight: 800, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Trusted by users worldwide</div>
+          <div style={{ color: C.muted, fontSize: 13 }}>AI-powered decisions. Real results. No bias.</div>
+        </div>
+        {[
+          { stars: "★★★★★", score: "4.9", label: "Google Reviews", count: "2,841 ratings" },
+          { stars: "★★★★★", score: "4.8", label: "Trustpilot", count: "1,290 ratings" },
+        ].map((r, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 20px", background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12 }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ color: "#F59E0B", fontSize: 18, letterSpacing: 1 }}>{r.stars}</div>
+              <div style={{ color: C.text, fontSize: 22, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{r.score}</div>
+            </div>
+            <div>
+              <div style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>{r.label}</div>
+              <div style={{ color: C.muted, fontSize: 11 }}>{r.count}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      </div>{/* end maxWidth wrapper */}
+
+      <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
 
         {/* How it works */}
         <div style={{ marginBottom: 0 }}>
@@ -2991,6 +3243,7 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
         </div>
       </div>
+      </div>
 
       <WorldwideSection t={t} />
 
@@ -3133,6 +3386,7 @@ function Landing({ onStart, t, lang, setLang }) {
         </div>
       </div>
     </div>
+  </div>
   );
 }
 
