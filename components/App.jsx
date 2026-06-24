@@ -10,375 +10,8 @@ const C = {
   success: "#059669", gold: "#D97706", purple: "#7C3AED",
   shadow: "0 1px 4px rgba(15,23,42,0.08)", shadowMd: "0 4px 16px rgba(15,23,42,0.10)",
   shadowLg: "0 12px 40px rgba(15,23,42,0.13)",
-  // ── New subcategory trees ──
-  tablet:          { label:"Tablete",emoji:"📲",image:img("photo-1544244015-0df4b3ffc6b0"), questions:[
-    {id:"use",q:"For what purpose?",options:["Work & productivity","Drawing & design","Kids & education","Entertainment","Universal"]},
-    {id:"os",q:"Operating system?",options:["iPad (iOS)","Android","Windows","No preference"]},
-    {id:"size",q:"Screen size?",options:['Under 9"','9–11"','12"+',"No preference"]},
-    {id:"budget",q:"Budget?",options:["Under €200","€200–€500","€500–€900","€900+"]},
-  ]},
-  smartwatch:      { label:"Smartwatch-uri",emoji:"⌚",image:img("photo-1523275335684-37898b6baf30"), questions:[
-    {id:"use",q:"Primary use?",options:["Fitness tracking","Notifications & calls","Sleep monitoring","Style & everyday"]},
-    {id:"os",q:"Phone compatibility?",options:["iPhone (iOS)","Android","No preference"]},
-    {id:"battery",q:"Battery life priority?",options:["1–2 days (full features)","3–5 days","7+ days"]},
-    {id:"budget",q:"Budget?",options:["Under €100","€100–€250","€250–€500","€500+"]},
-  ]},
-  headphones:      { label:"Căști audio",emoji:"🎧",image:img("photo-1505740420928-5e560c06d30e"), questions:[
-    {id:"type",q:"Type?",options:["Over-ear","In-ear (earbuds)","On-ear","Doesn't matter"]},
-    {id:"use",q:"Primary use?",options:["Music listening","Gaming","Work calls","Sport & gym","Travel"]},
-    {id:"features",q:"Must-have feature?",options:["Active noise cancellation","Wireless / Bluetooth","Hi-Res audio","Long battery","Microphone quality"]},
-    {id:"budget",q:"Budget?",options:["Under €50","€50–€150","€150–€350","€350+"]},
-  ]},
-  gaming:          { label:"Console gaming",emoji:"🎮",image:img("photo-1542751371-adc38448a05e"), questions:[
-    {id:"type",q:"Console type?",options:["Home console","Handheld / portable","PC gaming","Not sure"]},
-    {id:"games",q:"Favorite game genre?",options:["Action & adventure","Sports","RPG","Shooter","Family & party","All genres"]},
-    {id:"friends",q:"Play with friends?",options:["Online multiplayer","Local co-op","Mainly solo","Mixed"]},
-    {id:"budget",q:"Budget?",options:["Under €200","€200–€350","€350–€600","€600+ (high-end PC)"]},
-  ]},
-  monitor:         { label:"Monitoare",emoji:"🖥️",image:img("photo-1527443224154-c4a3942d3acf"), questions:[
-    {id:"use",q:"Primary use?",options:["Office & productivity","Gaming","Design & photo editing","Programming","Universal"]},
-    {id:"size",q:"Screen size?",options:['24"','27"','32"','34"+ ultrawide']},
-    {id:"resolution",q:"Resolution?",options:["Full HD (1080p)","QHD (1440p)","4K UHD","Doesn't matter"]},
-    {id:"budget",q:"Budget?",options:["Under €200","€200–€400","€400–€800","€800+"]},
-  ]},
-  printer:         { label:"Imprimante",emoji:"🖨️",image:img("photo-1612815154858-60aa4c59eaa6"), questions:[
-    {id:"type",q:"Printer type?",options:["Inkjet (color & photos)","Laser (fast B&W)","All-in-one","Label printer"]},
-    {id:"use",q:"How often?",options:["Daily","A few times a week","Occasionally","Rarely"]},
-    {id:"color",q:"Need color printing?",options:["Yes, often","Mostly black & white","Both equally"]},
-    {id:"budget",q:"Budget?",options:["Under €80","€80–€200","€200–€500","€500+"]},
-  ]},
-  fridge:          { label:"Frigidere",emoji:"❄️",image:img("photo-1571175443880-49e1d25b2bc5"), questions:[
-    {id:"type",q:"Type?",options:["Combined fridge-freezer","Side-by-side","American style","Fridge only","Mini fridge"]},
-    {id:"space",q:"Available space (width)?",options:["Under 60 cm","60–70 cm","70 cm+","No constraint"]},
-    {id:"capacity",q:"Household size?",options:["1–2 people","3–4 people","5+ people"]},
-    {id:"budget",q:"Budget?",options:["Under €400","€400–€800","€800–€1,500","€1,500+"]},
-  ]},
-  washing_machine: { label:"Mașini de spălat",emoji:"🌊",image:img("photo-1626806787461-102c1bfaaea1"), questions:[
-    {id:"type",q:"Front or top loader?",options:["Front loader","Top loader","Washer-dryer combo","No preference"]},
-    {id:"capacity",q:"Drum capacity?",options:["6 kg","7–8 kg","9–10 kg","11+ kg"]},
-    {id:"energy",q:"Energy class priority?",options:["A+++ (most efficient)","A++ (good balance)","Price more important"]},
-    {id:"budget",q:"Budget?",options:["Under €350","€350–€600","€600–€1,000","€1,000+"]},
-  ]},
-  dryer:           { label:"Uscătoare",emoji:"🌀",image:img("photo-1604335398989-7d4c0748dcc8"), questions:[
-    {id:"type",q:"Type?",options:["Condenser dryer","Heat pump dryer","Vented dryer","Washer-dryer combo"]},
-    {id:"capacity",q:"Capacity?",options:["6–7 kg","8–9 kg","10+ kg"]},
-    {id:"energy",q:"Energy efficiency?",options:["Top priority (A++)","Good but not critical","Price first"]},
-    {id:"budget",q:"Budget?",options:["Under €350","€350–€650","€650–€1,200","€1,200+"]},
-  ]},
-  vacuum:          { label:"Aspiratoare",emoji:"🌪️",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
-    {id:"type",q:"Type?",options:["Robot vacuum","Cordless stick","Traditional bagged","Wet & dry"]},
-    {id:"floors",q:"Floor type?",options:["Mostly carpet","Mostly hard floors","Mixed"]},
-    {id:"pets",q:"Have pets?",options:["Yes — pet hair is an issue","No"]},
-    {id:"budget",q:"Budget?",options:["Under €100","€100–€300","€300–€600","€600+ (premium robot)"]},
-  ]},
-  espresso:        { label:"Espressoare",emoji:"☕",image:img("photo-1495474472287-4d71bcdd2085"), questions:[
-    {id:"type",q:"Type?",options:["Bean-to-cup (fully automatic)","Manual espresso machine","Pod / capsule (Nespresso)","Filter coffee maker"]},
-    {id:"drinks",q:"Favorite drinks?",options:["Espresso & americano","Cappuccino & latte","Both equally","Just filter coffee"]},
-    {id:"ease",q:"Ease of use?",options:["Very important — fully automatic","I enjoy the ritual","Balanced"]},
-    {id:"budget",q:"Budget?",options:["Under €100","€100–€300","€300–€700","€700+"]},
-  ]},
-  oven:            { label:"Cuptoare și plite",emoji:"🔥",image:img("photo-1556909114-f6e7ad7d3136"), questions:[
-    {id:"type",q:"What are you looking for?",options:["Electric oven","Gas hob","Induction hob","Oven + hob combo","Built-in oven"]},
-    {id:"capacity",q:"Oven capacity?",options:["Under 50 L","50–70 L","70 L+","Not applicable"]},
-    {id:"features",q:"Must-have feature?",options:["Pyrolytic self-clean","Air fry function","Steam cooking","Multiple cooking zones"]},
-    {id:"budget",q:"Budget?",options:["Under €300","€300–€600","€600–€1,200","€1,200+"]},
-  ]},
-  aircon:          { label:"Aer condiționat",emoji:"❄️",image:img("photo-1631049307264-da0ec9d70304"), questions:[
-    {id:"type",q:"Type?",options:["Split unit (fixed)","Portable / mobile","Multi-split (multiple rooms)","Cassette (commercial)"]},
-    {id:"room_size",q:"Room size?",options:["Under 15 m²","15–25 m²","25–40 m²","40 m²+"]},
-    {id:"heating",q:"Need heating too?",options:["Yes — heating + cooling","Cooling only"]},
-    {id:"budget",q:"Budget?",options:["Under €500","€500–€1,000","€1,000–€2,000","€2,000+"]},
-  ]},
-  new_car:         { label:"Mașini noi",emoji:"🚗",image:img("photo-1558618666-fcd25c85cd64"), questions:[
-    {id:"type",q:"Body type?",options:["Sedan","SUV","Hatchback","Kombi / estate","Cabriolet","Van / MPV"]},
-    {id:"fuel",q:"Fuel type?",options:["Petrol","Diesel","Hybrid","Full electric (EV)","Plug-in hybrid (PHEV)"]},
-    {id:"use",q:"Primary use?",options:["City commuting","Long-distance / highway","Family & kids","Weekend & leisure"]},
-    {id:"budget",q:"Budget?",options:["Under €20,000","€20,000–€35,000","€35,000–€60,000","€60,000+"]},
-  ]},
-  used_car:        { label:"Mașini second-hand",emoji:"🔑",image:img("photo-1494976388531-d1058494cdd8"), questions:[
-    {id:"type",q:"Body type?",options:["Sedan","SUV","Hatchback","Kombi / estate"]},
-    {id:"age",q:"Maximum age?",options:["Up to 3 years","3–7 years","7–12 years","Any age — low mileage is key"]},
-    {id:"mileage",q:"Maximum mileage?",options:["Under 50,000 km","50,000–120,000 km","Over 120,000 km fine"]},
-    {id:"budget",q:"Budget?",options:["Under €8,000","€8,000–€15,000","€15,000–€25,000","€25,000+"]},
-  ]},
-  tires:           { label:"Anvelope",emoji:"⚙️",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
-    {id:"season",q:"Season?",options:["Summer","Winter","All-season / All-weather"]},
-    {id:"size",q:"Tire size?",options:["185/65 R15","195/65 R15","205/55 R16","225/45 R17","Other — I'll check"]},
-    {id:"priority",q:"What matters most?",options:["Wet grip (safety)","Low noise","Fuel efficiency","Long mileage","Best value"]},
-    {id:"budget",q:"Budget per tire?",options:["Under €60","€60–€100","€100–€150","€150+ (premium)"]},
-  ]},
-  car_insurance:   { label:"Asigurări auto",emoji:"🛡️",image:img("photo-1450101499163-c8848c66ca85"), questions:[
-    {id:"type",q:"Coverage type?",options:["RCA (liability only)","Casco partial","Casco full","Not sure — need advice"]},
-    {id:"car_age",q:"Car age?",options:["Under 3 years","3–8 years","Over 8 years"]},
-    {id:"drivers",q:"Number of drivers?",options:["1 driver","2 drivers","3+ / young driver"]},
-    {id:"priority",q:"Top priority?",options:["Lowest price","Best coverage","Fast claims process","Roadside assistance"]},
-  ]},
-  ev_charger:      { label:"Stații încărcare EV",emoji:"⚡",image:img("photo-1593941707882-a56ae58a2cf1"), questions:[
-    {id:"location",q:"Where will you charge?",options:["Home (single-phase)","Home (three-phase)","Office / commercial","Public network subscription"]},
-    {id:"power",q:"Charging speed needed?",options:["3.7 kW (slow, overnight)","7.4 kW (standard)","11 kW (fast)","22 kW or DC fast"]},
-    {id:"car",q:"EV brand?",options:["Tesla","Renault / Dacia","Volkswagen Group","BMW / Mercedes","Other"]},
-    {id:"budget",q:"Budget?",options:["Under €500","€500–€1,000","€1,000–€2,000","€2,000+ (commercial)"]},
-  ]},
-  car_service:     { label:"Service-uri auto",emoji:"🔧",image:img("photo-1619767886558-efdc259cde1a"), questions:[
-    {id:"service",q:"Service needed?",options:["Routine maintenance","Tires / alignment","Bodywork & paint","Electrical / diagnostic","Tuning"]},
-    {id:"car",q:"Car brand?",options:["European (VW, BMW, Mercedes)","Asian (Toyota, Honda)","American","French (Renault, Peugeot)"]},
-    {id:"priority",q:"Priority?",options:["Price","Authorized dealer quality","Speed of service","Warranty on repairs"]},
-    {id:"location",q:"Distance willing to travel?",options:["Within 5 km","Within 20 km","Quality first — anywhere"]},
-  ]},
-  personal_loan:   { label:"Credite personale",emoji:"💵",image:img("photo-1565514020179-026b92b84bb6"), questions:[
-    {id:"amount",q:"Amount needed?",options:["Under €5,000","€5,000–€20,000","€20,000–€50,000","€50,000+"]},
-    {id:"term",q:"Repayment term?",options:["Under 1 year","1–3 years","3–7 years","7+ years"]},
-    {id:"credit",q:"Credit history?",options:["Excellent","Good","Fair","Building credit"]},
-    {id:"priority",q:"Priority?",options:["Lowest interest rate","Fast approval","Flexible repayment","No early repayment fee"]},
-  ]},
-  mortgage:        { label:"Credite ipotecare",emoji:"🏦",image:img("photo-1580587771525-78b9dba3b914"), questions:[
-    {id:"purpose",q:"Purpose?",options:["Buy first home","Buy second home","Refinance existing mortgage","Investment property"]},
-    {id:"amount",q:"Loan amount?",options:["Under €100,000","€100,000–€250,000","€250,000–€500,000","€500,000+"]},
-    {id:"term",q:"Loan term?",options:["10–15 years","15–25 years","25–30 years"]},
-    {id:"rate",q:"Interest rate type?",options:["Fixed (predictable)","Variable (potentially lower)","Mixed","Need advice"]},
-  ]},
-  credit_card:     { label:"Carduri de credit",emoji:"💳",image:img("photo-1556742049-0cfed4f6a45d"), questions:[
-    {id:"use",q:"Main use?",options:["Everyday purchases","Travel & miles","Cashback","Balance transfer","Business expenses"]},
-    {id:"travel",q:"Travel often?",options:["Frequently (monthly)","Occasionally","Rarely"]},
-    {id:"fee",q:"Annual fee?",options:["No fee preferred","Up to €50/year","€50–€150/year (for good perks)"]},
-    {id:"priority",q:"Priority?",options:["Rewards & cashback","0% interest period","Travel insurance included","Low foreign transaction fees"]},
-  ]},
-  bank_account:    { label:"Conturi bancare",emoji:"🏛️",image:img("photo-1601597111158-2fceff292cdc"), questions:[
-    {id:"type",q:"Account type?",options:["Current account (everyday)","Savings account","Business account","Youth account"]},
-    {id:"digital",q:"Digital vs traditional?",options:["100% digital bank (Revolut, N26)","Traditional bank with online access","Doesn't matter"]},
-    {id:"fees",q:"Monthly fee?",options:["Free account only","Up to €5/month","€5–€15/month for premium perks"]},
-    {id:"priority",q:"Priority feature?",options:["High interest on savings","No foreign exchange fees","Overdraft facility","Investment features"]},
-  ]},
-  deposit:         { label:"Depozite",emoji:"📈",image:img("photo-1611974789855-9c2a0a7236a3"), questions:[
-    {id:"amount",q:"Amount to deposit?",options:["Under €5,000","€5,000–€20,000","€20,000–€100,000","€100,000+"]},
-    {id:"term",q:"Term?",options:["3 months","6 months","12 months","24+ months","Flexible withdrawal"]},
-    {id:"institution",q:"Institution type?",options:["Traditional bank","Online bank (higher rates)","Credit union","No preference"]},
-    {id:"priority",q:"Priority?",options:["Highest interest rate","Safety & deposit guarantee","Flexibility to withdraw","Automatic rollover"]},
-  ]},
-  broker:          { label:"Brokeri de investiții",emoji:"📊",image:img("photo-1611974789855-9c2a0a7236a3"), questions:[
-    {id:"experience",q:"Investment experience?",options:["Complete beginner","Some experience","Intermediate","Expert"]},
-    {id:"products",q:"What to invest in?",options:["Stocks & ETFs","Crypto","Bonds & funds","Real estate (REITs)","Mixed portfolio"]},
-    {id:"style",q:"Investment style?",options:["Long-term (buy & hold)","Active trading","Automated / robo-advisor","Copy trading"]},
-    {id:"capital",q:"Starting capital?",options:["Under €1,000","€1,000–€10,000","€10,000–€50,000","€50,000+"]},
-  ]},
-  mobile_plan:     { label:"Abonamente mobile",emoji:"📱",image:img("photo-1511707171634-5f897ff02aa9"), questions:[
-    {id:"data",q:"Monthly data needed?",options:["Under 5 GB","5–15 GB","15–30 GB","Unlimited"]},
-    {id:"calls",q:"Calls & SMS?",options:["Unlimited calls & SMS","Limited — I mainly use apps","International calls important"]},
-    {id:"contract",q:"Contract type?",options:["12-month contract","24-month contract","SIM-only / monthly","Flex — no commitment"]},
-    {id:"priority",q:"Priority?",options:["Lowest price","Best network coverage","International roaming","5G access"]},
-  ]},
-  prepaid:         { label:"Cartele preplătite",emoji:"📲",image:img("photo-1601784551446-20c9e07cdbdb"), questions:[
-    {id:"use",q:"Primary use?",options:["Calls & SMS only","Data for social media","Data + calls","Travel SIM"]},
-    {id:"data",q:"Data needed?",options:["Under 1 GB","1–5 GB","5–15 GB","Unlimited"]},
-    {id:"country",q:"Where will you use it?",options:["Domestic only","EU roaming included","International travel","Multiple countries"]},
-    {id:"budget",q:"Monthly top-up budget?",options:["Under €5","€5–€15","€15–€30","€30+"]},
-  ]},
-  internet:        { label:"Internet fix",emoji:"🌐",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
-    {id:"speed",q:"Speed needed?",options:["Basic (50–100 Mbps)","Standard (100–300 Mbps)","Fast (300–600 Mbps)","Gigabit (1 Gbps+)"]},
-    {id:"tech",q:"Technology preference?",options:["Fiber optic (fastest)","Cable","DSL","Doesn't matter — best value"]},
-    {id:"bundle",q:"Want a bundle?",options:["Internet only","Internet + TV","Internet + TV + phone","Internet + mobile"]},
-    {id:"contract",q:"Contract?",options:["Monthly / no commitment","12 months","24 months"]},
-  ]},
-  tv_package:      { label:"Pachete TV",emoji:"📺",image:img("photo-1593784991095-a205069470b6"), questions:[
-    {id:"channels",q:"Channel needs?",options:["Basic (news & free-to-air)","Sports channels","Movies & series (premium)","International channels"]},
-    {id:"tech",q:"Delivery type?",options:["Satellite (DTH)","Cable TV","IPTV / streaming box","Android TV / smart decoder"]},
-    {id:"hd",q:"4K / HD channels?",options:["Essential","Nice to have","Not important"]},
-    {id:"budget",q:"Monthly budget?",options:["Under €15","€15–€30","€30–€50","€50+"]},
-  ]},
-  phone_provider:  { label:"Furnizori de telefonie",emoji:"☎️",image:img("photo-1551650975-87deedd944c3"), questions:[
-    {id:"type",q:"Fixed or mobile?",options:["Fixed line (home / office)","VoIP (internet calls)","Business phone system","Cloud PBX"]},
-    {id:"calls",q:"Call volume?",options:["Occasional","Regular (daily)","High volume (call center)"]},
-    {id:"international",q:"International calls?",options:["Frequent","Occasional","Domestic only"]},
-    {id:"priority",q:"Priority?",options:["Lowest price per minute","Call quality","Features (recording, forwarding)","Customer support"]},
-  ]},
-  electricity:     { label:"Energie electrică",emoji:"💡",image:img("photo-1473341304170-971dccb5ac1e"), questions:[
-    {id:"type",q:"Contract type?",options:["Fixed price (predictable bills)","Variable (market price)","Green / renewable energy","Smart / dynamic pricing"]},
-    {id:"consumption",q:"Monthly consumption?",options:["Under 100 kWh","100–250 kWh","250–500 kWh","500+ kWh"]},
-    {id:"solar",q:"Do you have solar panels?",options:["Yes — want smart integration","No","Planning to install"]},
-    {id:"priority",q:"Priority?",options:["Lowest price","100% renewable","Smart meter & app","Easy switching"]},
-  ]},
-  gas_provider:    { label:"Furnizori gaze",emoji:"🔥",image:img("photo-1611974789855-9c2a0a7236a3"), questions:[
-    {id:"use",q:"Primary use?",options:["Heating only","Cooking only","Heating + cooking","Commercial / business"]},
-    {id:"contract",q:"Contract type?",options:["Fixed price","Variable price","Doesn't matter"]},
-    {id:"consumption",q:"Annual consumption (approx)?",options:["Under 5,000 kWh","5,000–15,000 kWh","15,000–30,000 kWh","30,000+ kWh"]},
-    {id:"priority",q:"Priority?",options:["Lowest price","Contract flexibility","Green gas (biomethane)","Bundle with electricity"]},
-  ]},
-  solar:           { label:"Panouri solare",emoji:"☀️",image:img("photo-1509391366360-2e959784a276"), questions:[
-    {id:"goal",q:"Main goal?",options:["Reduce electricity bills","Full energy independence","Sell surplus energy","Charge EV with solar"]},
-    {id:"roof",q:"Roof type?",options:["Sloped tile","Flat roof","Flat + pitched","Ground-mounted / field"]},
-    {id:"power",q:"System size needed?",options:["3–5 kWp (small home)","5–10 kWp (medium)","10–20 kWp (large)","20+ kWp (commercial)"]},
-    {id:"budget",q:"Budget?",options:["Under €5,000","€5,000–€12,000","€12,000–€25,000","€25,000+"]},
-  ]},
-  battery_storage: { label:"Baterii de stocare",emoji:"🔋",image:img("photo-1593941707882-a56ae58a2cf1"), questions:[
-    {id:"purpose",q:"Why add battery storage?",options:["Store solar energy","Backup power (outages)","Reduce peak-hour costs","Go off-grid"]},
-    {id:"capacity",q:"Capacity needed?",options:["5–10 kWh (small home)","10–20 kWh (medium)","20+ kWh (large / off-grid)"]},
-    {id:"solar",q:"Do you have solar panels?",options:["Yes, existing system","Installing together with battery","No — battery only"]},
-    {id:"budget",q:"Budget?",options:["Under €5,000","€5,000–€10,000","€10,000–€20,000","€20,000+"]},
-  ]},
-  hotel:           { label:"Hoteluri",emoji:"🏨",image:img("photo-1566073771259-6a8506099945"), questions:[
-    {id:"stars",q:"Star rating?",options:["2–3 stars (budget)","3–4 stars (standard)","4–5 stars (premium)","5 stars / luxury"]},
-    {id:"location",q:"Location priority?",options:["City centre","Near the beach","Near airport","Quiet / countryside"]},
-    {id:"nights",q:"Number of nights?",options:["1–2","3–5","6–10","10+"]},
-    {id:"priority",q:"Priority?",options:["Best price","Breakfast included","Pool & spa","Cancellation flexibility"]},
-  ]},
-  airline:         { label:"Companii aeriene",emoji:"✈️",image:img("photo-1436491865332-7a61a109cc05"), questions:[
-    {id:"class",q:"Cabin class?",options:["Economy","Premium economy","Business","First class"]},
-    {id:"journey",q:"Journey type?",options:["Short-haul (under 3h)","Medium-haul (3–6h)","Long-haul (6h+)","Ultra long-haul (10h+)"]},
-    {id:"luggage",q:"Luggage needs?",options:["Cabin bag only","1 checked bag","2+ checked bags","Extra luggage fine — price matters"]},
-    {id:"priority",q:"Priority?",options:["Lowest price","Seat comfort","Punctuality record","Loyalty program miles"]},
-  ]},
-  travel_agency:   { label:"Agenții de turism",emoji:"🌍",image:img("photo-1488085061387-422e29b40080"), questions:[
-    {id:"type",q:"Trip type?",options:["All-inclusive package","City break","Cruise","Adventure / trekking","Custom / tailor-made"]},
-    {id:"destination",q:"Destination region?",options:["Mediterranean","Caribbean / Tropical","Asia","Americas","Europe / cultural"]},
-    {id:"group",q:"Group?",options:["Solo traveller","Couple","Family with children","Group of friends"]},
-    {id:"budget",q:"Budget per person?",options:["Under €500","€500–€1,500","€1,500–€3,000","€3,000+"]},
-  ]},
-  travel_insurance:{ label:"Asigurări de călătorie",emoji:"🛡️",image:img("photo-1450101499163-c8848c66ca85"), questions:[
-    {id:"coverage",q:"Coverage needed?",options:["Medical expenses only","Medical + cancellation","Full comprehensive","Annual multi-trip"]},
-    {id:"destination",q:"Destination?",options:["Europe (Schengen)","USA / Canada","Worldwide","High-risk area"]},
-    {id:"activities",q:"Doing extreme sports?",options:["No","Yes — skiing / snowboarding","Yes — water sports","Yes — adventure / trekking"]},
-    {id:"duration",q:"Trip duration?",options:["Under 1 week","1–2 weeks","2–4 weeks","1 month+"]},
-  ]},
-  car_rental:      { label:"Închirieri auto",emoji:"🚙",image:img("photo-1494976388531-d1058494cdd8"), questions:[
-    {id:"category",q:"Car category?",options:["Economy / city car","Compact / hatchback","SUV / 4x4","Minivan / 7-seater","Luxury"]},
-    {id:"duration",q:"Rental duration?",options:["1–3 days","4–7 days","1–2 weeks","1 month+"]},
-    {id:"driver_age",q:"Driver age?",options:["21–25 (young driver)","26–70","70+ (senior)"]},
-    {id:"priority",q:"Priority?",options:["Lowest price","Full insurance included","Free cancellation","Unlimited mileage"]},
-  ]},
-  vpn:             { label:"VPN-uri",emoji:"🔒",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
-    {id:"use",q:"Primary use?",options:["Privacy & anonymity","Streaming geo-blocked content","Secure remote work","Torrenting","All of the above"]},
-    {id:"devices",q:"Devices to cover?",options:["1 device","2–5 devices","6–10 devices","Unlimited / router-level"]},
-    {id:"speed",q:"Speed priority?",options:["Very important (streaming / gaming)","Important","Moderate — security first"]},
-    {id:"budget",q:"Budget?",options:["Free (limited)","Under €3/month","€3–€7/month","€7+/month (premium)"]},
-  ]},
-  hosting:         { label:"Hosting web",emoji:"☁️",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
-    {id:"type",q:"Hosting type?",options:["Shared hosting (basic sites)","VPS (more control)","Dedicated server","Cloud hosting (scalable)"]},
-    {id:"site",q:"Type of site?",options:["Blog / portfolio","E-commerce","Business / corporate","High-traffic / SaaS"]},
-    {id:"traffic",q:"Expected monthly visitors?",options:["Under 1,000","1,000–10,000","10,000–100,000","100,000+"]},
-    {id:"budget",q:"Monthly budget?",options:["Under €5","€5–€20","€20–€100","€100+"]},
-  ]},
-  website_builder: { label:"Constructori de site-uri",emoji:"🌐",image:img("photo-1561070791-2526d30994b5"), questions:[
-    {id:"site_type",q:"Type of site?",options:["Portfolio / personal","Blog","E-commerce shop","Business / corporate","Restaurant / booking"]},
-    {id:"technical",q:"Technical skill level?",options:["No coding at all","Basic (can follow tutorials)","Intermediate","Developer"]},
-    {id:"ecommerce",q:"Need to sell online?",options:["Yes — it's the main goal","Yes — as a secondary feature","No"]},
-    {id:"budget",q:"Budget?",options:["Free plan","Under €15/month","€15–€30/month","€30+/month"]},
-  ]},
-  crm:             { label:"CRM-uri",emoji:"📊",image:img("photo-1454165804606-c3d57bc86b40"), questions:[
-    {id:"team_size",q:"Team size?",options:["Solo / freelancer","2–10","11–50","50+"]},
-    {id:"industry",q:"Industry?",options:["Sales & B2B","E-commerce","Real estate","Agencies / services","Healthcare"]},
-    {id:"must_have",q:"Must-have features?",options:["Email integration","Pipeline / deal tracking","Automation","Reporting & analytics","Mobile app"]},
-    {id:"budget",q:"Budget per user/month?",options:["Free tier","Under €15","€15–€50","€50+"]},
-  ]},
-  email_marketing: { label:"Email marketing",emoji:"📧",image:img("photo-1563986768609-322da13575f3"), questions:[
-    {id:"list_size",q:"Email list size?",options:["Under 500","500–5,000","5,000–50,000","50,000+"]},
-    {id:"frequency",q:"Send frequency?",options:["Daily","2–3 per week","Weekly","Monthly"]},
-    {id:"automation",q:"Need automation?",options:["Advanced automation (drips, sequences)","Basic autoresponders","Manual sends only"]},
-    {id:"budget",q:"Monthly budget?",options:["Free","Under €30","€30–€100","€100+"]},
-  ]},
-  ai_solutions:    { label:"Soluții AI",emoji:"🤖",image:img("photo-1677442136019-21780ecad995"), questions:[
-    {id:"use_case",q:"Main use case?",options:["Content writing","Customer service chatbot","Data analysis","Image / video generation","Coding assistant"]},
-    {id:"team",q:"Team size?",options:["Individual","Small team (2–10)","Medium business","Enterprise"]},
-    {id:"integration",q:"Integration needed?",options:["Standalone tool","API integration","Custom AI model"]},
-    {id:"budget",q:"Monthly budget?",options:["Free / pay-as-you-go","Under €50","€50–€300","€300+"]},
-  ]},
-  antivirus:       { label:"Antiviruși",emoji:"🛡️",image:img("photo-1614064641938-3bbee52942c7"), questions:[
-    {id:"platform",q:"Platform?",options:["Windows PC","Mac","Android","iOS","Multiple / cross-platform"]},
-    {id:"devices",q:"Devices?",options:["1 device","2–3 devices","5+ devices","Family plan (all devices)"]},
-    {id:"features",q:"Priority features?",options:["Real-time antivirus","VPN included","Parental controls","Password manager","Identity protection"]},
-    {id:"budget",q:"Budget?",options:["Free","Under €30/year","€30–€70/year","€70+/year"]},
-  ]},
-  mattress:        { label:"Saltele",emoji:"😴",image:img("photo-1631049307264-da0ec9d70304"), questions:[
-    {id:"type",q:"Mattress type?",options:["Memory foam","Pocket springs","Hybrid (foam + springs)","Latex","Doesn't matter"]},
-    {id:"firmness",q:"Firmness preference?",options:["Soft","Medium","Firm","Don't know — need advice"]},
-    {id:"size",q:"Bed size?",options:["Single (90×200)","Double (140×200)","Queen (160×200)","King (180×200)","Super King"]},
-    {id:"budget",q:"Budget?",options:["Under €200","€200–€500","€500–€1,200","€1,200+"]},
-  ]},
-  power_tools:     { label:"Unelte electrice",emoji:"🔨",image:img("photo-1504148455328-c376907d081c"), questions:[
-    {id:"tool_type",q:"What tool?",options:["Drill / driver","Circular saw","Angle grinder","Jigsaw","Sander","Multi-tool kit"]},
-    {id:"use",q:"Frequency of use?",options:["Occasional DIY","Regular weekend projects","Professional / daily use"]},
-    {id:"battery",q:"Power source?",options:["Battery (cordless)","Mains plug (more power)","Doesn't matter"]},
-    {id:"budget",q:"Budget?",options:["Under €80","€80–€200","€200–€500","€500+"]},
-  ]},
-  security_system: { label:"Sisteme de securitate",emoji:"📹",image:img("photo-1558002038-1055907df827"), questions:[
-    {id:"type",q:"System type?",options:["CCTV cameras","Smart alarm system","Smart doorbell / video intercom","Complete smart home security"]},
-    {id:"property",q:"Property type?",options:["Apartment","House","Office / commercial","Large property"]},
-    {id:"monitoring",q:"Professional monitoring?",options:["Yes — 24/7 monitoring service","No — DIY / self-monitoring","Both options"]},
-    {id:"budget",q:"Budget?",options:["Under €200","€200–€600","€600–€1,500","€1,500+"]},
-  ]},
-  robot_mower:     { label:"Roboți de tuns iarba",emoji:"🌿",image:img("photo-1558618666-fcd25c85cd64"), questions:[
-    {id:"lawn_size",q:"Lawn area?",options:["Under 300 m²","300–800 m²","800–2,000 m²","2,000+ m²"]},
-    {id:"obstacles",q:"Obstacles in garden?",options:["Simple flat lawn","Some trees / flowerbeds","Complex / many obstacles"]},
-    {id:"connectivity",q:"Smart features?",options:["App control & scheduling","GPS navigation (no wire)","Basic automatic — no setup"]},
-    {id:"budget",q:"Budget?",options:["Under €400","€400–€900","€900–€1,800","€1,800+"]},
-  ]},
-  gym:             { label:"Săli de fitness",emoji:"🏋️",image:img("photo-1517836357463-d25dfeac3438"), questions:[
-    {id:"goal",q:"Fitness goal?",options:["Lose weight","Build muscle","Improve endurance","General wellbeing","Specific sport training"]},
-    {id:"frequency",q:"How often?",options:["1–2 times/week","3–4 times/week","5+ times/week"]},
-    {id:"facilities",q:"Must-have facilities?",options:["Weight room","Cardio equipment","Swimming pool","Group classes","Personal trainers"]},
-    {id:"budget",q:"Monthly budget?",options:["Under €20","€20–€50","€50–€100","€100+ (premium)"]},
-  ]},
-  fitness_watch:   { label:"Ceasuri fitness",emoji:"⌚",image:img("photo-1523275335684-37898b6baf30"), questions:[
-    {id:"sport",q:"Main sport?",options:["Running","Cycling","Swimming","Gym / strength","Hiking","Multi-sport"]},
-    {id:"metrics",q:"Key metrics?",options:["Heart rate","GPS tracking","Sleep analysis","VO2 max","Stress monitoring"]},
-    {id:"battery",q:"Battery life?",options:["1–3 days (full smart features)","5–7 days","14+ days","1 month+ (basic tracker)"]},
-    {id:"budget",q:"Budget?",options:["Under €50","€50–€150","€150–€300","€300+"]},
-  ]},
-  supplements:     { label:"Suplimente",emoji:"💊",image:img("photo-1584308666744-24d5c474f2ae"), questions:[
-    {id:"goal",q:"Goal?",options:["Build muscle (protein, creatine)","Lose weight (fat burners)","Energy & focus","Recovery & joints","General health & immunity"]},
-    {id:"diet",q:"Dietary preferences?",options:["Omnivore","Vegetarian","Vegan","Gluten-free"]},
-    {id:"form",q:"Preferred form?",options:["Powder (shakes)","Capsules / tablets","Gummies","RTD (ready to drink)","No preference"]},
-    {id:"budget",q:"Monthly budget?",options:["Under €30","€30–€70","€70–€150","€150+"]},
-  ]},
-  health_app:      { label:"Aplicații de sănătate",emoji:"📱",image:img("photo-1576091160550-2173dba999ef"), questions:[
-    {id:"focus",q:"Health focus?",options:["Mental health & mindfulness","Nutrition & calorie tracking","Workout planning","Sleep tracking","General health monitoring"]},
-    {id:"platform",q:"Platform?",options:["iOS (iPhone)","Android","Web / both"]},
-    {id:"premium",q:"Willing to pay?",options:["Free apps only","€2–€10/month","€10–€20/month","Whatever the best app costs"]},
-    {id:"integration",q:"Device integration?",options:["Apple Health / Watch","Google Fit","Garmin / Fitbit","No device — just phone"]},
-  ]},
-  online_courses:  { label:"Cursuri online",emoji:"💻",image:img("photo-1501504905252-473c47e087f8"), questions:[
-    {id:"subject",q:"Subject area?",options:["Technology & programming","Business & marketing","Design & creativity","Languages","Personal development","Academic"]},
-    {id:"level",q:"Level?",options:["Beginner","Intermediate","Advanced / professional certification"]},
-    {id:"format",q:"Learning format?",options:["Video lessons (self-paced)","Live classes (scheduled)","Project-based","Mixed"]},
-    {id:"budget",q:"Budget?",options:["Free courses only","Under €20/month","€20–€50/month","€50+/month or one-time purchase"]},
-  ]},
-  university:      { label:"Universități",emoji:"🎓",image:img("photo-1562774053-701939374585"), questions:[
-    {id:"program",q:"Degree type?",options:["Bachelor's","Master's","PhD","MBA","Short professional program"]},
-    {id:"field",q:"Field of study?",options:["Engineering & tech","Business & economics","Medicine & health","Arts & humanities","Law","Sciences"]},
-    {id:"location",q:"Study location?",options:["Local (same city)","National (another city)","Abroad (Europe)","Abroad (USA/UK/Australia)"]},
-    {id:"priority",q:"Priority?",options:["University ranking","Cost & scholarships","Course content","Career prospects"]},
-  ]},
-  private_school:  { label:"Școli private",emoji:"🏫",image:img("photo-1580582932707-520aed937b7b"), questions:[
-    {id:"level",q:"School level?",options:["Primary (ages 6–12)","Middle school (11–14)","High school / lyceum","International baccalaureate"]},
-    {id:"curriculum",q:"Curriculum?",options:["National","Cambridge / British","International (IB)","American","Bilingual / immersion"]},
-    {id:"facilities",q:"Priority?",options:["Academic results","Sports & activities","Language programs","Small class sizes","Special needs support"]},
-    {id:"budget",q:"Annual tuition?",options:["Under €3,000","€3,000–€8,000","€8,000–€15,000","€15,000+"]},
-  ]},
-  language_courses:{ label:"Cursuri de limbi",emoji:"🌍",image:img("photo-1488085061387-422e29b40080"), questions:[
-    {id:"language",q:"Which language?",options:["English","German","French","Spanish","Italian","Chinese / Japanese","Other"]},
-    {id:"level",q:"Current level?",options:["Complete beginner","Elementary","Intermediate","Upper-intermediate / Advanced"]},
-    {id:"format",q:"Format?",options:["In-person group class","One-on-one tutoring","Online platform","Immersion / abroad"]},
-    {id:"goal",q:"Goal?",options:["Travel & tourism","Career & business","Academic requirements","Exam preparation","Personal interest"]},
-  ]},
-  online_store:    { label:"Magazine online",emoji:"🛍️",image:img("photo-1526170375885-4d8ecf77b99f"), questions:[
-    {id:"category",q:"Shopping category?",options:["Fashion & clothing","Electronics","Home & furniture","Health & beauty","Books & media","Food & groceries"]},
-    {id:"priority",q:"Priority?",options:["Lowest price","Fast delivery","Easy returns","Trustworthy seller","Loyalty / cashback program"]},
-    {id:"delivery",q:"Delivery preference?",options:["Next day","2–3 days","Doesn't matter — price first"]},
-    {id:"market",q:"Marketplace or specialist?",options:["Large marketplace (Amazon, eMag)","Specialist shop","Both — compare"]},
-  ]},
-  delivery:        { label:"Servicii de livrare",emoji:"📦",image:img("photo-1566576912321-d58ddd7a6088"), questions:[
-    {id:"type",q:"Service type?",options:["Parcel delivery (personal)","Business shipping","Same-day / express","International freight"]},
-    {id:"volume",q:"Monthly shipment volume?",options:["1–5 parcels","5–30 parcels","30–200 parcels","200+ parcels"]},
-    {id:"size",q:"Typical parcel size?",options:["Small (under 2 kg)","Medium (2–10 kg)","Large (10–30 kg)","Pallet / heavy freight"]},
-    {id:"priority",q:"Priority?",options:["Lowest price","Speed (next day)","Tracking & reliability","International coverage"]},
-  ]},
-  dropshipping:    { label:"Platforme dropshipping",emoji:"📦",image:img("photo-1551288049-bebda4e38f71"), questions:[
-    {id:"niche",q:"Product niche?",options:["Fashion & accessories","Electronics","Home & garden","Health & beauty","Pet products","No niche yet"]},
-    {id:"supplier",q:"Supplier preference?",options:["AliExpress / Chinese suppliers","EU / local suppliers (faster delivery)","Print-on-demand","Own brand (white label)"]},
-    {id:"platform",q:"Selling platform?",options:["Shopify","WooCommerce","eBay / Amazon","Social media (TikTok, Instagram)"]},
-    {id:"budget",q:"Starting budget?",options:["Under €500","€500–€2,000","€2,000–€10,000","€10,000+"]},
-  ]},
-
 };
+
 
 const ASEL_ACCESSORY_Q = {
   vacation: "beach", car: "auto", phone: "phone", laptop: "laptop",
@@ -675,6 +308,320 @@ const TREES = {
       { id: "budget", q: "What's your budget per person?", options: ["Under €100", "€100–€400", "€400–€1,000", "€1,000–€3,000", "€3,000+"] },
     ],
   },
+
+  // ── New subcategory trees ──
+  tablet:          { label:"Tablete",emoji:"📲",image:img("photo-1544244015-0df4b3ffc6b0"), questions:[
+    {id:"use",q:"For what purpose?",options:["Work & productivity","Drawing & design","Kids & education","Entertainment","Universal"]},
+    {id:"os",q:"Operating system?",options:["iPad (iOS)","Android","Windows","No preference"]},
+    {id:"size",q:'Screen size?',options:["Under 9in","9-11in","12in+","No preference"]},
+    {id:"budget",q:"Budget?",options:["Under €200","€200–€500","€500–€900","€900+"]},
+  ]},
+  smartwatch:      { label:"Smartwatch-uri",emoji:"⌚",image:img("photo-1523275335684-37898b6baf30"), questions:[
+    {id:"use",q:"Primary use?",options:["Fitness tracking","Notifications & calls","Sleep monitoring","Style & everyday"]},
+    {id:"os",q:"Phone compatibility?",options:["iPhone (iOS)","Android","No preference"]},
+    {id:"battery",q:"Battery life priority?",options:["1-2 days (full features)","3-5 days","7+ days"]},
+    {id:"budget",q:"Budget?",options:["Under €100","€100–€250","€250–€500","€500+"]},
+  ]},
+  headphones:      { label:"Căști audio",emoji:"🎧",image:img("photo-1505740420928-5e560c06d30e"), questions:[
+    {id:"type",q:"Type?",options:["Over-ear","In-ear (earbuds)","On-ear","No preference"]},
+    {id:"use",q:"Primary use?",options:["Music listening","Gaming","Work calls","Sport & gym","Travel"]},
+    {id:"features",q:"Must-have feature?",options:["Active noise cancellation","Wireless / Bluetooth","Hi-Res audio","Long battery","Microphone quality"]},
+    {id:"budget",q:"Budget?",options:["Under €50","€50–€150","€150–€350","€350+"]},
+  ]},
+  gaming:          { label:"Console gaming",emoji:"🎮",image:img("photo-1542751371-adc38448a05e"), questions:[
+    {id:"type",q:"Console type?",options:["Home console","Handheld / portable","PC gaming","Not sure"]},
+    {id:"games",q:"Favorite game genre?",options:["Action & adventure","Sports","RPG","Shooter","Family & party","All genres"]},
+    {id:"friends",q:"Play with friends?",options:["Online multiplayer","Local co-op","Mainly solo","Mixed"]},
+    {id:"budget",q:"Budget?",options:["Under €200","€200–€350","€350–€600","€600+ (high-end PC)"]},
+  ]},
+  monitor:         { label:"Monitoare",emoji:"🖥️",image:img("photo-1527443224154-c4a3942d3acf"), questions:[
+    {id:"use",q:"Primary use?",options:["Office & productivity","Gaming","Design & photo editing","Programming","Universal"]},
+    {id:"size",q:"Screen size?",options:["24in","27in","32in","34in+ ultrawide"]},
+    {id:"resolution",q:"Resolution?",options:["Full HD (1080p)","QHD (1440p)","4K UHD","No preference"]},
+    {id:"budget",q:"Budget?",options:["Under €200","€200–€400","€400–€800","€800+"]},
+  ]},
+  printer:         { label:"Imprimante",emoji:"🖨️",image:img("photo-1612815154858-60aa4c59eaa6"), questions:[
+    {id:"type",q:"Printer type?",options:["Inkjet (color & photos)","Laser (fast B&W)","All-in-one","Label printer"]},
+    {id:"use",q:"How often?",options:["Daily","A few times a week","Occasionally","Rarely"]},
+    {id:"color",q:"Need color printing?",options:["Yes, often","Mostly black & white","Both equally"]},
+    {id:"budget",q:"Budget?",options:["Under €80","€80–€200","€200–€500","€500+"]},
+  ]},
+  fridge:          { label:"Frigidere",emoji:"❄️",image:img("photo-1571175443880-49e1d25b2bc5"), questions:[
+    {id:"type",q:"Type?",options:["Combined fridge-freezer","Side-by-side","American style","Fridge only","Mini fridge"]},
+    {id:"space",q:"Available space (width)?",options:["Under 60 cm","60-70 cm","70 cm+","No constraint"]},
+    {id:"capacity",q:"Household size?",options:["1-2 people","3-4 people","5+ people"]},
+    {id:"budget",q:"Budget?",options:["Under €400","€400–€800","€800–€1,500","€1,500+"]},
+  ]},
+  washing_machine: { label:"Mașini de spălat",emoji:"🌊",image:img("photo-1626806787461-102c1bfaaea1"), questions:[
+    {id:"type",q:"Front or top loader?",options:["Front loader","Top loader","Washer-dryer combo","No preference"]},
+    {id:"capacity",q:"Drum capacity?",options:["6 kg","7-8 kg","9-10 kg","11+ kg"]},
+    {id:"energy",q:"Energy class priority?",options:["A+++ (most efficient)","A++ (good balance)","Price more important"]},
+    {id:"budget",q:"Budget?",options:["Under €350","€350–€600","€600–€1,000","€1,000+"]},
+  ]},
+  dryer:           { label:"Uscătoare",emoji:"🌀",image:img("photo-1604335398989-7d4c0748dcc8"), questions:[
+    {id:"type",q:"Type?",options:["Condenser dryer","Heat pump dryer","Vented dryer","Washer-dryer combo"]},
+    {id:"capacity",q:"Capacity?",options:["6-7 kg","8-9 kg","10+ kg"]},
+    {id:"energy",q:"Energy efficiency?",options:["Top priority (A++)","Good but not critical","Price first"]},
+    {id:"budget",q:"Budget?",options:["Under €350","€350–€650","€650–€1,200","€1,200+"]},
+  ]},
+  vacuum:          { label:"Aspiratoare",emoji:"🌪️",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
+    {id:"type",q:"Type?",options:["Robot vacuum","Cordless stick","Traditional bagged","Wet & dry"]},
+    {id:"floors",q:"Floor type?",options:["Mostly carpet","Mostly hard floors","Mixed"]},
+    {id:"pets",q:"Have pets?",options:["Yes - pet hair is an issue","No"]},
+    {id:"budget",q:"Budget?",options:["Under €100","€100–€300","€300–€600","€600+ (premium robot)"]},
+  ]},
+  espresso:        { label:"Espressoare",emoji:"☕",image:img("photo-1495474472287-4d71bcdd2085"), questions:[
+    {id:"type",q:"Type?",options:["Bean-to-cup (fully automatic)","Manual espresso machine","Pod / capsule (Nespresso)","Filter coffee maker"]},
+    {id:"drinks",q:"Favorite drinks?",options:["Espresso & americano","Cappuccino & latte","Both equally","Just filter coffee"]},
+    {id:"ease",q:"Ease of use?",options:["Very important - fully automatic","I enjoy the ritual","Balanced"]},
+    {id:"budget",q:"Budget?",options:["Under €100","€100–€300","€300–€700","€700+"]},
+  ]},
+  oven:            { label:"Cuptoare și plite",emoji:"🔥",image:img("photo-1556909114-f6e7ad7d3136"), questions:[
+    {id:"type",q:"What are you looking for?",options:["Electric oven","Gas hob","Induction hob","Oven + hob combo","Built-in oven"]},
+    {id:"capacity",q:"Oven capacity?",options:["Under 50 L","50-70 L","70 L+","Not applicable"]},
+    {id:"features",q:"Must-have feature?",options:["Pyrolytic self-clean","Air fry function","Steam cooking","Multiple cooking zones"]},
+    {id:"budget",q:"Budget?",options:["Under €300","€300–€600","€600–€1,200","€1,200+"]},
+  ]},
+  aircon:          { label:"Aer condiționat",emoji:"❄️",image:img("photo-1631049307264-da0ec9d70304"), questions:[
+    {id:"type",q:"Type?",options:["Split unit (fixed)","Portable / mobile","Multi-split (multiple rooms)","Cassette (commercial)"]},
+    {id:"room_size",q:"Room size?",options:["Under 15 m2","15-25 m2","25-40 m2","40 m2+"]},
+    {id:"heating",q:"Need heating too?",options:["Yes - heating + cooling","Cooling only"]},
+    {id:"budget",q:"Budget?",options:["Under €500","€500–€1,000","€1,000–€2,000","€2,000+"]},
+  ]},
+  new_car:         { label:"Mașini noi",emoji:"🚗",image:img("photo-1558618666-fcd25c85cd64"), questions:[
+    {id:"type",q:"Body type?",options:["Sedan","SUV","Hatchback","Kombi / estate","Cabriolet","Van / MPV"]},
+    {id:"fuel",q:"Fuel type?",options:["Petrol","Diesel","Hybrid","Full electric (EV)","Plug-in hybrid (PHEV)"]},
+    {id:"use",q:"Primary use?",options:["City commuting","Long-distance / highway","Family & kids","Weekend & leisure"]},
+    {id:"budget",q:"Budget?",options:["Under €20,000","€20,000–€35,000","€35,000–€60,000","€60,000+"]},
+  ]},
+  used_car:        { label:"Mașini second-hand",emoji:"🔑",image:img("photo-1494976388531-d1058494cdd8"), questions:[
+    {id:"type",q:"Body type?",options:["Sedan","SUV","Hatchback","Kombi / estate"]},
+    {id:"age",q:"Maximum age?",options:["Up to 3 years","3-7 years","7-12 years","Any age - low mileage is key"]},
+    {id:"mileage",q:"Maximum mileage?",options:["Under 50,000 km","50,000-120,000 km","Over 120,000 km fine"]},
+    {id:"budget",q:"Budget?",options:["Under €8,000","€8,000–€15,000","€15,000–€25,000","€25,000+"]},
+  ]},
+  tires:           { label:"Anvelope",emoji:"⚙️",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
+    {id:"season",q:"Season?",options:["Summer","Winter","All-season / All-weather"]},
+    {id:"size",q:"Tire size?",options:["185/65 R15","195/65 R15","205/55 R16","225/45 R17","Other - I'll check"]},
+    {id:"priority",q:"What matters most?",options:["Wet grip (safety)","Low noise","Fuel efficiency","Long mileage","Best value"]},
+    {id:"budget",q:"Budget per tire?",options:["Under €60","€60–€100","€100–€150","€150+ (premium)"]},
+  ]},
+  car_insurance:   { label:"Asigurări auto",emoji:"🛡️",image:img("photo-1450101499163-c8848c66ca85"), questions:[
+    {id:"type",q:"Coverage type?",options:["RCA (liability only)","Casco partial","Casco full","Not sure - need advice"]},
+    {id:"car_age",q:"Car age?",options:["Under 3 years","3-8 years","Over 8 years"]},
+    {id:"drivers",q:"Number of drivers?",options:["1 driver","2 drivers","3+ / young driver"]},
+    {id:"priority",q:"Top priority?",options:["Lowest price","Best coverage","Fast claims process","Roadside assistance"]},
+  ]},
+  ev_charger:      { label:"Stații încărcare EV",emoji:"⚡",image:img("photo-1593941707882-a56ae58a2cf1"), questions:[
+    {id:"location",q:"Where will you charge?",options:["Home (single-phase)","Home (three-phase)","Office / commercial","Public network subscription"]},
+    {id:"power",q:"Charging speed needed?",options:["3.7 kW (slow, overnight)","7.4 kW (standard)","11 kW (fast)","22 kW or DC fast"]},
+    {id:"car",q:"EV brand?",options:["Tesla","Renault / Dacia","Volkswagen Group","BMW / Mercedes","Other"]},
+    {id:"budget",q:"Budget?",options:["Under €500","€500–€1,000","€1,000–€2,000","€2,000+ (commercial)"]},
+  ]},
+  car_service:     { label:"Service-uri auto",emoji:"🔧",image:img("photo-1619767886558-efdc259cde1a"), questions:[
+    {id:"service",q:"Service needed?",options:["Routine maintenance","Tires / alignment","Bodywork & paint","Electrical / diagnostic","Tuning"]},
+    {id:"car",q:"Car brand?",options:["European (VW, BMW, Mercedes)","Asian (Toyota, Honda)","American","French (Renault, Peugeot)"]},
+    {id:"priority",q:"Priority?",options:["Price","Authorized dealer quality","Speed of service","Warranty on repairs"]},
+    {id:"location",q:"Distance willing to travel?",options:["Within 5 km","Within 20 km","Quality first - anywhere"]},
+  ]},
+  personal_loan:   { label:"Credite personale",emoji:"💵",image:img("photo-1565514020179-026b92b84bb6"), questions:[
+    {id:"amount",q:"Amount needed?",options:["Under €5,000","€5,000–€20,000","€20,000–€50,000","€50,000+"]},
+    {id:"term",q:"Repayment term?",options:["Under 1 year","1-3 years","3-7 years","7+ years"]},
+    {id:"credit",q:"Credit history?",options:["Excellent","Good","Fair","Building credit"]},
+    {id:"priority",q:"Priority?",options:["Lowest interest rate","Fast approval","Flexible repayment","No early repayment fee"]},
+  ]},
+  mortgage:        { label:"Credite ipotecare",emoji:"🏦",image:img("photo-1580587771525-78b9dba3b914"), questions:[
+    {id:"purpose",q:"Purpose?",options:["Buy first home","Buy second home","Refinance existing mortgage","Investment property"]},
+    {id:"amount",q:"Loan amount?",options:["Under €100,000","€100,000–€250,000","€250,000–€500,000","€500,000+"]},
+    {id:"term",q:"Loan term?",options:["10-15 years","15-25 years","25-30 years"]},
+    {id:"rate",q:"Interest rate type?",options:["Fixed (predictable)","Variable (potentially lower)","Mixed","Need advice"]},
+  ]},
+  credit_card:     { label:"Carduri de credit",emoji:"💳",image:img("photo-1556742049-0cfed4f6a45d"), questions:[
+    {id:"use",q:"Main use?",options:["Everyday purchases","Travel & miles","Cashback","Balance transfer","Business expenses"]},
+    {id:"travel",q:"Travel often?",options:["Frequently (monthly)","Occasionally","Rarely"]},
+    {id:"fee",q:"Annual fee?",options:["No fee preferred","Up to €50/year","€50-€150/year (for good perks)"]},
+    {id:"priority",q:"Priority?",options:["Rewards & cashback","0% interest period","Travel insurance included","Low foreign transaction fees"]},
+  ]},
+  bank_account:    { label:"Conturi bancare",emoji:"🏛️",image:img("photo-1601597111158-2fceff292cdc"), questions:[
+    {id:"type",q:"Account type?",options:["Current account (everyday)","Savings account","Business account","Youth account"]},
+    {id:"digital",q:"Digital vs traditional?",options:["100% digital bank (Revolut, N26)","Traditional bank with online access","No preference"]},
+    {id:"fees",q:"Monthly fee?",options:["Free account only","Up to €5/month","€5-€15/month for premium perks"]},
+    {id:"priority",q:"Priority feature?",options:["High interest on savings","No foreign exchange fees","Overdraft facility","Investment features"]},
+  ]},
+  deposit:         { label:"Depozite",emoji:"📈",image:img("photo-1611974789855-9c2a0a7236a3"), questions:[
+    {id:"amount",q:"Amount to deposit?",options:["Under €5,000","€5,000–€20,000","€20,000–€100,000","€100,000+"]},
+    {id:"term",q:"Term?",options:["3 months","6 months","12 months","24+ months","Flexible withdrawal"]},
+    {id:"institution",q:"Institution type?",options:["Traditional bank","Online bank (higher rates)","Credit union","No preference"]},
+    {id:"priority",q:"Priority?",options:["Highest interest rate","Safety & deposit guarantee","Flexibility to withdraw","Automatic rollover"]},
+  ]},
+  mobile_plan:     { label:"Abonamente mobile",emoji:"📱",image:img("photo-1511707171634-5f897ff02aa9"), questions:[
+    {id:"data",q:"Monthly data needed?",options:["Under 5 GB","5-15 GB","15-30 GB","Unlimited"]},
+    {id:"calls",q:"Calls & SMS?",options:["Unlimited calls & SMS","Limited - I mainly use apps","International calls important"]},
+    {id:"contract",q:"Contract type?",options:["12-month contract","24-month contract","SIM-only / monthly","Flex - no commitment"]},
+    {id:"priority",q:"Priority?",options:["Lowest price","Best network coverage","International roaming","5G access"]},
+  ]},
+  prepaid:         { label:"Cartele preplătite",emoji:"📲",image:img("photo-1601784551446-20c9e07cdbdb"), questions:[
+    {id:"use",q:"Primary use?",options:["Calls & SMS only","Data for social media","Data + calls","Travel SIM"]},
+    {id:"data",q:"Data needed?",options:["Under 1 GB","1-5 GB","5-15 GB","Unlimited"]},
+    {id:"country",q:"Where will you use it?",options:["Domestic only","EU roaming included","International travel","Multiple countries"]},
+    {id:"budget",q:"Monthly top-up budget?",options:["Under €5","€5-€15","€15-€30","€30+"]},
+  ]},
+  internet:        { label:"Internet fix",emoji:"🌐",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
+    {id:"speed",q:"Speed needed?",options:["Basic (50-100 Mbps)","Standard (100-300 Mbps)","Fast (300-600 Mbps)","Gigabit (1 Gbps+)"]},
+    {id:"tech",q:"Technology preference?",options:["Fiber optic (fastest)","Cable","DSL","No preference - best value"]},
+    {id:"bundle",q:"Want a bundle?",options:["Internet only","Internet + TV","Internet + TV + phone","Internet + mobile"]},
+    {id:"contract",q:"Contract?",options:["Monthly / no commitment","12 months","24 months"]},
+  ]},
+  tv_package:      { label:"Pachete TV",emoji:"📺",image:img("photo-1593784991095-a205069470b6"), questions:[
+    {id:"channels",q:"Channel needs?",options:["Basic (news & free-to-air)","Sports channels","Movies & series (premium)","International channels"]},
+    {id:"tech",q:"Delivery type?",options:["Satellite (DTH)","Cable TV","IPTV / streaming box","Android TV / smart decoder"]},
+    {id:"hd",q:"4K / HD channels?",options:["Essential","Nice to have","Not important"]},
+    {id:"budget",q:"Monthly budget?",options:["Under €15","€15-€30","€30-€50","€50+"]},
+  ]},
+  electricity:     { label:"Energie electrică",emoji:"💡",image:img("photo-1473341304170-971dccb5ac1e"), questions:[
+    {id:"type",q:"Contract type?",options:["Fixed price (predictable bills)","Variable (market price)","Green / renewable energy","Smart / dynamic pricing"]},
+    {id:"consumption",q:"Monthly consumption?",options:["Under 100 kWh","100-250 kWh","250-500 kWh","500+ kWh"]},
+    {id:"solar",q:"Do you have solar panels?",options:["Yes - want smart integration","No","Planning to install"]},
+    {id:"priority",q:"Priority?",options:["Lowest price","100% renewable","Smart meter & app","Easy switching"]},
+  ]},
+  gas_provider:    { label:"Furnizori gaze",emoji:"🔥",image:img("photo-1611974789855-9c2a0a7236a3"), questions:[
+    {id:"use",q:"Primary use?",options:["Heating only","Cooking only","Heating + cooking","Commercial / business"]},
+    {id:"contract",q:"Contract type?",options:["Fixed price","Variable price","No preference"]},
+    {id:"consumption",q:"Annual consumption (approx)?",options:["Under 5,000 kWh","5,000-15,000 kWh","15,000-30,000 kWh","30,000+ kWh"]},
+    {id:"priority",q:"Priority?",options:["Lowest price","Contract flexibility","Green gas (biomethane)","Bundle with electricity"]},
+  ]},
+  solar:           { label:"Panouri solare",emoji:"☀️",image:img("photo-1509391366360-2e959784a276"), questions:[
+    {id:"goal",q:"Main goal?",options:["Reduce electricity bills","Full energy independence","Sell surplus energy","Charge EV with solar"]},
+    {id:"roof",q:"Roof type?",options:["Sloped tile","Flat roof","Flat + pitched","Ground-mounted / field"]},
+    {id:"power",q:"System size needed?",options:["3-5 kWp (small home)","5-10 kWp (medium)","10-20 kWp (large)","20+ kWp (commercial)"]},
+    {id:"budget",q:"Budget?",options:["Under €5,000","€5,000-€12,000","€12,000-€25,000","€25,000+"]},
+  ]},
+  battery_storage: { label:"Baterii de stocare",emoji:"🔋",image:img("photo-1593941707882-a56ae58a2cf1"), questions:[
+    {id:"purpose",q:"Why add battery storage?",options:["Store solar energy","Backup power (outages)","Reduce peak-hour costs","Go off-grid"]},
+    {id:"capacity",q:"Capacity needed?",options:["5-10 kWh (small home)","10-20 kWh (medium)","20+ kWh (large / off-grid)"]},
+    {id:"solar",q:"Do you have solar panels?",options:["Yes, existing system","Installing together with battery","No - battery only"]},
+    {id:"budget",q:"Budget?",options:["Under €5,000","€5,000-€10,000","€10,000-€20,000","€20,000+"]},
+  ]},
+  hotel:           { label:"Hoteluri",emoji:"🏨",image:img("photo-1566073771259-6a8506099945"), questions:[
+    {id:"stars",q:"Star rating?",options:["2-3 stars (budget)","3-4 stars (standard)","4-5 stars (premium)","5 stars / luxury"]},
+    {id:"location",q:"Location priority?",options:["City centre","Near the beach","Near airport","Quiet / countryside"]},
+    {id:"nights",q:"Number of nights?",options:["1-2","3-5","6-10","10+"]},
+    {id:"priority",q:"Priority?",options:["Best price","Breakfast included","Pool & spa","Cancellation flexibility"]},
+  ]},
+  airline:         { label:"Companii aeriene",emoji:"✈️",image:img("photo-1436491865332-7a61a109cc05"), questions:[
+    {id:"class",q:"Cabin class?",options:["Economy","Premium economy","Business","First class"]},
+    {id:"journey",q:"Journey type?",options:["Short-haul (under 3h)","Medium-haul (3-6h)","Long-haul (6h+)","Ultra long-haul (10h+)"]},
+    {id:"luggage",q:"Luggage needs?",options:["Cabin bag only","1 checked bag","2+ checked bags","Extra luggage fine - price matters"]},
+    {id:"priority",q:"Priority?",options:["Lowest price","Seat comfort","Punctuality record","Loyalty program miles"]},
+  ]},
+  travel_agency:   { label:"Agenții de turism",emoji:"🌍",image:img("photo-1488085061387-422e29b40080"), questions:[
+    {id:"type",q:"Trip type?",options:["All-inclusive package","City break","Cruise","Adventure / trekking","Custom / tailor-made"]},
+    {id:"destination",q:"Destination region?",options:["Mediterranean","Caribbean / Tropical","Asia","Americas","Europe / cultural"]},
+    {id:"group",q:"Group?",options:["Solo traveller","Couple","Family with children","Group of friends"]},
+    {id:"budget",q:"Budget per person?",options:["Under €500","€500-€1,500","€1,500-€3,000","€3,000+"]},
+  ]},
+  car_rental:      { label:"Închirieri auto",emoji:"🚙",image:img("photo-1494976388531-d1058494cdd8"), questions:[
+    {id:"category",q:"Car category?",options:["Economy / city car","Compact / hatchback","SUV / 4x4","Minivan / 7-seater","Luxury"]},
+    {id:"duration",q:"Rental duration?",options:["1-3 days","4-7 days","1-2 weeks","1 month+"]},
+    {id:"driver_age",q:"Driver age?",options:["21-25 (young driver)","26-70","70+ (senior)"]},
+    {id:"priority",q:"Priority?",options:["Lowest price","Full insurance included","Free cancellation","Unlimited mileage"]},
+  ]},
+  vpn:             { label:"VPN-uri",emoji:"🔒",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
+    {id:"use",q:"Primary use?",options:["Privacy & anonymity","Streaming geo-blocked content","Secure remote work","Torrenting","All of the above"]},
+    {id:"devices",q:"Devices to cover?",options:["1 device","2-5 devices","6-10 devices","Unlimited / router-level"]},
+    {id:"speed",q:"Speed priority?",options:["Very important (streaming / gaming)","Important","Moderate - security first"]},
+    {id:"budget",q:"Budget?",options:["Free (limited)","Under €3/month","€3-€7/month","€7+/month (premium)"]},
+  ]},
+  hosting:         { label:"Hosting web",emoji:"☁️",image:img("photo-1558618047-3c8c76ca7d13"), questions:[
+    {id:"type",q:"Hosting type?",options:["Shared hosting (basic sites)","VPS (more control)","Dedicated server","Cloud hosting (scalable)"]},
+    {id:"site",q:"Type of site?",options:["Blog / portfolio","E-commerce","Business / corporate","High-traffic / SaaS"]},
+    {id:"traffic",q:"Expected monthly visitors?",options:["Under 1,000","1,000-10,000","10,000-100,000","100,000+"]},
+    {id:"budget",q:"Monthly budget?",options:["Under €5","€5-€20","€20-€100","€100+"]},
+  ]},
+  crm:             { label:"CRM-uri",emoji:"📊",image:img("photo-1454165804606-c3d57bc86b40"), questions:[
+    {id:"team_size",q:"Team size?",options:["Solo / freelancer","2-10","11-50","50+"]},
+    {id:"industry",q:"Industry?",options:["Sales & B2B","E-commerce","Real estate","Agencies / services","Healthcare"]},
+    {id:"must_have",q:"Must-have features?",options:["Email integration","Pipeline / deal tracking","Automation","Reporting & analytics","Mobile app"]},
+    {id:"budget",q:"Budget per user/month?",options:["Free tier","Under €15","€15-€50","€50+"]},
+  ]},
+  email_marketing: { label:"Email marketing",emoji:"📧",image:img("photo-1563986768609-322da13575f3"), questions:[
+    {id:"list_size",q:"Email list size?",options:["Under 500","500-5,000","5,000-50,000","50,000+"]},
+    {id:"frequency",q:"Send frequency?",options:["Daily","2-3 per week","Weekly","Monthly"]},
+    {id:"automation",q:"Need automation?",options:["Advanced automation (drips, sequences)","Basic autoresponders","Manual sends only"]},
+    {id:"budget",q:"Monthly budget?",options:["Free","Under €30","€30-€100","€100+"]},
+  ]},
+  ai_solutions:    { label:"Soluții AI",emoji:"🤖",image:img("photo-1677442136019-21780ecad995"), questions:[
+    {id:"use_case",q:"Main use case?",options:["Content writing","Customer service chatbot","Data analysis","Image / video generation","Coding assistant"]},
+    {id:"team",q:"Team size?",options:["Individual","Small team (2-10)","Medium business","Enterprise"]},
+    {id:"integration",q:"Integration needed?",options:["Standalone tool","API integration","Custom AI model"]},
+    {id:"budget",q:"Monthly budget?",options:["Free / pay-as-you-go","Under €50","€50-€300","€300+"]},
+  ]},
+  antivirus:       { label:"Antiviruși",emoji:"🛡️",image:img("photo-1614064641938-3bbee52942c7"), questions:[
+    {id:"platform",q:"Platform?",options:["Windows PC","Mac","Android","iOS","Multiple / cross-platform"]},
+    {id:"devices",q:"Devices?",options:["1 device","2-3 devices","5+ devices","Family plan (all devices)"]},
+    {id:"features",q:"Priority features?",options:["Real-time antivirus","VPN included","Parental controls","Password manager","Identity protection"]},
+    {id:"budget",q:"Budget?",options:["Free","Under €30/year","€30-€70/year","€70+/year"]},
+  ]},
+  mattress:        { label:"Saltele",emoji:"😴",image:img("photo-1631049307264-da0ec9d70304"), questions:[
+    {id:"type",q:"Mattress type?",options:["Memory foam","Pocket springs","Hybrid (foam + springs)","Latex","No preference"]},
+    {id:"firmness",q:"Firmness preference?",options:["Soft","Medium","Firm","Don't know - need advice"]},
+    {id:"size",q:"Bed size?",options:["Single (90x200)","Double (140x200)","Queen (160x200)","King (180x200)","Super King"]},
+    {id:"budget",q:"Budget?",options:["Under €200","€200-€500","€500-€1,200","€1,200+"]},
+  ]},
+  power_tools:     { label:"Unelte electrice",emoji:"🔨",image:img("photo-1504148455328-c376907d081c"), questions:[
+    {id:"tool_type",q:"What tool?",options:["Drill / driver","Circular saw","Angle grinder","Jigsaw","Sander","Multi-tool kit"]},
+    {id:"use",q:"Frequency of use?",options:["Occasional DIY","Regular weekend projects","Professional / daily use"]},
+    {id:"battery",q:"Power source?",options:["Battery (cordless)","Mains plug (more power)","No preference"]},
+    {id:"budget",q:"Budget?",options:["Under €80","€80-€200","€200-€500","€500+"]},
+  ]},
+  gym:             { label:"Săli de fitness",emoji:"🏋️",image:img("photo-1517836357463-d25dfeac3438"), questions:[
+    {id:"goal",q:"Fitness goal?",options:["Lose weight","Build muscle","Improve endurance","General wellbeing","Specific sport training"]},
+    {id:"frequency",q:"How often?",options:["1-2 times/week","3-4 times/week","5+ times/week"]},
+    {id:"facilities",q:"Must-have facilities?",options:["Weight room","Cardio equipment","Swimming pool","Group classes","Personal trainers"]},
+    {id:"budget",q:"Monthly budget?",options:["Under €20","€20-€50","€50-€100","€100+ (premium)"]},
+  ]},
+  fitness_watch:   { label:"Ceasuri fitness",emoji:"⌚",image:img("photo-1523275335684-37898b6baf30"), questions:[
+    {id:"sport",q:"Main sport?",options:["Running","Cycling","Swimming","Gym / strength","Hiking","Multi-sport"]},
+    {id:"metrics",q:"Key metrics?",options:["Heart rate","GPS tracking","Sleep analysis","VO2 max","Stress monitoring"]},
+    {id:"battery",q:"Battery life?",options:["1-3 days (full smart features)","5-7 days","14+ days","1 month+ (basic tracker)"]},
+    {id:"budget",q:"Budget?",options:["Under €50","€50-€150","€150-€300","€300+"]},
+  ]},
+  supplements:     { label:"Suplimente",emoji:"💊",image:img("photo-1584308666744-24d5c474f2ae"), questions:[
+    {id:"goal",q:"Goal?",options:["Build muscle (protein, creatine)","Lose weight (fat burners)","Energy & focus","Recovery & joints","General health & immunity"]},
+    {id:"diet",q:"Dietary preferences?",options:["Omnivore","Vegetarian","Vegan","Gluten-free"]},
+    {id:"form",q:"Preferred form?",options:["Powder (shakes)","Capsules / tablets","Gummies","RTD (ready to drink)","No preference"]},
+    {id:"budget",q:"Monthly budget?",options:["Under €30","€30-€70","€70-€150","€150+"]},
+  ]},
+  online_courses:  { label:"Cursuri online",emoji:"💻",image:img("photo-1501504905252-473c47e087f8"), questions:[
+    {id:"subject",q:"Subject area?",options:["Technology & programming","Business & marketing","Design & creativity","Languages","Personal development","Academic"]},
+    {id:"level",q:"Level?",options:["Beginner","Intermediate","Advanced / professional certification"]},
+    {id:"format",q:"Learning format?",options:["Video lessons (self-paced)","Live classes (scheduled)","Project-based","Mixed"]},
+    {id:"budget",q:"Budget?",options:["Free courses only","Under €20/month","€20-€50/month","€50+/month or one-time purchase"]},
+  ]},
+  university:      { label:"Universități",emoji:"🎓",image:img("photo-1562774053-701939374585"), questions:[
+    {id:"program",q:"Degree type?",options:["Bachelor's","Master's","PhD","MBA","Short professional program"]},
+    {id:"field",q:"Field of study?",options:["Engineering & tech","Business & economics","Medicine & health","Arts & humanities","Law","Sciences"]},
+    {id:"location",q:"Study location?",options:["Local (same city)","National (another city)","Abroad (Europe)","Abroad (USA/UK/Australia)"]},
+    {id:"priority",q:"Priority?",options:["University ranking","Cost & scholarships","Course content","Career prospects"]},
+  ]},
+  private_school:  { label:"Școli private",emoji:"🏫",image:img("photo-1580582932707-520aed937b7b"), questions:[
+    {id:"level",q:"School level?",options:["Primary (ages 6-12)","Middle school (11-14)","High school / lyceum","International baccalaureate"]},
+    {id:"curriculum",q:"Curriculum?",options:["National","Cambridge / British","International (IB)","American","Bilingual / immersion"]},
+    {id:"facilities",q:"Priority?",options:["Academic results","Sports & activities","Language programs","Small class sizes","Special needs support"]},
+    {id:"budget",q:"Annual tuition?",options:["Under €3,000","€3,000-€8,000","€8,000-€15,000","€15,000+"]},
+  ]},
+  online_store:    { label:"Magazine online",emoji:"🛍️",image:img("photo-1526170375885-4d8ecf77b99f"), questions:[
+    {id:"category",q:"Shopping category?",options:["Fashion & clothing","Electronics","Home & furniture","Health & beauty","Books & media","Food & groceries"]},
+    {id:"priority",q:"Priority?",options:["Lowest price","Fast delivery","Easy returns","Trustworthy seller","Loyalty / cashback program"]},
+    {id:"delivery",q:"Delivery preference?",options:["Next day","2-3 days","No preference - price first"]},
+    {id:"market",q:"Marketplace or specialist?",options:["Large marketplace (Amazon, eMag)","Specialist shop","Both - compare"]},
+  ]},
+  delivery:        { label:"Servicii de livrare",emoji:"📦",image:img("photo-1566576912321-d58ddd7a6088"), questions:[
+    {id:"type",q:"Service type?",options:["Parcel delivery (personal)","Business shipping","Same-day / express","International freight"]},
+    {id:"volume",q:"Monthly shipment volume?",options:["1-5 parcels","5-30 parcels","30-200 parcels","200+ parcels"]},
+    {id:"size",q:"Typical parcel size?",options:["Small (under 2 kg)","Medium (2-10 kg)","Large (10-30 kg)","Pallet / heavy freight"]},
+    {id:"priority",q:"Priority?",options:["Lowest price","Speed (next day)","Tracking & reliability","International coverage"]},
+  ]},
 };
 
 const CAT_I18N = {
@@ -2719,34 +2666,6 @@ function Landing({ onStart, t, lang, setLang }) {
       <style>{`h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }`}</style>
       <TopNav showBack={false} t={t} lang={lang} setLang={setLang} count={count} />
       <HeroBanner onStart={onStart} t={t} lang={lang} />
-
-      {/* Search bar - replaces stats strip */}
-      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", gap: 10 }}>
-          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10, background: C.bg, border: `1.5px solid ${C.border}`, borderRadius: 12, padding: "0 16px", transition: "border-color 0.2s" }}
-            onFocus={() => {}} onBlur={() => {}}>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke={C.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
-            <input
-              type="text"
-              placeholder="Search a decision topic... (e.g. best SUV under €40k)"
-              style={{
-                flex: 1, border: "none", background: "transparent", outline: "none",
-                fontSize: 14, color: C.text, padding: "12px 0",
-                fontFamily: "inherit",
-              }}
-            />
-          </div>
-          <button style={{
-            background: C.accent, color: "#fff", border: "none", borderRadius: 12,
-            padding: "0 22px", fontSize: 14, fontWeight: 700, cursor: "pointer",
-            whiteSpace: "nowrap", transition: "all 0.2s",
-          }}
-            onMouseEnter={e => e.currentTarget.style.background = "#1547C0"}
-            onMouseLeave={e => e.currentTarget.style.background = C.accent}>
-            Search
-          </button>
-        </div>
-      </div>
 
       {/* Search bar */}
       <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px" }}>
