@@ -3243,7 +3243,6 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
         </div>
       </div>
-      </div>
 
       <WorldwideSection t={t} />
 
@@ -3385,6 +3384,7 @@ function Landing({ onStart, t, lang, setLang }) {
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
   );
