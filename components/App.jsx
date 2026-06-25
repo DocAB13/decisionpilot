@@ -1811,6 +1811,119 @@ function Badge({ children, color = "#1A56DB" }) {
   );
 }
 
+
+// ── UI Translations for all screens ──────────────────────────────────────────
+const UI_T = {
+  back:      {en:"← Back",de:"← Zurück",fr:"← Retour",es:"← Volver",it:"← Indietro",pt:"← Voltar",ro:"← Înapoi",nl:"← Terug",pl:"← Wstecz",ru:"← Назад",zh:"← 返回",ar:"← رجوع",tr:"← Geri",sv:"← Tillbaka",da:"← Tilbage",no:"← Tilbake",fi:"← Takaisin",cs:"← Zpět",hu:"← Vissza",uk:"← Назад",ko:"← 뒤로",ja:"← 戻る",id:"← Kembali",vi:"← Quay lại",hi:"← वापस",th:"← กลับ",he:"← חזרה",bg:"← Назад",sk:"← Späť",hr:"← Natrag"},
+  home:      {en:"Home",de:"Startseite",fr:"Accueil",es:"Inicio",it:"Home",pt:"Início",ro:"Acasă",nl:"Home",pl:"Strona główna",ru:"Главная",zh:"首页",ar:"الرئيسية",tr:"Ana Sayfa"},
+  startOver: {en:"Start over",de:"Neu starten",fr:"Recommencer",es:"Empezar de nuevo",it:"Ricomincia",pt:"Recomeçar",ro:"Ia de la capăt",nl:"Opnieuw beginnen",pl:"Zacznij od nowa",ru:"Начать заново",zh:"重新开始",ar:"ابدأ من جديد",tr:"Yeniden başla",sv:"Börja om",da:"Start forfra",no:"Start på nytt",fi:"Aloita alusta",cs:"Začít znovu",hu:"Újrakezdés",uk:"Почати знову",ko:"다시 시작",ja:"やり直す",id:"Mulai ulang",vi:"Bắt đầu lại",hi:"फिर से शुरू",th:"เริ่มใหม่",he:"התחל מחדש",bg:"Започни отново",sk:"Začať znovu",hr:"Počni ispočetka"},
+  pros:      {en:"Pros",de:"Vorteile",fr:"Avantages",es:"Ventajas",it:"Pro",pt:"Vantagens",ro:"Avantaje",nl:"Voordelen",pl:"Zalety",ru:"Плюсы",zh:"优点",ar:"المزايا",tr:"Artılar",sv:"Fördelar",da:"Fordele",no:"Fordeler",fi:"Edut",cs:"Výhody",hu:"Előnyök",uk:"Переваги",ko:"장점",ja:"メリット",id:"Kelebihan",vi:"Ưu điểm",hi:"फायदे",th:"ข้อดี",he:"יתרונות",bg:"Предимства",sk:"Výhody",hr:"Prednosti"},
+  cons:      {en:"Cons",de:"Nachteile",fr:"Inconvénients",es:"Desventajas",it:"Contro",pt:"Desvantagens",ro:"Dezavantaje",nl:"Nadelen",pl:"Wady",ru:"Минусы",zh:"缺点",ar:"العيوب",tr:"Eksiler",sv:"Nackdelar",da:"Ulemper",no:"Ulemper",fi:"Haitat",cs:"Nevýhody",hu:"Hátrányok",uk:"Недоліки",ko:"단점",ja:"デメリット",id:"Kekurangan",vi:"Nhược điểm",hi:"नुकसान",th:"ข้อเสีย",he:"חסרונות",bg:"Недостатъци",sk:"Nevýhody",hr:"Nedostaci"},
+  viewDeal:  {en:"View deal →",de:"Zum Angebot →",fr:"Voir l'offre →",es:"Ver oferta →",it:"Vedi offerta →",pt:"Ver oferta →",ro:"Vezi oferta →",nl:"Bekijk deal →",pl:"Zobacz ofertę →",ru:"Смотреть →",zh:"查看优惠 →",ar:"عرض الصفقة →",tr:"Teklifi gör →",sv:"Se erbjudande →",da:"Se tilbud →",no:"Se tilbud →",fi:"Katso tarjous →",cs:"Zobrazit nabídku →",hu:"Ajánlat megtekintése →",uk:"Переглянути →",ko:"딜 보기 →",ja:"詳細を見る →",id:"Lihat penawaran →",vi:"Xem ưu đãi →",hi:"डील देखें →",th:"ดูดีล →",he:"לצפות בעסקה →",bg:"Виж офертата →",sk:"Zobraziť ponuku →",hr:"Pogledaj ponudu →"},
+  whyForYou: {en:"Why this for you",de:"Warum genau das",fr:"Pourquoi ce choix",es:"Por qué esto",it:"Perché questo",pt:"Por que isso",ro:"De ce tocmai asta",nl:"Waarom dit voor jou",pl:"Dlaczego to",ru:"Почему именно это",zh:"为什么推荐给你",ar:"لماذا هذا لك",tr:"Neden bu sizin için"},
+  topPick:   {en:"Top pick",de:"Top-Wahl",fr:"Meilleur choix",es:"Mejor opción",it:"Scelta top",pt:"Melhor escolha",ro:"Alegerea nr.1",nl:"Topkeuze",pl:"Najlepszy wybór",ru:"Лучший выбор",zh:"最佳选择",ar:"أفضل اختيار",tr:"En iyi seçim"},
+  poweredBy: {en:"Powered by AI · Sources: CNET, TechRadar, Wirecutter",de:"KI-gestützt · Quellen: CNET, TechRadar, Wirecutter",fr:"Propulsé par IA · Sources: CNET, TechRadar, Wirecutter",es:"Impulsado por IA · Fuentes: CNET, TechRadar, Wirecutter",it:"Con IA · Fonti: CNET, TechRadar, Wirecutter",pt:"Com IA · Fontes: CNET, TechRadar, Wirecutter",ro:"Powered by AI · Surse: CNET, TechRadar, Wirecutter",nl:"AI-gestuurd · Bronnen: CNET, TechRadar, Wirecutter",pl:"Napędzane przez AI · Źródła: CNET, TechRadar, Wirecutter",ru:"На основе ИИ · Источники: CNET, TechRadar, Wirecutter",zh:"AI 驱动 · 来源: CNET, TechRadar, Wirecutter",ar:"مدعوم بالذكاء الاصطناعي",tr:"Yapay Zeka Destekli · Kaynaklar: CNET, TechRadar, Wirecutter"},
+  chatMore:  {en:"Want more personalized advice? Chat with Ai·sel.",de:"Möchten Sie mehr Beratung? Chatten Sie mit Ai·sel.",fr:"Vous voulez des conseils? Discutez avec Ai·sel.",es:"¿Quieres consejos? Chatea con Ai·sel.",it:"Vuoi consigli? Chatta con Ai·sel.",pt:"Quer conselhos? Converse com Ai·sel.",ro:"Vrei sfaturi? Discută cu Ai·sel.",nl:"Wil je advies? Chat met Ai·sel.",pl:"Chcesz porad? Porozmawiaj z Ai·sel.",ru:"Хотите советов? Пообщайтесь с Ai·sel.",zh:"想要建议？与 Ai·sel 聊天。",ar:"هل تريد نصائح؟ تحدث مع Ai·sel.",tr:"Tavsiye mi istiyorsunuz? Ai·sel ile sohbet edin."},
+  loadSteps: {
+    en:["Analyzing your preferences...","Searching trusted review sources...","Comparing top options worldwide...","Calculating best matches...","Finalizing recommendations..."],
+    de:["Präferenzen analysieren...","Testberichte durchsuchen...","Top-Optionen vergleichen...","Beste Treffer berechnen...","Empfehlungen fertigstellen..."],
+    fr:["Analyse des préférences...","Recherche de sources fiables...","Comparaison des meilleures options...","Calcul des meilleures correspondances...","Finalisation des recommandations..."],
+    es:["Analizando preferencias...","Buscando fuentes confiables...","Comparando mejores opciones...","Calculando mejores coincidencias...","Finalizando recomendaciones..."],
+    it:["Analisi preferenze...","Ricerca fonti attendibili...","Confronto migliori opzioni...","Calcolo migliori corrispondenze...","Finalizzazione raccomandazioni..."],
+    pt:["Analisando preferências...","Pesquisando fontes confiáveis...","Comparando melhores opções...","Calculando melhores correspondências...","Finalizando recomendações..."],
+    ro:["Analizăm preferințele...","Căutăm surse de încredere...","Comparăm cele mai bune opțiuni...","Calculăm potrivirile...","Finalizăm recomandările..."],
+    nl:["Voorkeuren analyseren...","Betrouwbare bronnen zoeken...","Top opties vergelijken...","Beste overeenkomsten berekenen...","Aanbevelingen afronden..."],
+    pl:["Analizowanie preferencji...","Wyszukiwanie źródeł...","Porównywanie opcji...","Obliczanie dopasowań...","Finalizowanie rekomendacji..."],
+    ru:["Анализируем предпочтения...","Ищем источники...","Сравниваем варианты...","Рассчитываем совпадения...","Завершаем рекомендации..."],
+    zh:["分析偏好...","搜索评测来源...","比较顶级选项...","计算最佳匹配...","完成推荐..."],
+    ar:["تحليل التفضيلات...","البحث في المصادر...","مقارنة الخيارات...","حساب أفضل التطابقات...","إنهاء التوصيات..."],
+    tr:["Tercihler analiz ediliyor...","Kaynaklar aranıyor...","Seçenekler karşılaştırılıyor...","Eşleşmeler hesaplanıyor...","Öneriler tamamlanıyor..."],
+    sv:["Analyserar preferenser...","Söker pålitliga källor...","Jämför bästa alternativ...","Beräknar bästa matchningar...","Slutför rekommendationer..."],
+    ko:["선호도 분석 중...","신뢰할 수 있는 소스 검색 중...","최고의 옵션 비교 중...","최적의 매칭 계산 중...","추천 완료 중..."],
+    ja:["好みを分析中...","信頼できるレビューを検索中...","トップオプションを比較中...","最適なマッチを計算中...","推薦を確定中..."],
+  },
+  question:  {en:"Question",de:"Frage",fr:"Question",es:"Pregunta",it:"Domanda",pt:"Pergunta",ro:"Întrebarea",nl:"Vraag",pl:"Pytanie",ru:"Вопрос",zh:"问题",ar:"سؤال",tr:"Soru"},
+  of:        {en:"of",de:"von",fr:"sur",es:"de",it:"di",pt:"de",ro:"din",nl:"van",pl:"z",ru:"из",zh:"共",ar:"من",tr:"/{n}"},
+  tryAgain:  {en:"Try Again",de:"Erneut versuchen",fr:"Réessayer",es:"Intentar de nuevo",it:"Riprova",pt:"Tentar novamente",ro:"Încearcă din nou",nl:"Opnieuw proberen",pl:"Spróbuj ponownie",ru:"Попробовать снова",zh:"再试一次",ar:"حاول مرة أخرى",tr:"Tekrar dene"},
+  goBack:    {en:"← Go back",de:"← Zurück",fr:"← Retour",es:"← Volver",it:"← Torna indietro",pt:"← Voltar",ro:"← Înapoi",nl:"← Terug",pl:"← Wróć",ru:"← Назад",zh:"← 返回",ar:"← رجوع",tr:"← Geri dön"},
+};
+function uiT(key, lang) { return (UI_T[key]||{})[lang] || (UI_T[key]||{}).en || key; }
+
+// ── Product link resolver — real affiliate URLs ───────────────────────────────
+function getProductLink(category, productName) {
+  const n = (productName||"").toLowerCase();
+  if (n.includes("iphone"))          return "https://www.apple.com/shop/buy-iphone";
+  if (n.includes("macbook"))         return "https://www.apple.com/shop/buy-mac";
+  if (n.includes("ipad"))            return "https://www.apple.com/shop/buy-ipad";
+  if (n.includes("apple watch")||n.includes("airpods")) return "https://www.apple.com/shop/accessories";
+  if (n.includes("samsung galaxy s")) return "https://www.samsung.com/global/galaxy/galaxy-s-series/";
+  if (n.includes("samsung galaxy a")) return "https://www.samsung.com/global/galaxy/galaxy-a-series/";
+  if (n.includes("samsung"))         return "https://www.samsung.com/global/galaxy/";
+  if (n.includes("google pixel"))    return "https://store.google.com/category/phones";
+  if (n.includes("surface"))         return "https://www.microsoft.com/en-us/shop/category/surface-laptops";
+  if (n.includes("garmin"))          return "https://www.garmin.com/de-DE/products/smartwatch/";
+  if (n.includes("fitbit"))          return "https://www.fitbit.com/global/de/home";
+  if (n.includes("sony"))            return "https://www.sony.com/en/articles/latest-products";
+  if (category==="hotel")            return \`https://www.booking.com/searchresults.html?ss=\${encodeURIComponent(productName)}&aid=2942851\`;
+  if (category==="airline")          return "https://www.skyscanner.net/flights";
+  if (category==="travel_agency")    return "https://www.booking.com/holidays/?aid=2942851";
+  if (category==="travel_insurance") return "https://www.check24.de/reiseversicherung/";
+  if (category==="car_rental")       return "https://www.rentalcars.com/";
+  if (category==="new_car"||category==="used_car") {
+    if (n.includes("volkswagen")||n.includes("vw")) return "https://www.volkswagen.de/de/modelle.html";
+    if (n.includes("bmw"))      return "https://www.bmw.de/de/neufahrzeuge.html";
+    if (n.includes("mercedes")) return "https://www.mercedes-benz.de/passengercars.html";
+    if (n.includes("tesla"))    return "https://www.tesla.com/de_DE/";
+    if (n.includes("audi"))     return "https://www.audi.de/de/brand/de/neuwagen.html";
+    if (n.includes("toyota"))   return "https://www.toyota.de/neuwagen";
+    if (n.includes("renault"))  return "https://www.renault.de/pkw.html";
+    if (n.includes("hyundai"))  return "https://www.hyundai.de/modelle";
+    if (n.includes("kia"))      return "https://www.kia.com/de/";
+    return \`https://www.autoscout24.de/lst?make=\${encodeURIComponent(productName.split(" ")[0])}\`;
+  }
+  if (category==="personal_loan"||category==="mortgage") return "https://www.check24.de/kredit/";
+  if (category==="credit_card")   return "https://www.check24.de/kreditkarten/";
+  if (category==="bank_account")  return "https://www.check24.de/girokonto/";
+  if (category==="deposit")       return "https://www.check24.de/tagesgeld/";
+  if (category==="car_insurance") return "https://www.check24.de/kfz-versicherung/";
+  if (category==="insurance")     return "https://www.check24.de/versicherungen/";
+  if (category==="mobile_plan"||category==="prepaid") return "https://www.check24.de/handytarife/";
+  if (category==="internet")      return "https://www.check24.de/dsl/";
+  if (category==="electricity")   return "https://www.check24.de/strom/";
+  if (category==="gas_provider")  return "https://www.check24.de/gas/";
+  if (category==="solar")         return "https://www.check24.de/solar/";
+  if (n.includes("nordvpn"))      return "https://nordvpn.com/";
+  if (n.includes("expressvpn"))   return "https://www.expressvpn.com/";
+  if (n.includes("surfshark"))    return "https://surfshark.com/";
+  if (n.includes("norton"))       return "https://us.norton.com/";
+  if (n.includes("kaspersky"))    return "https://www.kaspersky.com/";
+  if (n.includes("bitdefender"))  return "https://www.bitdefender.com/";
+  if (n.includes("coursera"))     return "https://www.coursera.org/";
+  if (n.includes("udemy"))        return "https://www.udemy.com/";
+  if (n.includes("duolingo"))     return "https://www.duolingo.com/";
+  if (n.includes("babbel"))       return "https://www.babbel.com/";
+  if (n.includes("shopify"))      return "https://www.shopify.com/";
+  if (n.includes("hubspot"))      return "https://www.hubspot.com/";
+  if (n.includes("mailchimp"))    return "https://mailchimp.com/";
+  if (n.includes("ikea"))         return "https://www.ikea.com/";
+  return amz(productName);
+}
+
+// ── Home logo button — appears in every screen ────────────────────────────────
+function HomeButton({ onHome, lang }) {
+  return (
+    <button onClick={onHome} title={uiT("home",lang)||"Home"}
+      style={{ display:"flex",alignItems:"center",gap:8,background:"transparent",border:"none",cursor:"pointer",padding:"8px 12px 8px 4px",borderRadius:10,transition:"background 0.15s",flexShrink:0 }}
+      onMouseEnter={e=>e.currentTarget.style.background="rgba(26,86,219,0.08)"}
+      onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+      <div style={{ width:28,height:28,borderRadius:7,background:\`linear-gradient(135deg,\${C.accent},#6B8EFF)\`,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0 }}>
+        <img src="/asel-mascot.png" style={{ width:24,height:24,objectFit:"cover",objectPosition:"30% 8%" }} alt="" />
+      </div>
+      <span style={{ fontWeight:800,fontSize:14,color:C.text,letterSpacing:-0.3,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>DecisionPilot</span>
+    </button>
+  );
+}
+
 // ── Professional SVG icons for category bar ──────────────────────────────────
 const I = (d, extra="") => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html:d}} style={{display:"block"}} {...(extra?{style:{display:"block"}}:{})} />
@@ -2012,21 +2125,25 @@ function CategoryCard({ cat, onClick }) {
   );
 }
 
-function QuestionScreen({ category, onComplete, onBack, t }) {
+function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
   const tree = TREES[category];
   const catColor = CATEGORIES_LIST.find(c => c.id === category)?.color || C.accent;
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [selected, setSelected] = useState(null);
   const [animKey, setAnimKey] = useState(0);
+  const lg = lang || "en";
 
   if (!tree) {
     return (
       <div style={{ minHeight: "100vh", background: C.bg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 20 }}>
+        <div style={{ position:"fixed",top:0,left:0,right:0,background:"#fff",borderBottom:`1px solid ${C.border}`,padding:"8px 16px",zIndex:50 }}>
+          <HomeButton onHome={onHome} lang={lg} />
+        </div>
         <div style={{ fontSize: 48 }}>🔧</div>
         <h2 style={{ color: C.text, fontWeight: 800, margin: 0 }}>Category coming soon</h2>
-        <p style={{ color: C.muted }}>We're building questions for <strong>{catName(category, "en")}</strong>. Check back soon!</p>
-        <button onClick={onBack} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>← Go back</button>
+        <p style={{ color: C.muted }}>We're building questions for <strong>{catName(category, lg)}</strong>. Check back soon!</p>
+        <button onClick={onBack} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>{uiT("goBack", lg)}</button>
       </div>
     );
   }
@@ -2070,15 +2187,22 @@ function QuestionScreen({ category, onComplete, onBack, t }) {
           </div>
         </div>
 
-        {/* Top bar: Back + Step counter */}
+        {/* Top bar: Home + Back + Step counter */}
         <div style={{ position: "absolute", top: 16, left: 16, right: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <button onClick={onBack} style={{
-            background: "rgba(255,255,255,0.18)", backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255,255,255,0.35)", color: "#fff",
-            borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 13, fontWeight: 700,
-          }}>← Back</button>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {onHome && (
+              <button onClick={onHome}
+                style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.35)", color: "#fff", borderRadius: 10, padding: "7px 10px", cursor: "pointer", fontSize: 18, lineHeight: 1, display:"flex",alignItems:"center" }}
+                title={uiT("home", lg)}>🏠</button>
+            )}
+            <button onClick={onBack} style={{
+              background: "rgba(255,255,255,0.18)", backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255,255,255,0.35)", color: "#fff",
+              borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 13, fontWeight: 700,
+            }}>{uiT("back", lg)}</button>
+          </div>
           <span style={{ background: "rgba(0,0,0,0.3)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", borderRadius: 10, padding: "7px 14px", fontSize: 12, fontWeight: 800, letterSpacing: 0.5 }}>
-            {step + 1} / {total}
+            {uiT("question", lg)} {step + 1} {uiT("of", lg)} {total}
           </span>
         </div>
       </div>
@@ -2408,17 +2532,14 @@ function getCategoryAnimation(category) {
   );
 }
 
-function LoadingScreen({ category }) {
+function LoadingScreen({ category, lang, onHome }) {
   const tree = TREES[category];
   const [step, setStep] = useState(0);
   const catColor = CATEGORIES_LIST.find(c => c.id === category)?.color || "#1A56DB";
-  const steps = [
-    `Analyzing your ${tree?.label?.toLowerCase()} preferences...`,
-    "Searching trusted review sources...",
-    "Comparing top options worldwide...",
-    "Calculating best matches for you...",
-    "Almost ready — finalizing recommendations...",
-  ];
+  const lg = lang || "en";
+  const steps = (UI_T.loadSteps[lg] || UI_T.loadSteps.en).map((s,i) =>
+    i===0 ? s.replace("your preferences", `your ${tree?.label?.toLowerCase()||""} preferences`) : s
+  );
 
   useEffect(() => {
     const timer = setInterval(() => setStep(s => Math.min(s + 1, steps.length - 1)), 1200);
@@ -2426,11 +2547,12 @@ function LoadingScreen({ category }) {
   }, []);
 
   return (
-    <div style={{
-      minHeight: "100vh", background: C.bg,
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 32,
-    }}>
-      <div style={{ textAlign: "center", maxWidth: 520, width: "100%" }}>
+    <div style={{ minHeight:"100vh", background:C.bg, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:32 }}>
+      {/* Home button top-left */}
+      {onHome && <div style={{ position:"fixed",top:0,left:0,right:0,zIndex:50,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(8px)",borderBottom:`1px solid ${C.border}`,padding:"8px 16px" }}>
+        <HomeButton onHome={onHome} lang={lg} />
+      </div>}
+      <div style={{ textAlign:"center", maxWidth:520, width:"100%", marginTop: onHome ? 64 : 0 }}>
         {/* Animated category object banner */}
         <div style={{
           background: `linear-gradient(135deg, ${catColor}18, ${catColor}08)`,
@@ -2449,7 +2571,7 @@ function LoadingScreen({ category }) {
         </div>
 
         <h2 style={{ color: C.text, fontSize: 26, fontWeight: 900, marginBottom: 8, letterSpacing: -0.5 }}>
-          Finding your perfect {tree?.label?.toLowerCase()}...
+          {uiT("analyzing", lg)} {tree?.label?.toLowerCase()}...
         </h2>
         <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 28, lineHeight: 1.6 }}>
           Ai·sel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.
@@ -2486,10 +2608,14 @@ function LoadingScreen({ category }) {
   );
 }
 
-function RecommendationCard({ pick, index }) {
+function RecommendationCard({ pick, index, lang, category }) {
   const [hovered, setHovered] = useState(false);
   const isTop = index === 0;
   const c = isTop ? C.gold : C.accent;
+  const lg = lang || "en";
+  const dealLink = pick.link && pick.link !== "#" && !pick.link.includes("example.com")
+    ? pick.link
+    : getProductLink(category, pick.name);
 
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
@@ -2515,7 +2641,7 @@ function RecommendationCard({ pick, index }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
             <span style={{ color: C.text, fontWeight: 800, fontSize: 18, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{pick.name}</span>
-            {isTop && <Badge color={C.gold}>Top pick</Badge>}
+            {isTop && <Badge color={C.gold}>{uiT("topPick", lg)}</Badge>}
             {pick.badge && <Badge color={c}>{pick.badge}</Badge>}
           </div>
           <div style={{ color: C.muted, fontSize: 13, fontWeight: 500 }}>{pick.price}</div>
@@ -2527,7 +2653,7 @@ function RecommendationCard({ pick, index }) {
           background: C.accentLight, borderRadius: 10, padding: "12px 16px",
           marginBottom: 16, borderLeft: `3px solid ${C.accent}`,
         }}>
-          <span style={{ color: C.accent, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>Why this for you · </span>
+          <span style={{ color: C.accent, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>{uiT("whyForYou", lg)} · </span>
           <span style={{ color: C.textSecondary, fontSize: 14, lineHeight: 1.6 }}>{pick.why}</span>
         </div>
 
@@ -2535,7 +2661,7 @@ function RecommendationCard({ pick, index }) {
           <div style={{ background: "#DCFCE7", border: "2px solid #4ADE80", borderRadius: 14, padding: "16px 18px" }}>
             <div style={{ color: "#15803D", fontWeight: 900, fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
               <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><circle cx="8" cy="8" r="7" fill="#15803D"/><path d="m5 8 2 2 4-4" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              Pros
+              {uiT("pros", lg)}
             </div>
             {pick.pros?.map((p, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
@@ -2547,7 +2673,7 @@ function RecommendationCard({ pick, index }) {
           <div style={{ background: "#FEE2E2", border: "2px solid #F87171", borderRadius: 14, padding: "16px 18px" }}>
             <div style={{ color: "#B91C1C", fontWeight: 900, fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
               <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><circle cx="8" cy="8" r="7" fill="#B91C1C"/><path d="m5.5 5.5 5 5M10.5 5.5l-5 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>
-              Cons
+              {uiT("cons", lg)}
             </div>
             {pick.cons?.map((p, i) => (
               <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
@@ -2560,15 +2686,11 @@ function RecommendationCard({ pick, index }) {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
           <span style={{ color: C.muted, fontSize: 12 }}>Source: {pick.source}</span>
-          <a href={pick.link} target="_blank" rel="noopener noreferrer"
-            style={{
-              background: c, color: "#fff", textDecoration: "none",
-              padding: "9px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700,
-              display: "inline-flex", alignItems: "center", gap: 6, transition: "opacity 0.15s",
-            }}
+          <a href={dealLink} target="_blank" rel="noopener noreferrer"
+            style={{ background: c, color: "#fff", textDecoration: "none", padding: "9px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6, transition: "opacity 0.15s" }}
             onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-            View deal →
+            {uiT("viewDeal", lg)}
           </a>
         </div>
       </div>
@@ -2576,18 +2698,19 @@ function RecommendationCard({ pick, index }) {
   );
 }
 
-function ResultsScreen({ category, answers, onRestart, onBack, t }) {
+function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }) {
   const tree = TREES[category];
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const lg = lang || "en";
 
   useEffect(() => {
     async function fetchRecs() {
       try {
         const response = await fetch("/api/chat", {
           method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mode: "tree_result", category, answers }),
+          body: JSON.stringify({ mode: "tree_result", category, answers, lang: lg }),
         });
         const result = await response.json();
         if (result.type === "recommendations") setData(result.data);
@@ -2598,25 +2721,34 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
     fetchRecs();
   }, []);
 
-  if (loading) return <LoadingScreen category={category} />;
+  if (loading) return <LoadingScreen category={category} lang={lg} onHome={onHome} />;
 
   if (error) return (
     <div style={{ minHeight: "100vh", background: C.bg, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 16 }}>
+      <div style={{ position:"fixed",top:0,left:0,right:0,background:"#fff",borderBottom:`1px solid ${C.border}`,padding:"8px 16px",zIndex:50 }}>
+        <HomeButton onHome={onHome} lang={lg} />
+      </div>
       <div style={{ fontSize: 48 }}>😕</div>
       <p style={{ color: C.text, fontSize: 18, fontWeight: 600 }}>{error}</p>
-      <button onClick={onRestart} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 24px", cursor: "pointer", fontSize: 15, fontWeight: 700 }}>Try Again</button>
+      <button onClick={onRestart} style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 24px", cursor: "pointer", fontSize: 15, fontWeight: 700 }}>{uiT("tryAgain", lg)}</button>
     </div>
   );
 
   return (
     <div style={{ minHeight: "100vh", background: C.bg }}>
-      <div style={{
-        height: 200, backgroundImage: `url(${tree.image})`,
-        backgroundSize: "cover", backgroundPosition: "center", position: "relative",
-      }}>
+      {/* Sticky home bar */}
+      <div style={{ position:"sticky",top:0,zIndex:50,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(8px)",borderBottom:`1px solid ${C.border}`,padding:"6px 16px",display:"flex",alignItems:"center",justifyContent:"space-between" }}>
+        <HomeButton onHome={onHome} lang={lg} />
+        <button onClick={onBack} style={{ background:"transparent",border:`1px solid ${C.border}`,color:C.textSecondary,borderRadius:8,padding:"6px 14px",cursor:"pointer",fontSize:13,fontWeight:600 }}
+          onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;e.currentTarget.style.color=C.accent;}}
+          onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.textSecondary;}}>
+          {uiT("back", lg)}
+        </button>
+      </div>
+
+      <div style={{ height: 200, backgroundImage: `url(${tree.image})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7))" }} />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, maxWidth: 800, margin: "0 auto", padding: "0 24px 28px" }}>
-          <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.3)", color: "#fff", borderRadius: 8, padding: "6px 14px", cursor: "pointer", fontSize: 13, fontWeight: 600, marginBottom: 12 }}>← Back</button>
           <h1 style={{ color: "#fff", fontSize: "clamp(20px, 3.5vw, 28px)", fontWeight: 900, margin: 0, letterSpacing: -0.5, textShadow: "0 2px 12px rgba(0,0,0,0.4)" }}>{data?.title}</h1>
           {data?.subtitle && <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 14, margin: "6px 0 0", lineHeight: 1.5 }}>{data.subtitle}</p>}
         </div>
@@ -2624,16 +2756,16 @@ function ResultsScreen({ category, answers, onRestart, onBack, t }) {
 
       <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px 170px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
-          <span style={{ color: C.muted, fontSize: 13 }}>Powered by AI · Sources: CNET, TechRadar, Wirecutter & more</span>
+          <span style={{ color: C.muted, fontSize: 13 }}>{uiT("poweredBy", lg)}</span>
           <button onClick={onRestart} style={{ background: C.accentLight, color: C.accent, border: `1px solid ${C.accent}33`, borderRadius: 10, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700 }}>
-            🔄 Start over
+            🔄 {uiT("startOver", lg)}
           </button>
         </div>
 
-        {data?.picks?.map((pick, i) => <RecommendationCard key={i} pick={pick} index={i} />)}
+        {data?.picks?.map((pick, i) => <RecommendationCard key={i} pick={pick} index={i} lang={lg} category={category} />)}
 
         <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
-          <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>Want more personalized advice? Chat with our AI directly.</p>
+          <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>{uiT("chatMore", lg)}</p>
           <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
             style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}>
             <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="Ai·sel" />
@@ -3474,7 +3606,7 @@ export default function App() {
   if (screen === "questions" && category) {
     return (
       <>
-        <QuestionScreen category={category} onComplete={(ans) => { setAnswers(ans); setScreen("results"); }} onBack={() => setScreen("landing")} t={t} />
+        <QuestionScreen category={category} onComplete={(ans) => { setAnswers(ans); setScreen("results"); }} onBack={() => setScreen("landing")} onHome={() => setScreen("landing")} t={t} lang={lang} />
         <AselCorner screen="questions" />
       </>
     );
@@ -3483,7 +3615,7 @@ export default function App() {
   if (screen === "results" && category && answers) {
     return (
       <>
-        <ResultsScreen category={category} answers={answers} onRestart={() => { setAnswers(null); setScreen("questions"); }} onBack={() => { setAnswers(null); setScreen("questions"); }} t={t} />
+        <ResultsScreen category={category} answers={answers} onRestart={() => { setAnswers(null); setScreen("questions"); }} onBack={() => { setAnswers(null); setScreen("questions"); }} onHome={() => setScreen("landing")} t={t} lang={lang} />
         <AselCorner screen="results" />
       </>
     );
