@@ -2233,7 +2233,7 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCa
 
           {/* Language flag only */}
           <div style={{ position:"relative" }}>
-            <button onClick={()=>setLangOpen(!langOpen)} style={{ display:"flex",alignItems:"center",gap:4,background:"transparent",border:`1px solid ${C.border}`,borderRadius:20,padding:"6px 10px",cursor:"pointer",fontSize:18,lineHeight:1 }}
+            <button className="lang-flag-btn" onClick={()=>setLangOpen(!langOpen)} style={{ display:"flex",alignItems:"center",gap:4,background:"transparent",border:`1px solid ${C.border}`,borderRadius:20,padding:"6px 10px",cursor:"pointer",fontSize:18,lineHeight:1 }}
               onMouseEnter={e=>e.currentTarget.style.borderColor=C.accent}
               onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
               {currentFlag}
@@ -3000,8 +3000,8 @@ function RecommendationCard({ pick, index, lang, category, answers, onFavorite, 
 
       {/* ── WHY THIS FOR YOU ── bold label on own line ── */}
       <div style={{ margin:"0 20px 16px", background:C.accentLight, borderRadius:10, padding:"14px 16px", borderLeft:`3px solid ${C.accent}` }}>
-        <div style={{ color:C.accent, fontWeight:900, fontSize:11, textTransform:"uppercase", letterSpacing:0.9, marginBottom:7 }}>
-          {uiT("whyForYou",lg)}
+        <div style={{ color:C.accent, fontWeight:900, fontSize:12, textTransform:"uppercase", letterSpacing:0.9, marginBottom:7, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+          <strong>{uiT("whyForYou",lg)}</strong>
         </div>
         <div style={{ color:"#334155", fontSize:13.5, lineHeight:1.65 }}>{pick.why}</div>
       </div>
@@ -3240,10 +3240,10 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
         {/* ══ AFFILIATE — minimal ? button ══ */}
         <div style={{ textAlign:"right", marginTop:-16, marginBottom:28, position:"relative" }}>
           <button onClick={()=>setAffOpen(o=>!o)}
-            style={{ width:22,height:22,borderRadius:"50%",border:`1.5px solid ${C.border}`,background:"#fff",cursor:"pointer",fontSize:12,fontWeight:900,color:C.muted,display:"inline-flex",alignItems:"center",justifyContent:"center",transition:"all 0.15s",boxShadow:"none",padding:0,lineHeight:1 }}
-            onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;e.currentTarget.style.color=C.accent;}}
-            onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.muted;}}>
-            ?
+            style={{ width:20,height:20,borderRadius:"50%",border:"none",background:`${C.accent}18`,cursor:"pointer",fontSize:11,fontWeight:900,fontStyle:"italic",color:C.accent,display:"inline-flex",alignItems:"center",justifyContent:"center",transition:"all 0.15s",padding:0,lineHeight:1,fontFamily:"Georgia,serif" }}
+            onMouseEnter={e=>{e.currentTarget.style.background=C.accent;e.currentTarget.style.color="#fff";}}
+            onMouseLeave={e=>{e.currentTarget.style.background=`${C.accent}18`;e.currentTarget.style.color=C.accent;}}>
+            i
           </button>
           {affOpen && (
             <div style={{ position:"absolute",right:0,top:28,background:"#fff",border:`1px solid ${C.border}`,borderRadius:10,padding:"12px 16px",width:280,textAlign:"left",boxShadow:C.shadowMd,zIndex:20,animation:"fadeUp 0.15s ease" }}>
@@ -3380,13 +3380,19 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
           </div>
           <div style={{ display: "flex", gap: 16, flexShrink: 0 }}>
             {[
-              { num: "66+", label: lang === "de" ? "Kategorien" : lang === "ro" ? "Subcategorii" : "Categories", color: C.accent },
-              { num: "30+", label: lang === "de" ? "Sprachen" : lang === "ro" ? "Limbi" : "Languages", color: "#7048E8" },
-              { num: "AI", label: lang === "de" ? "Powered" : "Powered", color: "#059669" },
+              { num: "66+", label: lang === "de" ? "Kategorien" : lang === "ro" ? "Subcategorii" : "Categories", color: C.accent,
+                action: () => document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}) },
+              { num: "30+", label: lang === "de" ? "Sprachen" : lang === "ro" ? "Limbi" : "Languages", color: "#7048E8",
+                action: () => document.querySelector(".lang-flag-btn")?.click() },
+              { num: "AI", label: lang === "de" ? "Powered" : "Powered", color: "#059669",
+                action: () => onStart("chat") },
             ].map((s, i) => (
-              <div key={i} style={{ textAlign: "center", padding: "20px 24px", background: C.card, border: `1px solid ${C.border}`, borderRadius: 16, minWidth: 80 }}>
-                <div style={{ color: s.color, fontSize: 28, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif", letterSpacing: -1 }}>{s.num}</div>
-                <div style={{ color: C.muted, fontSize: 11, marginTop: 4, fontWeight: 600 }}>{s.label}</div>
+              <div key={i} onClick={s.action}
+                style={{ textAlign:"center", padding:"20px 24px", background:C.card, border:`1.5px solid ${C.border}`, borderRadius:16, minWidth:80, cursor:"pointer", transition:"all 0.18s" }}
+                onMouseEnter={e=>{ e.currentTarget.style.borderColor=s.color; e.currentTarget.style.transform="translateY(-3px)"; e.currentTarget.style.boxShadow=`0 8px 24px ${s.color}22`; }}
+                onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}>
+                <div style={{ color:s.color, fontSize:28, fontWeight:900, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:-1 }}>{s.num}</div>
+                <div style={{ color:C.muted, fontSize:11, marginTop:4, fontWeight:600 }}>{s.label}</div>
               </div>
             ))}
           </div>
@@ -3423,14 +3429,18 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
       {/* ⑤ POPULAR PRODUCT COMPARISONS — concrete cards like CHECK24 */}
       {[
         { section: lang === "de" ? "Handys vergleichen" : lang === "ro" ? "Compară telefoane" : "Compare Smartphones", gid: "tech", items: [
-          { id: "phone", label: "Apple iPhone 17 Pro", sub: "from €1 on contract · 131 plans", img: "photo-1592750475338-74b7b21085ab", rating: "4.9", reviews: "18.431" },
-          { id: "phone", label: "Samsung Galaxy S26 Ultra", sub: "from €1 on contract · 172 plans", img: "photo-1610945415295-d9bbf067e59c", rating: "4.7", reviews: "12.922" },
-          { id: "phone", label: "Google Pixel 10 Pro", sub: "from €1 on contract · 89 plans", img: "photo-1567581935884-3349723552ca", rating: "4.6", reviews: "6.211" },
+          { id: "phone", label: "Apple iPhone 17 Pro", sub: lang==="de"?"ab 1€ mit Vertrag · 131 Tarife":"from €1 on contract · 131 plans", img: "photo-1592750475338-74b7b21085ab", rating: "4.9", reviews: "18.431" },
+          { id: "phone", label: "Samsung Galaxy S26 Ultra", sub: lang==="de"?"ab 1€ mit Vertrag · 172 Tarife":"from €1 on contract · 172 plans", img: "photo-1610945415295-d9bbf067e59c", rating: "4.7", reviews: "12.922" },
+          { id: "phone", label: "Google Pixel 10 Pro", sub: lang==="de"?"ab 1€ mit Vertrag · 89 Tarife":"from €1 on contract · 89 plans", img: "photo-1567581935884-3349723552ca", rating: "4.6", reviews: "6.211" },
+          { id: "phone", label: "OnePlus 13", sub: lang==="de"?"ab 699€ · 54 Tarife":"from €699 unlocked · 54 plans", img: "photo-1574755393849-623942496936", rating: "4.5", reviews: "3.841" },
+          { id: "phone", label: "Sony Xperia 1 VII", sub: lang==="de"?"ab 1€ mit Vertrag · 41 Tarife":"from €1 on contract · 41 plans", img: "photo-1512054502232-10a0a035d672", rating: "4.4", reviews: "2.108" },
         ]},
         { section: lang === "de" ? "Kredite vergleichen" : lang === "ro" ? "Compară credite" : "Compare Loans", gid: "financial", items: [
-          { id: "personal_loan", label: "10.000 €", sub: "ab 314,18€ / Monat · 36 Monate", img: null, badge: "€", rating: null },
-          { id: "personal_loan", label: "20.000 €", sub: "ab 489,92€ / Monat · 48 Monate", img: null, badge: "€€", rating: null },
-          { id: "personal_loan", label: "50.000 €", sub: "ab 783,72€ / Monat · 84 Monate", img: null, badge: "€€€", rating: null },
+          { id: "personal_loan", label: "5.000 €", sub: lang==="de"?"ab 98,50€ / Monat · 60 Monate":"from €98/mo · 60 months", img: null, badge: "€", rating: null },
+          { id: "personal_loan", label: "10.000 €", sub: lang==="de"?"ab 179,55€ / Monat · 72 Monate":"from €179/mo · 72 months", img: null, badge: "€€", rating: null },
+          { id: "personal_loan", label: "20.000 €", sub: lang==="de"?"ab 314,18€ / Monat · 84 Monate":"from €314/mo · 84 months", img: null, badge: "€€€", rating: null },
+          { id: "personal_loan", label: "50.000 €", sub: lang==="de"?"ab 489,92€ / Monat · 96 Monate":"from €489/mo · 96 months", img: null, badge: "€€€€", rating: null },
+          { id: "mortgage", label: "150.000 €", sub: lang==="de"?"Immobilienkredit · Festzins":"Mortgage · Fixed rate", img: null, badge: "🏠", rating: null },
         ]},
       ].map(sec => {
         const grp = CATEGORY_GROUPS.find(g => g.id === sec.gid);
@@ -3443,7 +3453,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
                 {lang === "de" ? "Alle Angebote →" : lang === "ro" ? "Vezi toate →" : "See all →"}
               </button>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
               {sec.items.map((item, i) => (
                 <div key={i} onClick={() => startWithTracking(item.id)}
                   style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: "16px", cursor: "pointer", transition: "all 0.2s", display: "flex", gap: 14, alignItems: "center" }}
