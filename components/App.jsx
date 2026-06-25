@@ -3240,32 +3240,26 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
           );
         })()}
 
-        {/* ══ AFFILIATE TRANSPARENCY — discrete toggle ══ */}
-        {(()=>{
-          const label = lg==="de"?"Wie wir Geld verdienen":lg==="es"?"Cómo ganamos dinero":lg==="ro"?"Cum câștigăm bani":"How we make money";
-          return (
-            <div style={{ textAlign:"right", marginTop:-16, marginBottom:28 }}>
-              <button onClick={()=>setAffOpen(o=>!o)}
-                style={{ background:"none", border:"none", color:C.muted, fontSize:11, cursor:"pointer", display:"inline-flex", alignItems:"center", gap:4, padding:"4px 8px", borderRadius:6, transition:"color 0.15s" }}
-                onMouseEnter={e=>e.currentTarget.style.color=C.accent}
-                onMouseLeave={e=>e.currentTarget.style.color=C.muted}>
-                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><circle cx="8" cy="8" r="7" opacity=".2"/><path d="M8 7v5M8 5.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.2"/></svg>
-                {label} {affOpen?"▲":"▼"}
-              </button>
-              {affOpen && (
-                <div style={{ background:`${C.accent}06`, border:`1px solid ${C.accent}18`, borderRadius:10, padding:"12px 16px", marginTop:6, textAlign:"left", animation:"fadeUp 0.2s ease" }}>
-                  <p style={{ color:C.muted, fontSize:12, margin:0, lineHeight:1.7 }}>
-                    {lg==="de" ? <><strong>Einige Empfehlungen enthalten Affiliate-Links.</strong> Das Ranking wird ausschließlich durch die Übereinstimmung mit Ihrem Profil bestimmt — niemals durch Provisionen. Wenn Sie über unsere Links kaufen, erhalten wir eine kleine Provision ohne Mehrkosten für Sie.</> :
-                     lg==="es" ? <><strong>Algunas recomendaciones contienen enlaces de afiliado.</strong> El ranking está determinado exclusivamente por la compatibilidad con su perfil — nunca por comisiones.</> :
-                     lg==="ro" ? <><strong>Unele recomandări conțin linkuri afiliate.</strong> Clasamentul este determinat exclusiv de compatibilitatea cu profilul tău — niciodată de comisioane.</> :
-                     <><strong>Some recommendations contain affiliate links.</strong> Rankings are determined exclusively by compatibility with your profile — never by commissions.</>}
-                    {" "}<a href="/about" style={{ color:C.accent, fontSize:11 }}>{lg==="de"?"Mehr →":lg==="ro"?"Mai mult →":"Learn more →"}</a>
-                  </p>
-                </div>
-              )}
+        {/* ══ AFFILIATE — minimal ? button ══ */}
+        <div style={{ textAlign:"right", marginTop:-16, marginBottom:28, position:"relative" }}>
+          <button onClick={()=>setAffOpen(o=>!o)}
+            style={{ width:22,height:22,borderRadius:"50%",border:`1.5px solid ${C.border}`,background:"#fff",cursor:"pointer",fontSize:12,fontWeight:900,color:C.muted,display:"inline-flex",alignItems:"center",justifyContent:"center",transition:"all 0.15s",boxShadow:"none",padding:0,lineHeight:1 }}
+            onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;e.currentTarget.style.color=C.accent;}}
+            onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.muted;}}>
+            ?
+          </button>
+          {affOpen && (
+            <div style={{ position:"absolute",right:0,top:28,background:"#fff",border:`1px solid ${C.border}`,borderRadius:10,padding:"12px 16px",width:280,textAlign:"left",boxShadow:C.shadowMd,zIndex:20,animation:"fadeUp 0.15s ease" }}>
+              <p style={{ color:C.muted,fontSize:12,margin:0,lineHeight:1.7 }}>
+                {lg==="de" ? <><strong>Einige Empfehlungen enthalten Affiliate-Links.</strong> Das Ranking wird ausschließlich durch die Übereinstimmung mit Ihrem Profil bestimmt — niemals durch Provisionen.</> :
+                 lg==="es" ? <><strong>Algunas recomendaciones contienen enlaces de afiliado.</strong> El ranking está determinado exclusivamente por la compatibilidad con su perfil — nunca por comisiones.</> :
+                 lg==="ro" ? <><strong>Unele recomandări conțin linkuri afiliate.</strong> Clasamentul este determinat exclusiv de compatibilitatea cu profilul tău — niciodată de comisioane.</> :
+                 <><strong>Some recommendations contain affiliate links.</strong> Rankings are determined exclusively by your profile compatibility — never by commissions.</>}
+                {" "}<a href="/about" style={{ color:C.accent,fontSize:11 }}>{lg==="de"?"Mehr →":lg==="ro"?"Mai mult →":"Learn more →"}</a>
+              </p>
             </div>
-          );
-        })()}
+          )}
+        </div>
 
         <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
           <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>{uiT("chatMore", lg)}</p>
