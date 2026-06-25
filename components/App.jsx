@@ -1782,6 +1782,23 @@ const CATEGORY_GROUPS = [
 ];
 
 // Flatten for backwards compatibility
+
+const STATUSES = [
+  { id:"mr",    label:"Mr.",    emoji:"👔" },
+  { id:"mrs",   label:"Mrs.",   emoji:"👗" },
+  { id:"ms",    label:"Ms.",    emoji:"💼" },
+  { id:"mx",    label:"Mx.",    emoji:"🌈" },
+  { id:"dr",    label:"Dr.",    emoji:"🩺" },
+  { id:"prof",  label:"Prof.",  emoji:"🎓" },
+  { id:"family",label:"Family", emoji:"👨‍👩‍👧‍👦" },
+  { id:"student",label:"Student",emoji:"📚" },
+  { id:"single",label:"Single", emoji:"🏠" },
+  { id:"couple",label:"Couple", emoji:"💑" },
+  { id:"senior",label:"Senior", emoji:"🌟" },
+  { id:"expat", label:"Expat",  emoji:"🌍" },
+  { id:"divorced",label:"Divorced",emoji:"🔄"},
+  { id:"professional",label:"Professional",emoji:"💼"},
+];
 const CATEGORIES_LIST = CATEGORY_GROUPS.flatMap(g => g.subs.map(s => ({...s, groupId: g.id, groupLabel: g.label, color: g.color, desc: g.label})));
 
 
@@ -3046,6 +3063,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [affOpen, setAffOpen] = useState(false);  // ← moved here, not inside render
   const lg = lang || "en";
 
   useEffect(() => {
@@ -3223,8 +3241,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
         })()}
 
         {/* ══ AFFILIATE TRANSPARENCY — discrete toggle ══ */}
-        {(() => {
-          const [affOpen, setAffOpen] = useState(false);
+        {(()=>{
           const label = lg==="de"?"Wie wir Geld verdienen":lg==="es"?"Cómo ganamos dinero":lg==="ro"?"Cum câștigăm bani":"How we make money";
           return (
             <div style={{ textAlign:"right", marginTop:-16, marginBottom:28 }}>
@@ -4068,22 +4085,7 @@ function incrementDecisionCount() {
 // USER PROFILE + FAVORITES SYSTEM (localStorage, no personal data)
 // ═══════════════════════════════════════════════════════════════
 
-const STATUSES = [
-  { id:"mr",    label:"Mr.",    emoji:"👔" },
-  { id:"mrs",   label:"Mrs.",   emoji:"👗" },
-  { id:"ms",    label:"Ms.",    emoji:"💼" },
-  { id:"mx",    label:"Mx.",    emoji:"🌈" },
-  { id:"dr",    label:"Dr.",    emoji:"🩺" },
-  { id:"prof",  label:"Prof.",  emoji:"🎓" },
-  { id:"family",label:"Family", emoji:"👨‍👩‍👧‍👦" },
-  { id:"student",label:"Student",emoji:"📚" },
-  { id:"single",label:"Single", emoji:"🏠" },
-  { id:"couple",label:"Couple", emoji:"💑" },
-  { id:"senior",label:"Senior", emoji:"🌟" },
-  { id:"expat", label:"Expat",  emoji:"🌍" },
-  { id:"divorced",label:"Divorced",emoji:"🔄"},
-  { id:"professional",label:"Professional",emoji:"💼"},
-];
+
 
 const BUDGET_RANGES = [
   { id:"tight",  label:"< €100/mo",  icon:"💰" },
