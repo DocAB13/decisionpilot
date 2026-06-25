@@ -2829,6 +2829,19 @@ function LoadingScreen({ category, lang, onHome }) {
   );
 }
 
+// ── Badge translations ────────────────────────────────────────────────────────
+const BADGE_T = {
+  "BEST OVERALL":    {ro:"ALEGEREA NOASTRĂ",de:"BESTE WAHL",es:"MEJOR OPCIÓN",fr:"MEILLEUR CHOIX",it:"MIGLIORE SCELTA",pt:"MELHOR ESCOLHA",nl:"BESTE KEUZE",pl:"NAJLEPSZY WYBÓR"},
+  "BEST VALUE":      {ro:"RAPORT/PREȚ",de:"PREIS-LEISTUNG",es:"MEJOR VALOR",fr:"MEILLEUR RAPPORT",it:"MIGLIOR VALORE",pt:"MELHOR CUSTO",nl:"BESTE PRIJS"},
+  "TOP PICK":        {ro:"ALEGEREA NR.1",de:"TOP WAHL",es:"TOP ELECCIÓN",fr:"TOP CHOIX",it:"TOP SCELTA",pt:"TOP ESCOLHA"},
+  "PREMIUM CHOICE":  {ro:"ALEGERE PREMIUM",de:"PREMIUM WAHL",es:"OPCIÓN PREMIUM",fr:"CHOIX PREMIUM"},
+  "BUDGET PICK":     {ro:"ECONOMIC",de:"GÜNSTIGE WAHL",es:"ECONÓMICO",fr:"ÉCONOMIQUE",it:"ECONOMICO"},
+  "PREMIUM PICK":    {ro:"ALEGERE PREMIUM",de:"PREMIUM WAHL",es:"OPCIÓN PREMIUM"},
+  "EDITOR'S PICK":   {ro:"ALEGEREA EDITORULUI",de:"REDAKTIONSTIPP",es:"ELECCIÓN DEL EDITOR"},
+  "BEST OVERALL":    {ro:"CEL MAI BUN",de:"BESTE WAHL",es:"MEJOR OPCIÓN"},
+  "RUNNER UP":       {ro:"LOC 2",de:"ZWEITE WAHL",es:"SEGUNDA OPCIÓN"},
+};
+
 function RecommendationCard({ pick, index, lang, category, answers }) {
   const [hovered, setHovered] = useState(false);
   const [logoErr, setLogoErr] = useState(false);
@@ -2878,113 +2891,109 @@ function RecommendationCard({ pick, index, lang, category, answers }) {
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
-        background: C.card, borderRadius: 20,
-        border: `1.5px solid ${hovered ? c + "55" : C.border}`,
-        boxShadow: hovered ? `0 16px 48px ${c}18` : C.shadow,
-        overflow: "hidden", transition: "all 0.25s cubic-bezier(.4,0,.2,1)",
-        transform: hovered ? "translateY(-4px)" : "translateY(0)",
-        marginBottom: 20, animation: `fadeUp 0.4s ease ${index * 0.1}s both`,
+        background: C.card, overflow: "hidden",
+        transition: "background 0.2s",
+        animation: `fadeUp 0.4s ease ${index * 0.08}s both`,
       }}>
-      <div style={{
-        background: `linear-gradient(135deg, ${c}10, ${c}04)`,
-        borderBottom: `1px solid ${c}20`, padding: "0",
-        overflow: "hidden",
-      }}>
-        {/* Product image strip */}
-        {productImg && (
-          <div style={{ position:"relative", height:90, overflow:"hidden" }}>
-            <div style={{ position:"absolute",inset:0,backgroundImage:`url(${productImg})`,backgroundSize:"cover",backgroundPosition:"center",filter:"blur(1px)",transform:"scale(1.05)" }} />
-            <div style={{ position:"absolute",inset:0,background:`linear-gradient(to bottom,${c}44 0%,${c}88 100%)` }} />
-            {/* Rank badge over image */}
-            <div style={{ position:"absolute",top:12,left:16,width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${c},${c}CC)`,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:16,fontWeight:900,boxShadow:"0 2px 12px rgba(0,0,0,0.3)" }}>{index+1}</div>
-            {/* Badges top right */}
-            <div style={{ position:"absolute",top:12,right:16,display:"flex",gap:6 }}>
-              {isTop && <Badge color={C.gold}>{uiT("topPick",lg)}</Badge>}
-              {pick.badge && <Badge color="#fff">{pick.badge}</Badge>}
-            </div>
-          </div>
-        )}
 
-        {/* Card info row */}
-        <div style={{ padding:"16px 20px 14px", display:"flex", alignItems:"center", gap:14 }}>
-          {/* Brand logo */}
-          <div style={{ width:48,height:48,borderRadius:12,background:"#fff",border:`1px solid ${C.border}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.08)" }}>
-            {logoUrl
-              ? <img src={logoUrl} onError={()=>setLogoErr(true)} style={{ width:36,height:36,objectFit:"contain" }} alt="" />
-              : <div style={{ width:40,height:40,borderRadius:10,background:brandColor,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18,fontWeight:900 }}>{brandInitial}</div>
-            }
+      {/* ── Image strip with rank + badges ── */}
+      {productImg && (
+        <div style={{ position:"relative", height:80, overflow:"hidden" }}>
+          <div style={{ position:"absolute",inset:0,backgroundImage:`url(${productImg})`,backgroundSize:"cover",backgroundPosition:"center",filter:"blur(1px)",transform:"scale(1.06)" }} />
+          <div style={{ position:"absolute",inset:0,background:`linear-gradient(to bottom,${c}55 0%,${c}99 100%)` }} />
+          <div style={{ position:"absolute",top:10,left:14,width:32,height:32,borderRadius:8,background:`linear-gradient(135deg,${c},${c}CC)`,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:15,fontWeight:900,boxShadow:"0 2px 10px rgba(0,0,0,0.3)" }}>{index+1}</div>
+          <div style={{ position:"absolute",top:10,right:14,display:"flex",gap:5 }}>
+            {isTop && <Badge color={C.gold}>{uiT("topPick",lg)}</Badge>}
+            {pick.badge && <Badge color="rgba(255,255,255,0.9)">{BADGE_T[pick.badge?.toUpperCase()]?.[lg] || pick.badge}</Badge>}
           </div>
+        </div>
+      )}
 
-          <div style={{ flex:1, minWidth:0 }}>
-            <div style={{ color:C.text, fontWeight:800, fontSize:17, fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1.2, marginBottom:3 }}>{pick.name}</div>
-            <div style={{ color:C.muted, fontSize:12, fontWeight:500 }}>{pick.price}</div>
+      {/* ── Logo + Product name (clickable) + Rating/Match ── */}
+      <div style={{ padding:"14px 18px 12px", display:"flex", alignItems:"center", gap:12 }}>
+        {/* Brand logo */}
+        <div style={{ width:44,height:44,borderRadius:10,background:"#fff",border:`1px solid ${C.border}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,overflow:"hidden",boxShadow:"0 1px 6px rgba(0,0,0,0.07)" }}>
+          {logoUrl
+            ? <img src={logoUrl} onError={()=>setLogoErr(true)} style={{ width:32,height:32,objectFit:"contain" }} alt="" />
+            : <div style={{ width:36,height:36,borderRadius:8,background:brandColor,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:16,fontWeight:900 }}>{brandInitial}</div>
+          }
+        </div>
+
+        <div style={{ flex:1, minWidth:0 }}>
+          {/* Clickable product name */}
+          <a href={dealLink} target="_blank" rel="noopener noreferrer"
+            style={{ color:C.text, fontWeight:800, fontSize:16, fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1.2, textDecoration:"none", display:"block",
+              transition:"color 0.15s" }}
+            onMouseEnter={e=>e.currentTarget.style.color=c}
+            onMouseLeave={e=>e.currentTarget.style.color=C.text}>
+            {pick.name} ↗
+          </a>
+          <div style={{ color:C.muted, fontSize:12, fontWeight:500, marginTop:2 }}>{pick.price}</div>
+        </div>
+
+        {/* Rating + Match — compact column */}
+        <div style={{ display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5,flexShrink:0 }}>
+          <div style={{ display:"flex",alignItems:"center",gap:2,background:`${C.gold}12`,border:`1px solid ${C.gold}25`,borderRadius:7,padding:"2px 7px" }}>
+            <span style={{ color:C.gold,fontSize:10,letterSpacing:0.8 }}>{"★".repeat(starsNum)}{"☆".repeat(5-starsNum)}</span>
+            <span style={{ color:C.gold,fontSize:10,fontWeight:800 }}>{Number(stars).toFixed(1)}</span>
           </div>
-
-          {/* Rating + Match Score */}
-          <div style={{ display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6,flexShrink:0 }}>
-            <div style={{ display:"flex",alignItems:"center",gap:3,background:`${C.gold}12`,border:`1px solid ${C.gold}25`,borderRadius:8,padding:"3px 8px" }}>
-              <span style={{ color:C.gold,fontSize:11,letterSpacing:1 }}>{"★".repeat(starsNum)}{"☆".repeat(5-starsNum)}</span>
-              <span style={{ color:C.gold,fontSize:11,fontWeight:800 }}>{Number(stars).toFixed(1)}</span>
-            </div>
-            <div style={{ background:`${matchColor}10`,border:`1.5px solid ${matchColor}35`,borderRadius:10,padding:"4px 10px",display:"flex",alignItems:"center",gap:5 }}>
-              <svg viewBox="0 0 36 36" width="28" height="28" style={{ transform:"rotate(-90deg)",flexShrink:0 }}>
-                <circle cx="18" cy="18" r="15.9" fill="none" stroke={`${matchColor}22`} strokeWidth="3.5"/>
-                <circle cx="18" cy="18" r="15.9" fill="none" stroke={matchColor} strokeWidth="3.5" strokeDasharray={`${matchScore} 100`} strokeLinecap="round"/>
-              </svg>
-              <div>
-                <div style={{ color:matchColor,fontSize:9,fontWeight:800,textTransform:"uppercase",letterSpacing:0.5,lineHeight:1 }}>Match</div>
-                <div style={{ color:matchColor,fontSize:15,fontWeight:900,lineHeight:1 }}>{matchScore}%</div>
-              </div>
+          <div style={{ background:`${matchColor}10`,border:`1.5px solid ${matchColor}35`,borderRadius:9,padding:"3px 8px",display:"flex",alignItems:"center",gap:4 }}>
+            <svg viewBox="0 0 36 36" width="24" height="24" style={{ transform:"rotate(-90deg)",flexShrink:0 }}>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke={`${matchColor}22`} strokeWidth="4"/>
+              <circle cx="18" cy="18" r="15.9" fill="none" stroke={matchColor} strokeWidth="4" strokeDasharray={`${matchScore} 100`} strokeLinecap="round"/>
+            </svg>
+            <div>
+              <div style={{ color:matchColor,fontSize:8,fontWeight:800,textTransform:"uppercase",letterSpacing:0.5,lineHeight:1 }}>Match</div>
+              <div style={{ color:matchColor,fontSize:13,fontWeight:900,lineHeight:1 }}>{matchScore}%</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ padding: "20px 24px" }}>
-        <div style={{
-          background: C.accentLight, borderRadius: 10, padding: "12px 16px",
-          marginBottom: 16, borderLeft: `3px solid ${C.accent}`,
-        }}>
-          <span style={{ color: C.accent, fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>{uiT("whyForYou", lg)} · </span>
-          <span style={{ color: C.textSecondary, fontSize: 14, lineHeight: 1.6 }}>{pick.why}</span>
-        </div>
+      {/* ── Why this for you ── */}
+      <div style={{ margin:"0 18px 14px", background:C.accentLight, borderRadius:10, padding:"11px 14px", borderLeft:`3px solid ${C.accent}` }}>
+        <span style={{ color:C.accent, fontWeight:900, fontSize:11, textTransform:"uppercase", letterSpacing:0.7 }}>{uiT("whyForYou",lg)}</span>
+        <span style={{ color:C.accent, fontWeight:900, fontSize:11 }}> · </span>
+        <span style={{ color:C.textSecondary, fontSize:13, lineHeight:1.6 }}>{pick.why}</span>
+      </div>
 
-        <div className="pros-cons-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
-          <div style={{ background: "#DCFCE7", border: "2px solid #4ADE80", borderRadius: 14, padding: "16px 18px" }}>
-            <div style={{ color: "#15803D", fontWeight: 900, fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
-              <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><circle cx="8" cy="8" r="7" fill="#15803D"/><path d="m5 8 2 2 4-4" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              {uiT("pros", lg)}
-            </div>
-            {pick.pros?.map((p, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
-                <span style={{ color: "#15803D", fontSize: 14, fontWeight: 900, marginTop: 0, flexShrink: 0 }}>+</span>
-                <span style={{ color: "#14532D", fontSize: 13.5, lineHeight: 1.55, fontWeight: 700 }}>{p}</span>
-              </div>
-            ))}
+      {/* ── Pros / Cons ── */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, margin:"0 18px 14px" }}>
+        <div style={{ background:"#F0FDF4", border:"1.5px solid #86EFAC", borderRadius:12, padding:"12px 14px" }}>
+          <div style={{ color:"#15803D", fontWeight:900, fontSize:10, textTransform:"uppercase", letterSpacing:1, marginBottom:10, display:"flex", alignItems:"center", justifyContent:"center", gap:5 }}>
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none"><circle cx="8" cy="8" r="7" fill="#15803D"/><path d="m5 8 2 2 4-4" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            {uiT("pros",lg)}
           </div>
-          <div style={{ background: "#FEE2E2", border: "2px solid #F87171", borderRadius: 14, padding: "16px 18px" }}>
-            <div style={{ color: "#B91C1C", fontWeight: 900, fontSize: 11, textTransform: "uppercase", letterSpacing: 1.2, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
-              <svg viewBox="0 0 16 16" width="15" height="15" fill="none"><circle cx="8" cy="8" r="7" fill="#B91C1C"/><path d="m5.5 5.5 5 5M10.5 5.5l-5 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>
-              {uiT("cons", lg)}
+          {pick.pros?.map((p,i) => (
+            <div key={i} style={{ display:"flex",alignItems:"flex-start",gap:6,marginBottom:7 }}>
+              <span style={{ color:"#15803D",fontSize:13,fontWeight:900,flexShrink:0 }}>+</span>
+              <span style={{ color:"#14532D",fontSize:12.5,lineHeight:1.5,fontWeight:600 }}>{p}</span>
             </div>
-            {pick.cons?.map((p, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
-                <span style={{ color: "#DC2626", fontSize: 14, fontWeight: 900, marginTop: 0, flexShrink: 0 }}>−</span>
-                <span style={{ color: "#7F1D1D", fontSize: 13.5, lineHeight: 1.55, fontWeight: 700 }}>{p}</span>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
+        <div style={{ background:"#FFF1F1", border:"1.5px solid #FCA5A5", borderRadius:12, padding:"12px 14px" }}>
+          <div style={{ color:"#B91C1C", fontWeight:900, fontSize:10, textTransform:"uppercase", letterSpacing:1, marginBottom:10, display:"flex", alignItems:"center", justifyContent:"center", gap:5 }}>
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="none"><circle cx="8" cy="8" r="7" fill="#B91C1C"/><path d="m5.5 5.5 5 5M10.5 5.5l-5 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>
+            {uiT("cons",lg)}
+          </div>
+          {pick.cons?.map((p,i) => (
+            <div key={i} style={{ display:"flex",alignItems:"flex-start",gap:6,marginBottom:7 }}>
+              <span style={{ color:"#DC2626",fontSize:13,fontWeight:900,flexShrink:0 }}>−</span>
+              <span style={{ color:"#7F1D1D",fontSize:12.5,lineHeight:1.5,fontWeight:600 }}>{p}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
-          <span style={{ color: C.muted, fontSize: 12 }}>Source: {pick.source}</span>
-          <a href={dealLink} target="_blank" rel="noopener noreferrer"
-            style={{ background: c, color: "#fff", textDecoration: "none", padding: "9px 20px", borderRadius: 10, fontSize: 13, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6, transition: "opacity 0.15s" }}
-            onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
-            onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-            {uiT("viewDeal", lg)}
-          </a>
-        </div>
+      {/* ── Source + View deal ── */}
+      <div style={{ padding:"0 18px 16px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:8 }}>
+        <span style={{ color:C.muted, fontSize:11 }}>📖 {pick.source}</span>
+        <a href={dealLink} target="_blank" rel="noopener noreferrer"
+          style={{ background:c, color:"#fff", textDecoration:"none", padding:"8px 18px", borderRadius:9, fontSize:12, fontWeight:700, display:"inline-flex", alignItems:"center", gap:5, transition:"opacity 0.15s", flexShrink:0 }}
+          onMouseEnter={e=>e.currentTarget.style.opacity="0.85"}
+          onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
+          {uiT("viewDeal",lg)}
+        </a>
       </div>
     </div>
   );
@@ -3061,7 +3070,17 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }
           </button>
         </div>
 
-        {data?.picks?.map((pick, i) => <RecommendationCard key={i} pick={pick} index={i} lang={lg} category={category} answers={answers} />)}
+        {/* ── 2-column grid for picks ── */}
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(340px,1fr))", background:C.card, borderRadius:16, overflow:"hidden", border:`1px solid ${C.border}`, marginBottom:32 }}>
+          {data?.picks?.map((pick, i) => (
+            <div key={i} style={{
+              borderRight: i % 2 === 0 && data.picks.length > 1 ? `1px solid ${C.border}` : "none",
+              borderBottom: i < data.picks.length - 2 ? `1px solid ${C.border}` : "none",
+            }}>
+              <RecommendationCard pick={pick} index={i} lang={lg} category={category} answers={answers} />
+            </div>
+          ))}
+        </div>
 
         {/* ══ DECISION CONFIDENCE PANEL ══ */}
         {(() => {
@@ -3159,24 +3178,33 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }
           );
         })()}
 
-        {/* ══ AFFILIATE TRANSPARENCY ══ */}
-        <div style={{ background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:"18px 22px",marginTop:20,display:"flex",alignItems:"flex-start",gap:14 }}>
-          <span style={{ fontSize:22,flexShrink:0,marginTop:2 }}>🔍</span>
-          <div style={{ flex:1 }}>
-            <div style={{ color:C.text,fontSize:13,fontWeight:700,marginBottom:4 }}>
-              {lg==="de"?"Wie wir Geld verdienen — transparent":lg==="es"?"Cómo ganamos dinero — transparente":lg==="ro"?"Cum câștigăm bani — transparent":"How we make money — transparent"}
+        {/* ══ AFFILIATE TRANSPARENCY — discrete toggle ══ */}
+        {(() => {
+          const [affOpen, setAffOpen] = useState(false);
+          const label = lg==="de"?"Wie wir Geld verdienen":lg==="es"?"Cómo ganamos dinero":lg==="ro"?"Cum câștigăm bani":"How we make money";
+          return (
+            <div style={{ textAlign:"right", marginTop:-16, marginBottom:28 }}>
+              <button onClick={()=>setAffOpen(o=>!o)}
+                style={{ background:"none", border:"none", color:C.muted, fontSize:11, cursor:"pointer", display:"inline-flex", alignItems:"center", gap:4, padding:"4px 8px", borderRadius:6, transition:"color 0.15s" }}
+                onMouseEnter={e=>e.currentTarget.style.color=C.accent}
+                onMouseLeave={e=>e.currentTarget.style.color=C.muted}>
+                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><circle cx="8" cy="8" r="7" opacity=".2"/><path d="M8 7v5M8 5.5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.2"/></svg>
+                {label} {affOpen?"▲":"▼"}
+              </button>
+              {affOpen && (
+                <div style={{ background:`${C.accent}06`, border:`1px solid ${C.accent}18`, borderRadius:10, padding:"12px 16px", marginTop:6, textAlign:"left", animation:"fadeUp 0.2s ease" }}>
+                  <p style={{ color:C.muted, fontSize:12, margin:0, lineHeight:1.7 }}>
+                    {lg==="de" ? <><strong>Einige Empfehlungen enthalten Affiliate-Links.</strong> Das Ranking wird ausschließlich durch die Übereinstimmung mit Ihrem Profil bestimmt — niemals durch Provisionen. Wenn Sie über unsere Links kaufen, erhalten wir eine kleine Provision ohne Mehrkosten für Sie.</> :
+                     lg==="es" ? <><strong>Algunas recomendaciones contienen enlaces de afiliado.</strong> El ranking está determinado exclusivamente por la compatibilidad con su perfil — nunca por comisiones.</> :
+                     lg==="ro" ? <><strong>Unele recomandări conțin linkuri afiliate.</strong> Clasamentul este determinat exclusiv de compatibilitatea cu profilul tău — niciodată de comisioane.</> :
+                     <><strong>Some recommendations contain affiliate links.</strong> Rankings are determined exclusively by compatibility with your profile — never by commissions.</>}
+                    {" "}<a href="/about" style={{ color:C.accent, fontSize:11 }}>{lg==="de"?"Mehr →":lg==="ro"?"Mai mult →":"Learn more →"}</a>
+                  </p>
+                </div>
+              )}
             </div>
-            <p style={{ color:C.muted,fontSize:12,margin:0,lineHeight:1.65 }}>
-              {lg==="de" ? <>Einige Empfehlungen enthalten Affiliate-Links. Das Ranking wird <strong>ausschließlich</strong> durch die Übereinstimmung mit Ihrem Profil bestimmt — niemals durch Provisionen.</> :
-               lg==="es" ? <>Algunas recomendaciones contienen enlaces de afiliado. El ranking está determinado <strong>exclusivamente</strong> por la compatibilidad con su perfil — nunca por comisiones.</> :
-               lg==="ro" ? <>Unele recomandări conțin linkuri afiliate. Clasamentul este determinat <strong>exclusiv</strong> de compatibilitatea cu profilul tău — niciodată de comisioane.</> :
-               <>Some recommendations contain affiliate links. Rankings are determined <strong>exclusively</strong> by compatibility with your profile — never by commissions.</>}
-            </p>
-            <a href="/about" style={{ color:C.accent,fontSize:11,fontWeight:600,textDecoration:"none",marginTop:4,display:"inline-block" }}>
-              {lg==="de"?"Mehr erfahren →":lg==="es"?"Saber más →":lg==="ro"?"Află mai mult →":"Learn more →"}
-            </a>
-          </div>
-        </div>
+          );
+        })()}
 
         <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
           <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>{uiT("chatMore", lg)}</p>
