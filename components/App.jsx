@@ -2875,6 +2875,121 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }
 
         {data?.picks?.map((pick, i) => <RecommendationCard key={i} pick={pick} index={i} lang={lg} category={category} answers={answers} />)}
 
+        {/* ══ DECISION CONFIDENCE PANEL ══ */}
+        {(() => {
+          const vals = Object.entries(answers || {});
+          const total = vals.length;
+          const skipped = vals.filter(([,v]) => /(no preference|not sure|skip|any|open to)/i.test(v));
+          const specific = total - skipped.length;
+          const confidence = total > 0 ? Math.round((specific / total) * 100) : 70;
+          const confColor = confidence >= 80 ? "#059669" : confidence >= 60 ? "#D97706" : "#DC2626";
+          const confLabel = confidence >= 80
+            ? (lg==="de"?"Hohe Sicherheit":lg==="es"?"Alta confianza":lg==="ro"?"Încredere ridicată":"High confidence")
+            : confidence >= 60
+            ? (lg==="de"?"Mittlere Sicherheit":lg==="es"?"Confianza media":lg==="ro"?"Încredere medie":"Moderate confidence")
+            : (lg==="de"?"Niedrige Sicherheit":lg==="es"?"Confianza baja":lg==="ro"?"Încredere scăzută":"Lower confidence");
+
+          // Detect budget answer for upgrade tip
+          const budgetEntry = vals.find(([k]) => k === "budget");
+          const budgetVal = budgetEntry?.[1] || "";
+          const budgetTiers = {
+            "Under €100": "€100–€200", "Under €200": "€200–€400", "Under €5,000": "€5,000–€10,000",
+            "Under €20": "€20–€50", "Under €30": "€30–€70", "Under €3/month": "€3–€7/month",
+            "Under €50": "€50–€150", "Under €300": "€300–€600", "Under $200": "$200–$400",
+          };
+          const nextBudgetTier = budgetTiers[budgetVal];
+
+          return (
+            <div style={{ background:"linear-gradient(135deg,#F8FAFF,#EEF3FF)", border:`1px solid ${C.border}`, borderRadius:20, padding:28, marginTop:32 }}>
+              <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:20 }}>
+                <div style={{ width:10,height:10,borderRadius:"50%",background:confColor,boxShadow:`0 0 8px ${confColor}` }} />
+                <h3 style={{ color:C.text,fontSize:18,fontWeight:900,margin:0,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+                  {lg==="de"?"Entscheidungs-Sicherheit":lg==="es"?"Confianza en la decisión":lg==="ro"?"Încredere în decizie":"Decision Confidence"}
+                </h3>
+              </div>
+
+              {/* Confidence meter */}
+              <div style={{ marginBottom:24 }}>
+                <div style={{ display:"flex",justifyContent:"space-between",marginBottom:8 }}>
+                  <span style={{ color:C.textSecondary,fontSize:13 }}>
+                    {lg==="de"?"Empfehlungsgenauigkeit":lg==="es"?"Precisión de recomendación":lg==="ro"?"Precizia recomandării":"Recommendation accuracy"}
+                  </span>
+                  <span style={{ color:confColor,fontWeight:900,fontSize:15 }}>{confidence}% · {confLabel}</span>
+                </div>
+                <div style={{ height:8,background:`${confColor}18`,borderRadius:4,overflow:"hidden" }}>
+                  <div style={{ height:"100%",width:`${confidence}%`,background:`linear-gradient(90deg,${confColor}88,${confColor})`,borderRadius:4,transition:"width 1s ease" }} />
+                </div>
+                <p style={{ color:C.muted,fontSize:12,marginTop:8,lineHeight:1.6 }}>
+                  {lg==="de"
+                    ? `Basiert auf ${specific} von ${total} spezifischen Antworten.${skipped.length>0?` ${skipped.length} Antworten waren allgemein und könnten verfeinert werden.`:""}`
+                    : lg==="es"
+                    ? `Basado en ${specific} de ${total} respuestas específicas.${skipped.length>0?` ${skipped.length} respuestas fueron generales y podrían refinarse.`:""}`
+                    : lg==="ro"
+                    ? `Bazat pe ${specific} din ${total} răspunsuri specifice.${skipped.length>0?` ${skipped.length} răspunsuri au fost generale și ar putea fi rafinate.`:""}`
+                    : `Based on ${specific} of ${total} specific answers.${skipped.length>0?` ${skipped.length} answers were general and could be refined for better accuracy.`:""}`}
+                </p>
+              </div>
+
+              {/* Missing info */}
+              {skipped.length > 0 && (
+                <div style={{ background:"#fff",borderRadius:12,padding:"14px 18px",marginBottom:20,border:`1px solid ${C.border}` }}>
+                  <div style={{ color:C.text,fontSize:13,fontWeight:700,marginBottom:8,display:"flex",alignItems:"center",gap:6 }}>
+                    <span style={{ fontSize:16 }}>💡</span>
+                    {lg==="de"?"Was könnte die Empfehlung verbessern?":lg==="es"?"¿Qué podría mejorar la recomendación?":lg==="ro"?"Ce ar putea îmbunătăți recomandarea?":"What could improve this recommendation?"}
+                  </div>
+                  <p style={{ color:C.textSecondary,fontSize:13,margin:0,lineHeight:1.6 }}>
+                    {lg==="de"
+                      ? `Sie haben bei ${skipped.length} ${skipped.length===1?"Frage":"Fragen"} "keine Präferenz" gewählt. Wenn Sie Ai·sel mehr Details geben, kann die Empfehlung noch genauer werden.`
+                      : lg==="es"
+                      ? `Eligió "sin preferencia" en ${skipped.length} ${skipped.length===1?"pregunta":"preguntas"}. Dar más detalles a Ai·sel puede hacer la recomendación más precisa.`
+                      : lg==="ro"
+                      ? `Ai ales "fără preferință" la ${skipped.length} ${skipped.length===1?"întrebare":"întrebări"}. Dacă dai mai multe detalii lui Ai·sel, recomandarea va fi mai precisă.`
+                      : `You chose "no preference" on ${skipped.length} ${skipped.length===1?"question":"questions"}. Giving Ai·sel more details could sharpen the recommendation further.`}
+                  </p>
+                </div>
+              )}
+
+              {/* Budget upgrade tip */}
+              {nextBudgetTier && data?.picks?.[1] && (
+                <div style={{ background:`${C.accent}08`,borderRadius:12,padding:"14px 18px",border:`1.5px solid ${C.accent}25` }}>
+                  <div style={{ color:C.accent,fontSize:13,fontWeight:700,marginBottom:6,display:"flex",alignItems:"center",gap:6 }}>
+                    <span style={{ fontSize:16 }}>📈</span>
+                    {lg==="de"?"Was ändert sich bei höherem Budget?":lg==="es"?"¿Qué cambia con un presupuesto mayor?":lg==="ro"?"Ce s-ar schimba cu un buget mai mare?":"What changes with a higher budget?"}
+                  </div>
+                  <p style={{ color:C.textSecondary,fontSize:13,margin:0,lineHeight:1.6 }}>
+                    {lg==="de"
+                      ? `Mit einem Budget von ${nextBudgetTier} wäre die Empfehlung <strong>${data.picks[1]?.name}</strong> als Top-Pick verfügbar — mit besserer Leistung und mehr Funktionen.`
+                      : lg==="es"
+                      ? `Con un presupuesto de ${nextBudgetTier}, la recomendación <strong>${data.picks[1]?.name}</strong> estaría disponible como opción principal — con mejor rendimiento.`
+                      : lg==="ro"
+                      ? `Cu un buget de ${nextBudgetTier}, recomandarea principală ar deveni <strong>${data.picks[1]?.name}</strong> — cu performanță mai bună și mai multe funcții.`
+                      : `If your budget were ${nextBudgetTier} instead, the top recommendation would shift to <strong>${data.picks[1]?.name}</strong> — offering significantly better performance.`}
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
+        {/* ══ AFFILIATE TRANSPARENCY ══ */}
+        <div style={{ background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:"18px 22px",marginTop:20,display:"flex",alignItems:"flex-start",gap:14 }}>
+          <span style={{ fontSize:22,flexShrink:0,marginTop:2 }}>🔍</span>
+          <div>
+            <div style={{ color:C.text,fontSize:13,fontWeight:700,marginBottom:4 }}>
+              {lg==="de"?"Wie wir Geld verdienen — transparent":lg==="es"?"Cómo ganamos dinero — transparente":lg==="ro"?"Cum câștigăm bani — transparent":"How we make money — transparent"}
+            </div>
+            <p style={{ color:C.muted,fontSize:12,margin:0,lineHeight:1.65 }}>
+              {lg==="de"
+                ? "Einige Empfehlungen können Affiliate-Links enthalten. Das Ranking wird nicht durch Provisionen beeinflusst — nur durch die Übereinstimmung mit Ihrem Profil. Wir verdienen eine kleine Provision, wenn Sie über unsere Links kaufen, ohne dass Sie mehr zahlen."
+                : lg==="es"
+                ? "Algunas recomendaciones pueden contener enlaces de afiliado. El ranking no está influenciado por comisiones, sino por la compatibilidad con su perfil. Ganamos una pequeña comisión si compra a través de nuestros enlaces, sin costo adicional para usted."
+                : lg==="ro"
+                ? "Unele recomandări pot conține linkuri afiliate. Clasamentul nu este influențat de comisioane, ci de compatibilitatea cu profilul tău. Câștigăm un mic comision dacă cumperi prin link-urile noastre, fără cost suplimentar pentru tine."
+                : "Some recommendations may contain affiliate links. Rankings are not influenced by commissions — only by compatibility with your profile. We earn a small fee if you purchase through our links, at no extra cost to you."}
+            </p>
+          </div>
+        </div>
+
         <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
           <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>{uiT("chatMore", lg)}</p>
           <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
@@ -3113,52 +3228,69 @@ function Landing({ onStart, t, lang, setLang }) {
 
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
 
-        {/* How it works */}
+        {/* ══ HOW IT WORKS + TRANSPARENCY ══ */}
         <div style={{ marginBottom: 0 }}>
-          {/* Full-width section banner */}
-          <div style={{ background: `linear-gradient(135deg, ${C.accent} 0%, #7048E8 100%)`, padding: "40px 24px", textAlign: "center", margin: "0 -24px 48px" }}>
-            <div style={{ display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#fff", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Guide</div>
-            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>How it works</h2>
-            <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 17, margin: 0 }}>Get your answer in under 60 seconds</p>
+          <div style={{ background:`linear-gradient(135deg,${C.accent} 0%,#7048E8 100%)`,padding:"40px 24px",textAlign:"center",margin:"0 -24px 48px" }}>
+            <div style={{ display:"inline-block",background:"rgba(255,255,255,0.15)",color:"#fff",borderRadius:20,padding:"4px 14px",fontSize:11,fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:12 }}>Guide</div>
+            <h2 style={{ color:"#fff",fontSize:"clamp(26px,4vw,42px)",fontWeight:900,letterSpacing:-1,margin:"0 0 10px" }}>
+              {lang==="de"?"Wie es funktioniert":lang==="es"?"Cómo funciona":lang==="ro"?"Cum funcționează":"How it works"}
+            </h2>
+            <p style={{ color:"rgba(255,255,255,0.82)",fontSize:17,margin:0 }}>
+              {lang==="de"?"Deine Antwort in unter 60 Sekunden":lang==="es"?"Tu respuesta en menos de 60 segundos":lang==="ro"?"Răspunsul tău în mai puțin de 60 de secunde":"Get your answer in under 60 seconds"}
+            </p>
           </div>
-          <div className="steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
+
+          <div className="steps-grid" style={{ display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:18,marginBottom:32 }}>
             {[
-              {
-                num: "Step 1", title: t?.step1_title || "Choose a category", desc: t?.step1_desc || "Pick from 21 decision categories", grad: [C.accent, C.purple],
-                icon: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-              },
-              {
-                num: "Step 2", title: t?.step2_title || "Answer a few questions", desc: t?.step2_desc || "Our AI learns exactly what you need", grad: [C.purple, C.gold],
-                icon: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="13" x2="12" y2="13"/></svg>
-              },
-              {
-                num: "Step 3", title: "AI analyzes options", desc: "Searches CNET, Wirecutter, Booking & more in real-time", grad: [C.gold, C.success],
-                icon: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6"/><path d="M11 8v6"/></svg>
-              },
-              {
-                num: "Step 4", title: t?.step3_title || "Get your top matches", desc: t?.step3_desc || "Personalized picks with pros, cons & direct links", grad: [C.success, C.accent],
-                icon: <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
-              },
-            ].map((s, i) => (
-              <div key={i} style={{
-                background: "rgba(26,86,219,0.07)", border: `1px solid rgba(26,86,219,0.18)`, borderRadius: 18, padding: "28px 24px",
-                boxShadow: C.shadow, transition: "all 0.2s ease",
-              }}
-                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = C.shadowMd; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = C.shadow; }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
-                  <div style={{
-                    width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-                    background: `linear-gradient(135deg, ${s.grad[0]}, ${s.grad[1]})`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: "#fff", boxShadow: `0 4px 14px ${s.grad[0]}40`,
-                  }}>{s.icon}</div>
-                  <span style={{ color: s.grad[0], fontWeight: 800, fontSize: 12, letterSpacing: 1.2, textTransform: "uppercase" }}>{s.num}</span>
+              { num:1, grad:[C.accent,C.purple],
+                title: lang==="de"?"Kategorie wählen":lang==="es"?"Elige una categoría":lang==="ro"?"Alege o categorie":"Choose a category",
+                desc: lang==="de"?"Wähle aus 66+ Kategorien — von Smartphones bis Krediten.":lang==="es"?"Elige entre 66+ categorías — de smartphones a préstamos.":lang==="ro"?"Alege din 66+ categorii — de la telefoane la credite.":"Pick from 66+ categories — smartphones to loans to hotels.",
+                icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg> },
+              { num:2, grad:[C.purple,"#059669"],
+                title: lang==="de"?"Einige Fragen beantworten":lang==="es"?"Responde algunas preguntas":lang==="ro"?"Răspunde la câteva întrebări":"Answer a few questions",
+                desc: lang==="de"?"Ai·sel lernt genau, was du brauchst — Budget, Nutzung, Prioritäten.":lang==="es"?"Ai·sel aprende exactamente lo que necesitas — presupuesto, uso, prioridades.":lang==="ro"?"Ai·sel află exact ce ai nevoie — buget, utilizare, priorități.":"Ai·sel learns exactly what you need — budget, usage, priorities.",
+                icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> },
+              { num:3, grad:["#059669",C.gold],
+                title: lang==="de"?"KI analysiert Optionen":lang==="es"?"La IA analiza opciones":lang==="ro"?"AI analizează opțiunile":"AI analyzes hundreds of options",
+                desc: lang==="de"?"Durchsucht CNET, Wirecutter, Booking und mehr. Filtert nach deinem Profil — nicht nach Kommissionen.":lang==="es"?"Busca en CNET, Wirecutter, Booking y más. Filtra por tu perfil — no por comisiones.":lang==="ro"?"Caută pe CNET, Wirecutter, Booking și mai mult. Filtrează după profilul tău — nu după comisioane.":"Searches CNET, Wirecutter, Booking & more. Filters by your profile — not by commissions.",
+                icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg> },
+              { num:4, grad:[C.gold,C.accent],
+                title: lang==="de"?"Top-Empfehlungen erhalten":lang==="es"?"Recibe tus mejores opciones":lang==="ro"?"Primești top recomandări":"Get your top matches + why",
+                desc: lang==="de"?"Personalisierte Empfehlungen mit Vor-/Nachteilen, Match-Score und direkten Links. Wir erklären, warum jede Empfehlung zu dir passt.":lang==="es"?"Recomendaciones personalizadas con pros/contras, puntuación de coincidencia y enlaces directos. Explicamos por qué cada opción se adapta a ti.":lang==="ro"?"Recomandări personalizate cu avantaje/dezavantaje, scor de potrivire și link-uri directe. Explicăm de ce fiecare recomandare ți se potrivește.":"Personalized picks with pros/cons, Match %, and direct links. We explain exactly why each recommendation fits your needs.",
+                icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg> },
+            ].map((s,i) => (
+              <div key={i} style={{ background:`${s.grad[0]}08`,border:`1px solid ${s.grad[0]}22`,borderRadius:18,padding:"26px 22px",transition:"all 0.2s ease" }}
+                onMouseEnter={e=>{ e.currentTarget.style.transform="translateY(-4px)"; e.currentTarget.style.boxShadow=`0 12px 28px ${s.grad[0]}18`; }}
+                onMouseLeave={e=>{ e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}>
+                <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:16 }}>
+                  <div style={{ width:44,height:44,borderRadius:12,flexShrink:0,background:`linear-gradient(135deg,${s.grad[0]},${s.grad[1]})`,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",boxShadow:`0 4px 14px ${s.grad[0]}40` }}>{s.icon}</div>
+                  <span style={{ color:s.grad[0],fontWeight:800,fontSize:11,letterSpacing:1.2,textTransform:"uppercase" }}>
+                    {lang==="de"?`Schritt ${s.num}`:lang==="es"?`Paso ${s.num}`:lang==="ro"?`Pasul ${s.num}`:`Step ${s.num}`}
+                  </span>
                 </div>
-                <div style={{ color: C.text, fontWeight: 700, fontSize: 16, marginBottom: 6 }}>{s.title}</div>
-                <div style={{ color: C.muted, fontSize: 13, lineHeight: 1.6 }}>{s.desc}</div>
+                <div style={{ color:C.text,fontWeight:700,fontSize:15,marginBottom:6,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{s.title}</div>
+                <div style={{ color:C.muted,fontSize:13,lineHeight:1.65 }}>{s.desc}</div>
               </div>
             ))}
+          </div>
+
+          {/* ── Affiliate Transparency strip ── */}
+          <div style={{ background:"#fff",border:`1px solid ${C.border}`,borderRadius:16,padding:"20px 24px",display:"flex",alignItems:"flex-start",gap:16 }}>
+            <div style={{ width:40,height:40,borderRadius:10,background:`${C.accent}10`,border:`1px solid ${C.accent}25`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:20 }}>🔍</div>
+            <div>
+              <div style={{ color:C.text,fontSize:14,fontWeight:700,marginBottom:4 }}>
+                {lang==="de"?"Wie wir Geld verdienen — transparent":lang==="es"?"Cómo ganamos dinero — transparente":lang==="ro"?"Cum câștigăm bani — transparent":"How we make money — fully transparent"}
+              </div>
+              <p style={{ color:C.textSecondary,fontSize:13,margin:0,lineHeight:1.7 }}>
+                {lang==="de"
+                  ? "Einige Empfehlungen enthalten Affiliate-Links. Das Ranking wird <strong>ausschließlich</strong> durch die Übereinstimmung mit Ihrem Profil bestimmt — niemals durch Provisionen. Wenn Sie über unsere Links kaufen, erhalten wir eine kleine Provision, ohne dass Sie mehr zahlen."
+                  : lang==="es"
+                  ? "Algunas recomendaciones contienen enlaces de afiliado. El ranking está determinado <strong>exclusivamente</strong> por la compatibilidad con su perfil — nunca por comisiones. Si compra a través de nuestros enlaces, recibimos una pequeña comisión sin costo adicional para usted."
+                  : lang==="ro"
+                  ? "Unele recomandări conțin linkuri afiliate. Clasamentul este determinat <strong>exclusiv</strong> de compatibilitatea cu profilul tău — niciodată de comisioane. Dacă cumperi prin link-urile noastre, primim un mic comision fără costuri suplimentare pentru tine."
+                  : "Some recommendations contain affiliate links. Rankings are determined <strong>exclusively</strong> by compatibility with your profile — never by commissions. If you purchase through our links, we earn a small fee at no extra cost to you."}
+              </p>
+            </div>
           </div>
         </div>
 
