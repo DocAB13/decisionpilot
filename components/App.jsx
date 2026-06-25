@@ -1864,7 +1864,7 @@ function getProductLink(category, productName) {
   if (n.includes("garmin"))          return "https://www.garmin.com/de-DE/products/smartwatch/";
   if (n.includes("fitbit"))          return "https://www.fitbit.com/global/de/home";
   if (n.includes("sony"))            return "https://www.sony.com/en/articles/latest-products";
-  if (category==="hotel")            return \`https://www.booking.com/searchresults.html?ss=\${encodeURIComponent(productName)}&aid=2942851\`;
+  if (category==="hotel")            return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(productName)}&aid=2942851`;
   if (category==="airline")          return "https://www.skyscanner.net/flights";
   if (category==="travel_agency")    return "https://www.booking.com/holidays/?aid=2942851";
   if (category==="travel_insurance") return "https://www.check24.de/reiseversicherung/";
@@ -1879,7 +1879,7 @@ function getProductLink(category, productName) {
     if (n.includes("renault"))  return "https://www.renault.de/pkw.html";
     if (n.includes("hyundai"))  return "https://www.hyundai.de/modelle";
     if (n.includes("kia"))      return "https://www.kia.com/de/";
-    return \`https://www.autoscout24.de/lst?make=\${encodeURIComponent(productName.split(" ")[0])}\`;
+    return `https://www.autoscout24.de/lst?make=${encodeURIComponent(productName.split(" ")[0])}`;
   }
   if (category==="personal_loan"||category==="mortgage") return "https://www.check24.de/kredit/";
   if (category==="credit_card")   return "https://www.check24.de/kreditkarten/";
@@ -1916,7 +1916,7 @@ function HomeButton({ onHome, lang }) {
       style={{ display:"flex",alignItems:"center",gap:8,background:"transparent",border:"none",cursor:"pointer",padding:"8px 12px 8px 4px",borderRadius:10,transition:"background 0.15s",flexShrink:0 }}
       onMouseEnter={e=>e.currentTarget.style.background="rgba(26,86,219,0.08)"}
       onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-      <div style={{ width:28,height:28,borderRadius:7,background:\`linear-gradient(135deg,\${C.accent},#6B8EFF)\`,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0 }}>
+      <div style={{ width:28,height:28,borderRadius:7,background:`linear-gradient(135deg,\${C.accent},#6B8EFF)`,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0 }}>
         <img src="/asel-mascot.png" style={{ width:24,height:24,objectFit:"cover",objectPosition:"30% 8%" }} alt="" />
       </div>
       <span style={{ fontWeight:800,fontSize:14,color:C.text,letterSpacing:-0.3,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>DecisionPilot</span>
