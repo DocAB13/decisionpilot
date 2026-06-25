@@ -296,6 +296,13 @@ export function HeroBanner({ onStart, t, lang }) {
             {t.tagline}
           </div>
 
+          {/* Market tagline — AI-powered comparison platform */}
+          {t.marketTag && (
+            <p style={{ color:"rgba(255,255,255,0.75)", fontSize:"clamp(12px,1.6vw,15px)", fontWeight:500, margin:"0 0 14px", letterSpacing:0.1, lineHeight:1.5, maxWidth:520 }}>
+              {t.marketTag}
+            </p>
+          )}
+
           <h1 style={{
             color: "#fff", fontSize: "clamp(32px, 5vw, 58px)",
             fontWeight: 900, lineHeight: 1.08, letterSpacing: -2,

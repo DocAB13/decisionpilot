@@ -1924,6 +1924,41 @@ function HomeButton({ onHome, lang }) {
   );
 }
 
+// ── Match Score Calculator ────────────────────────────────────────────────────
+function calculateMatchScore(answers, pickIndex) {
+  const base = [97, 92, 86, 79, 72, 65][Math.min(pickIndex, 5)];
+  const vals = Object.values(answers || {});
+  const specific = vals.filter(a => !/(no preference|not sure|any|open to|don.t know)/i.test(a)).length;
+  const boost = vals.length ? Math.round(((specific / vals.length) - 0.5) * 10) : 0;
+  return Math.min(99, Math.max(58, base + boost));
+}
+
+// ── 3-Market config: EN / DE / ES (+ FR/IT/PT/RO) ────────────────────────────
+const MARKETS = {
+  en: { currency:"USD", region:"US/UK/Global",
+    heroTag:"AI-powered comparison platform for smarter buying decisions.",
+    heroBadge:"AI-Powered · 66+ Categories · 30 Languages" },
+  de: { currency:"EUR", region:"DACH",
+    heroTag:"KI-gestützte Vergleichsplattform für bessere Kaufentscheidungen.",
+    heroBadge:"KI-Powered · 66+ Kategorien · 30 Sprachen" },
+  es: { currency:"EUR", region:"ES/LATAM",
+    heroTag:"Plataforma de comparación con IA para decisiones de compra más inteligentes.",
+    heroBadge:"Con IA · 66+ Categorías · 30 Idiomas" },
+  fr: { currency:"EUR", region:"FR/BE/CH",
+    heroTag:"Plateforme de comparaison IA pour des décisions d'achat plus intelligentes.",
+    heroBadge:"Propulsé par IA · 66+ Catégories · 30 Langues" },
+  it: { currency:"EUR", region:"IT",
+    heroTag:"Piattaforma di confronto AI per decisioni di acquisto più intelligenti.",
+    heroBadge:"Con IA · 66+ Categorie · 30 Lingue" },
+  pt: { currency:"EUR", region:"PT/BR",
+    heroTag:"Plataforma de comparação com IA para decisões de compra mais inteligentes.",
+    heroBadge:"Com IA · 66+ Categorias · 30 Idiomas" },
+  ro: { currency:"RON", region:"RO",
+    heroTag:"Platformă de comparare AI pentru decizii de cumpărare mai inteligente.",
+    heroBadge:"Powered by AI · 66+ Categorii · 30 Limbi" },
+};
+function getMarket(lang) { return MARKETS[lang] || MARKETS[(lang||"").slice(0,2)] || MARKETS.en; }
+
 // ── Professional SVG icons for category bar ──────────────────────────────────
 const I = (d, extra="") => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" dangerouslySetInnerHTML={{__html:d}} style={{display:"block"}} {...(extra?{style:{display:"block"}}:{})} />
@@ -2645,7 +2680,7 @@ function LoadingScreen({ category, lang, onHome }) {
   );
 }
 
-function RecommendationCard({ pick, index, lang, category }) {
+function RecommendationCard({ pick, index, lang, category, answers }) {
   const [hovered, setHovered] = useState(false);
   const isTop = index === 0;
   const c = isTop ? C.gold : C.accent;
@@ -2653,6 +2688,12 @@ function RecommendationCard({ pick, index, lang, category }) {
   const dealLink = pick.link && pick.link !== "#" && !pick.link.includes("example.com")
     ? pick.link
     : getProductLink(category, pick.name);
+
+  // Match score: from AI or calculated
+  const matchScore = pick.matchScore || calculateMatchScore(answers, index);
+  const matchColor = matchScore >= 90 ? "#059669" : matchScore >= 75 ? "#D97706" : "#DC2626";
+  const stars = pick.rating ? parseFloat(pick.rating) : (5 - index * 0.2).toFixed(1);
+  const starsNum = Math.round(stars);
 
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
@@ -2680,6 +2721,32 @@ function RecommendationCard({ pick, index, lang, category }) {
             <span style={{ color: C.text, fontWeight: 800, fontSize: 18, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{pick.name}</span>
             {isTop && <Badge color={C.gold}>{uiT("topPick", lg)}</Badge>}
             {pick.badge && <Badge color={c}>{pick.badge}</Badge>}
+
+            {/* Match Score + Rating — prominent display */}
+            <div style={{ display:"flex", alignItems:"center", gap:8, marginLeft:"auto", flexShrink:0 }}>
+              {/* Rating stars */}
+              <div style={{ display:"flex", alignItems:"center", gap:4, background:`${C.gold}12`, border:`1px solid ${C.gold}30`, borderRadius:8, padding:"3px 8px" }}>
+                <span style={{ color:C.gold, fontSize:12, letterSpacing:1 }}>
+                  {"★".repeat(starsNum)}{"☆".repeat(5-starsNum)}
+                </span>
+                <span style={{ color:C.gold, fontSize:12, fontWeight:800 }}>{Number(stars).toFixed(1)}</span>
+              </div>
+              {/* Match Score */}
+              <div style={{ background:`${matchColor}12`, border:`1.5px solid ${matchColor}40`, borderRadius:10, padding:"4px 12px", display:"flex", alignItems:"center", gap:6 }}>
+                <div style={{ position:"relative", width:32, height:32 }}>
+                  <svg viewBox="0 0 36 36" width="32" height="32" style={{ transform:"rotate(-90deg)" }}>
+                    <circle cx="18" cy="18" r="15.9" fill="none" stroke={`${matchColor}22`} strokeWidth="3.5"/>
+                    <circle cx="18" cy="18" r="15.9" fill="none" stroke={matchColor} strokeWidth="3.5"
+                      strokeDasharray={`${matchScore} 100`} strokeLinecap="round"/>
+                  </svg>
+                  <span style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:8, fontWeight:900, color:matchColor }}>{matchScore}</span>
+                </div>
+                <div>
+                  <div style={{ color:matchColor, fontSize:10, fontWeight:900, textTransform:"uppercase", letterSpacing:0.5 }}>Match</div>
+                  <div style={{ color:matchColor, fontSize:14, fontWeight:900, lineHeight:1 }}>{matchScore}%</div>
+                </div>
+              </div>
+            </div>
           </div>
           <div style={{ color: C.muted, fontSize: 13, fontWeight: 500 }}>{pick.price}</div>
         </div>
@@ -2747,7 +2814,14 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }
       try {
         const response = await fetch("/api/chat", {
           method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ mode: "tree_result", category, answers, lang: lg }),
+          body: JSON.stringify({
+            mode: "tree_result",
+            category,
+            answers,
+            lang: lg,
+            market: getMarket(lg).region,
+            currency: getMarket(lg).currency,
+          }),
         });
         const result = await response.json();
         if (result.type === "recommendations") setData(result.data);
@@ -2799,7 +2873,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }
           </button>
         </div>
 
-        {data?.picks?.map((pick, i) => <RecommendationCard key={i} pick={pick} index={i} lang={lg} category={category} />)}
+        {data?.picks?.map((pick, i) => <RecommendationCard key={i} pick={pick} index={i} lang={lg} category={category} answers={answers} />)}
 
         <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
           <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>{uiT("chatMore", lg)}</p>
@@ -2853,7 +2927,7 @@ function Landing({ onStart, t, lang, setLang }) {
           setSelectedGroup(gid);
           setTimeout(() => document.getElementById("categories")?.scrollIntoView({behavior:"smooth", block:"start"}), 80);
         }} />
-      <HeroBanner onStart={onStart} t={t} lang={lang} />
+      <HeroBanner onStart={onStart} t={{ ...t, marketTag: getMarket(lang).heroTag }} lang={lang} />
 
       {/* Search bar */}
       <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px", display: "none" }}>

@@ -5,16 +5,23 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>DecisionPilot – AI Decision Making</title>
-        <meta name="description" content="AI-powered decision making for vacations, phones, cars, and more." />
+        <title>DecisionPilot – AI-Powered Comparison Platform for Smarter Buying Decisions</title>
+        <meta name="description" content="AI-powered comparison platform for smarter buying decisions. Personalized recommendations across 66+ categories — free, unbiased, instant. Available in 30 languages." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+        {/* 3-Market hreflang — EN / DE / ES */}
+        <link rel="alternate" hrefLang="en" href="https://decisionpilot.tech/" />
+        <link rel="alternate" hrefLang="de" href="https://decisionpilot.tech/?lang=de" />
+        <link rel="alternate" hrefLang="es" href="https://decisionpilot.tech/?lang=es" />
+        <link rel="alternate" hrefLang="fr" href="https://decisionpilot.tech/?lang=fr" />
+        <link rel="alternate" hrefLang="x-default" href="https://decisionpilot.tech/" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#1A56DB" />
-        <meta property="og:title" content="DecisionPilot – AI-Powered Decision Making" />
-        <meta property="og:description" content="Get personalized AI recommendations for any decision. 66+ categories, 30+ languages." />
+        <meta property="og:title" content="DecisionPilot – AI-Powered Comparison Platform" />
+        <meta property="og:description" content="AI-powered comparison platform for smarter buying decisions. 66+ categories, 30 languages. Free forever." />
         <meta property="og:url" content="https://decisionpilot.tech" />
         <meta property="og:type" content="website" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
