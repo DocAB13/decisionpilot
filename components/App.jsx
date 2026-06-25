@@ -2941,26 +2941,23 @@ function RecommendationCard({ pick, index, lang, category, answers, onFavorite, 
   const productImg = catTree?.image;
 
   return (
-    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{
-        background: C.card, overflow: "hidden",
-        transition: "background 0.2s",
-        animation: `fadeUp 0.4s ease ${index * 0.08}s both`,
-      }}>
 
-      {/* ── Image strip with rank + badges ── */}
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{ background:C.card, overflow:"hidden", transition:"background 0.2s",
+        animation:`fadeUp 0.4s ease ${index * 0.08}s both`, height:"100%", display:"flex", flexDirection:"column" }}>
+
+      {/* ── Image strip ── */}
       {productImg && (
-        <div style={{ position:"relative", height:80, overflow:"hidden" }}>
+        <div style={{ position:"relative", height:100, overflow:"hidden", flexShrink:0 }}>
           <div style={{ position:"absolute",inset:0,backgroundImage:`url(${productImg})`,backgroundSize:"cover",backgroundPosition:"center",filter:"blur(1px)",transform:"scale(1.06)" }} />
-          <div style={{ position:"absolute",inset:0,background:`linear-gradient(to bottom,${c}55 0%,${c}99 100%)` }} />
-          <div style={{ position:"absolute",top:10,left:14,width:32,height:32,borderRadius:8,background:`linear-gradient(135deg,${c},${c}CC)`,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:15,fontWeight:900,boxShadow:"0 2px 10px rgba(0,0,0,0.3)" }}>{index+1}</div>
-          <div style={{ position:"absolute",top:10,right:14,display:"flex",gap:5,alignItems:"center" }}>
+          <div style={{ position:"absolute",inset:0,background:`linear-gradient(to bottom,${c}55 0%,${c}AA 100%)` }} />
+          <div style={{ position:"absolute",top:12,left:16,width:36,height:36,borderRadius:9,background:`linear-gradient(135deg,${c},${c}CC)`,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:16,fontWeight:900,boxShadow:"0 2px 10px rgba(0,0,0,0.3)" }}>{index+1}</div>
+          <div style={{ position:"absolute",top:12,right:14,display:"flex",gap:5,alignItems:"center" }}>
             {isTop && <Badge color={C.gold}>{uiT("topPick",lg)}</Badge>}
-            {pick.badge && <Badge color="rgba(255,255,255,0.9)">{BADGE_T[pick.badge?.toUpperCase()]?.[lg] || pick.badge}</Badge>}
+            {pick.badge && <Badge color="rgba(255,255,255,0.92)">{BADGE_T[pick.badge?.toUpperCase()]?.[lg] || pick.badge}</Badge>}
             {onFavorite && (
               <button onClick={e=>{e.stopPropagation();onFavorite(pick);}}
-                style={{ background:isFav?"rgba(255,210,0,0.95)":"rgba(255,255,255,0.85)",border:"none",borderRadius:7,width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:14,boxShadow:"0 2px 8px rgba(0,0,0,0.2)",transition:"all 0.15s",flexShrink:0 }}
-                title={isFav?(lg==="ro"?"Șterge din favorite":lg==="de"?"Aus Favoriten entfernen":"Remove from favorites"):(lg==="ro"?"Salvează la favorite":lg==="de"?"Zu Favoriten":"Save")}>
+                style={{ background:isFav?"rgba(255,210,0,0.95)":"rgba(255,255,255,0.88)",border:"none",borderRadius:7,width:30,height:30,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:15,boxShadow:"0 2px 8px rgba(0,0,0,0.2)",transition:"all 0.15s",flexShrink:0 }}>
                 {isFav?"⭐":"☆"}
               </button>
             )}
@@ -2968,87 +2965,80 @@ function RecommendationCard({ pick, index, lang, category, answers, onFavorite, 
         </div>
       )}
 
-      {/* ── Logo + Product name (clickable) + Rating/Match ── */}
-      <div style={{ padding:"14px 18px 12px", display:"flex", alignItems:"center", gap:12 }}>
-        {/* Brand logo */}
-        <div style={{ width:44,height:44,borderRadius:10,background:"#fff",border:`1px solid ${C.border}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,overflow:"hidden",boxShadow:"0 1px 6px rgba(0,0,0,0.07)" }}>
+      {/* ── Brand logo + Name + Price + Scores ── */}
+      <div style={{ padding:"18px 20px 14px", display:"flex", alignItems:"flex-start", gap:12 }}>
+        <div style={{ width:46,height:46,borderRadius:11,background:"#fff",border:`1px solid ${C.border}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,overflow:"hidden",boxShadow:"0 1px 6px rgba(0,0,0,0.07)",marginTop:2 }}>
           {logoUrl
-            ? <img src={logoUrl} onError={()=>setLogoErr(true)} style={{ width:32,height:32,objectFit:"contain" }} alt="" />
-            : <div style={{ width:36,height:36,borderRadius:8,background:brandColor,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:16,fontWeight:900 }}>{brandInitial}</div>
+            ? <img src={logoUrl} onError={()=>setLogoErr(true)} style={{ width:34,height:34,objectFit:"contain" }} alt="" />
+            : <div style={{ width:38,height:38,borderRadius:9,background:brandColor,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:17,fontWeight:900 }}>{brandInitial}</div>
           }
         </div>
-
         <div style={{ flex:1, minWidth:0 }}>
-          {/* Clickable product name */}
           <a href={dealLink} target="_blank" rel="noopener noreferrer"
-            style={{ color:C.text, fontWeight:800, fontSize:16, fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1.2, textDecoration:"none", display:"block",
-              transition:"color 0.15s" }}
+            style={{ color:C.text,fontWeight:800,fontSize:15,fontFamily:"'Plus Jakarta Sans',sans-serif",lineHeight:1.3,textDecoration:"none",display:"block",transition:"color 0.15s",wordBreak:"break-word" }}
             onMouseEnter={e=>e.currentTarget.style.color=c}
             onMouseLeave={e=>e.currentTarget.style.color=C.text}>
             {pick.name} ↗
           </a>
-          <div style={{ color:C.muted, fontSize:12, fontWeight:500, marginTop:2 }}>{pick.price}</div>
-        </div>
-
-        {/* Rating + Match — compact column */}
-        <div style={{ display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5,flexShrink:0 }}>
-          <div style={{ display:"flex",alignItems:"center",gap:2,background:`${C.gold}12`,border:`1px solid ${C.gold}25`,borderRadius:7,padding:"2px 7px" }}>
-            <span style={{ color:C.gold,fontSize:10,letterSpacing:0.8 }}>{"★".repeat(starsNum)}{"☆".repeat(5-starsNum)}</span>
-            <span style={{ color:C.gold,fontSize:10,fontWeight:800 }}>{Number(stars).toFixed(1)}</span>
-          </div>
-          <div style={{ background:`${matchColor}10`,border:`1.5px solid ${matchColor}35`,borderRadius:9,padding:"3px 8px",display:"flex",alignItems:"center",gap:4 }}>
-            <svg viewBox="0 0 36 36" width="24" height="24" style={{ transform:"rotate(-90deg)",flexShrink:0 }}>
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke={`${matchColor}22`} strokeWidth="4"/>
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke={matchColor} strokeWidth="4" strokeDasharray={`${matchScore} 100`} strokeLinecap="round"/>
-            </svg>
-            <div>
-              <div style={{ color:matchColor,fontSize:8,fontWeight:800,textTransform:"uppercase",letterSpacing:0.5,lineHeight:1 }}>Match</div>
-              <div style={{ color:matchColor,fontSize:13,fontWeight:900,lineHeight:1 }}>{matchScore}%</div>
+          <div style={{ color:C.muted,fontSize:12,fontWeight:500,marginTop:3 }}>{pick.price}</div>
+          <div style={{ display:"flex",alignItems:"center",gap:8,marginTop:8,flexWrap:"wrap" }}>
+            <div style={{ display:"flex",alignItems:"center",gap:2,background:`${C.gold}12`,border:`1px solid ${C.gold}25`,borderRadius:7,padding:"2px 8px" }}>
+              <span style={{ color:C.gold,fontSize:10,letterSpacing:0.8 }}>{"★".repeat(starsNum)}{"☆".repeat(5-starsNum)}</span>
+              <span style={{ color:C.gold,fontSize:10,fontWeight:800,marginLeft:2 }}>{Number(stars).toFixed(1)}</span>
+            </div>
+            <div style={{ display:"flex",alignItems:"center",gap:4,background:`${matchColor}10`,border:`1.5px solid ${matchColor}30`,borderRadius:8,padding:"3px 10px" }}>
+              <svg viewBox="0 0 36 36" width="18" height="18" style={{ transform:"rotate(-90deg)",flexShrink:0 }}>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke={`${matchColor}22`} strokeWidth="5"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke={matchColor} strokeWidth="5" strokeDasharray={`${matchScore} 100`} strokeLinecap="round"/>
+              </svg>
+              <span style={{ color:matchColor,fontSize:12,fontWeight:900 }}>{matchScore}%</span>
+              <span style={{ color:matchColor,fontSize:10,fontWeight:600 }}>match</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── Why this for you ── */}
-      <div style={{ margin:"0 18px 14px", background:C.accentLight, borderRadius:10, padding:"11px 14px", borderLeft:`3px solid ${C.accent}` }}>
-        <span style={{ color:C.accent, fontWeight:900, fontSize:11, textTransform:"uppercase", letterSpacing:0.7 }}>{uiT("whyForYou",lg)}</span>
-        <span style={{ color:C.accent, fontWeight:900, fontSize:11 }}> · </span>
-        <span style={{ color:C.textSecondary, fontSize:13, lineHeight:1.6 }}>{pick.why}</span>
+      {/* ── WHY THIS FOR YOU ── bold label on own line ── */}
+      <div style={{ margin:"0 20px 16px", background:C.accentLight, borderRadius:10, padding:"14px 16px", borderLeft:`3px solid ${C.accent}` }}>
+        <div style={{ color:C.accent, fontWeight:900, fontSize:11, textTransform:"uppercase", letterSpacing:0.9, marginBottom:7 }}>
+          {uiT("whyForYou",lg)}
+        </div>
+        <div style={{ color:"#334155", fontSize:13.5, lineHeight:1.65 }}>{pick.why}</div>
       </div>
 
       {/* ── Pros / Cons ── */}
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, margin:"0 18px 14px" }}>
-        <div style={{ background:"#F0FDF4", border:"1.5px solid #86EFAC", borderRadius:12, padding:"12px 14px" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, margin:"0 20px 16px" }}>
+        <div style={{ background:"#F0FDF4", border:"1.5px solid #86EFAC", borderRadius:12, padding:"14px" }}>
           <div style={{ color:"#15803D", fontWeight:900, fontSize:10, textTransform:"uppercase", letterSpacing:1, marginBottom:10, display:"flex", alignItems:"center", justifyContent:"center", gap:5 }}>
             <svg viewBox="0 0 16 16" width="13" height="13" fill="none"><circle cx="8" cy="8" r="7" fill="#15803D"/><path d="m5 8 2 2 4-4" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
             {uiT("pros",lg)}
           </div>
           {pick.pros?.map((p,i) => (
-            <div key={i} style={{ display:"flex",alignItems:"flex-start",gap:6,marginBottom:7 }}>
-              <span style={{ color:"#15803D",fontSize:13,fontWeight:900,flexShrink:0 }}>+</span>
-              <span style={{ color:"#14532D",fontSize:12.5,lineHeight:1.5,fontWeight:600 }}>{p}</span>
+            <div key={i} style={{ display:"flex",alignItems:"flex-start",gap:6,marginBottom:8 }}>
+              <span style={{ color:"#15803D",fontSize:13,fontWeight:900,flexShrink:0,marginTop:1 }}>+</span>
+              <span style={{ color:"#14532D",fontSize:13,lineHeight:1.55,fontWeight:500 }}>{p}</span>
             </div>
           ))}
         </div>
-        <div style={{ background:"#FFF1F1", border:"1.5px solid #FCA5A5", borderRadius:12, padding:"12px 14px" }}>
+        <div style={{ background:"#FFF1F1", border:"1.5px solid #FCA5A5", borderRadius:12, padding:"14px" }}>
           <div style={{ color:"#B91C1C", fontWeight:900, fontSize:10, textTransform:"uppercase", letterSpacing:1, marginBottom:10, display:"flex", alignItems:"center", justifyContent:"center", gap:5 }}>
             <svg viewBox="0 0 16 16" width="13" height="13" fill="none"><circle cx="8" cy="8" r="7" fill="#B91C1C"/><path d="m5.5 5.5 5 5M10.5 5.5l-5 5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/></svg>
             {uiT("cons",lg)}
           </div>
           {pick.cons?.map((p,i) => (
-            <div key={i} style={{ display:"flex",alignItems:"flex-start",gap:6,marginBottom:7 }}>
-              <span style={{ color:"#DC2626",fontSize:13,fontWeight:900,flexShrink:0 }}>−</span>
-              <span style={{ color:"#7F1D1D",fontSize:12.5,lineHeight:1.5,fontWeight:600 }}>{p}</span>
+            <div key={i} style={{ display:"flex",alignItems:"flex-start",gap:6,marginBottom:8 }}>
+              <span style={{ color:"#DC2626",fontSize:13,fontWeight:900,flexShrink:0,marginTop:1 }}>−</span>
+              <span style={{ color:"#7F1D1D",fontSize:13,lineHeight:1.55,fontWeight:500 }}>{p}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ── Source + View deal ── */}
-      <div style={{ padding:"0 18px 16px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:8 }}>
-        <span style={{ color:C.muted, fontSize:11 }}>📖 {pick.source}</span>
+      {/* ── Source + View deal ── pinned to bottom ── */}
+      <div style={{ padding:"0 20px 20px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:8, marginTop:"auto" }}>
+        <span style={{ color:C.muted,fontSize:11 }}>📖 {pick.source}</span>
         <a href={dealLink} target="_blank" rel="noopener noreferrer"
-          style={{ background:c, color:"#fff", textDecoration:"none", padding:"8px 18px", borderRadius:9, fontSize:12, fontWeight:700, display:"inline-flex", alignItems:"center", gap:5, transition:"opacity 0.15s", flexShrink:0 }}
+          style={{ background:c,color:"#fff",textDecoration:"none",padding:"9px 20px",borderRadius:9,fontSize:13,fontWeight:700,display:"inline-flex",alignItems:"center",gap:5,transition:"opacity 0.15s",flexShrink:0,whiteSpace:"nowrap" }}
           onMouseEnter={e=>e.currentTarget.style.opacity="0.85"}
           onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
           {uiT("viewDeal",lg)}
@@ -3122,7 +3112,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
         </div>
       </div>
 
-      <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px 170px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 32px 170px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
           <span style={{ color: C.muted, fontSize: 13 }}>{uiT("poweredBy", lg)}</span>
           <button onClick={onRestart} style={{ background: C.accentLight, color: C.accent, border: `1px solid ${C.accent}33`, borderRadius: 10, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700 }}>
@@ -3130,13 +3120,20 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
           </button>
         </div>
 
-        {/* ── 2-column grid for picks ── */}
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(340px,1fr))", background:C.card, borderRadius:16, overflow:"hidden", border:`1px solid ${C.border}`, marginBottom:32 }}>
+        {/* ── Product grid: 3 cols desktop, 2 tablet, 1 mobile ── */}
+        <style>{`
+          .picks-grid { display:grid; grid-template-columns:repeat(3,1fr); background:var(--card-bg,#fff); border-radius:16px; overflow:hidden; border:1px solid var(--border,#E2E8F0); margin-bottom:32px; }
+          @media(max-width:1024px){ .picks-grid { grid-template-columns:repeat(2,1fr); } }
+          @media(max-width:640px){ .picks-grid { grid-template-columns:1fr; } }
+          .pick-cell { border-right:1px solid var(--border,#E2E8F0); }
+          .pick-cell:nth-child(3n){ border-right:none; }
+          .pick-cell:nth-child(2n){ border-right:none; }
+          @media(min-width:1025px){ .pick-cell:nth-child(2n){ border-right:1px solid var(--border,#E2E8F0); } .pick-cell:nth-child(3n){ border-right:none; } }
+          .pick-cell:nth-last-child(-n+3){ border-bottom:none; }
+        `}</style>
+        <div className="picks-grid">
           {data?.picks?.map((pick, i) => (
-            <div key={i} style={{
-              borderRight: i % 2 === 0 && data.picks.length > 1 ? `1px solid ${C.border}` : "none",
-              borderBottom: i < data.picks.length - 2 ? `1px solid ${C.border}` : "none",
-            }}>
+            <div key={i} className="pick-cell" style={{ borderBottom:`1px solid ${C.border}` }}>
               <RecommendationCard pick={pick} index={i} lang={lg} category={category} answers={answers}
                 isFav={isFavorited(favorites||[], category, pick?.name)}
                 onFavorite={(p)=>onFavorite&&onFavorite(category, p, answers)} />
