@@ -2609,9 +2609,46 @@ function LoadingScreen({ category, lang, onHome }) {
   const [step, setStep] = useState(0);
   const catColor = CATEGORIES_LIST.find(c => c.id === category)?.color || "#1A56DB";
   const lg = lang || "en";
-  const steps = (UI_T.loadSteps[lg] || UI_T.loadSteps.en).map((s,i) =>
-    i===0 ? s.replace("your preferences", `your ${tree?.label?.toLowerCase()||""} preferences`) : s
+  const catLabel = catName(category, lg) || tree?.label || category;
+
+  // Fully translated steps — replace only in English, use native phrases for others
+  const rawSteps = UI_T.loadSteps[lg] || UI_T.loadSteps.en;
+  const steps = rawSteps.map((s, i) =>
+    i === 0 && lg === "en" ? `Analyzing your ${catLabel.toLowerCase()} preferences...` : s
   );
+
+  // Fully translated title per language
+  const loadingTitle = {
+    en: `Finding your perfect ${catLabel.toLowerCase()}...`,
+    de: `Ihr perfektes ${catLabel} wird gesucht...`,
+    es: `Encontrando el mejor ${catLabel.toLowerCase()}...`,
+    fr: `Recherche du meilleur ${catLabel.toLowerCase()}...`,
+    it: `Ricerca del migliore ${catLabel.toLowerCase()}...`,
+    pt: `Encontrando o melhor ${catLabel.toLowerCase()}...`,
+    ro: `Găsim cel mai bun ${catLabel.toLowerCase()}...`,
+    nl: `Uw perfecte ${catLabel.toLowerCase()} wordt gezocht...`,
+    pl: `Szukamy najlepszego ${catLabel.toLowerCase()}...`,
+    ru: `Ищем идеальный ${catLabel.toLowerCase()}...`,
+    zh: `正在寻找最适合您的${catLabel}...`,
+    ar: `نبحث عن أفضل ${catLabel}...`,
+    tr: `En iyi ${catLabel.toLowerCase()} aranıyor...`,
+  }[lg] || `Finding your perfect ${catLabel.toLowerCase()}...`;
+
+  const loadingSubtitle = {
+    en: "Ai·sel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.",
+    de: "Ai·sel analysiert Bewertungen von CNET, TechRadar, Wirecutter und mehr.",
+    es: "Ai·sel está analizando reseñas de CNET, TechRadar, Wirecutter y más.",
+    fr: "Ai·sel analyse les avis de CNET, TechRadar, Wirecutter et plus encore.",
+    it: "Ai·sel sta analizzando recensioni di CNET, TechRadar, Wirecutter e altro.",
+    pt: "Ai·sel está analisando avaliações de CNET, TechRadar, Wirecutter e mais.",
+    ro: "Ai·sel analizează recenzii de pe CNET, TechRadar, Wirecutter și altele.",
+    nl: "Ai·sel analyseert beoordelingen van CNET, TechRadar, Wirecutter en meer.",
+    pl: "Ai·sel analizuje recenzje z CNET, TechRadar, Wirecutter i innych.",
+    ru: "Ai·sel анализирует отзывы с CNET, TechRadar, Wirecutter и других.",
+    zh: "Ai·sel 正在分析 CNET、TechRadar、Wirecutter 等平台的评测。",
+    ar: "تحليل مراجعات CNET وTechRadar وWirecutter والمزيد.",
+    tr: "Ai·sel, CNET, TechRadar, Wirecutter ve daha fazlasından incelemeleri analiz ediyor.",
+  }[lg] || "Ai·sel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.";
 
   useEffect(() => {
     const timer = setInterval(() => setStep(s => Math.min(s + 1, steps.length - 1)), 1200);
@@ -2638,15 +2675,15 @@ function LoadingScreen({ category, lang, onHome }) {
             {getCategoryAnimation(category)}
           </div>
           <div style={{ color: catColor, fontWeight: 800, fontSize: 13, letterSpacing: 1.2, textTransform: "uppercase" }}>
-            {tree?.label} · AI Analysis
+            {catLabel} · AI Analysis
           </div>
         </div>
 
         <h2 style={{ color: C.text, fontSize: 26, fontWeight: 900, marginBottom: 8, letterSpacing: -0.5 }}>
-          {uiT("analyzing", lg)} {tree?.label?.toLowerCase()}...
+          {loadingTitle}
         </h2>
         <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 28, lineHeight: 1.6 }}>
-          Ai·sel is analyzing reviews from CNET, TechRadar, Wirecutter, and more.
+          {loadingSubtitle}
         </p>
         <div style={{ textAlign: "left", background: C.card, borderRadius: 16, padding: "20px 24px", boxShadow: C.shadowMd }}>
           {steps.map((s, i) => (
@@ -2682,6 +2719,7 @@ function LoadingScreen({ category, lang, onHome }) {
 
 function RecommendationCard({ pick, index, lang, category, answers }) {
   const [hovered, setHovered] = useState(false);
+  const [logoErr, setLogoErr] = useState(false);
   const isTop = index === 0;
   const c = isTop ? C.gold : C.accent;
   const lg = lang || "en";
@@ -2689,11 +2727,39 @@ function RecommendationCard({ pick, index, lang, category, answers }) {
     ? pick.link
     : getProductLink(category, pick.name);
 
-  // Match score: from AI or calculated
   const matchScore = pick.matchScore || calculateMatchScore(answers, index);
   const matchColor = matchScore >= 90 ? "#059669" : matchScore >= 75 ? "#D97706" : "#DC2626";
   const stars = pick.rating ? parseFloat(pick.rating) : (5 - index * 0.2).toFixed(1);
   const starsNum = Math.round(stars);
+
+  // Brand logo from Clearbit + category image for product visual
+  const BRAND_DOMAINS = {
+    bosch:"bosch.com", samsung:"samsung.com", apple:"apple.com", lg:"lg.com",
+    siemens:"siemens-home.bsh-group.com", miele:"miele.de", hotpoint:"hotpoint.eu",
+    aeg:"aeg.com", whirlpool:"whirlpool.com", electrolux:"electrolux.com",
+    dyson:"dyson.com", philips:"philips.com", panasonic:"panasonic.com",
+    sony:"sony.com", google:"google.com", microsoft:"microsoft.com",
+    dell:"dell.com", hp:"hp.com", lenovo:"lenovo.com", asus:"asus.com", acer:"acer.com",
+    bmw:"bmw.de", mercedes:"mercedes-benz.de", volkswagen:"vw.de", audi:"audi.de",
+    toyota:"toyota.de", tesla:"tesla.com", ford:"ford.de", renault:"renault.de",
+    nordvpn:"nordvpn.com", expressvpn:"expressvpn.com", surfshark:"surfshark.com",
+    norton:"norton.com", kaspersky:"kaspersky.com", bitdefender:"bitdefender.com",
+    coursera:"coursera.org", udemy:"udemy.com", duolingo:"duolingo.com",
+    shopify:"shopify.com", hubspot:"hubspot.com", mailchimp:"mailchimp.com",
+    garmin:"garmin.com", fitbit:"fitbit.com", ikea:"ikea.com",
+    booking:"booking.com", airbnb:"airbnb.com", skyscanner:"skyscanner.net",
+  };
+  const brandKey = Object.keys(BRAND_DOMAINS).find(b => (pick.name||"").toLowerCase().includes(b));
+  const logoUrl = brandKey && !logoErr
+    ? `https://logo.clearbit.com/${BRAND_DOMAINS[brandKey]}`
+    : null;
+  // Brand initial fallback
+  const brandInitial = (pick.name||"?").charAt(0).toUpperCase();
+  const brandColor = ["#1A56DB","#7C3AED","#059669","#D97706","#DC2626","#0891B2"][index % 6];
+
+  // Category product image from TREES
+  const catTree = TREES[category];
+  const productImg = catTree?.image;
 
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
@@ -2706,49 +2772,57 @@ function RecommendationCard({ pick, index, lang, category, answers }) {
         marginBottom: 20, animation: `fadeUp 0.4s ease ${index * 0.1}s both`,
       }}>
       <div style={{
-        background: `linear-gradient(135deg, ${c}12, ${c}05)`,
-        borderBottom: `1px solid ${c}22`, padding: "20px 24px",
-        display: "flex", alignItems: "center", gap: 14,
+        background: `linear-gradient(135deg, ${c}10, ${c}04)`,
+        borderBottom: `1px solid ${c}20`, padding: "0",
+        overflow: "hidden",
       }}>
-        <div style={{
-          width: 44, height: 44, borderRadius: 12,
-          background: `linear-gradient(135deg, ${c}, ${c}CC)`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          color: "#fff", fontSize: 18, fontWeight: 900, flexShrink: 0,
-        }}>{index + 1}</div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-            <span style={{ color: C.text, fontWeight: 800, fontSize: 18, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{pick.name}</span>
-            {isTop && <Badge color={C.gold}>{uiT("topPick", lg)}</Badge>}
-            {pick.badge && <Badge color={c}>{pick.badge}</Badge>}
+        {/* Product image strip */}
+        {productImg && (
+          <div style={{ position:"relative", height:90, overflow:"hidden" }}>
+            <div style={{ position:"absolute",inset:0,backgroundImage:`url(${productImg})`,backgroundSize:"cover",backgroundPosition:"center",filter:"blur(1px)",transform:"scale(1.05)" }} />
+            <div style={{ position:"absolute",inset:0,background:`linear-gradient(to bottom,${c}44 0%,${c}88 100%)` }} />
+            {/* Rank badge over image */}
+            <div style={{ position:"absolute",top:12,left:16,width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${c},${c}CC)`,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:16,fontWeight:900,boxShadow:"0 2px 12px rgba(0,0,0,0.3)" }}>{index+1}</div>
+            {/* Badges top right */}
+            <div style={{ position:"absolute",top:12,right:16,display:"flex",gap:6 }}>
+              {isTop && <Badge color={C.gold}>{uiT("topPick",lg)}</Badge>}
+              {pick.badge && <Badge color="#fff">{pick.badge}</Badge>}
+            </div>
+          </div>
+        )}
 
-            {/* Match Score + Rating — prominent display */}
-            <div style={{ display:"flex", alignItems:"center", gap:8, marginLeft:"auto", flexShrink:0 }}>
-              {/* Rating stars */}
-              <div style={{ display:"flex", alignItems:"center", gap:4, background:`${C.gold}12`, border:`1px solid ${C.gold}30`, borderRadius:8, padding:"3px 8px" }}>
-                <span style={{ color:C.gold, fontSize:12, letterSpacing:1 }}>
-                  {"★".repeat(starsNum)}{"☆".repeat(5-starsNum)}
-                </span>
-                <span style={{ color:C.gold, fontSize:12, fontWeight:800 }}>{Number(stars).toFixed(1)}</span>
-              </div>
-              {/* Match Score */}
-              <div style={{ background:`${matchColor}12`, border:`1.5px solid ${matchColor}40`, borderRadius:10, padding:"4px 12px", display:"flex", alignItems:"center", gap:6 }}>
-                <div style={{ position:"relative", width:32, height:32 }}>
-                  <svg viewBox="0 0 36 36" width="32" height="32" style={{ transform:"rotate(-90deg)" }}>
-                    <circle cx="18" cy="18" r="15.9" fill="none" stroke={`${matchColor}22`} strokeWidth="3.5"/>
-                    <circle cx="18" cy="18" r="15.9" fill="none" stroke={matchColor} strokeWidth="3.5"
-                      strokeDasharray={`${matchScore} 100`} strokeLinecap="round"/>
-                  </svg>
-                  <span style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:8, fontWeight:900, color:matchColor }}>{matchScore}</span>
-                </div>
-                <div>
-                  <div style={{ color:matchColor, fontSize:10, fontWeight:900, textTransform:"uppercase", letterSpacing:0.5 }}>Match</div>
-                  <div style={{ color:matchColor, fontSize:14, fontWeight:900, lineHeight:1 }}>{matchScore}%</div>
-                </div>
+        {/* Card info row */}
+        <div style={{ padding:"16px 20px 14px", display:"flex", alignItems:"center", gap:14 }}>
+          {/* Brand logo */}
+          <div style={{ width:48,height:48,borderRadius:12,background:"#fff",border:`1px solid ${C.border}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,overflow:"hidden",boxShadow:"0 2px 8px rgba(0,0,0,0.08)" }}>
+            {logoUrl
+              ? <img src={logoUrl} onError={()=>setLogoErr(true)} style={{ width:36,height:36,objectFit:"contain" }} alt="" />
+              : <div style={{ width:40,height:40,borderRadius:10,background:brandColor,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18,fontWeight:900 }}>{brandInitial}</div>
+            }
+          </div>
+
+          <div style={{ flex:1, minWidth:0 }}>
+            <div style={{ color:C.text, fontWeight:800, fontSize:17, fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1.2, marginBottom:3 }}>{pick.name}</div>
+            <div style={{ color:C.muted, fontSize:12, fontWeight:500 }}>{pick.price}</div>
+          </div>
+
+          {/* Rating + Match Score */}
+          <div style={{ display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6,flexShrink:0 }}>
+            <div style={{ display:"flex",alignItems:"center",gap:3,background:`${C.gold}12`,border:`1px solid ${C.gold}25`,borderRadius:8,padding:"3px 8px" }}>
+              <span style={{ color:C.gold,fontSize:11,letterSpacing:1 }}>{"★".repeat(starsNum)}{"☆".repeat(5-starsNum)}</span>
+              <span style={{ color:C.gold,fontSize:11,fontWeight:800 }}>{Number(stars).toFixed(1)}</span>
+            </div>
+            <div style={{ background:`${matchColor}10`,border:`1.5px solid ${matchColor}35`,borderRadius:10,padding:"4px 10px",display:"flex",alignItems:"center",gap:5 }}>
+              <svg viewBox="0 0 36 36" width="28" height="28" style={{ transform:"rotate(-90deg)",flexShrink:0 }}>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke={`${matchColor}22`} strokeWidth="3.5"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke={matchColor} strokeWidth="3.5" strokeDasharray={`${matchScore} 100`} strokeLinecap="round"/>
+              </svg>
+              <div>
+                <div style={{ color:matchColor,fontSize:9,fontWeight:800,textTransform:"uppercase",letterSpacing:0.5,lineHeight:1 }}>Match</div>
+                <div style={{ color:matchColor,fontSize:15,fontWeight:900,lineHeight:1 }}>{matchScore}%</div>
               </div>
             </div>
           </div>
-          <div style={{ color: C.muted, fontSize: 13, fontWeight: 500 }}>{pick.price}</div>
         </div>
       </div>
 
@@ -2974,19 +3048,19 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }
         {/* ══ AFFILIATE TRANSPARENCY ══ */}
         <div style={{ background:C.card,border:`1px solid ${C.border}`,borderRadius:16,padding:"18px 22px",marginTop:20,display:"flex",alignItems:"flex-start",gap:14 }}>
           <span style={{ fontSize:22,flexShrink:0,marginTop:2 }}>🔍</span>
-          <div>
+          <div style={{ flex:1 }}>
             <div style={{ color:C.text,fontSize:13,fontWeight:700,marginBottom:4 }}>
               {lg==="de"?"Wie wir Geld verdienen — transparent":lg==="es"?"Cómo ganamos dinero — transparente":lg==="ro"?"Cum câștigăm bani — transparent":"How we make money — transparent"}
             </div>
             <p style={{ color:C.muted,fontSize:12,margin:0,lineHeight:1.65 }}>
-              {lg==="de"
-                ? "Einige Empfehlungen können Affiliate-Links enthalten. Das Ranking wird nicht durch Provisionen beeinflusst — nur durch die Übereinstimmung mit Ihrem Profil. Wir verdienen eine kleine Provision, wenn Sie über unsere Links kaufen, ohne dass Sie mehr zahlen."
-                : lg==="es"
-                ? "Algunas recomendaciones pueden contener enlaces de afiliado. El ranking no está influenciado por comisiones, sino por la compatibilidad con su perfil. Ganamos una pequeña comisión si compra a través de nuestros enlaces, sin costo adicional para usted."
-                : lg==="ro"
-                ? "Unele recomandări pot conține linkuri afiliate. Clasamentul nu este influențat de comisioane, ci de compatibilitatea cu profilul tău. Câștigăm un mic comision dacă cumperi prin link-urile noastre, fără cost suplimentar pentru tine."
-                : "Some recommendations may contain affiliate links. Rankings are not influenced by commissions — only by compatibility with your profile. We earn a small fee if you purchase through our links, at no extra cost to you."}
+              {lg==="de" ? <>Einige Empfehlungen enthalten Affiliate-Links. Das Ranking wird <strong>ausschließlich</strong> durch die Übereinstimmung mit Ihrem Profil bestimmt — niemals durch Provisionen.</> :
+               lg==="es" ? <>Algunas recomendaciones contienen enlaces de afiliado. El ranking está determinado <strong>exclusivamente</strong> por la compatibilidad con su perfil — nunca por comisiones.</> :
+               lg==="ro" ? <>Unele recomandări conțin linkuri afiliate. Clasamentul este determinat <strong>exclusiv</strong> de compatibilitatea cu profilul tău — niciodată de comisioane.</> :
+               <>Some recommendations contain affiliate links. Rankings are determined <strong>exclusively</strong> by compatibility with your profile — never by commissions.</>}
             </p>
+            <a href="/about" style={{ color:C.accent,fontSize:11,fontWeight:600,textDecoration:"none",marginTop:4,display:"inline-block" }}>
+              {lg==="de"?"Mehr erfahren →":lg==="es"?"Saber más →":lg==="ro"?"Află mai mult →":"Learn more →"}
+            </a>
           </div>
         </div>
 
@@ -3274,24 +3348,6 @@ function Landing({ onStart, t, lang, setLang }) {
             ))}
           </div>
 
-          {/* ── Affiliate Transparency strip ── */}
-          <div style={{ background:"#fff",border:`1px solid ${C.border}`,borderRadius:16,padding:"20px 24px",display:"flex",alignItems:"flex-start",gap:16 }}>
-            <div style={{ width:40,height:40,borderRadius:10,background:`${C.accent}10`,border:`1px solid ${C.accent}25`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:20 }}>🔍</div>
-            <div>
-              <div style={{ color:C.text,fontSize:14,fontWeight:700,marginBottom:4 }}>
-                {lang==="de"?"Wie wir Geld verdienen — transparent":lang==="es"?"Cómo ganamos dinero — transparente":lang==="ro"?"Cum câștigăm bani — transparent":"How we make money — fully transparent"}
-              </div>
-              <p style={{ color:C.textSecondary,fontSize:13,margin:0,lineHeight:1.7 }}>
-                {lang==="de"
-                  ? "Einige Empfehlungen enthalten Affiliate-Links. Das Ranking wird <strong>ausschließlich</strong> durch die Übereinstimmung mit Ihrem Profil bestimmt — niemals durch Provisionen. Wenn Sie über unsere Links kaufen, erhalten wir eine kleine Provision, ohne dass Sie mehr zahlen."
-                  : lang==="es"
-                  ? "Algunas recomendaciones contienen enlaces de afiliado. El ranking está determinado <strong>exclusivamente</strong> por la compatibilidad con su perfil — nunca por comisiones. Si compra a través de nuestros enlaces, recibimos una pequeña comisión sin costo adicional para usted."
-                  : lang==="ro"
-                  ? "Unele recomandări conțin linkuri afiliate. Clasamentul este determinat <strong>exclusiv</strong> de compatibilitatea cu profilul tău — niciodată de comisioane. Dacă cumperi prin link-urile noastre, primim un mic comision fără costuri suplimentare pentru tine."
-                  : "Some recommendations contain affiliate links. Rankings are determined <strong>exclusively</strong> by compatibility with your profile — never by commissions. If you purchase through our links, we earn a small fee at no extra cost to you."}
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Categories - immediately after How it works */}

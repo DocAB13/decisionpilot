@@ -21,12 +21,30 @@ export default function About() {
           actually fit, complete with pros, cons, and a direct link to act on it.
         </p>
 
-        <h2>Independent by design</h2>
+        <h2>How we make money — fully transparent</h2>
         <p>
-          We work with comparison partners like AutoScout24, CHECK24, Booking.com, Wayfair, Sixt, and Europcar, and may earn a
-          small commission when you complete a booking through us. That commission never decides what we recommend — our goal
-          is to be the tool you'd want a sharp, honest friend to be when you're stuck choosing between options.
+          Some recommendations on DecisionPilot contain affiliate links. When you click through and make a purchase,
+          we may earn a small commission — at <strong>no extra cost to you</strong>.
         </p>
+        <p>
+          <strong>Our rankings are determined exclusively by compatibility with your profile</strong> — never by commission rates.
+          The algorithm considers your answers to questions about budget, usage, priorities, and preferences.
+          A product that pays us a higher commission will never rank above a product that fits you better.
+        </p>
+        <p>
+          We partner with: AutoScout24, CHECK24, Booking.com, Wayfair, Sixt, Europcar, Amazon Associates,
+          and others — all through Awin (Publisher ID: 2942851) and CJ Affiliate networks.
+        </p>
+
+        <div style={{ background:"#F0FDF4", border:"1px solid #BBF7D0", borderRadius:12, padding:"16px 20px", margin:"24px 0" }}>
+          <strong style={{ color:"#15803D" }}>Our commitment:</strong>
+          <ul style={{ color:"#166534", margin:"8px 0 0", paddingLeft:20, lineHeight:2 }}>
+            <li>Rankings are based on match score, not commission value</li>
+            <li>We disclose affiliate relationships on every results page</li>
+            <li>You can always use the "Chat with Ai·sel" option for unfiltered advice</li>
+            <li>We never sell your personal data or search history</li>
+          </ul>
+        </div>
 
         <h2>Where we are today</h2>
         <p>
