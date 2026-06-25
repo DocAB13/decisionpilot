@@ -2102,7 +2102,7 @@ const CAT_SVG_ICONS = {
   ecommerce: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>,
 };
 
-function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCategoryClick }) {
+function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCategoryClick, profile, onShowProfile, favoritesCount, onShowFavorites }) {
   const [langOpen, setLangOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
@@ -2165,7 +2165,7 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCa
           </div>
         </div>
 
-        {/* Right: Pro, Premium, Lang */}
+        {/* Right: Favorites, Profile, Lang */}
         <div style={{ display:"flex",alignItems:"center",gap:6,flexShrink:0 }}>
         {/* Pro/Premium buttons — TEMPORARILY HIDDEN */}
         <div style={{ display: "none" }}>
@@ -2178,6 +2178,41 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCa
             ♛ Premium
           </button>
         </div>
+
+          {/* ── Favorites button ── */}
+          {onShowFavorites && (
+            <button onClick={onShowFavorites}
+              style={{ position:"relative",background:"transparent",border:`1px solid ${C.border}`,borderRadius:20,padding:"6px 12px",cursor:"pointer",fontSize:13,display:"flex",alignItems:"center",gap:4,color:C.textSecondary,transition:"all 0.15s",whiteSpace:"nowrap" }}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=C.gold;e.currentTarget.style.color=C.gold;}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.textSecondary;}}>
+              ⭐
+              {favoritesCount > 0 && <span style={{ fontWeight:700,fontSize:12 }}>{favoritesCount}</span>}
+            </button>
+          )}
+
+          {/* ── Profile button ── */}
+          {onShowProfile && (
+            <button onClick={onShowProfile}
+              style={{ display:"flex",alignItems:"center",gap:6,background:"transparent",border:`1px solid ${C.border}`,borderRadius:20,padding:"5px 10px 5px 6px",cursor:"pointer",transition:"all 0.15s" }}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;e.currentTarget.style.background=`${C.accent}08`;}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.background="transparent";}}>
+              {profile ? (
+                <>
+                  <div style={{ width:26,height:26,borderRadius:"50%",background:`linear-gradient(135deg,${C.accent},#7C3AED)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13 }}>
+                    {STATUSES.find(s=>s.id===profile.status)?.emoji||"👤"}
+                  </div>
+                  <span style={{ fontSize:12,fontWeight:700,color:C.text,maxWidth:70,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>
+                    {profile.nickname}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <div style={{ width:26,height:26,borderRadius:"50%",background:`${C.accent}15`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14 }}>👤</div>
+                  <span style={{ fontSize:11,fontWeight:600,color:C.muted }}>{lang==="de"?"Profil":lang==="ro"?"Profil":"Profile"}</span>
+                </>
+              )}
+            </button>
+          )}
 
           {/* Language flag only */}
           <div style={{ position:"relative" }}>
@@ -2842,7 +2877,7 @@ const BADGE_T = {
   "RUNNER UP":       {ro:"LOC 2",de:"ZWEITE WAHL",es:"SEGUNDA OPCIÓN"},
 };
 
-function RecommendationCard({ pick, index, lang, category, answers }) {
+function RecommendationCard({ pick, index, lang, category, answers, onFavorite, isFav }) {
   const [hovered, setHovered] = useState(false);
   const [logoErr, setLogoErr] = useState(false);
   const isTop = index === 0;
@@ -2902,9 +2937,16 @@ function RecommendationCard({ pick, index, lang, category, answers }) {
           <div style={{ position:"absolute",inset:0,backgroundImage:`url(${productImg})`,backgroundSize:"cover",backgroundPosition:"center",filter:"blur(1px)",transform:"scale(1.06)" }} />
           <div style={{ position:"absolute",inset:0,background:`linear-gradient(to bottom,${c}55 0%,${c}99 100%)` }} />
           <div style={{ position:"absolute",top:10,left:14,width:32,height:32,borderRadius:8,background:`linear-gradient(135deg,${c},${c}CC)`,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:15,fontWeight:900,boxShadow:"0 2px 10px rgba(0,0,0,0.3)" }}>{index+1}</div>
-          <div style={{ position:"absolute",top:10,right:14,display:"flex",gap:5 }}>
+          <div style={{ position:"absolute",top:10,right:14,display:"flex",gap:5,alignItems:"center" }}>
             {isTop && <Badge color={C.gold}>{uiT("topPick",lg)}</Badge>}
             {pick.badge && <Badge color="rgba(255,255,255,0.9)">{BADGE_T[pick.badge?.toUpperCase()]?.[lg] || pick.badge}</Badge>}
+            {onFavorite && (
+              <button onClick={e=>{e.stopPropagation();onFavorite(pick);}}
+                style={{ background:isFav?"rgba(255,210,0,0.95)":"rgba(255,255,255,0.85)",border:"none",borderRadius:7,width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:14,boxShadow:"0 2px 8px rgba(0,0,0,0.2)",transition:"all 0.15s",flexShrink:0 }}
+                title={isFav?(lg==="ro"?"Șterge din favorite":lg==="de"?"Aus Favoriten entfernen":"Remove from favorites"):(lg==="ro"?"Salvează la favorite":lg==="de"?"Zu Favoriten":"Save")}>
+                {isFav?"⭐":"☆"}
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -2999,7 +3041,7 @@ function RecommendationCard({ pick, index, lang, category, answers }) {
   );
 }
 
-function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }) {
+function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorite, favorites, profile, t, lang }) {
   const tree = TREES[category];
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -3077,7 +3119,9 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }
               borderRight: i % 2 === 0 && data.picks.length > 1 ? `1px solid ${C.border}` : "none",
               borderBottom: i < data.picks.length - 2 ? `1px solid ${C.border}` : "none",
             }}>
-              <RecommendationCard pick={pick} index={i} lang={lg} category={category} answers={answers} />
+              <RecommendationCard pick={pick} index={i} lang={lg} category={category} answers={answers}
+                isFav={isFavorited(favorites||[], category, pick?.name)}
+                onFavorite={(p)=>onFavorite&&onFavorite(category, p, answers)} />
             </div>
           ))}
         </div>
@@ -3219,7 +3263,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, t, lang }
   );
 }
 
-function Landing({ onStart, t, lang, setLang }) {
+function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile }) {
   const [count, setCount] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
   const [showPricing, setShowPricing] = useState(false);
@@ -3254,6 +3298,8 @@ function Landing({ onStart, t, lang, setLang }) {
     <div style={{ minHeight: "100vh", background: C.bg, fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
       <style>{`h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }`}</style>
       <TopNav showBack={false} t={t} lang={lang} setLang={setLang} count={count}
+        profile={profile} onShowProfile={onShowProfile}
+        favoritesCount={favorites?.length||0} onShowFavorites={()=>onStart("favorites")}
         onCategoryClick={(gid) => {
           setSelectedGroup(gid);
           setTimeout(() => document.getElementById("categories")?.scrollIntoView({behavior:"smooth", block:"start"}), 80);
@@ -4017,14 +4063,359 @@ function incrementDecisionCount() {
   localStorage.setItem("dp_decisions", JSON.stringify({ date: today, count: current + 1 }));
 }
 
+
+// ═══════════════════════════════════════════════════════════════
+// USER PROFILE + FAVORITES SYSTEM (localStorage, no personal data)
+// ═══════════════════════════════════════════════════════════════
+
+const STATUSES = [
+  { id:"mr",    label:"Mr.",    emoji:"👔" },
+  { id:"mrs",   label:"Mrs.",   emoji:"👗" },
+  { id:"ms",    label:"Ms.",    emoji:"💼" },
+  { id:"mx",    label:"Mx.",    emoji:"🌈" },
+  { id:"dr",    label:"Dr.",    emoji:"🩺" },
+  { id:"prof",  label:"Prof.",  emoji:"🎓" },
+  { id:"family",label:"Family", emoji:"👨‍👩‍👧‍👦" },
+  { id:"student",label:"Student",emoji:"📚" },
+  { id:"single",label:"Single", emoji:"🏠" },
+  { id:"couple",label:"Couple", emoji:"💑" },
+  { id:"senior",label:"Senior", emoji:"🌟" },
+  { id:"expat", label:"Expat",  emoji:"🌍" },
+  { id:"divorced",label:"Divorced",emoji:"🔄"},
+  { id:"professional",label:"Professional",emoji:"💼"},
+];
+
+const BUDGET_RANGES = [
+  { id:"tight",  label:"< €100/mo",  icon:"💰" },
+  { id:"medium", label:"€100–500",   icon:"💶" },
+  { id:"comfort",label:"€500–2000",  icon:"💳" },
+  { id:"premium",label:"€2000+/mo",  icon:"🏆" },
+];
+
+const TECH_LEVELS = [
+  { id:"beginner",     label:{ en:"Beginner",     de:"Anfänger",   ro:"Începător"  } },
+  { id:"intermediate", label:{ en:"Intermediate",  de:"Mittelstufe",ro:"Intermediar"} },
+  { id:"advanced",     label:{ en:"Advanced",      de:"Fortgeschrittener",ro:"Avansat"}},
+  { id:"expert",       label:{ en:"Expert",        de:"Experte",    ro:"Expert"     } },
+];
+
+function loadProfile() {
+  try { return JSON.parse(localStorage.getItem("dp_profile")||"null"); } catch { return null; }
+}
+function saveProfile(p) {
+  try { localStorage.setItem("dp_profile", JSON.stringify(p)); } catch {}
+}
+function loadFavorites() {
+  try { return JSON.parse(localStorage.getItem("dp_favorites")||"[]"); } catch { return []; }
+}
+function saveFavorites(favs) {
+  try { localStorage.setItem("dp_favorites", JSON.stringify(favs)); } catch {}
+}
+function isFavorited(favs, category, pickName) {
+  return favs.some(f => f.category === category && f.pick?.name === pickName);
+}
+function toggleFavorite(favs, category, pick, answers) {
+  if (isFavorited(favs, category, pick?.name)) {
+    return favs.filter(f => !(f.category === category && f.pick?.name === pick?.name));
+  }
+  return [...favs, { id: Date.now(), category, pick, answers, savedAt: new Date().toISOString() }];
+}
+
+// ── Profile Setup Modal ───────────────────────────────────────────────────────
+function ProfileModal({ onClose, onSave, lang, existing }) {
+  const [step, setStep] = useState(0);
+  const [status, setStatus] = useState(existing?.status || "");
+  const [nickname, setNickname] = useState(existing?.nickname || "");
+  const [budget, setBudget] = useState(existing?.budget || "");
+  const [techLevel, setTechLevel] = useState(existing?.techLevel || "");
+  const [priorities, setPriorities] = useState(existing?.priorities || []);
+  const lg = lang || "en";
+
+  const PRIORITY_OPTS = [
+    { id:"price",    label:{ en:"Best price",       de:"Bester Preis",  ro:"Cel mai bun preț" } },
+    { id:"quality",  label:{ en:"Quality first",    de:"Qualität zuerst",ro:"Calitate înainte" } },
+    { id:"privacy",  label:{ en:"Privacy & security",de:"Datenschutz",  ro:"Confidențialitate"} },
+    { id:"ease",     label:{ en:"Easy to use",      de:"Einfach zu nutzen",ro:"Ușor de folosit"} },
+    { id:"speed",    label:{ en:"Speed & performance",de:"Geschwindigkeit",ro:"Viteză"        } },
+    { id:"support",  label:{ en:"Good support",     de:"Guter Support",  ro:"Suport bun"      } },
+    { id:"eco",      label:{ en:"Eco / green",      de:"Umweltfreundlich",ro:"Ecologic"        } },
+    { id:"local",    label:{ en:"Local / EU brands",de:"Europäische Marken",ro:"Mărci locale" } },
+  ];
+
+  const titles = {
+    en: ["Choose your status","Your nickname","Your preferences","All set! 🎉"],
+    de: ["Status wählen","Ihr Spitzname","Ihre Präferenzen","Fertig! 🎉"],
+    ro: ["Alege statusul tău","Nickname-ul tău","Preferințele tale","Gata! 🎉"],
+    es: ["Elige tu estado","Tu apodo","Tus preferencias","¡Listo! 🎉"],
+  };
+
+  const subtitle = {
+    en: ["No email. No password. Just a nickname.",
+         "This is how Ai·sel will greet you.",
+         "These help Ai·sel pre-fill your answers.",
+         "Your profile is saved locally only."],
+    de: ["Keine E-Mail. Kein Passwort. Nur ein Spitzname.",
+         "So begrüßt dich Ai·sel.",
+         "Das hilft Ai·sel, deine Antworten vorauszufüllen.",
+         "Dein Profil wird nur lokal gespeichert."],
+    ro: ["Fără email. Fără parolă. Doar un nickname.",
+         "Așa te va saluta Ai·sel.",
+         "Ajută Ai·sel să precompleteze răspunsurile.",
+         "Profilul tău este salvat doar local."],
+    es: ["Sin email. Sin contraseña. Solo un apodo.",
+         "Así es como Ai·sel te saludará.",
+         "Ayudan a Ai·sel a pre-rellenar tus respuestas.",
+         "Tu perfil se guarda solo localmente."],
+  };
+
+  const t = (key) => (titles[lg]||titles.en)[key];
+  const s = (key) => ((subtitle[lg]||subtitle.en)[key]);
+
+  function handleSave() {
+    const profile = { status, nickname: nickname.trim(), budget, techLevel, priorities, createdAt: existing?.createdAt || new Date().toISOString(), updatedAt: new Date().toISOString() };
+    saveProfile(profile);
+    onSave(profile);
+    onClose();
+  }
+
+  const canNext = [
+    step === 0 ? !!status : true,
+    step === 1 ? nickname.trim().length >= 2 : true,
+    true, true
+  ][step];
+
+  const statusObj = STATUSES.find(s => s.id === status);
+
+  return (
+    <div style={{ position:"fixed",inset:0,zIndex:1000,background:"rgba(15,23,42,0.7)",backdropFilter:"blur(8px)",display:"flex",alignItems:"center",justifyContent:"center",padding:20 }} onClick={onClose}>
+      <div style={{ background:"#fff",borderRadius:24,padding:"32px",maxWidth:480,width:"100%",boxShadow:"0 32px 80px rgba(15,23,42,0.25)",animation:"fadeUp 0.3s ease" }}
+        onClick={e=>e.stopPropagation()}>
+
+        {/* Progress dots */}
+        <div style={{ display:"flex",gap:6,marginBottom:24,justifyContent:"center" }}>
+          {[0,1,2,3].map(i=>(
+            <div key={i} style={{ width:i===step?24:8,height:8,borderRadius:4,background:i<=step?C.accent:C.border,transition:"all 0.3s" }} />
+          ))}
+        </div>
+
+        <h2 style={{ color:C.text,fontSize:22,fontWeight:900,margin:"0 0 6px",fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{t(step)}</h2>
+        <p style={{ color:C.muted,fontSize:14,margin:"0 0 28px" }}>{s(step)}</p>
+
+        {step === 0 && (
+          <div style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8 }}>
+            {STATUSES.map(st=>(
+              <button key={st.id} onClick={()=>setStatus(st.id)}
+                style={{ padding:"10px 6px",border:`2px solid ${status===st.id?C.accent:C.border}`,background:status===st.id?`${C.accent}10`:"#fff",borderRadius:12,cursor:"pointer",transition:"all 0.15s",textAlign:"center" }}>
+                <div style={{ fontSize:20,marginBottom:4 }}>{st.emoji}</div>
+                <div style={{ fontSize:11,fontWeight:700,color:status===st.id?C.accent:C.text }}>{st.label}</div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {step === 1 && (
+          <div>
+            <div style={{ display:"flex",alignItems:"center",gap:12,marginBottom:20,padding:"12px 16px",background:`${C.accent}08`,borderRadius:14,border:`1px solid ${C.accent}20` }}>
+              <span style={{ fontSize:28 }}>{statusObj?.emoji||"👤"}</span>
+              <div>
+                <div style={{ color:C.muted,fontSize:12 }}>{statusObj?.label||""}</div>
+                <div style={{ color:C.text,fontSize:17,fontWeight:700 }}>{nickname||"..."}</div>
+              </div>
+            </div>
+            <input
+              value={nickname} onChange={e=>setNickname(e.target.value)}
+              placeholder={lg==="de"?"Spitzname (z.B. Alex)":lg==="ro"?"Nickname (ex. Alex)":"Nickname (e.g. Alex)"}
+              maxLength={20}
+              style={{ width:"100%",padding:"14px 16px",borderRadius:12,border:`2px solid ${nickname.length>=2?C.accent:C.border}`,fontSize:16,fontWeight:600,outline:"none",boxSizing:"border-box",transition:"border-color 0.2s" }}
+              autoFocus
+            />
+            <div style={{ color:C.muted,fontSize:11,marginTop:6 }}>2–20 {lg==="ro"?"caractere":"characters"}</div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div>
+            <div style={{ marginBottom:20 }}>
+              <div style={{ color:C.text,fontSize:13,fontWeight:700,marginBottom:10 }}>
+                {lg==="de"?"Monatliches Budget":lg==="ro"?"Buget lunar":"Monthly budget"}
+              </div>
+              <div style={{ display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:8 }}>
+                {BUDGET_RANGES.map(b=>(
+                  <button key={b.id} onClick={()=>setBudget(b.id)}
+                    style={{ padding:"10px 12px",border:`2px solid ${budget===b.id?C.accent:C.border}`,background:budget===b.id?`${C.accent}10`:"#fff",borderRadius:10,cursor:"pointer",display:"flex",alignItems:"center",gap:8,transition:"all 0.15s" }}>
+                    <span style={{ fontSize:18 }}>{b.icon}</span>
+                    <span style={{ fontSize:13,fontWeight:600,color:budget===b.id?C.accent:C.text }}>{b.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ marginBottom:20 }}>
+              <div style={{ color:C.text,fontSize:13,fontWeight:700,marginBottom:10 }}>
+                {lg==="de"?"Technisches Niveau":lg==="ro"?"Nivel tehnic":"Tech level"}
+              </div>
+              <div style={{ display:"flex",gap:6,flexWrap:"wrap" }}>
+                {TECH_LEVELS.map(tl=>(
+                  <button key={tl.id} onClick={()=>setTechLevel(tl.id)}
+                    style={{ padding:"7px 14px",border:`2px solid ${techLevel===tl.id?C.accent:C.border}`,background:techLevel===tl.id?`${C.accent}10`:"#fff",borderRadius:20,cursor:"pointer",fontSize:12,fontWeight:700,color:techLevel===tl.id?C.accent:C.text,transition:"all 0.15s" }}>
+                    {tl.label[lg]||tl.label.en}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div style={{ color:C.text,fontSize:13,fontWeight:700,marginBottom:10 }}>
+                {lg==="de"?"Prioritäten (mehrere wählbar)":lg==="ro"?"Priorități (mai multe)":"Priorities (pick any)"}
+              </div>
+              <div style={{ display:"flex",gap:6,flexWrap:"wrap" }}>
+                {PRIORITY_OPTS.map(p=>{
+                  const sel = priorities.includes(p.id);
+                  return (
+                    <button key={p.id} onClick={()=>setPriorities(sel?priorities.filter(x=>x!==p.id):[...priorities,p.id])}
+                      style={{ padding:"6px 12px",border:`2px solid ${sel?C.accent:C.border}`,background:sel?`${C.accent}10`:"#fff",borderRadius:20,cursor:"pointer",fontSize:12,fontWeight:700,color:sel?C.accent:C.text,transition:"all 0.15s" }}>
+                      {p.label[lg]||p.label.en}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div style={{ textAlign:"center" }}>
+            <div style={{ fontSize:64,marginBottom:16 }}>{statusObj?.emoji||"👤"}</div>
+            <div style={{ fontSize:24,fontWeight:900,color:C.text,marginBottom:4,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+              {statusObj?.label} {nickname}
+            </div>
+            <div style={{ color:C.muted,fontSize:14,marginBottom:16 }}>
+              {lg==="de"?"Willkommen bei DecisionPilot!":lg==="ro"?"Bun venit la DecisionPilot!":"Welcome to DecisionPilot!"}
+            </div>
+            {budget && <div style={{ display:"inline-flex",alignItems:"center",gap:6,background:`${C.accent}10`,borderRadius:20,padding:"5px 14px",fontSize:13,color:C.accent,fontWeight:700,margin:"0 auto" }}>
+              {BUDGET_RANGES.find(b=>b.id===budget)?.icon} {BUDGET_RANGES.find(b=>b.id===budget)?.label}
+            </div>}
+          </div>
+        )}
+
+        <div style={{ display:"flex",gap:10,marginTop:28 }}>
+          {step > 0 && (
+            <button onClick={()=>setStep(s=>s-1)}
+              style={{ flex:1,padding:"13px",border:`1.5px solid ${C.border}`,background:"#fff",borderRadius:12,cursor:"pointer",fontSize:14,fontWeight:700,color:C.text }}>
+              ← {lg==="de"?"Zurück":lg==="ro"?"Înapoi":"Back"}
+            </button>
+          )}
+          {step < 3 ? (
+            <button onClick={()=>setStep(s=>s+1)} disabled={!canNext}
+              style={{ flex:2,padding:"13px",background:canNext?C.accent:`${C.accent}60`,color:"#fff",border:"none",borderRadius:12,cursor:canNext?"pointer":"not-allowed",fontSize:14,fontWeight:700,transition:"background 0.15s" }}>
+              {lg==="de"?"Weiter →":lg==="ro"?"Continuă →":"Continue →"}
+            </button>
+          ) : (
+            <button onClick={handleSave}
+              style={{ flex:2,padding:"13px",background:C.success||"#059669",color:"#fff",border:"none",borderRadius:12,cursor:"pointer",fontSize:14,fontWeight:800 }}>
+              {lg==="de"?"Profil speichern ✓":lg==="ro"?"Salvează profilul ✓":"Save profile ✓"}
+            </button>
+          )}
+        </div>
+        <button onClick={onClose} style={{ display:"block",margin:"12px auto 0",background:"none",border:"none",color:C.muted,fontSize:12,cursor:"pointer" }}>
+          {lg==="de"?"Überspringen":lg==="ro"?"Sari peste":"Skip for now"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Favorites Screen ──────────────────────────────────────────────────────────
+function FavoritesScreen({ favorites, onRemove, onHome, onStartCategory, lang }) {
+  const lg = lang || "en";
+  const title = { en:"My Favorites", de:"Meine Favoriten", ro:"Favoritele mele", es:"Mis favoritos", fr:"Mes favoris" };
+  const empty = { en:"No saved favorites yet. Star ★ a recommendation to save it.", de:"Noch keine Favoriten. Klicke ★ um eine Empfehlung zu speichern.", ro:"Niciun favorit salvat încă. Apasă ★ pe o recomandare pentru a o salva.", es:"Aún no hay favoritos. Pulsa ★ en una recomendación para guardarla." };
+
+  return (
+    <div style={{ minHeight:"100vh",background:C.bg }}>
+      <div style={{ position:"sticky",top:0,zIndex:50,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(8px)",borderBottom:`1px solid ${C.border}`,padding:"10px 20px",display:"flex",alignItems:"center",gap:12 }}>
+        <HomeButton onHome={onHome} lang={lg} />
+        <div style={{ width:1,height:24,background:C.border }} />
+        <span style={{ color:C.text,fontSize:16,fontWeight:800 }}>⭐ {title[lg]||title.en}</span>
+        <span style={{ color:C.muted,fontSize:13,marginLeft:"auto" }}>{favorites.length} {lg==="ro"?"salvate":lg==="de"?"gespeichert":"saved"}</span>
+      </div>
+
+      <div style={{ maxWidth:900,margin:"0 auto",padding:"32px 20px" }}>
+        {favorites.length === 0 ? (
+          <div style={{ textAlign:"center",padding:"80px 24px" }}>
+            <div style={{ fontSize:56,marginBottom:16 }}>⭐</div>
+            <p style={{ color:C.muted,fontSize:16,lineHeight:1.7 }}>{empty[lg]||empty.en}</p>
+            <button onClick={onHome} style={{ background:C.accent,color:"#fff",border:"none",borderRadius:12,padding:"12px 28px",fontSize:14,fontWeight:700,cursor:"pointer",marginTop:16 }}>
+              {lg==="de"?"Jetzt vergleichen":lg==="ro"?"Compară acum":"Compare now"}
+            </button>
+          </div>
+        ) : (
+          <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:16 }}>
+            {favorites.map(fav => {
+              const tree = TREES[fav.category];
+              const catColor = CATEGORIES_LIST.find(c=>c.id===fav.category)?.color || C.accent;
+              return (
+                <div key={fav.id} style={{ background:C.card,borderRadius:16,overflow:"hidden",border:`1px solid ${C.border}`,boxShadow:C.shadow,transition:"transform 0.2s" }}
+                  onMouseEnter={e=>e.currentTarget.style.transform="translateY(-3px)"}
+                  onMouseLeave={e=>e.currentTarget.style.transform="translateY(0)"}>
+                  {/* Mini image */}
+                  <div style={{ height:60,backgroundImage:`url(${tree?.image})`,backgroundSize:"cover",backgroundPosition:"center",position:"relative" }}>
+                    <div style={{ position:"absolute",inset:0,background:`${catColor}99` }} />
+                    <div style={{ position:"absolute",top:8,left:10,fontSize:20 }}>{tree?.emoji}</div>
+                    <div style={{ position:"absolute",top:8,right:10,background:"rgba(255,255,255,0.2)",borderRadius:6,padding:"2px 8px",fontSize:11,color:"#fff",fontWeight:700 }}>
+                      {catName(fav.category,lg)}
+                    </div>
+                  </div>
+                  <div style={{ padding:"14px 16px" }}>
+                    <div style={{ fontWeight:800,fontSize:15,color:C.text,marginBottom:4,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{fav.pick?.name}</div>
+                    <div style={{ color:C.muted,fontSize:12,marginBottom:10 }}>{fav.pick?.price}</div>
+                    <div style={{ color:C.textSecondary,fontSize:12,lineHeight:1.5,marginBottom:12 }}>{fav.pick?.why?.slice(0,100)}...</div>
+                    <div style={{ display:"flex",gap:8,alignItems:"center" }}>
+                      <a href={fav.pick?.link||getProductLink(fav.category,fav.pick?.name)} target="_blank" rel="noopener noreferrer"
+                        style={{ flex:1,background:catColor,color:"#fff",textDecoration:"none",padding:"8px",borderRadius:8,fontSize:12,fontWeight:700,textAlign:"center" }}>
+                        {uiT("viewDeal",lg)}
+                      </a>
+                      <button onClick={()=>onRemove(fav.id)}
+                        style={{ padding:"8px",border:`1px solid ${C.border}`,background:"#fff",borderRadius:8,cursor:"pointer",fontSize:14,color:C.muted,transition:"all 0.15s" }}
+                        title={lg==="de"?"Entfernen":lg==="ro"?"Șterge":"Remove"}
+                        onMouseEnter={e=>{e.currentTarget.style.borderColor="#ef4444";e.currentTarget.style.color="#ef4444";}}
+                        onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.muted;}}>
+                        🗑
+                      </button>
+                    </div>
+                    <div style={{ color:C.muted,fontSize:10,marginTop:8 }}>
+                      {lg==="ro"?"Salvat la":lg==="de"?"Gespeichert am":"Saved"} {new Date(fav.savedAt).toLocaleDateString(lg)}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
 export default function App() {
   const [screen, setScreen] = useState("landing");
   const [category, setCategory] = useState(null);
   const [answers, setAnswers] = useState(null);
   const [lang, setLang] = useState("en");
   const [showLimitModal, setShowLimitModal] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => { setLang(detectLanguage()); }, []);
+
+  // Load profile + favorites from localStorage on mount
+  useEffect(() => {
+    const p = loadProfile();
+    if (p) setProfile(p);
+    setFavorites(loadFavorites());
+  }, []);
 
   useEffect(() => {
     function handleOpenChat() { setScreen("chat"); }
@@ -4041,13 +4432,27 @@ export default function App() {
       setScreen("questions");
     }
     else if (mode === "chat") { setScreen("chat"); }
+    else if (mode === "favorites") { setScreen("favorites"); }
+    else if (mode === "profile") { setShowProfileModal(true); }
     else { setScreen("landing"); }
+  }
+
+  function handleToggleFavorite(cat, pick, ans) {
+    const updated = toggleFavorite(favorites, cat, pick, ans);
+    setFavorites(updated);
+    saveFavorites(updated);
+  }
+
+  function handleRemoveFavorite(id) {
+    const updated = favorites.filter(f => f.id !== id);
+    setFavorites(updated);
+    saveFavorites(updated);
   }
 
   if (screen === "questions" && category) {
     return (
       <>
-        <QuestionScreen category={category} onComplete={(ans) => { setAnswers(ans); setScreen("results"); }} onBack={() => setScreen("landing")} onHome={() => setScreen("landing")} t={t} lang={lang} />
+        <QuestionScreen category={category} onComplete={(ans) => { setAnswers(ans); setScreen("results"); }} onBack={() => setScreen("landing")} onHome={() => setScreen("landing")} t={t} lang={lang} profile={profile} />
         <AselCorner screen="questions" />
       </>
     );
@@ -4056,18 +4461,36 @@ export default function App() {
   if (screen === "results" && category && answers) {
     return (
       <>
-        <ResultsScreen category={category} answers={answers} onRestart={() => { setAnswers(null); setScreen("questions"); }} onBack={() => { setAnswers(null); setScreen("questions"); }} onHome={() => setScreen("landing")} t={t} lang={lang} />
+        <ResultsScreen category={category} answers={answers}
+          onRestart={() => { setAnswers(null); setScreen("questions"); }}
+          onBack={() => { setAnswers(null); setScreen("questions"); }}
+          onHome={() => setScreen("landing")}
+          onFavorite={handleToggleFavorite}
+          favorites={favorites}
+          profile={profile}
+          t={t} lang={lang} />
         <AselCorner screen="results" />
       </>
     );
+  }
+
+  if (screen === "favorites") {
+    return <FavoritesScreen favorites={favorites} onRemove={handleRemoveFavorite} onHome={()=>setScreen("landing")} onStartCategory={(id)=>{setCategory(id);setScreen("questions");}} lang={lang} />;
   }
 
   if (screen === "chat") return <ChatScreen onBack={() => setScreen("landing")} t={t} lang={lang} setLang={setLang} />;
 
   return (
     <>
-      <Landing onStart={handleStart} t={t} lang={lang} setLang={setLang} />
+      <Landing onStart={handleStart} t={t} lang={lang} setLang={setLang}
+        profile={profile} favorites={favorites}
+        onShowProfile={()=>setShowProfileModal(true)} />
       <AselCorner screen="landing" />
+      {showProfileModal && (
+        <ProfileModal lang={lang} existing={profile}
+          onSave={p=>setProfile(p)}
+          onClose={()=>setShowProfileModal(false)} />
+      )}
       {showLimitModal && (
         <div style={{
           position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
