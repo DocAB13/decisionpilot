@@ -1852,60 +1852,172 @@ function uiT(key, lang) { return (UI_T[key]||{})[lang] || (UI_T[key]||{}).en || 
 // ── Product link resolver — real affiliate URLs ───────────────────────────────
 function getProductLink(category, productName) {
   const n = (productName||"").toLowerCase();
-  if (n.includes("iphone"))          return "https://www.apple.com/shop/buy-iphone";
-  if (n.includes("macbook"))         return "https://www.apple.com/shop/buy-mac";
-  if (n.includes("ipad"))            return "https://www.apple.com/shop/buy-ipad";
-  if (n.includes("apple watch")||n.includes("airpods")) return "https://www.apple.com/shop/accessories";
-  if (n.includes("samsung galaxy s")) return "https://www.samsung.com/global/galaxy/galaxy-s-series/";
-  if (n.includes("samsung galaxy a")) return "https://www.samsung.com/global/galaxy/galaxy-a-series/";
-  if (n.includes("samsung"))         return "https://www.samsung.com/global/galaxy/";
-  if (n.includes("google pixel"))    return "https://store.google.com/category/phones";
-  if (n.includes("surface"))         return "https://www.microsoft.com/en-us/shop/category/surface-laptops";
-  if (n.includes("garmin"))          return "https://www.garmin.com/de-DE/products/smartwatch/";
-  if (n.includes("fitbit"))          return "https://www.fitbit.com/global/de/home";
-  if (n.includes("sony"))            return "https://www.sony.com/en/articles/latest-products";
-  if (category==="hotel")            return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(productName)}&aid=2942851`;
-  if (category==="airline")          return "https://www.skyscanner.net/flights";
-  if (category==="travel_agency")    return "https://www.booking.com/holidays/?aid=2942851";
-  if (category==="travel_insurance") return "https://www.check24.de/reiseversicherung/";
-  if (category==="car_rental")       return "https://www.rentalcars.com/";
+
+  // Appliances — brand category pages (never specific product URLs)
+  if (category==="washing_machine"||category==="dryer") {
+    if (n.includes("bosch"))    return "https://www.bosch-home.com/gb/products/washing-care/washing-machines.html";
+    if (n.includes("miele"))    return "https://www.miele.co.uk/c/washing-machines-6830.htm";
+    if (n.includes("samsung"))  return "https://www.samsung.com/uk/washing-machines/all-washing-machines/";
+    if (n.includes("lg"))       return "https://www.lg.com/uk/washing-machines";
+    if (n.includes("siemens"))  return "https://www.siemens-home.bsh-group.com/gb/products/washing/washing-machines";
+    if (n.includes("hotpoint")) return "https://www.hotpoint.eu/gb/en/washing/washing-machines/";
+    if (n.includes("aeg"))      return "https://www.aeg.com/gb/washing-machines/";
+    if (n.includes("beko"))     return "https://www.beko.com/en-gb/washers-dryers/washing-machines";
+    if (n.includes("whirlpool")) return "https://www.whirlpool.eu/en/washers-dryers.html";
+    return amz(productName+" washing machine");
+  }
+  if (category==="fridge") {
+    if (n.includes("bosch"))    return "https://www.bosch-home.com/gb/products/cooking-and-warming/refrigeration.html";
+    if (n.includes("samsung"))  return "https://www.samsung.com/uk/refrigerators/all-refrigerators/";
+    if (n.includes("lg"))       return "https://www.lg.com/uk/fridge-freezers";
+    if (n.includes("miele"))    return "https://www.miele.co.uk/c/refrigeration-6960.htm";
+    if (n.includes("siemens"))  return "https://www.siemens-home.bsh-group.com/gb/products/cooking/refrigeration";
+    return amz(productName+" fridge freezer");
+  }
+  if (category==="vacuum") {
+    if (n.includes("dyson"))    return "https://www.dyson.co.uk/vacuum-cleaners";
+    if (n.includes("miele"))    return "https://www.miele.co.uk/c/vacuum-cleaners-6790.htm";
+    if (n.includes("bosch"))    return "https://www.bosch-home.com/gb/products/cleaning/vacuum-cleaners.html";
+    if (n.includes("samsung"))  return "https://www.samsung.com/uk/vacuum-cleaners/all-vacuum-cleaners/";
+    return amz(productName+" vacuum cleaner");
+  }
+  if (category==="espresso") {
+    if (n.includes("delonghi")||n.includes("de'longhi")) return "https://www.delonghi.com/en-gb/coffee-machines";
+    if (n.includes("nespresso")) return "https://www.nespresso.com/gb/en/machines";
+    if (n.includes("jura"))     return "https://www.jura.com/en_GB/coffee-machines.html";
+    if (n.includes("philips"))  return "https://www.philips.co.uk/c-m-ho/coffee-machines";
+    if (n.includes("siemens"))  return "https://www.siemens-home.bsh-group.com/gb/products/coffee-machines";
+    return amz(productName+" coffee machine");
+  }
+  if (category==="oven") {
+    if (n.includes("bosch"))    return "https://www.bosch-home.com/gb/products/cooking-and-warming/ovens.html";
+    if (n.includes("siemens"))  return "https://www.siemens-home.bsh-group.com/gb/products/cooking/ovens";
+    if (n.includes("miele"))    return "https://www.miele.co.uk/c/ovens-6810.htm";
+    return amz(productName+" oven");
+  }
+  if (category==="aircon") {
+    if (n.includes("daikin"))   return "https://www.daikin.co.uk/en_us/product-group/air-conditioning.html";
+    if (n.includes("mitsubishi")) return "https://www.mitsubishielectric.co.uk/home-comfort/cooling-and-heating";
+    return amz(productName+" air conditioner");
+  }
+
+  // Phones
+  if (category==="phone") {
+    if (n.includes("iphone"))           return "https://www.apple.com/uk/shop/buy-iphone";
+    if (n.includes("samsung galaxy s")) return "https://www.samsung.com/uk/smartphones/galaxy-s/";
+    if (n.includes("samsung galaxy a")) return "https://www.samsung.com/uk/smartphones/galaxy-a/";
+    if (n.includes("samsung"))          return "https://www.samsung.com/uk/smartphones/";
+    if (n.includes("google pixel")||n.includes("pixel")) return "https://store.google.com/gb/category/phones";
+    if (n.includes("oneplus"))          return "https://www.oneplus.com/uk/smartphones";
+    if (n.includes("xiaomi"))           return "https://www.mi.com/uk";
+    if (n.includes("sony xperia"))      return "https://www.sony.co.uk/en/smartphones";
+    if (n.includes("motorola"))         return "https://www.motorola.co.uk/smartphones";
+    return amz(productName+" smartphone");
+  }
+
+  // Laptops
+  if (category==="laptop") {
+    if (n.includes("macbook"))          return "https://www.apple.com/uk/shop/buy-mac";
+    if (n.includes("dell xps"))         return "https://www.dell.com/en-uk/shop/laptops/xps-laptops/spd/laptops-xps";
+    if (n.includes("dell"))             return "https://www.dell.com/en-uk/shop/laptops/";
+    if (n.includes("lenovo thinkpad"))  return "https://www.lenovo.com/gb/en/laptops/thinkpad/";
+    if (n.includes("lenovo"))           return "https://www.lenovo.com/gb/en/laptops/";
+    if (n.includes("hp"))               return "https://www.hp.com/gb-en/shop/laptops.aspx";
+    if (n.includes("asus"))             return "https://www.asus.com/uk/laptops/";
+    if (n.includes("surface"))          return "https://www.microsoft.com/en-gb/shop/category/surface-laptops";
+    if (n.includes("acer"))             return "https://www.acer.com/gb-en/laptops";
+    return amz(productName+" laptop");
+  }
+
+  // TVs
+  if (category==="tv") {
+    if (n.includes("samsung")) return "https://www.samsung.com/uk/tvs/all-tvs/";
+    if (n.includes("lg"))      return "https://www.lg.com/uk/tvs/oled-tvs";
+    if (n.includes("sony"))    return "https://www.sony.co.uk/en/televisions";
+    if (n.includes("philips")) return "https://www.philips.co.uk/c-m-so/television";
+    return amz(productName+" 4K TV");
+  }
+
+  // Apple fallbacks
+  if (n.includes("iphone"))      return "https://www.apple.com/uk/shop/buy-iphone";
+  if (n.includes("macbook"))     return "https://www.apple.com/uk/shop/buy-mac";
+  if (n.includes("ipad"))        return "https://www.apple.com/uk/shop/buy-ipad";
+  if (n.includes("apple watch")) return "https://www.apple.com/uk/shop/buy-watch";
+  if (n.includes("airpods"))     return "https://www.apple.com/uk/shop/buy-airpods";
+  if (n.includes("samsung"))     return "https://www.samsung.com/uk/";
+  if (n.includes("google pixel")||n.includes("pixel")) return "https://store.google.com/gb/category/phones";
+
+  // Cars
   if (category==="new_car"||category==="used_car") {
     if (n.includes("volkswagen")||n.includes("vw")) return "https://www.volkswagen.de/de/modelle.html";
-    if (n.includes("bmw"))      return "https://www.bmw.de/de/neufahrzeuge.html";
-    if (n.includes("mercedes")) return "https://www.mercedes-benz.de/passengercars.html";
-    if (n.includes("tesla"))    return "https://www.tesla.com/de_DE/";
-    if (n.includes("audi"))     return "https://www.audi.de/de/brand/de/neuwagen.html";
-    if (n.includes("toyota"))   return "https://www.toyota.de/neuwagen";
-    if (n.includes("renault"))  return "https://www.renault.de/pkw.html";
-    if (n.includes("hyundai"))  return "https://www.hyundai.de/modelle";
-    if (n.includes("kia"))      return "https://www.kia.com/de/";
-    return `https://www.autoscout24.de/lst?make=${encodeURIComponent(productName.split(" ")[0])}`;
+    if (n.includes("bmw"))       return "https://www.bmw.de/de/neufahrzeuge.html";
+    if (n.includes("mercedes"))  return "https://www.mercedes-benz.de/passengercars.html";
+    if (n.includes("tesla"))     return "https://www.tesla.com/de_DE/";
+    if (n.includes("audi"))      return "https://www.audi.de/de/brand/de/neuwagen.html";
+    if (n.includes("toyota"))    return "https://www.toyota.de/neuwagen";
+    if (n.includes("renault"))   return "https://www.renault.de/pkw.html";
+    if (n.includes("ford"))      return "https://www.ford.de/neuwagen";
+    if (n.includes("hyundai"))   return "https://www.hyundai.de/modelle";
+    if (n.includes("kia"))       return "https://www.kia.com/de/";
+    if (n.includes("opel"))      return "https://www.opel.de/fahrzeuge/pkw.html";
+    if (n.includes("skoda")||n.includes("\u0161koda")) return "https://www.skoda-auto.de/modelle";
+    if (n.includes("volvo"))     return "https://www.volvocars.com/de/cars";
+    if (n.includes("peugeot"))   return "https://www.peugeot.de/pkw.html";
+    return "https://www.autoscout24.de/";
   }
+
+  // Finance
   if (category==="personal_loan"||category==="mortgage") return "https://www.check24.de/kredit/";
-  if (category==="credit_card")   return "https://www.check24.de/kreditkarten/";
-  if (category==="bank_account")  return "https://www.check24.de/girokonto/";
-  if (category==="deposit")       return "https://www.check24.de/tagesgeld/";
-  if (category==="car_insurance") return "https://www.check24.de/kfz-versicherung/";
-  if (category==="insurance")     return "https://www.check24.de/versicherungen/";
+  if (category==="credit_card")    return "https://www.check24.de/kreditkarten/";
+  if (category==="bank_account")   return "https://www.check24.de/girokonto/";
+  if (category==="deposit")        return "https://www.check24.de/tagesgeld/";
+  if (category==="car_insurance")  return "https://www.check24.de/kfz-versicherung/";
+  if (category==="insurance")      return "https://www.check24.de/versicherungen/";
+
+  // Telecom
   if (category==="mobile_plan"||category==="prepaid") return "https://www.check24.de/handytarife/";
-  if (category==="internet")      return "https://www.check24.de/dsl/";
-  if (category==="electricity")   return "https://www.check24.de/strom/";
-  if (category==="gas_provider")  return "https://www.check24.de/gas/";
-  if (category==="solar")         return "https://www.check24.de/solar/";
-  if (n.includes("nordvpn"))      return "https://nordvpn.com/";
-  if (n.includes("expressvpn"))   return "https://www.expressvpn.com/";
-  if (n.includes("surfshark"))    return "https://surfshark.com/";
-  if (n.includes("norton"))       return "https://us.norton.com/";
-  if (n.includes("kaspersky"))    return "https://www.kaspersky.com/";
-  if (n.includes("bitdefender"))  return "https://www.bitdefender.com/";
-  if (n.includes("coursera"))     return "https://www.coursera.org/";
-  if (n.includes("udemy"))        return "https://www.udemy.com/";
-  if (n.includes("duolingo"))     return "https://www.duolingo.com/";
-  if (n.includes("babbel"))       return "https://www.babbel.com/";
-  if (n.includes("shopify"))      return "https://www.shopify.com/";
-  if (n.includes("hubspot"))      return "https://www.hubspot.com/";
-  if (n.includes("mailchimp"))    return "https://mailchimp.com/";
-  if (n.includes("ikea"))         return "https://www.ikea.com/";
+  if (category==="internet")       return "https://www.check24.de/dsl/";
+  if (category==="tv_package")     return "https://www.check24.de/kabel-internet/";
+
+  // Energy
+  if (category==="electricity")    return "https://www.check24.de/strom/";
+  if (category==="gas_provider")   return "https://www.check24.de/gas/";
+  if (category==="solar")          return "https://www.check24.de/solar/";
+
+  // Travel
+  if (category==="hotel")          return "https://www.booking.com/searchresults.html?ss="+encodeURIComponent(productName)+"&aid=2942851";
+  if (category==="airline")        return "https://www.skyscanner.net/flights";
+  if (category==="travel_agency")  return "https://www.booking.com/holidays/?aid=2942851";
+  if (category==="travel_insurance") return "https://www.check24.de/reiseversicherung/";
+  if (category==="car_rental")     return "https://www.rentalcars.com/";
+
+  // Software
+  if (n.includes("nordvpn"))       return "https://nordvpn.com/";
+  if (n.includes("expressvpn"))    return "https://www.expressvpn.com/";
+  if (n.includes("surfshark"))     return "https://surfshark.com/";
+  if (n.includes("norton"))        return "https://uk.norton.com/";
+  if (n.includes("kaspersky"))     return "https://www.kaspersky.com/";
+  if (n.includes("bitdefender"))   return "https://www.bitdefender.com/";
+  if (category==="hosting")        return "https://www.ionos.de/hosting/webhosting";
+  if (n.includes("shopify"))       return "https://www.shopify.com/";
+  if (n.includes("hubspot"))       return "https://www.hubspot.com/";
+
+  // Education
+  if (n.includes("coursera"))  return "https://www.coursera.org/";
+  if (n.includes("udemy"))     return "https://www.udemy.com/";
+  if (n.includes("duolingo"))  return "https://www.duolingo.com/";
+  if (n.includes("babbel"))    return "https://www.babbel.com/";
+
+  // Fitness
+  if (n.includes("garmin"))   return "https://www.garmin.com/en-GB/products/wearables/";
+  if (n.includes("fitbit"))   return "https://www.fitbit.com/global/us/home";
+  if (n.includes("polar"))    return "https://www.polar.com/uk-en/";
+
+  // Home
+  if (n.includes("ikea"))     return "https://www.ikea.com/gb/en/";
+  if (n.includes("wayfair"))  return "https://www.wayfair.co.uk/";
+
+  // Default: Amazon search
   return amz(productName);
 }
 
@@ -2723,9 +2835,11 @@ function RecommendationCard({ pick, index, lang, category, answers }) {
   const isTop = index === 0;
   const c = isTop ? C.gold : C.accent;
   const lg = lang || "en";
-  const dealLink = pick.link && pick.link !== "#" && !pick.link.includes("example.com")
-    ? pick.link
-    : getProductLink(category, pick.name);
+  // SAFE LINK LOGIC: Only trust marketplace links from AI, never manufacturer-specific URLs
+  const SAFE_DOMAINS = ["amazon","booking","skyscanner","rentalcars","check24","autoscout24","nordvpn","expressvpn","surfshark","coursera","udemy","shopify","hubspot","ikea","google.com/shopping","otto.de","galaxus","mediamarkt","saturn"];
+  const aiLinkSafe = pick.link && pick.link !== "#" && !pick.link.includes("example.com") &&
+    SAFE_DOMAINS.some(d => pick.link.includes(d));
+  const dealLink = aiLinkSafe ? pick.link : getProductLink(category, pick.name);
 
   const matchScore = pick.matchScore || calculateMatchScore(answers, index);
   const matchColor = matchScore >= 90 ? "#059669" : matchScore >= 75 ? "#D97706" : "#DC2626";
