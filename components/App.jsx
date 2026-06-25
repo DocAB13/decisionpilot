@@ -2164,86 +2164,122 @@ function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: C.bg }}>
-      <div style={{
-        height: 260, backgroundImage: `url(${tree.image})`,
-        backgroundSize: "cover", backgroundPosition: "center", position: "relative", overflow: "hidden",
-      }}>
-        {/* Light overlay - keeps image visible and catchy */}
-        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg, ${catColor}CC 0%, rgba(0,0,0,0.45) 100%)` }} />
+    <div style={{ minHeight:"100vh", background:C.bg, fontFamily:"'Inter',system-ui,sans-serif" }}>
 
-        {/* Category title prominent center */}
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingBottom: 40 }}>
-          <div style={{ fontSize: 44, marginBottom: 8, filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.4))" }}>{tree.emoji}</div>
-          <div style={{ color: "#fff", fontSize: "clamp(22px, 4vw, 34px)", fontWeight: 900, letterSpacing: -0.5, textShadow: "0 2px 16px rgba(0,0,0,0.5)" }}>{tree.label}</div>
+      {/* ── HERO HEADER — tall, immersive ── */}
+      <div style={{ position:"relative", height:300, overflow:"hidden" }}>
+        <div style={{ position:"absolute",inset:0,backgroundImage:`url(${tree.image})`,backgroundSize:"cover",backgroundPosition:"center" }} />
+        <div style={{ position:"absolute",inset:0,background:`linear-gradient(160deg,${catColor}E8 0%,${catColor}88 45%,rgba(0,0,0,0.6) 100%)` }} />
+        <div style={{ position:"absolute",inset:0,opacity:0.05,backgroundImage:"radial-gradient(circle,#fff 1px,transparent 1px)",backgroundSize:"28px 28px" }} />
+
+        {/* Top nav bar */}
+        <div style={{ position:"absolute",top:0,left:0,right:0,padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",zIndex:10 }}>
+          <div style={{ display:"flex",alignItems:"center",gap:8 }}>
+            {onHome && (
+              <button onClick={onHome} style={{ display:"flex",alignItems:"center",gap:7,background:"rgba(0,0,0,0.28)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.22)",color:"#fff",borderRadius:10,padding:"7px 12px",cursor:"pointer",fontSize:13,fontWeight:700 }}>
+                <div style={{ width:20,height:20,borderRadius:5,background:`linear-gradient(135deg,${C.accent},#6B8EFF)`,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden" }}>
+                  <img src="/asel-mascot.png" style={{ width:18,height:18,objectFit:"cover",objectPosition:"30% 8%" }} alt="" />
+                </div>
+              </button>
+            )}
+            <button onClick={onBack} style={{ background:"rgba(0,0,0,0.28)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.22)",color:"#fff",borderRadius:10,padding:"7px 14px",cursor:"pointer",fontSize:13,fontWeight:700 }}>
+              {uiT("back",lg)}
+            </button>
+          </div>
+          <div style={{ background:"rgba(0,0,0,0.35)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.2)",color:"#fff",borderRadius:20,padding:"6px 16px",fontSize:12,fontWeight:800,letterSpacing:0.8 }}>
+            {step+1} / {total}
+          </div>
         </div>
 
-        {/* Progress bars at bottom */}
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0 }}>
-          <div style={{ display: "flex", gap: 3, padding: "0 20px 8px" }}>
-            {tree.questions.map((_, i) => (
-              <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, background: i < step ? catColor : i === step ? "#fff" : "rgba(255,255,255,0.3)", transition: "background 0.3s", boxShadow: i === step ? `0 0 8px ${catColor}` : "none" }} />
+        {/* Center: emoji in glassmorphism card + category name */}
+        <div style={{ position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",paddingBottom:28 }}>
+          <div style={{ width:76,height:76,borderRadius:22,background:"rgba(255,255,255,0.16)",backdropFilter:"blur(10px)",border:"2px solid rgba(255,255,255,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:42,marginBottom:14,boxShadow:"0 8px 32px rgba(0,0,0,0.25)" }}>
+            {tree.emoji}
+          </div>
+          <div style={{ color:"#fff",fontSize:"clamp(18px,3.5vw,28px)",fontWeight:900,letterSpacing:-0.5,textShadow:"0 2px 16px rgba(0,0,0,0.5)",fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+            {catName(category,lg)}
+          </div>
+          <div style={{ color:"rgba(255,255,255,0.65)",fontSize:12,marginTop:5,letterSpacing:0.5 }}>
+            {uiT("question",lg)} {step+1} {uiT("of",lg)} {total}
+          </div>
+        </div>
+
+        {/* Progress bars */}
+        <div style={{ position:"absolute",bottom:0,left:0,right:0,padding:"0 20px" }}>
+          <div style={{ display:"flex",gap:4 }}>
+            {tree.questions.map((_,i) => (
+              <div key={i} style={{ flex:1,height:i===step?5:3,borderRadius:3,
+                background:i<step?"rgba(255,255,255,0.9)":i===step?"#fff":"rgba(255,255,255,0.22)",
+                transition:"all 0.35s cubic-bezier(.4,0,.2,1)",
+                boxShadow:i===step?"0 0 10px rgba(255,255,255,0.8)":"none" }} />
             ))}
           </div>
-        </div>
-
-        {/* Top bar: Home + Back + Step counter */}
-        <div style={{ position: "absolute", top: 16, left: 16, right: 16, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            {onHome && (
-              <button onClick={onHome}
-                style={{ background: "rgba(255,255,255,0.18)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.35)", color: "#fff", borderRadius: 10, padding: "7px 10px", cursor: "pointer", fontSize: 18, lineHeight: 1, display:"flex",alignItems:"center" }}
-                title={uiT("home", lg)}>🏠</button>
-            )}
-            <button onClick={onBack} style={{
-              background: "rgba(255,255,255,0.18)", backdropFilter: "blur(10px)",
-              border: "1px solid rgba(255,255,255,0.35)", color: "#fff",
-              borderRadius: 10, padding: "7px 14px", cursor: "pointer", fontSize: 13, fontWeight: 700,
-            }}>{uiT("back", lg)}</button>
-          </div>
-          <span style={{ background: "rgba(0,0,0,0.3)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", borderRadius: 10, padding: "7px 14px", fontSize: 12, fontWeight: 800, letterSpacing: 0.5 }}>
-            {uiT("question", lg)} {step + 1} {uiT("of", lg)} {total}
-          </span>
         </div>
       </div>
 
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 170px" }}>
-        <div key={animKey} style={{ animation: "fadeUp 0.35s ease" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 36, flexWrap: "wrap" }}>
-            <h2 style={{
-              color: C.text, fontSize: "clamp(22px, 3.5vw, 32px)",
-              fontWeight: 900, letterSpacing: -0.8, lineHeight: 1.25,
-              margin: 0, textAlign: "center",
-            }}>{question.q}</h2>
+      {/* ── QUESTION CONTENT ── */}
+      <div style={{ maxWidth:680,margin:"0 auto",padding:"32px 20px 160px" }}>
+        <div key={animKey} style={{ animation:"fadeUp 0.32s ease" }}>
+
+          {/* Question card */}
+          <div style={{ background:C.card,borderRadius:20,padding:"24px 24px 20px",boxShadow:"0 4px 24px rgba(15,23,42,0.08)",border:`1px solid ${C.border}`,marginBottom:16 }}>
+            <div style={{ width:36,height:4,borderRadius:2,background:catColor,marginBottom:14 }} />
+            <h2 style={{ color:C.text,fontSize:"clamp(19px,3.5vw,26px)",fontWeight:900,letterSpacing:-0.6,lineHeight:1.3,margin:0,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+              {question.q}
+            </h2>
+            <div style={{ color:C.muted,fontSize:12,marginTop:8,display:"flex",alignItems:"center",gap:5 }}>
+              <span style={{ width:5,height:5,borderRadius:"50%",background:catColor,display:"inline-block" }} />
+              {catName(category,lg)} · {uiT("question",lg)} {step+1} {uiT("of",lg)} {total}
+            </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {question.options.map((opt, i) => (
-              <button key={opt} onClick={() => handleSelect(opt)}
-                style={{
-                  background: selected === opt ? catColor + "14" : C.card,
-                  border: `1.5px solid ${selected === opt ? catColor : C.border}`,
-                  borderRadius: 14, padding: "16px 22px", textAlign: "left",
-                  cursor: "pointer", color: selected === opt ? catColor : C.text,
-                  fontSize: 15, fontWeight: selected === opt ? 700 : 500,
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  transition: "all 0.15s", boxShadow: selected === opt ? `0 4px 16px ${catColor}22` : C.shadow,
-                  animation: `fadeUp 0.3s ease ${i * 0.04}s both`,
-                }}
-                onMouseEnter={e => { if (selected !== opt) { e.currentTarget.style.borderColor = catColor + "66"; e.currentTarget.style.transform = "translateX(4px)"; } }}
-                onMouseLeave={e => { if (selected !== opt) { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.transform = "translateX(0)"; } }}>
-                <span>{opt}</span>
-                {selected === opt
-                  ? <span style={{ color: catColor, fontSize: 18 }}>✓</span>
-                  : <span style={{ color: C.muted, fontSize: 18 }}>›</span>}
-              </button>
-            ))}
+          {/* Answer option cards */}
+          <div style={{ display:"flex",flexDirection:"column",gap:9 }}>
+            {question.options.map((opt,i) => {
+              const isSel = selected===opt;
+              return (
+                <button key={opt} onClick={()=>handleSelect(opt)}
+                  style={{ background:isSel?`${catColor}12`:C.card, border:`2px solid ${isSel?catColor:C.border}`, borderRadius:15, padding:"15px 18px",
+                    textAlign:"left", cursor:"pointer", display:"flex", alignItems:"center", gap:13,
+                    transition:"all 0.18s cubic-bezier(.4,0,.2,1)",
+                    boxShadow:isSel?`0 4px 20px ${catColor}25`:"0 1px 4px rgba(15,23,42,0.05)",
+                    animation:`fadeUp 0.28s ease ${i*0.05}s both` }}
+                  onMouseEnter={e=>{ if(!isSel){ e.currentTarget.style.borderColor=`${catColor}80`; e.currentTarget.style.background=`${catColor}06`; e.currentTarget.style.transform="translateX(5px)"; e.currentTarget.style.boxShadow=`0 4px 14px ${catColor}12`; } }}
+                  onMouseLeave={e=>{ if(!isSel){ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.background=C.card; e.currentTarget.style.transform="translateX(0)"; e.currentTarget.style.boxShadow="0 1px 4px rgba(15,23,42,0.05)"; } }}>
+                  {/* Letter badge */}
+                  <div style={{ width:34,height:34,borderRadius:10,flexShrink:0,
+                    background:isSel?catColor:`${catColor}14`,
+                    border:`1.5px solid ${isSel?catColor:`${catColor}30`}`,
+                    display:"flex",alignItems:"center",justifyContent:"center",
+                    fontSize:13,fontWeight:900,color:isSel?"#fff":catColor,
+                    transition:"all 0.18s" }}>
+                    {String.fromCharCode(65+i)}
+                  </div>
+                  <span style={{ flex:1,fontSize:15,fontWeight:isSel?700:500,color:isSel?catColor:C.text,lineHeight:1.4 }}>{opt}</span>
+                  <div style={{ width:22,height:22,borderRadius:"50%",border:`2px solid ${isSel?catColor:C.border}`,background:isSel?catColor:"transparent",
+                    display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all 0.18s" }}>
+                    {isSel&&<span style={{ color:"#fff",fontSize:11,fontWeight:900 }}>✓</span>}
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
-          <div style={{ textAlign: "center", marginTop: 24 }}>
-            <button onClick={() => handleSelect("No preference")}
-              style={{ background: "none", border: "none", color: C.muted, fontSize: 13, cursor: "pointer", textDecoration: "underline" }}>
-              Skip this question
+          {/* Skip + Ai·sel tip */}
+          <div style={{ marginTop:20,display:"flex",alignItems:"flex-start",gap:12,background:`${catColor}08`,border:`1px solid ${catColor}20`,borderRadius:14,padding:"13px 16px" }}>
+            <img src="/asel-mascot.png" style={{ width:30,height:30,borderRadius:"50%",objectFit:"cover",objectPosition:"30% 8%",border:`2px solid ${catColor}40`,flexShrink:0,marginTop:2 }} alt="Ai·sel" />
+            <div style={{ flex:1 }}>
+              <div style={{ color:catColor,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:0.8,marginBottom:2 }}>Ai·sel tip</div>
+              <div style={{ color:C.textSecondary,fontSize:13,lineHeight:1.5 }}>
+                {step===0?"Take your time — your first answer shapes all recommendations.":
+                 step===total-1?"Last question! Ai·sel will now analyze thousands of reviews for you.":
+                 step===total-2?"Almost there! One more question and your picks are ready.":
+                 "Each answer narrows down to find your perfect match."}
+              </div>
+            </div>
+            <button onClick={()=>handleSelect("No preference")}
+              style={{ background:"none",border:`1px solid ${catColor}30`,color:catColor,borderRadius:8,padding:"5px 10px",fontSize:11,cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap" }}>
+              Skip
             </button>
           </div>
         </div>
@@ -2818,6 +2854,22 @@ function Landing({ onStart, t, lang, setLang }) {
         }} />
       <HeroBanner onStart={onStart} t={t} lang={lang} />
 
+
+      {/* ── CHECK24-style category pills at bottom of hero ── */}
+      <div style={{ background:"rgba(255,255,255,0.92)",backdropFilter:"blur(12px)",borderBottom:`1px solid ${C.border}`,overflowX:"auto",scrollbarWidth:"none",WebkitOverflowScrolling:"touch" }}>
+        <div style={{ display:"flex",alignItems:"center",gap:0,padding:"0 8px",maxWidth:1400,margin:"0 auto",minWidth:"max-content" }}>
+          {CATEGORY_GROUPS.map(g => (
+            <button key={g.id}
+              style={{ display:"flex",flexDirection:"column",alignItems:"center",gap:3,padding:"10px 14px",border:"none",borderBottom:"3px solid transparent",background:"transparent",cursor:"pointer",transition:"all 0.18s",flexShrink:0,color:C.textSecondary }}
+              onClick={()=>{ onStart&&onStart("category",g.id); document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}); }}
+              onMouseEnter={e=>{ e.currentTarget.style.borderBottomColor=g.color; e.currentTarget.style.color=g.color; e.currentTarget.style.background=`${g.color}08`; }}
+              onMouseLeave={e=>{ e.currentTarget.style.borderBottomColor="transparent"; e.currentTarget.style.color=C.textSecondary; e.currentTarget.style.background="transparent"; }}>
+              <span style={{ fontSize:20 }}>{g.emoji}</span>
+              <span style={{ fontSize:10.5,fontWeight:600,whiteSpace:"nowrap",letterSpacing:0.1 }}>{catName(g.id,lang||"en")}</span>
+            </button>
+          ))}
+        </div>
+      </div>
       {/* Search bar */}
       <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px", display: "none" }}>
         <div style={{ maxWidth: 720, margin: "0 auto" }}></div>
@@ -2927,9 +2979,9 @@ function Landing({ onStart, t, lang, setLang }) {
       {/* ⑤ POPULAR PRODUCT COMPARISONS — concrete cards like CHECK24 */}
       {[
         { section: lang === "de" ? "Handys vergleichen" : lang === "ro" ? "Compară telefoane" : "Compare Smartphones", gid: "tech", items: [
-          { id: "phone", label: "Apple iPhone 17", sub: "ab 1,00€ / Handyeinmalig", img: "photo-1510557880182-3d4d3cba35a5", rating: "4.8", reviews: "12.431" },
-          { id: "phone", label: "Samsung Galaxy S26", sub: "ab 1,00€ / Handyeinmalig", img: "photo-1610945415295-d9bbf067e59c", rating: "4.7", reviews: "8.922" },
-          { id: "phone", label: "Google Pixel 10", sub: "ab 1,00€ / Handyeinmalig", img: "photo-1598300042247-d088f8ab3a91", rating: "4.6", reviews: "4.211" },
+          { id: "phone", label: "Apple iPhone 17 Pro", sub: "from €1 on contract · 131 plans", img: "photo-1592750475338-74b7b21085ab", rating: "4.9", reviews: "18.431" },
+          { id: "phone", label: "Samsung Galaxy S26 Ultra", sub: "from €1 on contract · 172 plans", img: "photo-1610945415295-d9bbf067e59c", rating: "4.7", reviews: "12.922" },
+          { id: "phone", label: "Google Pixel 10 Pro", sub: "from €1 on contract · 89 plans", img: "photo-1567581935884-3349723552ca", rating: "4.6", reviews: "6.211" },
         ]},
         { section: lang === "de" ? "Kredite vergleichen" : lang === "ro" ? "Compară credite" : "Compare Loans", gid: "financial", items: [
           { id: "personal_loan", label: "10.000 €", sub: "ab 314,18€ / Monat · 36 Monate", img: null, badge: "€", rating: null },
