@@ -4283,10 +4283,14 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
               <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>Explore</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {CATEGORY_GROUPS.slice(0,5).map(g => (
-                  <a key={g.id} href="#categories" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}
+                  <a key={g.id} href="#categories" style={{ color:"#94A3B8", fontSize:13, textDecoration:"none", display:"flex", alignItems:"center", gap:8, transition:"color 0.15s" }}
                     onMouseEnter={e=>e.currentTarget.style.color="#fff"}
                     onMouseLeave={e=>e.currentTarget.style.color="#94A3B8"}>
-                    {g.emoji} {catName(g.id, "en")}
+                    <span style={{ display:"flex", color:"inherit", opacity:0.5, flexShrink:0 }}>{CAT_SVG_ICONS[g.id]
+                      ? React.cloneElement(CAT_SVG_ICONS[g.id], { width:13, height:13 })
+                      : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="4"/></svg>}
+                    </span>
+                    {catName(g.id, lang)}
                   </a>
                 ))}
               </div>
@@ -4296,10 +4300,14 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
               <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>More</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {CATEGORY_GROUPS.slice(5,10).map(g => (
-                  <a key={g.id} href="#categories" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}
+                  <a key={g.id} href="#categories" style={{ color:"#94A3B8", fontSize:13, textDecoration:"none", display:"flex", alignItems:"center", gap:8, transition:"color 0.15s" }}
                     onMouseEnter={e=>e.currentTarget.style.color="#fff"}
                     onMouseLeave={e=>e.currentTarget.style.color="#94A3B8"}>
-                    {g.emoji} {catName(g.id, "en")}
+                    <span style={{ display:"flex", color:"inherit", opacity:0.5, flexShrink:0 }}>{CAT_SVG_ICONS[g.id]
+                      ? React.cloneElement(CAT_SVG_ICONS[g.id], { width:13, height:13 })
+                      : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="4"/></svg>}
+                    </span>
+                    {catName(g.id, lang)}
                   </a>
                 ))}
               </div>
