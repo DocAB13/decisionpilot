@@ -3698,7 +3698,7 @@ winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"
   const products = data?.products || [];
 
   return (
-    <div style={{ marginBottom:40, background:C.card, borderRadius:20, border:`1px solid ${C.border}`, padding:"28px 28px 24px", boxShadow:C.shadow }}>
+    <div id="dp-comparator" style={{ marginBottom:40, background:C.card, borderRadius:20, border:`1px solid ${C.border}`, padding:"28px 28px 24px", boxShadow:C.shadow }}>
       {/* Header */}
       <div style={{ display:"flex",alignItems:"center",gap:8,marginBottom:8 }}>
         <div style={{ background:`${C.accent}12`,borderRadius:8,padding:"4px 10px",display:"inline-flex",alignItems:"center",gap:6 }}>
@@ -3911,10 +3911,13 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
       <div style={{ padding: "40px 0 32px", borderBottom: `1px solid ${C.border}` }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
           <div style={{ flex: 1, minWidth: 260 }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: `${C.accent}12`, border: `1px solid ${C.accent}30`, borderRadius: 20, padding: "4px 12px", fontSize: 11, fontWeight: 700, color: C.accent, letterSpacing: 0.8, textTransform: "uppercase", marginBottom: 14 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.accent, display: "inline-block", animation: "aselLoadPulse 1.4s ease-in-out infinite" }} />
+            <button onClick={()=>document.getElementById("dp-comparator")?.scrollIntoView({behavior:"smooth"})}
+              style={{ display:"inline-flex",alignItems:"center",gap:6,background:`${C.accent}12`,border:`1px solid ${C.accent}30`,borderRadius:20,padding:"4px 12px",fontSize:11,fontWeight:700,color:C.accent,letterSpacing:0.8,textTransform:"uppercase",marginBottom:14,cursor:"pointer",transition:"all 0.18s" }}
+              onMouseEnter={e=>{e.currentTarget.style.background=`${C.accent}20`;e.currentTarget.style.transform="translateY(-1px)";}}
+              onMouseLeave={e=>{e.currentTarget.style.background=`${C.accent}12`;e.currentTarget.style.transform="translateY(0)";}}>
+              <span style={{ width:6,height:6,borderRadius:"50%",background:C.accent,display:"inline-block",animation:"aselLoadPulse 1.4s ease-in-out infinite" }} />
               AI-Powered · Not just comparison
-            </div>
+            </button>
             <h2 style={{ color: C.text, fontSize: "clamp(22px, 3vw, 34px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 10px" }}>
               The future of decision-making is <span style={{ color: C.accent }}>here</span>
             </h2>
@@ -4125,7 +4128,8 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
         ))}
       </div>
 
-      </div>{/* end maxWidth wrapper */}
+      </div>
+      {/* end maxWidth wrapper */}
 
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
 
