@@ -286,15 +286,18 @@ export function HeroBanner({ onStart, t, lang }) {
       }}>
         {/* Left text */}
         <div style={{ flex: 1, minWidth: 0, position: "relative" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(255,255,255,0.15)", backdropFilter: "blur(10px)",
-            border: "1px solid rgba(255,255,255,0.3)",
-            borderRadius: 24, padding: "6px 16px", marginBottom: 20,
-            color: "#fff", fontSize: 13, fontWeight: 600,
-          }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ADE80", display: "inline-block", boxShadow: "0 0 8px #4ADE80" }} />
+          <button onClick={() => { const el = document.getElementById("dp-comparator"); el ? el.scrollIntoView({behavior:"smooth"}) : window.scrollTo({top:600,behavior:"smooth"}); }}
+            style={{ display:"inline-flex",alignItems:"center",gap:8,
+            background:"rgba(255,255,255,0.15)",backdropFilter:"blur(10px)",
+            border:"1px solid rgba(255,255,255,0.3)",
+            borderRadius:24,padding:"6px 16px",marginBottom:20,
+            color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",
+            transition:"all 0.18s" }}
+            onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.25)";e.currentTarget.style.transform="translateY(-1px)";}}
+            onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.15)";e.currentTarget.style.transform="translateY(0)";}}>
+            <span style={{ width:7,height:7,borderRadius:"50%",background:"#4ADE80",display:"inline-block",boxShadow:"0 0 8px #4ADE80" }} />
             {t.tagline}
-          </div>
+          </button>
 
           {/* Market tagline — AI-powered comparison platform */}
           {t.marketTag && (
