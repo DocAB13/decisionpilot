@@ -4038,18 +4038,12 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
               <div style={{ color: "#fff", fontSize: 16, fontWeight: 800, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Available worldwide — free forever</div>
               <div style={{ color: "#475569", fontSize: 13 }}>No country restrictions. No premium wall for basic decisions. Built for everyone, everywhere.</div>
             </div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {["DE","US","FR","GB","RO","ES","IT","JP","CN","BR","SA","IN"].map((c, i) => (
-                <span key={i} style={{ fontSize: 12, fontWeight: 900, color: "#FBBF24", letterSpacing: 0.5, padding: "2px 5px", border: "1px solid rgba(251,191,36,0.3)", borderRadius: 5, transition: "all 0.15s", cursor:"default" }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(251,191,36,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}>{c}</span>
+            <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+              {["DE","US","FR","GB","RO","ES","IT","JP","CN","BR","SA","IN","PT","NL","PL","RU","TR","SE","KR","AU","MX","NG","UA","CZ","HU","GR","TH","NO","AR","ZA"].map((c, i) => (
+                <span key={i} style={{ fontSize: 11, fontWeight: 800, color: "#FBBF24", letterSpacing: 0.4, padding: "2px 4px", border: "1px solid rgba(251,191,36,0.25)", borderRadius: 4, transition: "all 0.15s", cursor:"default", lineHeight:1 }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(251,191,36,0.15)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>{c}</span>
               ))}
-              <button onClick={()=>document.querySelector(".lang-flag-btn")?.click()}
-                style={{ color:"#FBBF24",fontSize:12,fontWeight:700,background:"rgba(251,191,36,0.12)",border:"1px solid rgba(251,191,36,0.3)",borderRadius:5,padding:"2px 8px",cursor:"pointer",alignSelf:"center",transition:"all 0.15s" }}
-                onMouseEnter={e=>{e.currentTarget.style.background="rgba(251,191,36,0.25)";}}
-                onMouseLeave={e=>{e.currentTarget.style.background="rgba(251,191,36,0.12)";}}>
-                +18 more
-              </button>
             </div>
           </div>
 
