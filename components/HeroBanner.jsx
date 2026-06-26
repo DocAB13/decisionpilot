@@ -219,7 +219,7 @@ export function HeroBanner({ onStart, t, lang }) {
 
   const CATEGORIES = [
     { id: "vacation", label: "✈️ Vacation" },
-    { id: "car", label: "🚗 Cars" },
+    { id: "car", label: "Cars" },
     { id: "realestate", label: "🏡 Houses" },
   ];
 
@@ -347,7 +347,8 @@ export function HeroBanner({ onStart, t, lang }) {
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              {SLIDES[current].emoji} {t.banner_cta || "Decide now →"}
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              {t.banner_cta || "Decide now"}
             </button>
             <button onClick={() => onStart("chat")} style={{
               background: "rgba(255,255,255,0.15)", color: "#fff",

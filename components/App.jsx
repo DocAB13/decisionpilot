@@ -2203,9 +2203,9 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCa
           {onShowFavorites && (
             <button onClick={onShowFavorites}
               style={{ position:"relative",background:"transparent",border:`1px solid ${C.border}`,borderRadius:20,padding:"6px 12px",cursor:"pointer",fontSize:13,display:"flex",alignItems:"center",gap:4,color:C.textSecondary,transition:"all 0.15s",whiteSpace:"nowrap" }}
-              onMouseEnter={e=>{e.currentTarget.style.borderColor=C.gold;e.currentTarget.style.color=C.gold;}}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor="#ef4444";e.currentTarget.style.color="#ef4444";}}
               onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.textSecondary;}}>
-              ⭐
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
               {favoritesCount > 0 && <span className="dp-fav-count" style={{ fontWeight:700,fontSize:12 }}>{favoritesCount}</span>}
             </button>
           )}
@@ -3086,7 +3086,7 @@ function RecommendationCard({ pick, index, lang, category, answers, onFavorite, 
             {onFavorite && (
               <button onClick={e=>{e.stopPropagation();onFavorite(pick);}}
                 style={{ background:isFav?"rgba(255,210,0,0.95)":"rgba(255,255,255,0.88)",border:"none",borderRadius:7,width:30,height:30,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:15,boxShadow:"0 2px 8px rgba(0,0,0,0.2)",transition:"all 0.15s",flexShrink:0 }}>
-                {isFav?"⭐":"☆"}
+                {isFav ? <svg width="15" height="15" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}
               </button>
             )}
           </div>
@@ -3526,9 +3526,9 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               {[
-                { icon: "🧠", text: "AI learns your priorities" },
-                { icon: "⚡", text: "Answer in under 60 seconds" },
-                { icon: "🌍", text: "30 languages supported" },
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="3"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="3"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="3"/></svg>, text: "AI learns your priorities" },
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, text: "Answer in under 60 seconds" },
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>, text: "30 languages supported" },
               ].map((item, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: C.text }}>
                   <span>{item.icon}</span>{item.text}
@@ -3885,15 +3885,15 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
           {/* 4 pillars */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20, marginBottom: 52 }}>
             {[
-              { icon: "🌍", title: "30+ Languages", sub: "Full UI and AI responses in your native language — from Arabic to Vietnamese.", color: "#3B82F6" },
-              { icon: "🗂️", title: "66+ Categories", sub: "Finance, tech, travel, health, education and more — every major life decision covered.", color: "#8B5CF6" },
-              { icon: "🤖", title: "AI-Personalized", sub: "No generic lists. Ai·sel learns your priorities and tailors every recommendation to you.", color: "#10B981" },
-              { icon: "🔒", title: "No Account Needed", sub: "Zero signup, zero tracking. Your decisions stay private — always.", color: "#F59E0B" },
+              { icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>, title: "30+ Languages", sub: "Full UI and AI responses in your native language — from Arabic to Vietnamese.", color: "#3B82F6" },
+              { icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="8" height="8" rx="1.5"/><rect x="14" y="3" width="8" height="8" rx="1.5"/><rect x="2" y="14" width="8" height="8" rx="1.5"/><rect x="14" y="14" width="8" height="8" rx="1.5"/></svg>, title: "66+ Categories", sub: "Finance, tech, travel, health, education and more — every major life decision covered.", color: "#8B5CF6" },
+              { icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="2.5"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="2.5"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="2.5"/></svg>, title: "AI-Personalized", sub: "No generic lists. Ai·sel learns your priorities and tailors every recommendation to you.", color: "#10B981" },
+              { icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><line x1="12" y1="15" x2="12" y2="17" strokeWidth="2"/></svg>, title: "No Account Needed", sub: "Zero signup, zero tracking. Your decisions stay private — always.", color: "#F59E0B" },
             ].map((p, i) => (
               <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 18, padding: "28px 24px", transition: "all 0.25s" }}
                 onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.borderColor = `${p.color}44`; e.currentTarget.style.transform = "translateY(-4px)"; }}
                 onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                <div style={{ fontSize: 36, marginBottom: 14 }}>{p.icon}</div>
+                <div style={{ marginBottom: 16, display:"flex", alignItems:"center", justifyContent:"flex-start" }}>{p.icon}</div>
                 <div style={{ color: "#fff", fontSize: 17, fontWeight: 800, marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{p.title}</div>
                 <div style={{ color: "#64748B", fontSize: 14, lineHeight: 1.6 }}>{p.sub}</div>
               </div>
@@ -4499,14 +4499,14 @@ function FavoritesScreen({ favorites, onRemove, onHome, onStartCategory, lang })
       <div style={{ position:"sticky",top:0,zIndex:50,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(8px)",borderBottom:`1px solid ${C.border}`,padding:"10px 20px",display:"flex",alignItems:"center",gap:12 }}>
         <HomeButton onHome={onHome} lang={lg} />
         <div style={{ width:1,height:24,background:C.border }} />
-        <span style={{ color:C.text,fontSize:16,fontWeight:800 }}>⭐ {title[lg]||title.en}</span>
+        <span style={{ color:C.text,fontSize:16,fontWeight:800,display:"flex",alignItems:"center",gap:7 }}><svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> {title[lg]||title.en}</span>
         <span style={{ color:C.muted,fontSize:13,marginLeft:"auto" }}>{favorites.length} {lg==="ro"?"salvate":lg==="de"?"gespeichert":"saved"}</span>
       </div>
 
       <div style={{ maxWidth:900,margin:"0 auto",padding:"32px 20px" }}>
         {favorites.length === 0 ? (
           <div style={{ textAlign:"center",padding:"80px 24px" }}>
-            <div style={{ fontSize:56,marginBottom:16 }}>⭐</div>
+            <div style={{ marginBottom:16 }}><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
             <p style={{ color:C.muted,fontSize:16,lineHeight:1.7 }}>{empty[lg]||empty.en}</p>
             <button onClick={onHome} style={{ background:C.accent,color:"#fff",border:"none",borderRadius:12,padding:"12px 28px",fontSize:14,fontWeight:700,cursor:"pointer",marginTop:16 }}>
               {lg==="de"?"Jetzt vergleichen":lg==="ro"?"Compară acum":"Compare now"}
