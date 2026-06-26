@@ -1,10 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const DARK = "#1A1A2E";
-const CREAM = "#F5F0E8";
-const ORANGE = "#FF8C00";
-
-const FREE_DAILY_LIMIT = Infinity; // Pricing paused — unlimited for all users
+const FREE_DAILY_LIMIT = Infinity;
 function getDecisionCount() {
   if (typeof window === "undefined") return 0;
   const today = new Date().toDateString();
@@ -64,71 +60,65 @@ export default function AselCorner({ screen = "landing" }) {
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       onClick={handleClick}
-      style={{ position: "fixed", right: 20, bottom: 20, zIndex: 70, cursor: "pointer",
-        display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+      style={{ position: "fixed", right: 16, bottom: 16, zIndex: 70, cursor: "pointer",
+        display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
 
       {/* Speech bubble */}
-      <div style={{
-        background: tip ? "#1A56DB" : "#fff",
-        border: `1px solid ${tip ? "#1A56DB" : "#E8ECF4"}`,
-        borderRadius: 14, padding: "10px 14px", fontSize: 12.5, fontWeight: 600,
-        color: tip ? "#fff" : "#0F172A",
-        boxShadow: "0 8px 20px rgba(15,23,42,0.16)",
-        whiteSpace: tip ? "normal" : "nowrap", maxWidth: tip ? 220 : "none", lineHeight: 1.5,
-        opacity: bubbleVisible ? 1 : 0, transform: bubbleVisible ? "translateY(0)" : "translateY(6px)",
-        transition: "all 0.25s ease", position: "relative",
-      }}>
-        {bubbleText}
-        {tip && (
-          <span onClick={dismissTip} style={{
-            position: "absolute", top: -7, right: -7, width: 20, height: 20, borderRadius: "50%",
-            background: "#fff", color: "#475569", display: "flex", alignItems: "center",
-            justifyContent: "center", fontSize: 12, fontWeight: 700,
-            boxShadow: "0 2px 6px rgba(0,0,0,0.2)", cursor: "pointer",
-          }}>×</span>
-        )}
+      {bubbleVisible && (
         <div style={{
-          position: "absolute", right: 22, bottom: -6, width: 10, height: 10,
           background: tip ? "#1A56DB" : "#fff",
-          borderRight: `1px solid ${tip ? "#1A56DB" : "#E8ECF4"}`,
-          borderBottom: `1px solid ${tip ? "#1A56DB" : "#E8ECF4"}`,
-          transform: "rotate(45deg)",
-        }}/>
-      </div>
+          border: `1px solid ${tip ? "#1A56DB" : "#E8ECF4"}`,
+          borderRadius: 14, padding: "10px 14px", fontSize: 12.5, fontWeight: 600,
+          color: tip ? "#fff" : "#0F172A",
+          boxShadow: "0 8px 20px rgba(15,23,42,0.16)",
+          whiteSpace: tip ? "normal" : "nowrap", maxWidth: tip ? 220 : "none", lineHeight: 1.5,
+          position: "relative", animation: "aselPopIn 0.2s ease",
+        }}>
+          {tip && (
+            <button onClick={dismissTip} style={{ position:"absolute",top:4,right:6,background:"none",border:"none",color:"rgba(255,255,255,0.7)",cursor:"pointer",fontSize:14,lineHeight:1,padding:0 }}>×</button>
+          )}
+          {bubbleText}
+          {/* Tail */}
+          <div style={{ position:"absolute",bottom:-7,right:22,width:14,height:14,
+            background: tip ? "#1A56DB" : "#fff",
+            border: `1px solid ${tip ? "#1A56DB" : "#E8ECF4"}`,
+            clipPath:"polygon(0 0,100% 0,50% 100%)",
+          }}/>
+        </div>
+      )}
 
-      {/* Ai·sel avatar button */}
-      <div style={{
-        width: 68, height: 68, borderRadius: "50%", background: "#fff",
-        border: "2px solid #E8ECF4",
-        boxShadow: hovered ? "0 10px 28px rgba(26,86,219,0.28)" : "0 8px 20px rgba(15,23,42,0.18)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        transform: hovered ? "scale(1.07)" : "scale(1)",
-        transition: "all 0.2s ease", position: "relative", overflow: "hidden",
-      }}>
+      {/* Ai·sel — bigger, full body, floating */}
+      <div style={{ position:"relative", width:96, height:96 }}>
         {tip && (
           <span style={{
-            position: "absolute", inset: -6, borderRadius: "50%",
-            border: "2px solid #1A56DB",
-            animation: "aselTipPulse 1.6s ease-out infinite",
-            pointerEvents: "none",
+            position:"absolute", inset:-8, borderRadius:"50%",
+            border:"2px solid #1A56DB",
+            animation:"aselTipPulse 1.6s ease-out infinite",
+            pointerEvents:"none",
           }}/>
         )}
         <img
-          src="/asel-mascot.png"
+          src="/asel-hero.png"
           alt="Ai·sel"
           style={{
-            width: 60, height: 60,
-            objectFit: "cover",
-            objectPosition: "30% 8%",
-            animation: "aselCornerBob 2.8s ease-in-out infinite",
-            borderRadius: "50%",
+            width: 96, height: 96,
+            objectFit: "contain",
+            objectPosition: "center bottom",
+            filter: hovered
+              ? "drop-shadow(0 12px 28px rgba(26,86,219,0.45))"
+              : "drop-shadow(0 8px 20px rgba(26,86,219,0.25))",
+            transform: hovered ? "translateY(-6px) scale(1.06)" : "translateY(0) scale(1)",
+            transition: "all 0.25s cubic-bezier(.34,1.56,.64,1)",
+            animation: "aselCornerBob 3s ease-in-out infinite",
           }}
         />
       </div>
 
       <style>{`
-        @keyframes aselCornerBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-3px);} }
-        @keyframes aselTipPulse { 0%{opacity:0.7;transform:scale(1);} 100%{opacity:0;transform:scale(1.4);} }
+        @keyframes aselCornerBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+        @keyframes aselTipPulse { 0%{opacity:0.7;transform:scale(1);} 100%{opacity:0;transform:scale(1.5);} }
+        @keyframes aselPopIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes aselFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
       `}</style>
     </div>
   );

@@ -3412,13 +3412,17 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
           )}
         </div>
 
-        <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px", boxShadow: C.shadow, textAlign: "center" }}>
-          <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>{uiT("chatMore", lg)}</p>
-          <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
-            style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}>
-            <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="Ai·sel" />
-            {uiT("chatWith", lg)}
-          </button>
+        <div style={{ marginTop: 40, background: C.card, borderRadius: 16, padding: "24px 32px", boxShadow: C.shadow, display:"flex", alignItems:"center", gap:32, flexWrap:"wrap" }}>
+          <img src="/asel-hero.png" alt="Ai·sel"
+            style={{ width:120, height:"auto", objectFit:"contain", flexShrink:0, filter:"drop-shadow(0 8px 24px rgba(26,86,219,0.18))", transform:"scaleX(-1)", animation:"aselFloat 3s ease-in-out infinite" }} />
+          <div style={{ flex:1, minWidth:200 }}>
+            <p style={{ color: C.textSecondary, fontSize: 15, marginBottom: 16 }}>{uiT("chatMore", lg)}</p>
+            <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
+              style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}>
+              <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="" />
+              {uiT("chatWith", lg)}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -3664,7 +3668,9 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
 
         {/* ══ HOW IT WORKS + TRANSPARENCY ══ */}
         <div style={{ marginBottom: 0 }}>
-          <div style={{ background:`linear-gradient(135deg,${C.accent} 0%,#7048E8 100%)`,padding:"40px 24px",textAlign:"center",margin:"0 -24px 48px" }}>
+          <div style={{ background:`linear-gradient(135deg,${C.accent} 0%,#7048E8 100%)`,padding:"40px 24px",textAlign:"center",margin:"0 -24px 48px",position:"relative",overflow:"hidden" }}>
+            <img src="/asel-medium.png" alt="Ai·sel"
+              style={{ position:"absolute",right:"4%",bottom:0,height:"130%",maxHeight:200,objectFit:"contain",objectPosition:"center bottom",filter:"drop-shadow(0 6px 20px rgba(0,0,0,0.2))",opacity:0.9,pointerEvents:"none" }} />
             <div style={{ display:"inline-block",background:"rgba(255,255,255,0.15)",color:"#fff",borderRadius:20,padding:"4px 14px",fontSize:11,fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:12 }}>Guide</div>
             <h2 style={{ color:"#fff",fontSize:"clamp(26px,4vw,42px)",fontWeight:900,letterSpacing:-1,margin:"0 0 10px" }}>
               {lang==="de"?"Wie es funktioniert":lang==="es"?"Cómo funciona":lang==="ro"?"Cum funcționează":"How it works"}
