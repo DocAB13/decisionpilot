@@ -3583,7 +3583,90 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
         </div>
       </div>
 
-      {/* ⑤ POPULAR PRODUCT COMPARISONS — concrete cards like CHECK24 */}
+      {/* ④b AI COMPARE — 3 products side-by-side */}
+      {(() => {
+        const [cp1,setCp1] = useState(""); const [cp2,setCp2] = useState(""); const [cp3,setCp3] = useState("");
+        const [cmpLoading,setCmpLoading] = useState(false); const [cmpData,setCmpData] = useState(null); const [cmpErr,setCmpErr] = useState("");
+        const clr = ["#4F46E5","#15803D","#C2410C"]; const bgClr = ["#EEF2FF","#F0FDF4","#FFF7ED"];
+        async function doCompare() {
+          if (!cp1||!cp2||!cp3) { setCmpErr(lang==="de"?"Bitte alle 3 Felder ausfüllen":lang==="ro"?"Completează toate cele 3 câmpuri":"Please fill in all 3 products"); return; }
+          setCmpErr(""); setCmpData(null); setCmpLoading(true);
+          try {
+            const prompt = `Compare these 3 products and respond ONLY with valid JSON, no markdown:\nProducts: "${cp1}", "${cp2}", "${cp3}"\n{"products":[{"name":"short name","score":8.5,"price_range":"€500-700","pros":["pro 1","pro 2","pro 3"],"cons":["con 1","con 2"],"best_for":"who this is best for","winner_badge":""}],"summary":"one sentence verdict"}\nwinner_badge: "" | "Best value" | "Top pick" | "Best specs" — only ONE product. Respond in same language as input.`;
+            const res = await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mode:"compare3",prompt,lang})});
+            const txt = await res.text(); const clean = txt.replace(/```json|```/g,"").trim();
+            const j = JSON.parse(clean); setCmpData(j);
+          } catch(e) { setCmpErr("Error comparing — please try again."); }
+          finally { setCmpLoading(false); }
+        }
+        function sc(s){ return s>=8.5?"#15803D":s>=7?"#92400E":"#B91C1C"; }
+        return (
+          <div style={{ marginBottom:40, background:C.card, borderRadius:20, border:`1px solid ${C.border}`, padding:"28px 28px 24px", boxShadow:C.shadow }}>
+            <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:8 }}>
+              <div style={{ background:`${C.accent}12`,borderRadius:8,padding:"4px 10px",display:"inline-flex",alignItems:"center",gap:6 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="2.5"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="2.5"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="2.5"/></svg>
+                <span style={{ fontSize:11,fontWeight:700,color:C.accent,letterSpacing:0.5,textTransform:"uppercase" }}>AI Comparator</span>
+              </div>
+            </div>
+            <h2 style={{ fontSize:20,fontWeight:900,color:C.text,margin:"0 0 4px",fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+              {lang==="de"?"3 Produkte direkt vergleichen":lang==="ro"?"Compară orice 3 produse":"Compare any 3 products"}
+            </h2>
+            <p style={{ fontSize:13,color:C.muted,margin:"0 0 20px" }}>
+              {lang==="de"?"Telefone, Autos, Laptops, Banken — AI vergleicht sie sofort":lang==="ro"?"Telefoane, mașini, laptopuri, bănci — AI le compară instant":"Phones, cars, laptops, banks — AI compares them instantly"}
+            </p>
+            <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:14 }}>
+              {[[cp1,setCp1,"1","e.g. iPhone 16 Pro"],[cp2,setCp2,"2","e.g. Samsung S25"],[cp3,setCp3,"3","e.g. Pixel 9 Pro"]].map(([val,set,num,ph],i)=>(
+                <div key={i}>
+                  <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:6 }}>
+                    <div style={{ width:20,height:20,borderRadius:"50%",background:bgClr[i],color:clr[i],display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700 }}>{num}</div>
+                    <span style={{ fontSize:11,color:C.muted,fontWeight:600 }}>{lang==="de"?`Produkt ${num}`:lang==="ro"?`Produsul ${num}`:`Product ${num}`}</span>
+                  </div>
+                  <input value={val} onChange={e=>set(e.target.value)} onKeyDown={e=>e.key==="Enter"&&doCompare()} placeholder={ph}
+                    style={{ width:"100%",boxSizing:"border-box",padding:"10px 12px",border:`1.5px solid ${C.border}`,borderRadius:10,fontSize:14,background:C.bg,color:C.text,outline:"none",transition:"border-color 0.15s",fontFamily:"inherit" }}
+                    onFocus={e=>e.target.style.borderColor=clr[i]} onBlur={e=>e.target.style.borderColor=C.border} />
+                </div>
+              ))}
+            </div>
+            <button onClick={doCompare} disabled={cmpLoading}
+              style={{ width:"100%",padding:"12px",background:C.accent,color:"#fff",border:"none",borderRadius:10,fontSize:14,fontWeight:700,cursor:cmpLoading?"not-allowed":"pointer",opacity:cmpLoading?0.7:1,display:"flex",alignItems:"center",justifyContent:"center",gap:8 }}>
+              {cmpLoading
+                ? <><span style={{ display:"inline-flex",gap:4 }}>{[0,1,2].map(i=><span key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#fff",animation:`blink 1.2s ${i*0.2}s ease-in-out infinite`,display:"inline-block" }}/>)}</span>{lang==="de"?"Vergleiche...":lang==="ro"?"Comparăm...":"Comparing…"}</>
+                : <>{lang==="de"?"Mit AI vergleichen →":lang==="ro"?"Compară cu AI →":"Compare with AI →"}</>}
+            </button>
+            {cmpErr && <p style={{ color:"#DC2626",fontSize:13,margin:"10px 0 0",textAlign:"center" }}>{cmpErr}</p>}
+            {cmpData?.products && (
+              <div style={{ marginTop:20 }}>
+                <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:1,background:C.border,borderRadius:14,overflow:"hidden" }}>
+                  {cmpData.products.map((p,i)=>(
+                    <div key={i} style={{ background:C.card,display:"flex",flexDirection:"column" }}>
+                      <div style={{ padding:"14px 14px 10px",borderBottom:`1px solid ${C.border}`,borderTop:`3px solid ${clr[i]}` }}>
+                        {p.winner_badge ? <div style={{ display:"inline-block",fontSize:10,fontWeight:700,padding:"2px 8px",borderRadius:6,background:bgClr[i],color:clr[i],marginBottom:4 }}>{p.winner_badge}</div> : <div style={{ height:20 }}/>}
+                        <div style={{ fontWeight:800,fontSize:14,color:C.text,marginBottom:4,fontFamily:"'Plus Jakarta Sans',sans-serif",lineHeight:1.3 }}>{p.name}</div>
+                        <div style={{ fontSize:24,fontWeight:900,color:sc(p.score),lineHeight:1 }}>{p.score?.toFixed(1)}<span style={{ fontSize:12,color:C.muted,fontWeight:400 }}>/10</span></div>
+                        {p.price_range&&<div style={{ fontSize:11,color:C.muted,marginTop:3 }}>{p.price_range}</div>}
+                      </div>
+                      <div style={{ padding:"10px 14px",borderBottom:`1px solid ${C.border}` }}>
+                        <div style={{ fontSize:9,fontWeight:700,letterSpacing:0.8,textTransform:"uppercase",color:"#15803D",marginBottom:7 }}>✓ Pros</div>
+                        {(p.pros||[]).map((x,j)=><div key={j} style={{ display:"flex",gap:5,alignItems:"flex-start",marginBottom:5 }}><div style={{ width:4,height:4,borderRadius:"50%",background:"#15803D",flexShrink:0,marginTop:5 }}/><span style={{ fontSize:12,color:C.textSecondary,lineHeight:1.45 }}>{x}</span></div>)}
+                      </div>
+                      <div style={{ padding:"10px 14px",borderBottom:`1px solid ${C.border}` }}>
+                        <div style={{ fontSize:9,fontWeight:700,letterSpacing:0.8,textTransform:"uppercase",color:"#DC2626",marginBottom:7 }}>✕ Cons</div>
+                        {(p.cons||[]).map((x,j)=><div key={j} style={{ display:"flex",gap:5,alignItems:"flex-start",marginBottom:5 }}><div style={{ width:4,height:4,borderRadius:"50%",background:"#DC2626",flexShrink:0,marginTop:5 }}/><span style={{ fontSize:12,color:C.textSecondary,lineHeight:1.45 }}>{x}</span></div>)}
+                      </div>
+                      <div style={{ padding:"10px 14px",flex:1 }}>
+                        <div style={{ fontSize:9,fontWeight:700,letterSpacing:0.8,textTransform:"uppercase",color:C.muted,marginBottom:5 }}>Best for</div>
+                        <p style={{ fontSize:12,color:C.muted,margin:0,lineHeight:1.55 }}>{p.best_for}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {cmpData.summary&&<p style={{ fontSize:12,color:C.muted,margin:"10px 2px 0",lineHeight:1.6 }}>{cmpData.summary}</p>}
+              </div>
+            )}
+            <style>{`@keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:1}}`}</style>
+          </div>
+        );
+      })()}
       {[
         { section: lang === "de" ? "Handys vergleichen" : lang === "ro" ? "Compară telefoane" : "Compare Smartphones", gid: "tech", items: [
           { id: "phone", label: "Apple iPhone 17 Pro", sub: lang==="de"?"ab 1€ mit Vertrag · 131 Tarife":"from €1 on contract · 131 plans", img: "photo-1592750475338-74b7b21085ab", rating: "4.9", reviews: "18.431" },
