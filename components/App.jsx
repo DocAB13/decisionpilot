@@ -3528,14 +3528,18 @@ function CompareSection({ lang }) {
         body: JSON.stringify({ mode: "compare", products, lang: lg })
       });
 
-      const json = await res.json();
-
-      if (!res.ok || json.error) {
-        throw new Error(json.error || `HTTP ${res.status}`);
+      const text = await res.text();
+      let json;
+      try { json = JSON.parse(text); } catch(e) {
+        throw new Error("Response not JSON: " + text.slice(0, 200));
       }
 
-      if (!json.products || !json.rows) {
-        throw new Error("Unexpected response format");
+      if (json.error) throw new Error(json.error);
+
+      // Flexible: accept 'picks' (old format) or 'products' (new format)
+      if (json.picks && !json.products) json.products = json.picks;
+      if (!json.products || json.products.length === 0) {
+        throw new Error("Got: " + text.slice(0, 300));
       }
 
       setData(json);
