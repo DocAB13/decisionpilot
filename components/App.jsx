@@ -1866,6 +1866,25 @@ const UI_T = {
   of:        {en:"of",de:"von",fr:"sur",es:"de",it:"di",pt:"de",ro:"din",nl:"van",pl:"z",ru:"из",zh:"共",ar:"من",tr:"/{n}"},
   tryAgain:  {en:"Try Again",de:"Erneut versuchen",fr:"Réessayer",es:"Intentar de nuevo",it:"Riprova",pt:"Tentar novamente",ro:"Încearcă din nou",nl:"Opnieuw proberen",pl:"Spróbuj ponownie",ru:"Попробовать снова",zh:"再试一次",ar:"حاول مرة أخرى",tr:"Tekrar dene"},
   goBack:    {en:"← Go back",de:"← Zurück",fr:"← Retour",es:"← Volver",it:"← Torna indietro",pt:"← Voltar",ro:"← Înapoi",nl:"← Terug",pl:"← Wróć",ru:"← Назад",zh:"← 返回",ar:"← رجوع",tr:"← Geri dön"},
+
+  // ── Compare section ─────────────────────────────────────────────────────────
+  compareTitle:   {en:"Compare any 2 or 3 products",de:"2 oder 3 Produkte vergleichen",fr:"Comparez 2 ou 3 produits",es:"Compara 2 o 3 productos",it:"Confronta 2 o 3 prodotti",pt:"Compare 2 ou 3 produtos",ro:"Compară orice 2 sau 3 produse",nl:"Vergelijk 2 of 3 producten",pl:"Porównaj 2 lub 3 produkty",ru:"Сравните 2 или 3 продукта",zh:"比较 2 或 3 款产品",ar:"قارن بين منتجَين أو 3",tr:"2 veya 3 ürünü karşılaştır",sv:"Jämför 2 eller 3 produkter",ko:"2~3개 제품 비교",ja:"2〜3製品を比較"},
+  compareSubtitle:{en:"Phones, cars, hotels, banks, services… AI compares anything instantly",de:"Telefone, Autos, Hotels, Banken… AI vergleicht alles sofort",fr:"Téléphones, voitures, hôtels, banques… l'IA compare tout instantanément",es:"Teléfonos, coches, hoteles, bancos… la IA compara cualquier cosa al instante",it:"Telefoni, auto, hotel, banche… l'IA confronta tutto subito",pt:"Telefones, carros, hotéis, bancos… a IA compara tudo instantaneamente",ro:"Telefoane, mașini, hoteluri, bănci, servicii… AI compară orice instant",nl:"Telefoons, auto's, hotels, banken… AI vergelijkt alles direct",pl:"Telefony, auta, hotele, banki… AI porównuje wszystko natychmiast",ru:"Телефоны, авто, отели, банки… ИИ сравнивает всё мгновенно",zh:"手机、汽车、酒店、银行… AI即时比较一切",ar:"هواتف، سيارات، فنادق… الذكاء الاصطناعي يقارن كل شيء فوراً",tr:"Telefonlar, arabalar, oteller, bankalar… AI her şeyi anında karşılaştırır"},
+  compareBtn:     {en:"Compare with Ai·sel →",de:"Mit Ai·sel vergleichen →",fr:"Comparer avec Ai·sel →",es:"Comparar con Ai·sel →",it:"Confronta con Ai·sel →",pt:"Comparar com Ai·sel →",ro:"Compară cu Ai·sel →",nl:"Vergelijk met Ai·sel →",pl:"Porównaj z Ai·sel →",ru:"Сравнить с Ai·sel →",zh:"与 Ai·sel 比较 →",ar:"قارن مع Ai·sel →",tr:"Ai·sel ile karşılaştır →",sv:"Jämför med Ai·sel →",ko:"Ai·sel로 비교 →",ja:"Ai·selで比較 →"},
+  comparingNow:   {en:"Ai·sel is comparing…",de:"Ai·sel vergleicht…",fr:"Ai·sel compare…",es:"Ai·sel está comparando…",it:"Ai·sel sta confrontando…",pt:"Ai·sel está comparando…",ro:"Ai·sel compară…",nl:"Ai·sel vergelijkt…",pl:"Ai·sel porównuje…",ru:"Ai·sel сравнивает…",zh:"Ai·sel 正在比较…",ar:"Ai·sel يقارن…",tr:"Ai·sel karşılaştırıyor…"},
+  compareFailed:  {en:"Comparison failed",de:"Vergleich fehlgeschlagen",fr:"Comparaison échouée",es:"Comparación fallida",it:"Confronto fallito",pt:"Comparação falhou",ro:"Compararea a eșuat",nl:"Vergelijking mislukt",pl:"Porównanie nie powiodło się",ru:"Ошибка сравнения",zh:"比较失败",ar:"فشل المقارنة",tr:"Karşılaştırma başarısız"},
+  featureLabel:   {en:"Feature",de:"Merkmal",fr:"Critère",es:"Característica",it:"Caratteristica",pt:"Característica",ro:"Criteriu",nl:"Kenmerk",pl:"Cecha",ru:"Характеристика",zh:"特征",ar:"الميزة",tr:"Özellik",sv:"Egenskap",ko:"특성",ja:"特徴"},
+  bestFor:        {en:"Best for",de:"Am besten für",fr:"Idéal pour",es:"Ideal para",it:"Ideale per",pt:"Ideal para",ro:"Ideal pentru",nl:"Ideaal voor",pl:"Najlepszy dla",ru:"Лучше всего для",zh:"最适合",ar:"الأفضل لـ",tr:"En iyisi için",sv:"Bäst för",ko:"최적 대상",ja:"こんな方に最適"},
+  minProducts:    {en:"Please enter at least 2 products",de:"Bitte mindestens 2 Produkte eingeben",fr:"Veuillez entrer au moins 2 produits",es:"Por favor ingresa al menos 2 productos",it:"Inserisci almeno 2 prodotti",pt:"Por favor insira pelo menos 2 produtos",ro:"Introdu cel puțin 2 produse",nl:"Voer minimaal 2 producten in",pl:"Wprowadź co najmniej 2 produkty",ru:"Введите минимум 2 продукта",zh:"请输入至少 2 个产品",ar:"الرجاء إدخال منتجَين على الأقل",tr:"Lütfen en az 2 ürün girin"},
+
+  // ── Landing sections ────────────────────────────────────────────────────────
+  popularComp:    {en:"Popular Comparisons",de:"Beliebte Vergleiche",fr:"Comparaisons populaires",es:"Comparaciones populares",it:"Confronti popolari",pt:"Comparações populares",ro:"Comparații populare",nl:"Populaire vergelijkingen",pl:"Popularne porównania",ru:"Популярные сравнения",zh:"热门比较",ar:"المقارنات الشائعة",tr:"Popüler Karşılaştırmalar",sv:"Populära jämförelser",ko:"인기 비교",ja:"人気の比較"},
+  popularDest:    {en:"Popular Destinations",de:"Beliebte Reiseziele",fr:"Destinations populaires",es:"Destinos populares",it:"Destinazioni popolari",pt:"Destinos populares",ro:"Destinații populare",nl:"Populaire bestemmingen",pl:"Popularne destynacje",ru:"Популярные направления",zh:"热门目的地",ar:"الوجهات الشائعة",tr:"Popüler Destinasyonlar",sv:"Populära destinationer",ko:"인기 여행지",ja:"人気の旅行先"},
+  seeAll:         {en:uiT("seeAll",lang),de:"Alle anzeigen →",fr:"Voir tout →",es:"Ver todo →",it:"Vedi tutto →",pt:"Ver tudo →",ro:"Vezi toate →",nl:"Alles zien →",pl:"Zobacz wszystko →",ru:"Смотреть все →",zh:"查看全部 →",ar:"عرض الكل →",tr:"Hepsini gör →",sv:"Se alla →",ko:"모두 보기 →",ja:"すべて見る →"},
+  exploreAll:     {en:"Explore all →",de:"Alle entdecken →",fr:"Tout explorer →",es:"Explorar todo →",it:"Esplora tutto →",pt:"Explorar tudo →",ro:"Vezi toate →",nl:"Alles verkennen →",pl:"Odkryj wszystko →",ru:"Исследовать все →",zh:"探索全部 →",ar:"استكشاف الكل →",tr:"Hepsini keşfet →"},
+  recentlyViewed: {en:"Recently viewed",de:"Zuletzt angesehen",fr:"Vus récemment",es:"Vistos recientemente",it:"Visualizzati di recente",pt:"Vistos recentemente",ro:"Vizualizate recent",nl:"Recent bekeken",pl:"Ostatnio oglądane",ru:"Недавно просмотренные",zh:"最近浏览",ar:"شاهدت مؤخراً",tr:"Son görüntülenenler"},
+  compareSmartph: {en:"Compare Smartphones",de:"Handys vergleichen",fr:"Comparer les smartphones",es:"Comparar smartphones",it:"Confronta smartphone",pt:"Comparar smartphones",ro:"Compară telefoane",nl:"Vergelijk smartphones",pl:"Porównaj smartfony",ru:"Сравнить смартфоны",zh:"比较智能手机",ar:"قارن الهواتف الذكية",tr:"Akıllı telefon karşılaştır"},
+  compareLoans:   {en:"Compare Loans",de:"Kredite vergleichen",fr:"Comparer les prêts",es:"Comparar préstamos",it:"Confronta prestiti",pt:"Comparar empréstimos",ro:"Compară credite",nl:"Vergelijk leningen",pl:"Porównaj kredyty",ru:"Сравнить кредиты",zh:"比较贷款",ar:"قارن القروض",tr:"Kredi karşılaştır"},
 };
 function uiT(key, lang) { return (UI_T[key]||{})[lang] || (UI_T[key]||{}).en || key; }
 
@@ -3326,31 +3345,38 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
           @media(min-width:1025px){ .pick-cell:nth-child(2n){ border-right:1px solid var(--border,#E2E8F0); } .pick-cell:nth-child(3n){ border-right:none; } }
           .pick-cell:nth-last-child(-n+3){ border-bottom:none; }
 
-          /* ── MOBILE GLOBAL ── */
+          /* ── Tourism destinations grid ── */
+          .dp-dest-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:12px; }
+          @media(max-width:900px){ .dp-dest-grid { grid-template-columns:repeat(2,1fr); } }
+          @media(max-width:480px){ .dp-dest-grid { grid-template-columns:1fr; } }
+
+          /* ── Promo banners ── */
+          .dp-promo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-bottom:32px; }
+          @media(max-width:640px){ .dp-promo-grid { grid-template-columns:repeat(2,1fr); } }
+          @media(max-width:380px){ .dp-promo-grid { grid-template-columns:1fr; } }
+
+          /* ── Products 5-col ── */
+          .dp-products-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+          @media(max-width:900px){ .dp-products-grid { grid-template-columns:repeat(3,1fr); } }
+          @media(max-width:640px){ .dp-products-grid { grid-template-columns:repeat(2,1fr); } }
+          @media(max-width:400px){ .dp-products-grid { grid-template-columns:1fr; } }
+
+          /* ── Steps / How it works ── */
+          .steps-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin-bottom:32px; }
+          @media(max-width:640px){ .steps-grid { grid-template-columns:repeat(2,1fr); } }
+          @media(max-width:380px){ .steps-grid { grid-template-columns:1fr; } }
+
+          /* ── TopNav mobile ── */
           @media(max-width:768px){
-            /* TopNav: hide favorites count text, shrink profile */
-            .dp-fav-count { display:none !important; }
-            .dp-profile-name { display:none !important; }
-            /* 5-col product sections → 2-col */
-            .dp-products-grid { grid-template-columns:repeat(2,1fr) !important; }
-            /* How it works: 2 col */
-            .steps-grid { grid-template-columns:repeat(2,1fr) !important; }
-            /* Concept section flags: smaller */
-            .dp-flags span { font-size:16px !important; }
-            /* Results header: reduce hero */
-            .dp-results-hero { height:140px !important; }
-            /* Card pros/cons: stack on very small */
+            .dp-fav-count { display:none!important; }
+            .dp-profile-name { display:none!important; }
+            .cat-label { font-size:9px!important; }
           }
           @media(max-width:480px){
-            .dp-products-grid { grid-template-columns:1fr !important; }
-            .steps-grid { grid-template-columns:1fr !important; }
-            .picks-grid { grid-template-columns:1fr !important; }
-            .dp-promo-grid { grid-template-columns:1fr !important; }
+            .cat-pill { padding:8px 4px!important; }
           }
-          /* Prevent horizontal scroll */
           body { overflow-x:hidden; }
-          /* Smooth card hovers on touch devices */
-          @media(hover:none){ .pick-cell:hover { transform:none !important; } }
+          @media(hover:none){ .pick-cell { transform:none!important; } }
         `}</style>
         <div className="picks-grid">
           {data?.picks?.map((pick, i) => (
@@ -3516,7 +3542,7 @@ function CompareSection({ lang }) {
   async function doCompare() {
     const products = [cp1.trim(), cp2.trim(), cp3.trim()].filter(Boolean);
     if (products.length < 2) {
-      setErr(lg==="de"?"Bitte mindestens 2 Produkte eingeben":lg==="ro"?"Introdu cel puțin 2 produse":"Please enter at least 2 products");
+      setErr(uiT("minProducts",lg));
       return;
     }
     setErr(""); setErrDetail(""); setData(null); setLoading(true);
@@ -3566,7 +3592,7 @@ winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"
       throw new Error("Could not get comparison data. Response: " + text.slice(0, 150));
 
     } catch(e) {
-      setErr(lg==="de"?"Vergleich fehlgeschlagen":lg==="ro"?"Compararea a eșuat":"Comparison failed");
+      setErr(uiT("compareFailed",lg));
       setErrDetail(e.message);
     } finally { setLoading(false); }
   }
@@ -3585,14 +3611,22 @@ winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"
         </div>
       </div>
       <h2 style={{ fontSize:20,fontWeight:900,color:C.text,margin:"0 0 4px",fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-        {lg==="de"?"2 oder 3 Produkte vergleichen":lg==="ro"?"Compară orice 2 sau 3 produse":"Compare any 2 or 3 products"}
+        {uiT("compareTitle",lg)}
       </h2>
       <p style={{ fontSize:13,color:C.muted,margin:"0 0 20px" }}>
-        {lg==="de"?"Telefone, Autos, Hotels, Banken, Dienste… AI vergleicht alles sofort":lg==="ro"?"Telefoane, mașini, hoteluri, bănci, servicii… AI compară orice instant":"Phones, cars, hotels, banks, services… AI compares anything instantly"}
+        {uiT("compareSubtitle",lg)}
       </p>
 
-      {/* 3-column inputs */}
-      <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:14 }}>
+      <style>{`
+        .cmp-inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+        .cmp-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid #E2E8F0;margin-top:20px;}
+        .cmp-table-inner{min-width:480px;}
+        @media(max-width:768px){.cmp-inputs{grid-template-columns:1fr!important;}}
+        @media(max-width:480px){.cmp-inputs{grid-template-columns:1fr!important;}}
+      `}</style>
+
+      {/* 3-column inputs — 1-col on mobile */}
+      <div className="cmp-inputs">
         {inputs.map(([val,set,label,ph],i)=>(
           <div key={i}>
             <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:6 }}>
@@ -3616,7 +3650,7 @@ winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"
                   {products[i].price_range&&<span style={{ fontSize:11,color:C.muted,marginLeft:4 }}>· {products[i].price_range}</span>}
                 </div>
                 {products[i].best_for&&<div style={{ fontSize:11,color:C.muted,lineHeight:1.4 }}>
-                  <span style={{ fontWeight:600,color:clr[i] }}>{lg==="de"?"Ideal für":lg==="ro"?"Ideal pentru":"Best for"}:</span> {products[i].best_for}
+                  <span style={{ fontWeight:600,color:clr[i] }}>{uiT("bestFor",lg)}:</span> {products[i].best_for}
                 </div>}
               </div>
             )}
@@ -3628,8 +3662,8 @@ winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"
       <button onClick={doCompare} disabled={loading}
         style={{ width:"100%",padding:"13px",background:loading?`${C.accent}80`:C.accent,color:"#fff",border:"none",borderRadius:10,fontSize:14,fontWeight:700,cursor:loading?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"background 0.2s" }}>
         {loading
-          ? <><span style={{ display:"inline-flex",gap:4,alignItems:"center" }}>{[0,1,2].map(i=><span key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#fff",animation:`cmpBlink 1.2s ${i*0.2}s ease-in-out infinite`,display:"inline-block" }}/>)}</span> {lg==="de"?"Ai·sel vergleicht…":lg==="ro"?"Ai·sel compară…":"Ai·sel is comparing…"}</>
-          : <>{lg==="de"?"Mit Ai·sel vergleichen →":lg==="ro"?"Compară cu Ai·sel →":"Compare with Ai·sel →"}</>}
+          ? <><span style={{ display:"inline-flex",gap:4,alignItems:"center" }}>{[0,1,2].map(i=><span key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#fff",animation:`cmpBlink 1.2s ${i*0.2}s ease-in-out infinite`,display:"inline-block" }}/>)}</span> {uiT("comparingNow",lg)}</>
+          : <>{uiT("compareBtn",lg)}</>}
       </button>
 
       {err&&(
@@ -3639,14 +3673,15 @@ winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"
         </div>
       )}
 
-      {/* Comparison table */}
+      {/* Comparison table — horizontal scroll on mobile */}
       {data?.rows && data.rows.length > 0 && (
         <div style={{ marginTop:20 }}>
-          <div style={{ borderRadius:12,overflow:"hidden",border:`1px solid ${C.border}` }}>
+          <div className="cmp-table-wrap">
+            <div className="cmp-table-inner" style={{ borderRadius:12,overflow:"hidden" }}>
             {/* Table header row */}
             <div style={{ display:"grid",gridTemplateColumns:`150px repeat(${products.length},1fr)`,background:"#F8FAFC",borderBottom:`1.5px solid ${C.border}` }}>
               <div style={{ padding:"10px 14px",fontSize:10,fontWeight:700,color:C.muted,textTransform:"uppercase",letterSpacing:0.7 }}>
-                {lg==="de"?"Merkmal":lg==="ro"?"Criteriu":"Feature"}
+                {uiT("featureLabel",lg)}
               </div>
               {products.map((p,i)=>(
                 <div key={i} style={{ padding:"10px 12px",borderLeft:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:6 }}>
@@ -3685,6 +3720,7 @@ winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"
                 })}
               </div>
             ))}
+          </div>
           </div>
           {data.summary&&<p style={{ fontSize:13.5, fontWeight:700, color:"#334155", margin:"12px 2px 0", lineHeight:1.65 }}>💡 {data.summary}</p>}
         </div>
@@ -3825,7 +3861,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
       {/* ④ SPLIT PROMO BANNERS */}
       <div style={{ padding: "32px 0 0" }}>
         <h2 style={{ color: C.text, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 800, margin: "0 0 16px", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {lang === "de" ? "Beliebte Vergleiche" : lang === "ro" ? "Comparații populare" : lang === "fr" ? "Comparaisons populaires" : "Popular Comparisons"}
+          {uiT("popularComp",lang)}
         </h2>
         <div className="dp-promo-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 32 }}>
           {[
@@ -3852,14 +3888,14 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
       {/* ④b AI COMPARE */}
       <CompareSection lang={lang} onStart={onStart} />
       {[
-        { section: lang === "de" ? "Handys vergleichen" : lang === "ro" ? "Compară telefoane" : "Compare Smartphones", gid: "tech", items: [
+        { section: uiT("compareSmartph",lang), gid: "tech", items: [
           { id: "phone", label: "Apple iPhone 17 Pro", sub: lang==="de"?"ab 1€ mit Vertrag · 131 Tarife":"from €1 on contract · 131 plans", img: "photo-1592750475338-74b7b21085ab", rating: "4.9", reviews: "18.431" },
           { id: "phone", label: "Samsung Galaxy S26 Ultra", sub: lang==="de"?"ab 1€ mit Vertrag · 172 Tarife":"from €1 on contract · 172 plans", img: "photo-1610945415295-d9bbf067e59c", rating: "4.7", reviews: "12.922" },
           { id: "phone", label: "Google Pixel 10 Pro", sub: lang==="de"?"ab 1€ mit Vertrag · 89 Tarife":"from €1 on contract · 89 plans", img: "photo-1567581935884-3349723552ca", rating: "4.6", reviews: "6.211" },
           { id: "phone", label: "OnePlus 13", sub: lang==="de"?"ab 699€ · 54 Tarife":"from €699 unlocked · 54 plans", img: "photo-1574755393849-623942496936", rating: "4.5", reviews: "3.841" },
           { id: "phone", label: "Sony Xperia 1 VII", sub: lang==="de"?"ab 1€ mit Vertrag · 41 Tarife":"from €1 on contract · 41 plans", img: "photo-1512054502232-10a0a035d672", rating: "4.4", reviews: "2.108" },
         ]},
-        { section: lang === "de" ? "Kredite vergleichen" : lang === "ro" ? "Compară credite" : "Compare Loans", gid: "financial", items: [
+        { section: uiT("compareLoans",lang), gid: "financial", items: [
           { id: "personal_loan", label: "5.000 €", sub: lang==="de"?"ab 98,50€ / Monat · 60 Monate":"from €98/mo · 60 months", img: null, badge: "€", rating: null },
           { id: "personal_loan", label: "10.000 €", sub: lang==="de"?"ab 179,55€ / Monat · 72 Monate":"from €179/mo · 72 months", img: null, badge: "€€", rating: null },
           { id: "personal_loan", label: "20.000 €", sub: lang==="de"?"ab 314,18€ / Monat · 84 Monate":"from €314/mo · 84 months", img: null, badge: "€€€", rating: null },
@@ -3874,10 +3910,10 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
               <h2 style={{ color: C.text, fontSize: "clamp(16px, 2.2vw, 22px)", fontWeight: 800, margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{sec.section}</h2>
               <button onClick={() => { setSelectedGroup(sec.gid); document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}); }}
                 style={{ background: "none", border: "none", color: C.accent, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                {lang === "de" ? "Alle Angebote →" : lang === "ro" ? "Vezi toate →" : "See all →"}
+                {lang === "de" ? "Alle Angebote →" : lang === "ro" ? "Vezi toate →" : uiT("seeAll",lang)}
               </button>
             </div>
-            <div className="dp-products-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
+            <div className="dp-products-grid">
               {sec.items.map((item, i) => (
                 <div key={i} onClick={() => startWithTracking(item.id)}
                   style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: "16px", cursor: "pointer", transition: "all 0.2s", display: "flex", gap: 14, alignItems: "center" }}
@@ -3909,13 +3945,13 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
       <div style={{ marginBottom: 36 }}>
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
           <h2 style={{ color:C.text, fontSize:"clamp(16px,2.2vw,22px)", fontWeight:800, margin:0, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-            {lang==="de"?"Beliebte Reiseziele":lang==="ro"?"Destinații populare":"Popular Destinations"}
+            {uiT("popularDest",lang)}
           </h2>
           <button onClick={()=>startWithTracking("hotel")} style={{ background:"none",border:"none",color:C.accent,fontSize:13,fontWeight:700,cursor:"pointer" }}>
-            {lang==="de"?"Alle Angebote →":lang==="ro"?"Vezi toate →":"Explore all →"}
+            {uiT("exploreAll",lang)}
           </button>
         </div>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:12 }}>
+        <div className="dp-dest-grid">
           {[
             { name:"Mallorca", country:lang==="de"?"Spanien":lang==="ro"?"Spania":"Spain", img:"photo-1570197788417-0e82375c9371", price:"ab 442€" },
             { name:"Santorini", country:lang==="de"?"Griechenland":lang==="ro"?"Grecia":"Greece", img:"photo-1533105079780-92b9be482077", price:"ab 580€" },
@@ -3934,7 +3970,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
             </div>
           ))}
         </div>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
+        <div className="dp-dest-grid">
           {[
             { name:"Barcelona", country:lang==="de"?"Spanien":"Spain", img:"photo-1539037116277-4db20889f2d4", price:"ab 310€" },
             { name:"Hurghada", country:lang==="de"?"Ägypten":lang==="ro"?"Egipt":"Egypt", img:"photo-1539650116574-8efeb43e2750", price:"ab 399€" },
