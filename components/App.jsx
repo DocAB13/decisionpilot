@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
 import { HeroBanner, WorldwideSection } from "./HeroBanner";
 import AselCorner from "./AselCorner";
@@ -1666,8 +1666,8 @@ const CAT_I18N = {
     dropshipping: 'Dropshipping Platformları',
   },
   // ── Extra 17 languages to reach 30 total ──
-  sv: { tech:"Teknik",appliances:"Hushållsapparater",auto:"Bilar",financial:"Ekonomi",telecom:"Telekommunikation",energy:"Energi",tourism:"Turism",software:"Programvara",home:"Hem & Trädgård",health:"Hälsa & Fitness",education:"Utbildning",ecommerce:"E-handel",phone:"Smartphones",laptop:"Laptops",tablet:"Surfplattor",smartwatch:"Smartwatches",headphones:"Hörlurar",tv:"TV-apparater",gaming:"Spelkonsoler",monitor:"Skärmar",printer:"Skrivare",fridge:"Kylskåp",washing_machine:"Tvättmaskiner",dryer:"Torktumlare",vacuum:"Dammsugare",espresso:"Kaffemaskiner",oven:"Ugnar & Spis",aircon:"Luftkonditionering",new_car:"Nya bilar",used_car:"Begagnade bilar",tires:"Däck",car_insurance:"Bilförsäkring",ev_charger:"EV-laddare",car_service:"Bilverkstad",personal_loan:"Personliga lån",mortgage:"Bolån",credit_card:"Kreditkort",bank_account:"Bankkonton",deposit:"Sparkonton",broker:"Investeringsmäklare",insurance:"Försäkringar",mobile_plan:"Mobilabonnemang",prepaid:"Kontantkort",internet:"Fast bredband",tv_package:"TV-paket",phone_provider:"Telefonoperatörer",electricity:"Elleverantörer",gas_provider:"Gasleverantörer",solar:"Solpaneler",battery_storage:"Batterilager",hotel:"Hotell",airline:"Flygbolag",travel_agency:"Resebyråer",travel_insurance:"Reseförsäkring",car_rental:"Biluthyrning",vpn:"VPN-tjänster",hosting:"Webbhotell",website_builder:"Webbplatsbyggare",crm:"CRM",email_marketing:"E-postmarknadsföring",ai_solutions:"AI-lösningar",antivirus:"Antivirusprogram",furniture:"Möbler",mattress:"Madrasser",power_tools:"Elverktyg",security_system:"Säkerhetssystem",robot_mower:"Robotgräsklippare",gym:"Gym",fitness_watch:"Fitnessklockor",supplements:"Kosttillskott",health_app:"Hälsoappar",online_courses:"Onlinekurser",university:"Universitet",private_school:"Privatskolor",language_courses:"Språkkurser",online_store:"Nätbutiker",delivery:"Leveranstjänster",dropshipping:"Dropshipping" },
-  da: { tech:"Teknologi",appliances:"Husholdningsapparater",auto:"Biler",financial:"Økonomi",telecom:"Telekommunikation",energy:"Energi",tourism:"Turisme",software:"Software",home:"Hjem & Have",health:"Sundhed & Fitness",education:"Uddannelse",ecommerce:"E-handel",phone:"Smartphones",laptop:"Laptops",tablet:"Tablets",smartwatch:"Smartwatches",headphones:"Høretelefoner",tv:"Fjernsyn",gaming:"Spillekonsoller",monitor:"Skærme",printer:"Printere",fridge:"Køleskabe",washing_machine:"Vaskemaskiner",dryer:"Tørretumblere",vacuum:"Støvsugere",espresso:"Kaffemaskiner",oven:"Ovne & Komfurer",aircon:"Aircondition",new_car:"Nye biler",used_car:"Brugte biler",tires:"Dæk",car_insurance:"Bilforsikring",ev_charger:"EV-ladere",car_service:"Autoværksteder",personal_loan:"Personlige lån",mortgage:"Realkreditlån",credit_card:"Kreditkort",bank_account:"Bankkonti",deposit:"Opsparingskonto",broker:"Investeringsmæglere",insurance:"Forsikringer",mobile_plan:"Mobilabonnementer",prepaid:"Taletidskort",internet:"Fastnet internet",tv_package:"TV-pakker",phone_provider:"Telefonudbydere",electricity:"Eludbydere",gas_provider:"Gasudbydere",solar:"Solpaneler",battery_storage:"Batterilager",hotel:"Hoteller",airline:"Flyselskaber",travel_agency:"Rejsebureauer",travel_insurance:"Rejseforsikring",car_rental:"Biludlejning",vpn:"VPN",hosting:"Webhosting",website_builder:"Hjemmesidebyggere",crm:"CRM",email_marketing:"E-mailmarkedsføring",ai_solutions:"AI-løsninger",antivirus:"Antivirusprogrammer",furniture:"Møbler",mattress:"Madrasser",power_tools:"Elværktøj",security_system:"Sikkerhedssystemer",robot_mower:"Robotplæneklippere",gym:"Fitnesscentre",fitness_watch:"Fitnessure",supplements:"Kosttilskud",health_app:"Sundhedsapps",online_courses:"Onlinekurser",university:"Universiteter",private_school:"Privatskoler",language_courses:"Sprogkurser",online_store:"Netbutikker",delivery:"Leveringstjenester",dropshipping:"Dropshipping" },
+  sv: { tech:"Teknik",appliances:"Hushållsapparater",auto:"Bilar",financial:"Ekonomi",telecom:"Mobil & Internet",energy:"Energi",tourism:"Turism",software:"Programvara",home:"Hem & Trädgård",health:"Hälsa & Fitness",education:"Utbildning",ecommerce:"E-handel",phone:"Smartphones",laptop:"Laptops",tablet:"Surfplattor",smartwatch:"Smartwatches",headphones:"Hörlurar",tv:"TV-apparater",gaming:"Spelkonsoler",monitor:"Skärmar",printer:"Skrivare",fridge:"Kylskåp",washing_machine:"Tvättmaskiner",dryer:"Torktumlare",vacuum:"Dammsugare",espresso:"Kaffemaskiner",oven:"Ugnar & Spis",aircon:"Luftkonditionering",new_car:"Nya bilar",used_car:"Begagnade bilar",tires:"Däck",car_insurance:"Bilförsäkring",ev_charger:"EV-laddare",car_service:"Bilverkstad",personal_loan:"Personliga lån",mortgage:"Bolån",credit_card:"Kreditkort",bank_account:"Bankkonton",deposit:"Sparkonton",broker:"Investeringsmäklare",insurance:"Försäkringar",mobile_plan:"Mobilabonnemang",prepaid:"Kontantkort",internet:"Fast bredband",tv_package:"TV-paket",phone_provider:"Telefonoperatörer",electricity:"Elleverantörer",gas_provider:"Gasleverantörer",solar:"Solpaneler",battery_storage:"Batterilager",hotel:"Hotell",airline:"Flygbolag",travel_agency:"Resebyråer",travel_insurance:"Reseförsäkring",car_rental:"Biluthyrning",vpn:"VPN-tjänster",hosting:"Webbhotell",website_builder:"Webbplatsbyggare",crm:"CRM",email_marketing:"E-postmarknadsföring",ai_solutions:"AI-lösningar",antivirus:"Antivirusprogram",furniture:"Möbler",mattress:"Madrasser",power_tools:"Elverktyg",security_system:"Säkerhetssystem",robot_mower:"Robotgräsklippare",gym:"Gym",fitness_watch:"Fitnessklockor",supplements:"Kosttillskott",health_app:"Hälsoappar",online_courses:"Onlinekurser",university:"Universitet",private_school:"Privatskolor",language_courses:"Språkkurser",online_store:"Nätbutiker",delivery:"Leveranstjänster",dropshipping:"Dropshipping" },
+  da: { tech:"Teknologi",appliances:"Husholdningsapparater",auto:"Biler",financial:"Økonomi",telecom:"Mobil & Internet",energy:"Energi",tourism:"Turisme",software:"Software",home:"Hjem & Have",health:"Sundhed & Fitness",education:"Uddannelse",ecommerce:"E-handel",phone:"Smartphones",laptop:"Laptops",tablet:"Tablets",smartwatch:"Smartwatches",headphones:"Høretelefoner",tv:"Fjernsyn",gaming:"Spillekonsoller",monitor:"Skærme",printer:"Printere",fridge:"Køleskabe",washing_machine:"Vaskemaskiner",dryer:"Tørretumblere",vacuum:"Støvsugere",espresso:"Kaffemaskiner",oven:"Ovne & Komfurer",aircon:"Aircondition",new_car:"Nye biler",used_car:"Brugte biler",tires:"Dæk",car_insurance:"Bilforsikring",ev_charger:"EV-ladere",car_service:"Autoværksteder",personal_loan:"Personlige lån",mortgage:"Realkreditlån",credit_card:"Kreditkort",bank_account:"Bankkonti",deposit:"Opsparingskonto",broker:"Investeringsmæglere",insurance:"Forsikringer",mobile_plan:"Mobilabonnementer",prepaid:"Taletidskort",internet:"Fastnet internet",tv_package:"TV-pakker",phone_provider:"Telefonudbydere",electricity:"Eludbydere",gas_provider:"Gasudbydere",solar:"Solpaneler",battery_storage:"Batterilager",hotel:"Hoteller",airline:"Flyselskaber",travel_agency:"Rejsebureauer",travel_insurance:"Rejseforsikring",car_rental:"Biludlejning",vpn:"VPN",hosting:"Webhosting",website_builder:"Hjemmesidebyggere",crm:"CRM",email_marketing:"E-mailmarkedsføring",ai_solutions:"AI-løsninger",antivirus:"Antivirusprogrammer",furniture:"Møbler",mattress:"Madrasser",power_tools:"Elværktøj",security_system:"Sikkerhedssystemer",robot_mower:"Robotplæneklippere",gym:"Fitnesscentre",fitness_watch:"Fitnessure",supplements:"Kosttilskud",health_app:"Sundhedsapps",online_courses:"Onlinekurser",university:"Universiteter",private_school:"Privatskoler",language_courses:"Sprogkurser",online_store:"Netbutikker",delivery:"Leveringstjenester",dropshipping:"Dropshipping" },
   no: { tech:"Teknologi",appliances:"Husholdningsapparater",auto:"Biler",financial:"Økonomi",telecom:"Telekommunikasjon",energy:"Energi",tourism:"Turisme",software:"Programvare",home:"Hjem & Hage",health:"Helse & Fitness",education:"Utdanning",ecommerce:"E-handel",phone:"Smarttelefoner",laptop:"Bærbare PC-er",tablet:"Nettbrett",smartwatch:"Smartklokker",headphones:"Hodetelefoner",tv:"TV-er",gaming:"Spillkonsoller",monitor:"Skjermer",printer:"Skrivere",fridge:"Kjøleskap",washing_machine:"Vaskemaskiner",dryer:"Tørketromler",vacuum:"Støvsugere",espresso:"Kaffemaskiner",oven:"Ovner & Komfyrer",aircon:"Klimaanlegg",new_car:"Nye biler",used_car:"Brukte biler",tires:"Dekk",car_insurance:"Bilforsikring",ev_charger:"EV-ladere",car_service:"Bilverksteder",personal_loan:"Personlige lån",mortgage:"Boliglån",credit_card:"Kredittkort",bank_account:"Bankkontoer",deposit:"Sparekontoer",broker:"Investeringsmeglere",insurance:"Forsikringer",mobile_plan:"Mobilabonnementer",prepaid:"Kontantkort",internet:"Fast bredbånd",tv_package:"TV-pakker",phone_provider:"Telefonleverandører",electricity:"Strømleverandører",gas_provider:"Gassleverandører",solar:"Solpaneler",battery_storage:"Batterilager",hotel:"Hoteller",airline:"Flyselskaper",travel_agency:"Reisebyråer",travel_insurance:"Reiseforsikring",car_rental:"Bilutleie",vpn:"VPN",hosting:"Webhotell",website_builder:"Nettstedsbyggere",crm:"CRM",email_marketing:"E-postmarkedsføring",ai_solutions:"AI-løsninger",antivirus:"Antivirusprogrammer",furniture:"Møbler",mattress:"Madrasser",power_tools:"Elektroverktøy",security_system:"Sikkerhetssystemer",robot_mower:"Robotgressklipper",gym:"Treningssentre",fitness_watch:"Treningsklokker",supplements:"Kosttilskudd",health_app:"Helseapper",online_courses:"Nettkurs",university:"Universiteter",private_school:"Privatskoler",language_courses:"Språkkurs",online_store:"Nettbutikker",delivery:"Leveringstjenester",dropshipping:"Dropshipping" },
   fi: { tech:"Teknologia",appliances:"Kodinkoneet",auto:"Autot",financial:"Talous",telecom:"Televiestintä",energy:"Energia",tourism:"Matkailu",software:"Ohjelmistot",home:"Koti & Puutarha",health:"Terveys & Fitness",education:"Koulutus",ecommerce:"Verkkokauppa",phone:"Älypuhelimet",laptop:"Kannettavat",tablet:"Tabletit",smartwatch:"Älykellot",headphones:"Kuulokkeet",tv:"Televisiot",gaming:"Pelikonsolit",monitor:"Näytöt",printer:"Tulostimet",fridge:"Jääkaapit",washing_machine:"Pesukoneet",dryer:"Kuivausrummut",vacuum:"Pölynimurit",espresso:"Kahvikoneet",oven:"Uunit & Liedet",aircon:"Ilmastointi",new_car:"Uudet autot",used_car:"Käytetyt autot",tires:"Renkaat",car_insurance:"Autovakuutus",ev_charger:"Sähköauton laturit",car_service:"Autokorjaamot",personal_loan:"Henkilökohtaiset lainat",mortgage:"Asuntolainat",credit_card:"Luottokortit",bank_account:"Pankkitilit",deposit:"Säästötilit",broker:"Sijoitusvälittäjät",insurance:"Vakuutukset",mobile_plan:"Puhelinliittymät",prepaid:"Prepaid-liittymät",internet:"Kiinteä laajakaista",tv_package:"TV-paketit",phone_provider:"Puhelinoperaattorit",electricity:"Sähköntoimittajat",gas_provider:"Kaasuntoimittajat",solar:"Aurinkopaneelit",battery_storage:"Akkuvarastointi",hotel:"Hotellit",airline:"Lentoyhtiöt",travel_agency:"Matkatoimistot",travel_insurance:"Matkavakuutus",car_rental:"Autonvuokraus",vpn:"VPN-palvelut",hosting:"Webhotellit",website_builder:"Sivustorakentajat",crm:"CRM",email_marketing:"Sähköpostimarkkinointi",ai_solutions:"AI-ratkaisut",antivirus:"Virustorjuntaohjelmat",furniture:"Huonekalut",mattress:"Patjat",power_tools:"Sähkötyökalut",security_system:"Turvajärjestelmät",robot_mower:"Robottileikkurit",gym:"Kuntosalit",fitness_watch:"Fitnesskellot",supplements:"Ravintolisät",health_app:"Terveyssovellukset",online_courses:"Verkkokurssit",university:"Yliopistot",private_school:"Yksityiskoulut",language_courses:"Kielikurssit",online_store:"Verkkokaupat",delivery:"Toimituspalvelut",dropshipping:"Dropshipping" },
   cs: { tech:"Technologie",appliances:"Domácí spotřebiče",auto:"Automobily",financial:"Finance",telecom:"Telekomunikace",energy:"Energie",tourism:"Cestovní ruch",software:"Software",home:"Dům & Zahrada",health:"Zdraví & Fitness",education:"Vzdělání",ecommerce:"E-commerce",phone:"Smartphony",laptop:"Notebooky",tablet:"Tablety",smartwatch:"Chytré hodinky",headphones:"Sluchátka",tv:"Televizory",gaming:"Herní konzole",monitor:"Monitory",printer:"Tiskárny",fridge:"Lednice",washing_machine:"Pračky",dryer:"Sušičky",vacuum:"Vysavače",espresso:"Kávovary",oven:"Trouby a varné desky",aircon:"Klimatizace",new_car:"Nová auta",used_car:"Ojetá auta",tires:"Pneumatiky",car_insurance:"Pojištění vozidla",ev_charger:"Nabíječky EV",car_service:"Autoservisy",personal_loan:"Osobní půjčky",mortgage:"Hypotéky",credit_card:"Kreditní karty",bank_account:"Bankovní účty",deposit:"Spořicí vklady",broker:"Investiční makléři",insurance:"Pojištění",mobile_plan:"Mobilní tarify",prepaid:"Předplacené SIM",internet:"Pevný internet",tv_package:"TV balíčky",phone_provider:"Telefonní operátoři",electricity:"Dodavatelé elektřiny",gas_provider:"Dodavatelé plynu",solar:"Solární panely",battery_storage:"Bateriové zásoby",hotel:"Hotely",airline:"Letecké společnosti",travel_agency:"Cestovní kanceláře",travel_insurance:"Cestovní pojištění",car_rental:"Půjčovna aut",vpn:"VPN",hosting:"Webhosting",website_builder:"Tvůrci webů",crm:"CRM",email_marketing:"E-mail marketing",ai_solutions:"AI řešení",antivirus:"Antivirové programy",furniture:"Nábytek",mattress:"Matrace",power_tools:"Elektrické nářadí",security_system:"Bezpečnostní systémy",robot_mower:"Robotické sekačky",gym:"Fitness centra",fitness_watch:"Fitness hodinky",supplements:"Doplňky stravy",health_app:"Zdravotní aplikace",online_courses:"Online kurzy",university:"Univerzity",private_school:"Soukromé školy",language_courses:"Jazykové kurzy",online_store:"Internetové obchody",delivery:"Doručovací služby",dropshipping:"Dropshipping" },
@@ -1726,7 +1726,7 @@ const CATEGORY_GROUPS = [
     { id:"broker",          label:"Brokeri de investiții",emoji:"📊", image:img("photo-1611974789855-9c2a0a7236a3") },
     { id:"insurance",       label:"Asigurări",           emoji:"🛡️", image:img("photo-1450101499163-c8848c66ca85") },
   ]},
-  { id:"telecom",    label:"Telecomunicații",            emoji:"📡", color:"#7C3AED", subs:[
+  { id:"telecom",    label:"Mobile & Internet",            emoji:"📡", color:"#7C3AED", subs:[
     { id:"mobile_plan",     label:"Abonamente mobile",   emoji:"📱", image:img("photo-1511707171634-5f897ff02aa9") },
     { id:"prepaid",         label:"Cartele preplătite",  emoji:"📲", image:img("photo-1601784551446-20c9e07cdbdb") },
     { id:"internet",        label:"Internet fix",        emoji:"🌐", image:img("photo-1558618047-3c8c76ca7d13") },
@@ -2260,18 +2260,17 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCa
         </div>
       </div>
 
-      {/* ── CATEGORY ROW — CHECK24 style, appears above hero ── */}
-      <div style={{ borderTop:`1px solid ${C.border}`, background:"#fff", overflowX:"auto", scrollbarWidth:"none" }}>
+      {/* ── CATEGORY ROW — full width, no scroll ── */}
+      <div style={{ borderTop:`1px solid ${C.border}`, background:"#fff" }}>
         <style>{`
-          .cat-pill { display:flex; flex-direction:column; align-items:center; gap:5px; padding:11px 18px; border:none; border-bottom:3px solid transparent; background:transparent; cursor:pointer; transition:border-color 0.15s, color 0.15s, background 0.15s; flex-shrink:0; color:#64748B; min-height:0; }
+          .cat-pill { display:flex; flex-direction:column; align-items:center; gap:5px; padding:10px 8px; border:none; border-bottom:3px solid transparent; background:transparent; cursor:pointer; transition:border-color 0.15s, color 0.15s, background 0.15s; flex:1; color:#64748B; min-height:0; }
           .cat-pill:hover { background:var(--pill-bg); border-bottom-color:var(--pill-color); color:var(--pill-color); }
           .cat-pill:hover .cat-icon-wrap { transform:translateY(-3px) scale(1.12); }
-          .cat-icon-wrap { transition:transform 0.22s cubic-bezier(.34,1.56,.64,1); display:flex; align-items:center; justify-content:center; width:26px; height:26px; }
+          .cat-icon-wrap { transition:transform 0.22s cubic-bezier(.34,1.56,.64,1); display:flex; align-items:center; justify-content:center; width:24px; height:24px; }
           .cat-pill:hover .cat-icon-wrap svg { stroke:var(--pill-color); }
-          .cat-label { font-size:11px; font-weight:600; white-space:nowrap; letter-spacing:0.1px; }
-          ::-webkit-scrollbar { display:none; }
+          .cat-label { font-size:10.5px; font-weight:600; white-space:nowrap; letter-spacing:0.1px; }
         `}</style>
-        <div style={{ display:"flex", gap:0, padding:"0 16px", maxWidth:1400, margin:"0 auto", minWidth:"max-content" }}>
+        <div style={{ display:"flex", width:"100%", maxWidth:"100%" }}>
           {CATEGORY_GROUPS.map(g => (
             <button key={g.id} className="cat-pill"
               style={{"--pill-color":g.color, "--pill-bg":`${g.color}0c`}}
@@ -2396,8 +2395,8 @@ function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
 
         {/* Center: emoji in glassmorphism card + category name */}
         <div style={{ position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",paddingBottom:28 }}>
-          <div style={{ width:76,height:76,borderRadius:22,background:"rgba(255,255,255,0.16)",backdropFilter:"blur(10px)",border:"2px solid rgba(255,255,255,0.3)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,boxShadow:"0 8px 32px rgba(0,0,0,0.25)",color:"#fff" }}>
-            {React.cloneElement(getIcon(category, 36, "white"), { width:36, height:36 })}
+          <div style={{ width:76,height:76,borderRadius:22,background:"rgba(255,255,255,0.16)",backdropFilter:"blur(10px)",border:"2px solid rgba(255,255,255,0.3)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,boxShadow:"0 8px 32px rgba(0,0,0,0.25)",color:"white" }}>
+            <div style={{ transform:"scale(1.7)", transformOrigin:"center", display:"flex" }}>{getIcon(category)}</div>
           </div>
           <div style={{ color:"#fff",fontSize:"clamp(18px,3.5vw,28px)",fontWeight:900,letterSpacing:-0.5,textShadow:"0 2px 16px rgba(0,0,0,0.5)",fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
             {catName(category,lg)}
@@ -2845,7 +2844,7 @@ function LoadingScreen({ category, lang, onHome }) {
             {getCategoryAnimation(category)}
           </div>
           <div style={{ color: catColor, fontWeight: 800, fontSize: 13, letterSpacing: 1.2, textTransform: "uppercase", display:"flex", alignItems:"center", gap:8, justifyContent:"center" }}>
-            <span style={{ color:catColor, display:"flex" }}>{React.cloneElement(getIcon(category, 16, catColor), {width:16,height:16})}</span>
+            <div style={{ display:"flex", color:catColor }}>{getIcon(category)}</div>
             {catLabel} · AI Analysis
           </div>
         </div>
@@ -3639,6 +3638,56 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
         );
       })}
 
+      {/* ⑤b TOURISM DESTINATIONS — CHECK24 style with real photos */}
+      <div style={{ marginBottom: 36 }}>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
+          <h2 style={{ color:C.text, fontSize:"clamp(16px,2.2vw,22px)", fontWeight:800, margin:0, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+            {lang==="de"?"Beliebte Reiseziele":lang==="ro"?"Destinații populare":"Popular Destinations"}
+          </h2>
+          <button onClick={()=>startWithTracking("hotel")} style={{ background:"none",border:"none",color:C.accent,fontSize:13,fontWeight:700,cursor:"pointer" }}>
+            {lang==="de"?"Alle Angebote →":lang==="ro"?"Vezi toate →":"Explore all →"}
+          </button>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:12 }}>
+          {[
+            { name:"Mallorca", country:lang==="de"?"Spanien":lang==="ro"?"Spania":"Spain", img:"photo-1558618047-3c8c76ca7d13", price:"ab 442€" },
+            { name:"Santorini", country:lang==="de"?"Griechenland":lang==="ro"?"Grecia":"Greece", img:"photo-1533105079780-92b9be482077", price:"ab 580€" },
+            { name:"Alanya", country:lang==="de"?"Türkei":lang==="ro"?"Turcia":"Turkey", img:"photo-1590523277543-a94d2e4eb00b", price:"ab 389€" },
+            { name:"Dubai", country:lang==="de"?"VAE":lang==="ro"?"EAU":"UAE", img:"photo-1512453979798-5ea266f8880c", price:"ab 620€" },
+          ].map((d,i) => (
+            <div key={i} onClick={()=>startWithTracking("hotel")} style={{ position:"relative",borderRadius:14,overflow:"hidden",cursor:"pointer",aspectRatio:"4/3",transition:"transform 0.2s" }}
+              onMouseEnter={e=>e.currentTarget.style.transform="scale(1.02)"}
+              onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
+              <img src={`https://images.unsplash.com/${d.img}?w=400&h=300&fit=crop&auto=format`} style={{ width:"100%",height:"100%",objectFit:"cover",display:"block" }} alt={d.name} />
+              <div style={{ position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%)" }} />
+              <div style={{ position:"absolute",bottom:0,left:0,padding:"14px 16px" }}>
+                <div style={{ color:"#fff",fontSize:17,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{d.name}</div>
+                <div style={{ color:"rgba(255,255,255,0.8)",fontSize:12 }}>{d.country} · {d.price}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
+          {[
+            { name:"Barcelona", country:lang==="de"?"Spanien":"Spain", img:"photo-1511527661048-7fe73d85e9a4", price:"ab 310€" },
+            { name:"Hurghada", country:lang==="de"?"Ägypten":lang==="ro"?"Egipt":"Egypt", img:"photo-1539650116574-8efeb43e2750", price:"ab 399€" },
+            { name:"Maldives", country:"Maldives", img:"photo-1514282401047-d79a71a590e8", price:"ab 1.290€" },
+            { name:"Kreta", country:lang==="de"?"Griechenland":"Greece", img:"photo-1504150558240-0b4fd8946624", price:"ab 359€" },
+          ].map((d,i) => (
+            <div key={i} onClick={()=>startWithTracking("hotel")} style={{ position:"relative",borderRadius:14,overflow:"hidden",cursor:"pointer",aspectRatio:"4/3",transition:"transform 0.2s" }}
+              onMouseEnter={e=>e.currentTarget.style.transform="scale(1.02)"}
+              onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
+              <img src={`https://images.unsplash.com/${d.img}?w=400&h=300&fit=crop&auto=format`} style={{ width:"100%",height:"100%",objectFit:"cover",display:"block" }} alt={d.name} />
+              <div style={{ position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%)" }} />
+              <div style={{ position:"absolute",bottom:0,left:0,padding:"14px 16px" }}>
+                <div style={{ color:"#fff",fontSize:16,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{d.name}</div>
+                <div style={{ color:"rgba(255,255,255,0.8)",fontSize:12 }}>{d.country} · {d.price}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ⑥ TRUST RATINGS */}
       <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 16, padding: "24px 28px", marginBottom: 40, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
         <div style={{ flex: 1, minWidth: 200 }}>
@@ -3878,7 +3927,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
               <span style={{ background: "linear-gradient(90deg, #60A5FA, #A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Every decision. Everywhere.</span>
             </h2>
             <p style={{ color: "#94A3B8", fontSize: 17, maxWidth: 560, margin: "0 auto", lineHeight: 1.7 }}>
-              DecisionPilot is built for a world without borders — whether you're choosing a phone in Tokyo, a mortgage in Berlin, or a hotel in Dubai, Ai·sel speaks your language and understands your market.
+              DecisionPilot is built for a world without borders — whether you're choosing a phone in Tokyo, a mortgage in Berlin, or a hotel in Dubai, <button onClick={()=>window.dispatchEvent(new Event("openChat"))} style={{ background:"none",border:"none",color:"#7C3AED",fontWeight:700,cursor:"pointer",fontSize:"inherit",padding:0,textDecoration:"underline",textDecorationStyle:"dotted" }}>Ai·sel</button> speaks your language and understands your market.
             </p>
           </div>
 
@@ -3907,12 +3956,17 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
               <div style={{ color: "#475569", fontSize: 13 }}>No country restrictions. No premium wall for basic decisions. Built for everyone, everywhere.</div>
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {["🇩🇪","🇺🇸","🇫🇷","🇬🇧","🇷🇴","🇪🇸","🇮🇹","🇯🇵","🇨🇳","🇧🇷","🇸🇦","🇮🇳"].map((f, i) => (
-                <span key={i} style={{ fontSize: 22, filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.5))", transition: "transform 0.2s" }}
-                  onMouseEnter={e => e.currentTarget.style.transform = "scale(1.25)"}
-                  onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>{f}</span>
+              {["DE","US","FR","GB","RO","ES","IT","JP","CN","BR","SA","IN"].map((c, i) => (
+                <span key={i} style={{ fontSize: 12, fontWeight: 900, color: "#FBBF24", letterSpacing: 0.5, padding: "2px 5px", border: "1px solid rgba(251,191,36,0.3)", borderRadius: 5, transition: "all 0.15s", cursor:"default" }}
+                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(251,191,36,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}>{c}</span>
               ))}
-              <span style={{ color: "#475569", fontSize: 13, alignSelf: "center", paddingLeft: 4 }}>+18 more</span>
+              <button onClick={()=>document.querySelector(".lang-flag-btn")?.click()}
+                style={{ color:"#FBBF24",fontSize:12,fontWeight:700,background:"rgba(251,191,36,0.12)",border:"1px solid rgba(251,191,36,0.3)",borderRadius:5,padding:"2px 8px",cursor:"pointer",alignSelf:"center",transition:"all 0.15s" }}
+                onMouseEnter={e=>{e.currentTarget.style.background="rgba(251,191,36,0.25)";}}
+                onMouseLeave={e=>{e.currentTarget.style.background="rgba(251,191,36,0.12)";}}>
+                +18 more
+              </button>
             </div>
           </div>
 

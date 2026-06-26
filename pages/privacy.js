@@ -1,7 +1,9 @@
 import Head from "next/head";
 import LegalLayout from "../components/LegalLayout";
+import { useState } from "react";
 
 export default function Privacy() {
+  const [showContact, setShowContact] = useState(false);
   return (
     <>
       <Head>
@@ -10,20 +12,19 @@ export default function Privacy() {
       </Head>
       <LegalLayout title="Privacy Policy" lastUpdated="June 21, 2026">
         <p>
-          This Privacy Policy explains how Nicolae-Abel Bolos-Ardeleanu ("DecisionPilot", "we", "us")
-          collects, uses, and protects your information when you use decisionpilot.tech (the "Service"). We built DecisionPilot to help
-          you make decisions faster — this policy explains exactly what that involves on the data side.
+          This Privacy Policy explains how DecisionPilot ("we", "us") collects, uses, and protects your information
+          when you use decisionpilot.tech. We built DecisionPilot to help you make decisions faster — this policy
+          explains exactly what that involves on the data side.
         </p>
 
-        <h2>1. Who is responsible for your data</h2>
-        <p>
-          The data controller responsible for this website is:<br />
-          Nicolae-Abel Bolos-Ardeleanu<br />
-          Leipziger Str. 35C, 01097 Dresden, Saxony, Germany<br />
-          contact@decisionpilot.tech
-        </p>
-
-        <h2>2. What data we collect</h2>
+        <h2>1. What data we collect</h2>
+        <ul>
+          <li><strong>Decision answers:</strong> the choices you make when answering questions in a category (e.g. vacation, car, phone) so we can generate a recommendation. These are processed to produce your result and are not linked to your real-world identity.</li>
+          <li><strong>AI chat messages:</strong> if you use the "Chat with AI" feature, your messages are sent to our AI provider (Anthropic) to generate a response.</li>
+          <li><strong>Usage and analytics data:</strong> pages visited, approximate location (country/city level), device and browser type, collected via Google Analytics — only after you consent via our cookie banner.</li>
+          <li><strong>Account and billing data:</strong> if you subscribe to Pro or Premium, our payment processor (Stripe) collects your payment details directly. We do not store your full card number.</li>
+          <li><strong>Communications:</strong> if you contact us directly, we keep the content of that exchange to respond to you.</li>
+        </ul>
         <ul>
           <li><strong>Decision answers:</strong> the choices you make when answering questions in a category (e.g. vacation, car, phone) so we can generate a recommendation. These are processed to produce your result and are not linked to your real-world identity.</li>
           <li><strong>AI chat messages:</strong> if you use the "Chat with AI" feature, your messages are sent to our AI provider (Anthropic) to generate a response.</li>
@@ -90,9 +91,25 @@ export default function Privacy() {
 
         <h2>10. Contact</h2>
         <p>
-          Questions about this policy or your data? Reach us at contact@decisionpilot.tech or via our{" "}
-          <a href="/contact" style={{ color: "#1A56DB" }}>Contact page</a>.
+          Questions about this policy or your data? Reach us at <a href="mailto:contact@decisionpilot.tech" style={{ color:"#1A56DB" }}>contact@decisionpilot.tech</a> or via our{" "}
+          <a href="/contact" style={{ color:"#1A56DB" }}>Contact page</a>.
         </p>
+
+        <div style={{ marginTop:48, paddingTop:24, borderTop:"1px solid #E2E8F0" }}>
+          <button onClick={()=>setShowContact(c=>!c)}
+            style={{ background:"none",border:"none",color:"#94A3B8",fontSize:11,cursor:"pointer",padding:0,textDecoration:"underline" }}>
+            {showContact ? "Hide legal information ▲" : "Legal information (GDPR Art. 13) ▼"}
+          </button>
+          {showContact && (
+            <div style={{ marginTop:12, padding:"14px 16px", background:"#F8FAFC", borderRadius:8, fontSize:12, color:"#64748B", lineHeight:1.8 }}>
+              <strong style={{ display:"block", marginBottom:4", color:"#475569" }}>Data controller (Art. 4 No. 7 GDPR):</strong>
+              DecisionPilot<br />
+              Owner: N. A. Bolos-Ardeleanu<br />
+              Dresden, Germany<br />
+              <a href="mailto:contact@decisionpilot.tech" style={{ color:"#1A56DB" }}>contact@decisionpilot.tech</a>
+            </div>
+          )}
+        </div>
       </LegalLayout>
     </>
   );
