@@ -4129,7 +4129,6 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
       </div>
 
       </div>
-      {/* end maxWidth wrapper */}
 
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
 
