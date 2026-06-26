@@ -3923,14 +3923,18 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               {[
-                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="3"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="3"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="3"/></svg>, text: "AI learns your priorities" },
-                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, text: "Answer in under 60 seconds" },
-                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>, text: "30 languages supported" },
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="3"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="3"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="3"/></svg>, text: lang==="de"?"KI lernt deine Prioritäten":lang==="ro"?"AI îți învață prioritățile":lang==="es"?"IA aprende tus prioridades":"AI learns your priorities", action: () => onShowProfile && onShowProfile(), color: C.accent },
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, text: lang==="de"?"Antwort in unter 60 Sekunden":lang==="ro"?"Răspuns în sub 60 de secunde":lang==="es"?"Respuesta en menos de 60 segundos":"Answer in under 60 seconds", action: () => document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}), color: "#7048E8" },
+                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>, text: lang==="de"?"30 Sprachen unterstützt":lang==="ro"?"30 de limbi acceptate":lang==="es"?"30 idiomas soportados":"30 languages supported", action: () => document.querySelector(".lang-flag-btn")?.click(), color: "#059669" },
               ].map((item, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, background: C.card, border: `1px solid ${C.border}`, borderRadius: 10, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: C.text }}>
-                  <span>{item.icon}</span>{item.text}
-                </div>
+                <button key={i} onClick={item.action}
+                  style={{ display:"flex",alignItems:"center",gap:8,background:C.card,border:`1px solid ${C.border}`,borderRadius:10,padding:"8px 14px",fontSize:13,fontWeight:600,color:C.text,cursor:"pointer",transition:"all 0.18s" }}
+                  onMouseEnter={e=>{ e.currentTarget.style.borderColor=item.color; e.currentTarget.style.color=item.color; e.currentTarget.style.background=`${item.color}08`; e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow=`0 4px 12px ${item.color}20`; }}
+                  onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.color=C.text; e.currentTarget.style.background=C.card; e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}>
+                  <span style={{ color:item.color }}>{item.icon}</span>{item.text}
+                </button>
               ))}
+            </div>
             </div>
           </div>
           <div style={{ display: "flex", gap: 16, flexShrink: 0 }}>
