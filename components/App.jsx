@@ -3497,99 +3497,75 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
 }
 
 // ── Compare 2 or 3 Products section ─────────────────────────────────────────
-function CompareSection({ lang, onStart }) {
+function CompareSection({ lang }) {
   const [cp1, setCp1] = useState(""); const [cp2, setCp2] = useState(""); const [cp3, setCp3] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [err, setErr] = useState("");
+  const [errDetail, setErrDetail] = useState("");
   const lg = lang || "en";
   const clr = ["#4F46E5","#15803D","#C2410C"];
   const bgClr = ["#EEF2FF","#F0FDF4","#FFF7ED"];
 
   const inputs = [
-    [cp1, setCp1, lg==="de"?"Produkt 1":lg==="ro"?"Produsul 1":"Product 1", "e.g. iPhone 17 Pro"],
-    [cp2, setCp2, lg==="de"?"Produkt 2":lg==="ro"?"Produsul 2":"Product 2", "e.g. Samsung Galaxy S25"],
-    [cp3, setCp3, lg==="de"?"Produkt 3 (optional)":lg==="ro"?"Produsul 3 (opțional)":"Product 3 (optional)", "e.g. Pixel 9 Pro"],
+    [cp1, setCp1, lg==="de"?"Produkt 1":lg==="ro"?"Produsul 1":"Product 1", lg==="de"?"z.B. iPhone 17 Pro":lg==="ro"?"ex. iPhone 17 Pro":"e.g. iPhone 17 Pro"],
+    [cp2, setCp2, lg==="de"?"Produkt 2":lg==="ro"?"Produsul 2":"Product 2", lg==="de"?"z.B. Samsung S25":lg==="ro"?"ex. Samsung S25":"e.g. Samsung Galaxy S25"],
+    [cp3, setCp3, lg==="de"?"Produkt 3 (optional)":lg==="ro"?"Produsul 3 (opțional)":"Product 3 (optional)", lg==="de"?"z.B. Google Pixel":lg==="ro"?"ex. Google Pixel":"e.g. Google Pixel 9 Pro"],
   ];
 
   async function doCompare() {
-    if (!cp1.trim() || !cp2.trim()) {
-      setErr(lg==="de"?"Bitte mindestens 2 Produkte eingeben":lg==="ro"?"Introdu cel puțin 2 produse":"Please enter at least 2 products"); return;
-    }
-    setErr(""); setData(null); setLoading(true);
     const products = [cp1.trim(), cp2.trim(), cp3.trim()].filter(Boolean);
-    const count = products.length;
-
-    const prompt = `Compare these ${count} products. Respond ONLY with valid JSON (no markdown):
-Products: ${products.map(p => `"${p}"`).join(", ")}
-
-{
-  "products": [
-    {
-      "name": "exact product name",
-      "score": 8.5,
-      "price_range": "€800–1,000",
-      "winner_badge": "",
-      "best_for": "ideal buyer in ≤10 words"
+    if (products.length < 2) {
+      setErr(lg==="de"?"Bitte mindestens 2 Produkte eingeben":lg==="ro"?"Introdu cel puțin 2 produse":"Please enter at least 2 products");
+      return;
     }
-  ],
-  "rows": [
-    { "label": "Display", "values": ["6.9\" Super Retina XDR", "6.8\" Dynamic AMOLED", "..."], "winner": 0, "notes": [""] },
-    { "label": "Camera", "values": ["48MP ProRAW system", "200MP system", "..."], "winner": 1, "notes": [""] },
-    { "label": "Battery life", "values": ["25h video", "30h video", "..."], "winner": 1, "notes": [""] },
-    { "label": "Performance", "values": ["A18 Pro chip", "Snapdragon 8 Elite", "..."], "winner": 0, "notes": [""] },
-    { "label": "Storage", "values": ["128GB–2TB", "256GB–1TB", "..."], "winner": 0, "notes": [""] },
-    { "label": "Price", "values": ["€1,299+", "€1,099+", "..."], "winner": 1, "notes": [""] },
-    { "label": "OS / Software", "values": ["iOS 18", "Android 15", "..."], "winner": -1, "notes": [""] },
-    { "label": "Build quality", "values": ["Titanium", "Armor Aluminum", "..."], "winner": 0, "notes": [""] }
-  ],
-  "summary": "one sentence verdict"
-}
-
-Rules:
-- rows: 7–9 comparison criteria relevant to these products
-- winner: index of winning product (0=first, 1=second, 2=third), or -1 if tie/subjective
-- values: one short value per product (≤6 words each)
-- winner_badge: "" | "Best value" | "Top pick" | "Best specs" — only ONE product
-- score: 1–10 float, be honest
-- Respond in ${lg === "de" ? "German" : lg === "ro" ? "Romanian" : lg === "es" ? "Spanish" : "English"}`;
+    setErr(""); setErrDetail(""); setData(null); setLoading(true);
 
     try {
       const res = await fetch("/api/chat", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ mode:"compare", prompt, lang:lg })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode: "compare", products, lang: lg })
       });
-      if (!res.ok) { const txt = await res.text(); throw new Error(txt); }
-      const txt = await res.text();
-      const clean = txt.replace(/```json|```/g,"").trim();
-      setData(JSON.parse(clean));
+
+      const json = await res.json();
+
+      if (!res.ok || json.error) {
+        throw new Error(json.error || `HTTP ${res.status}`);
+      }
+
+      if (!json.products || !json.rows) {
+        throw new Error("Unexpected response format");
+      }
+
+      setData(json);
     } catch(e) {
-      setErr("Comparison failed: " + e.message);
+      setErr(lg==="de"?"Vergleich fehlgeschlagen":lg==="ro"?"Compararea a eșuat":"Comparison failed");
+      setErrDetail(e.message);
     } finally { setLoading(false); }
   }
 
   function scoreColor(s) { return s>=8.5?"#15803D":s>=7?"#92400E":"#B91C1C"; }
 
   const products = data?.products || [];
-  const cols = products.length || inputs.filter(([v])=>v).length || 3;
 
   return (
     <div style={{ marginBottom:40, background:C.card, borderRadius:20, border:`1px solid ${C.border}`, padding:"28px 28px 24px", boxShadow:C.shadow }}>
       {/* Header */}
-      <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:8 }}>
+      <div style={{ display:"flex",alignItems:"center",gap:8,marginBottom:8 }}>
         <div style={{ background:`${C.accent}12`,borderRadius:8,padding:"4px 10px",display:"inline-flex",alignItems:"center",gap:6 }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={C.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="2.5"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="2.5"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="2.5"/></svg>
-          <span style={{ fontSize:10,fontWeight:700,color:C.accent,letterSpacing:0.5,textTransform:"uppercase" }}>AI Comparator</span>
+          <span style={{ fontSize:10,fontWeight:700,color:C.accent,letterSpacing:0.5,textTransform:"uppercase" }}>Ai·sel Comparator</span>
         </div>
       </div>
       <h2 style={{ fontSize:20,fontWeight:900,color:C.text,margin:"0 0 4px",fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-        {lg==="de"?"2 oder 3 Produkte vergleichen":lg==="ro"?"Compară 2 sau 3 produse":"Compare 2 or 3 products"}
+        {lg==="de"?"2 oder 3 Produkte vergleichen":lg==="ro"?"Compară orice 2 sau 3 produse":"Compare any 2 or 3 products"}
       </h2>
       <p style={{ fontSize:13,color:C.muted,margin:"0 0 20px" }}>
-        {lg==="de"?"Telefone, Autos, Laptops — AI erstellt sofort eine Vergleichstabelle":lg==="ro"?"Telefoane, mașini, laptopuri — AI generează instant un tabel comparativ":"Phones, cars, laptops — AI instantly builds a comparison table"}
+        {lg==="de"?"Telefone, Autos, Hotels, Banken, Dienste… AI vergleicht alles sofort":lg==="ro"?"Telefoane, mașini, hoteluri, bănci, servicii… AI compară orice instant":"Phones, cars, hotels, banks, services… AI compares anything instantly"}
       </p>
 
-      {/* 3-column input grid */}
+      {/* 3-column inputs */}
       <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:14 }}>
         {inputs.map(([val,set,label,ph],i)=>(
           <div key={i}>
@@ -3601,18 +3577,21 @@ Rules:
               style={{ width:"100%",boxSizing:"border-box",padding:"10px 12px",border:`1.5px solid ${val?clr[i]:C.border}`,borderRadius:10,fontSize:14,background:C.bg,color:C.text,outline:"none",transition:"border-color 0.15s",fontFamily:"inherit" }}
               onFocus={e=>e.target.style.borderColor=clr[i]} onBlur={e=>e.target.style.borderColor=val?clr[i]:C.border} />
 
-            {/* Score header — shown after compare */}
-            {data && products[i] && (
-              <div style={{ marginTop:8,padding:"10px 12px",background:bgClr[i],borderRadius:10,border:`1px solid ${clr[i]}30` }}>
-                <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4 }}>
-                  <span style={{ fontSize:12,fontWeight:800,color:clr[i],fontFamily:"'Plus Jakarta Sans',sans-serif",lineHeight:1.3 }}>{products[i].name}</span>
-                  {products[i].winner_badge&&<span style={{ fontSize:9,fontWeight:700,padding:"2px 7px",borderRadius:5,background:clr[i],color:"#fff",whiteSpace:"nowrap" }}>{products[i].winner_badge}</span>}
+            {/* Score card under input - shows after compare */}
+            {products[i] && (
+              <div style={{ marginTop:8,padding:"12px",background:bgClr[i],borderRadius:10,border:`1.5px solid ${clr[i]}40` }}>
+                <div style={{ display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:4,marginBottom:6 }}>
+                  <span style={{ fontSize:12,fontWeight:800,color:clr[i],lineHeight:1.3,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{products[i].name}</span>
+                  {products[i].winner_badge&&<span style={{ fontSize:9,fontWeight:700,padding:"2px 6px",borderRadius:4,background:clr[i],color:"#fff",whiteSpace:"nowrap",flexShrink:0 }}>{products[i].winner_badge}</span>}
                 </div>
-                <div style={{ display:"flex",alignItems:"baseline",gap:4 }}>
-                  <span style={{ fontSize:22,fontWeight:900,color:scoreColor(products[i].score),lineHeight:1 }}>{Number(products[i].score).toFixed(1)}</span>
-                  <span style={{ fontSize:11,color:C.muted }}>/10 · {products[i].price_range}</span>
+                <div style={{ display:"flex",alignItems:"baseline",gap:4,marginBottom:4 }}>
+                  <span style={{ fontSize:24,fontWeight:900,color:scoreColor(products[i].score),lineHeight:1 }}>{Number(products[i].score).toFixed(1)}</span>
+                  <span style={{ fontSize:11,color:C.muted }}>/10</span>
+                  {products[i].price_range&&<span style={{ fontSize:11,color:C.muted,marginLeft:4 }}>· {products[i].price_range}</span>}
                 </div>
-                {products[i].best_for&&<div style={{ fontSize:11,color:C.muted,marginTop:3,lineHeight:1.4 }}>{lg==="de"?"Am besten für":lg==="ro"?"Ideal pentru":"Best for"}: {products[i].best_for}</div>}
+                {products[i].best_for&&<div style={{ fontSize:11,color:C.muted,lineHeight:1.4 }}>
+                  <span style={{ fontWeight:600,color:clr[i] }}>{lg==="de"?"Ideal für":lg==="ro"?"Ideal pentru":"Best for"}:</span> {products[i].best_for}
+                </div>}
               </div>
             )}
           </div>
@@ -3621,52 +3600,58 @@ Rules:
 
       {/* Compare button */}
       <button onClick={doCompare} disabled={loading}
-        style={{ width:"100%",padding:"12px",background:loading?`${C.accent}80`:C.accent,color:"#fff",border:"none",borderRadius:10,fontSize:14,fontWeight:700,cursor:loading?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"opacity 0.15s",marginBottom:err?8:0 }}>
+        style={{ width:"100%",padding:"13px",background:loading?`${C.accent}80`:C.accent,color:"#fff",border:"none",borderRadius:10,fontSize:14,fontWeight:700,cursor:loading?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"background 0.2s" }}>
         {loading
-          ? <><span style={{ display:"inline-flex",gap:4 }}>{[0,1,2].map(i=><span key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#fff",animation:`cmpBlink 1.2s ${i*0.2}s ease-in-out infinite`,display:"inline-block" }}/>)}</span>{lg==="de"?"Vergleiche…":lg==="ro"?"Comparăm…":"Comparing…"}</>
-          : <>{lg==="de"?"Mit AI vergleichen →":lg==="ro"?"Compară cu AI →":"Compare with AI →"}</>}
+          ? <><span style={{ display:"inline-flex",gap:4,alignItems:"center" }}>{[0,1,2].map(i=><span key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#fff",animation:`cmpBlink 1.2s ${i*0.2}s ease-in-out infinite`,display:"inline-block" }}/>)}</span> {lg==="de"?"Ai·sel vergleicht…":lg==="ro"?"Ai·sel compară…":"Ai·sel is comparing…"}</>
+          : <>{lg==="de"?"Mit Ai·sel vergleichen →":lg==="ro"?"Compară cu Ai·sel →":"Compare with Ai·sel →"}</>}
       </button>
-      {err&&<p style={{ color:"#DC2626",fontSize:12,margin:"0 0 8px",textAlign:"center" }}>{err}</p>}
+
+      {err&&(
+        <div style={{ margin:"10px 0 0",padding:"10px 14px",background:"#FEF2F2",border:"1px solid #FECACA",borderRadius:8 }}>
+          <div style={{ color:"#DC2626",fontSize:13,fontWeight:600 }}>{err}</div>
+          {errDetail&&<div style={{ color:"#991B1B",fontSize:11,marginTop:3,fontFamily:"monospace" }}>{errDetail}</div>}
+        </div>
+      )}
 
       {/* Comparison table */}
       {data?.rows && data.rows.length > 0 && (
         <div style={{ marginTop:20 }}>
           <div style={{ borderRadius:12,overflow:"hidden",border:`1px solid ${C.border}` }}>
-            {/* Table header */}
-            <div style={{ display:"grid",gridTemplateColumns:`160px repeat(${products.length},1fr)`,background:"#F8FAFC",borderBottom:`1px solid ${C.border}` }}>
-              <div style={{ padding:"10px 14px",fontSize:11,fontWeight:700,color:C.muted,textTransform:"uppercase",letterSpacing:0.6 }}>
+            {/* Table header row */}
+            <div style={{ display:"grid",gridTemplateColumns:`150px repeat(${products.length},1fr)`,background:"#F8FAFC",borderBottom:`1.5px solid ${C.border}` }}>
+              <div style={{ padding:"10px 14px",fontSize:10,fontWeight:700,color:C.muted,textTransform:"uppercase",letterSpacing:0.7 }}>
                 {lg==="de"?"Merkmal":lg==="ro"?"Criteriu":"Feature"}
               </div>
               {products.map((p,i)=>(
-                <div key={i} style={{ padding:"10px 12px",borderLeft:`1px solid ${C.border}`,fontSize:12,fontWeight:800,color:clr[i],display:"flex",alignItems:"center",gap:6 }}>
+                <div key={i} style={{ padding:"10px 12px",borderLeft:`1px solid ${C.border}`,display:"flex",alignItems:"center",gap:6 }}>
                   <div style={{ width:8,height:8,borderRadius:"50%",background:clr[i],flexShrink:0 }}/>
-                  {p.name.split(" ").slice(0,3).join(" ")}
+                  <span style={{ fontSize:11,fontWeight:800,color:clr[i],lineHeight:1.3 }}>{p.name}</span>
                 </div>
               ))}
             </div>
 
-            {/* Table rows */}
+            {/* Spec rows */}
             {data.rows.map((row,ri)=>(
-              <div key={ri} style={{ display:"grid",gridTemplateColumns:`160px repeat(${products.length},1fr)`,borderBottom:ri<data.rows.length-1?`1px solid ${C.border}`:"none",background:ri%2===0?"#fff":"#FAFBFC" }}>
-                {/* Feature label */}
-                <div style={{ padding:"10px 14px",fontSize:12,fontWeight:700,color:C.text,display:"flex",alignItems:"center" }}>
+              <div key={ri} style={{ display:"grid",gridTemplateColumns:`150px repeat(${products.length},1fr)`,borderBottom:ri<data.rows.length-1?`1px solid ${C.border}`:"none",background:ri%2===0?"#fff":"#FAFBFC",transition:"background 0.1s" }}
+                onMouseEnter={e=>e.currentTarget.style.background="#F0F4FF"}
+                onMouseLeave={e=>e.currentTarget.style.background=ri%2===0?"#fff":"#FAFBFC"}>
+                <div style={{ padding:"11px 14px",fontSize:12,fontWeight:700,color:C.text,display:"flex",alignItems:"center" }}>
                   {row.label}
                 </div>
-                {/* Values per product */}
                 {products.map((_,pi)=>{
-                  const isWinner = row.winner === pi;
-                  const isLoser = row.winner !== -1 && row.winner !== pi;
+                  const isWin = row.winner === pi;
+                  const isLose = row.winner !== -1 && row.winner !== pi;
                   return (
-                    <div key={pi} style={{ padding:"10px 12px",borderLeft:`1px solid ${C.border}`,display:"flex",alignItems:"flex-start",gap:7 }}>
-                      {/* ✓ / ✗ icon */}
-                      <div style={{ width:18,height:18,borderRadius:"50%",background:isWinner?"#DCFCE7":isLoser?"#FEE2E2":"#F1F5F9",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:1 }}>
-                        {isWinner
-                          ? <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="m2 6 3 3 5-5" stroke="#15803D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                          : isLoser
-                          ? <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="m3 3 6 6M9 3 3 9" stroke="#DC2626" strokeWidth="1.8" strokeLinecap="round"/></svg>
-                          : <svg width="8" height="8" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2" fill="#94A3B8"/></svg>}
+                    <div key={pi} style={{ padding:"11px 12px",borderLeft:`1px solid ${C.border}`,display:"flex",alignItems:"flex-start",gap:7 }}>
+                      <div style={{ width:18,height:18,borderRadius:"50%",flexShrink:0,marginTop:1,display:"flex",alignItems:"center",justifyContent:"center",
+                        background:isWin?"#DCFCE7":isLose?"#FEE2E2":"#F1F5F9" }}>
+                        {isWin
+                          ? <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="m2 6 3 3 5-5" stroke="#15803D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                          : isLose
+                          ? <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="m3 3 6 6M9 3 3 9" stroke="#DC2626" strokeWidth="2" strokeLinecap="round"/></svg>
+                          : <div style={{ width:5,height:5,borderRadius:"50%",background:"#94A3B8" }}/>}
                       </div>
-                      <span style={{ fontSize:12,color:isWinner?"#14532D":isLoser?"#7F1D1D":C.textSecondary,fontWeight:isWinner?700:400,lineHeight:1.45 }}>
+                      <span style={{ fontSize:12,lineHeight:1.45,color:isWin?"#14532D":isLose?"#7F1D1D":C.textSecondary,fontWeight:isWin?700:400 }}>
                         {row.values?.[pi] || "—"}
                       </span>
                     </div>
@@ -3675,7 +3660,6 @@ Rules:
               </div>
             ))}
           </div>
-
           {data.summary&&<p style={{ fontSize:12,color:C.muted,margin:"10px 2px 0",lineHeight:1.6 }}>💡 {data.summary}</p>}
         </div>
       )}
