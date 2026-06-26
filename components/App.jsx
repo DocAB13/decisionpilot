@@ -4077,16 +4077,40 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
           </div>
 
           {/* Global reach strip */}
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "24px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
-            <div>
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "24px 32px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+            <div style={{ textAlign: "center" }}>
               <div style={{ color: "#fff", fontSize: 16, fontWeight: 800, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Available worldwide — free forever</div>
               <div style={{ color: "#475569", fontSize: 13 }}>No country restrictions. No premium wall for basic decisions. Built for everyone, everywhere.</div>
             </div>
-            <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-              {["DE","US","FR","GB","RO","ES","IT","JP","CN","BR","SA","IN","PT","NL","PL","RU","TR","SE","KR","AU","MX","NG","UA","CZ","HU","GR","TH","NO","AR","ZA"].map((c, i) => (
-                <span key={i} style={{ fontSize: 11, fontWeight: 800, color: "#FBBF24", letterSpacing: 0.4, padding: "2px 4px", border: "1px solid rgba(251,191,36,0.25)", borderRadius: 4, transition: "all 0.15s", cursor:"default", lineHeight:1 }}
-                  onMouseEnter={e => { e.currentTarget.style.background = "rgba(251,191,36,0.15)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>{c}</span>
+            <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", marginTop: 8 }}>
+              {[
+                ["DE","Germany"],["US","United States"],["FR","France"],["GB","United Kingdom"],
+                ["RO","Romania"],["ES","Spain"],["IT","Italy"],["JP","Japan"],
+                ["CN","China"],["BR","Brazil"],["SA","Saudi Arabia"],["IN","India"],
+                ["PT","Portugal"],["NL","Netherlands"],["PL","Poland"],["RU","Russia"],
+                ["TR","Turkey"],["SE","Sweden"],["KR","South Korea"],["AU","Australia"],
+                ["MX","Mexico"],["NG","Nigeria"],["UA","Ukraine"],["CZ","Czech Republic"],
+                ["HU","Hungary"],["GR","Greece"],["TH","Thailand"],["NO","Norway"],
+                ["AR","Argentina"],["ZA","South Africa"],
+              ].map(([code, name], i) => (
+                <div key={i} style={{ position:"relative" }} className="cc-wrap">
+                  <span style={{ fontSize:11, fontWeight:800, color:"#FBBF24", letterSpacing:0.4, padding:"2px 5px", border:"1px solid rgba(251,191,36,0.25)", borderRadius:4, transition:"all 0.2s", cursor:"default", lineHeight:1, display:"inline-block" }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = "rgba(251,191,36,0.18)";
+                      e.currentTarget.nextSibling.style.opacity = "1";
+                      e.currentTarget.nextSibling.style.transform = "translateX(-50%) translateY(-4px)";
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.nextSibling.style.opacity = "0";
+                      e.currentTarget.nextSibling.style.transform = "translateX(-50%) translateY(0)";
+                    }}>
+                    {code}
+                  </span>
+                  <span style={{ position:"absolute", bottom:"calc(100% + 6px)", left:"50%", transform:"translateX(-50%) translateY(0)", background:"rgba(15,23,42,0.95)", color:"#fff", fontSize:11, fontWeight:600, padding:"4px 8px", borderRadius:6, whiteSpace:"nowrap", pointerEvents:"none", opacity:0, transition:"all 0.15s", zIndex:20, boxShadow:"0 4px 12px rgba(0,0,0,0.3)" }}>
+                    {name}
+                  </span>
+                </div>
               ))}
             </div>
           </div>
