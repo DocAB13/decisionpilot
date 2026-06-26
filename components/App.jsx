@@ -3962,22 +3962,11 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
       </div>
 
       {/* ④ SPLIT PROMO BANNERS */}
-      <style>{`
-        .dp-products-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
-        @media(max-width:900px){.dp-products-grid{grid-template-columns:repeat(3,1fr);}}
-        @media(max-width:640px){.dp-products-grid{grid-template-columns:repeat(2,1fr);}}
-        @media(max-width:400px){.dp-products-grid{grid-template-columns:1fr;}}
-        .dp-dest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px;}
-        @media(max-width:900px){.dp-dest-grid{grid-template-columns:repeat(2,1fr);}}
-        @media(max-width:480px){.dp-dest-grid{grid-template-columns:1fr;}}
-        .dp-promo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:32px;}
-        @media(max-width:640px){.dp-promo-grid{grid-template-columns:repeat(2,1fr);}}
-      `}</style>
       <div style={{ padding: "32px 0 0" }}>
         <h2 style={{ color: C.text, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 800, margin: "0 0 16px", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {uiT("popularComp",lang)}
         </h2>
-        <div className="dp-promo-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 32 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 32 }}>
           {[
             { id: "new_car", gid: "auto", title: lang === "de" ? "Auto vergleichen & sparen" : "Compare cars & save", sub: "New & used · Insurance · EV", img: "photo-1558618666-fcd25c85cd64", color: "#1A1A2E" },
             { id: "credit_card", gid: "financial", title: lang === "de" ? "Kredite von 300+ Banken" : "Loans from 300+ banks", sub: "Mortgages · Cards · Deposits", img: "photo-1611974789855-9c2a0a7236a3", color: "#0F3460" },
@@ -4027,7 +4016,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
                 {lang === "de" ? "Alle Angebote →" : lang === "ro" ? "Vezi toate →" : uiT("seeAll",lang)}
               </button>
             </div>
-            <div className="dp-products-grid">
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:12 }}>
               {sec.items.map((item, i) => (
                 <div key={i} onClick={() => startWithTracking(item.id)}
                   style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: "16px", cursor: "pointer", transition: "all 0.2s", display: "flex", gap: 14, alignItems: "center" }}
@@ -4065,7 +4054,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
             {uiT("exploreAll",lang)}
           </button>
         </div>
-        <div className="dp-dest-grid">
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:12 }}>
           {[
             { name:"Mallorca", country:lang==="de"?"Spanien":lang==="ro"?"Spania":"Spain", img:"photo-1570197788417-0e82375c9371", price:"ab 442€" },
             { name:"Santorini", country:lang==="de"?"Griechenland":lang==="ro"?"Grecia":"Greece", img:"photo-1533105079780-92b9be482077", price:"ab 580€" },
@@ -4084,7 +4073,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
             </div>
           ))}
         </div>
-        <div className="dp-dest-grid">
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:12 }}>
           {[
             { name:"Barcelona", country:lang==="de"?"Spanien":"Spain", img:"photo-1539037116277-4db20889f2d4", price:"ab 310€" },
             { name:"Hurghada", country:lang==="de"?"Ägypten":lang==="ro"?"Egipt":"Egypt", img:"photo-1539650116574-8efeb43e2750", price:"ab 399€" },
