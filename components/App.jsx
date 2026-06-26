@@ -3521,28 +3521,50 @@ function CompareSection({ lang }) {
     }
     setErr(""); setErrDetail(""); setData(null); setLoading(true);
 
+    const comparePrompt = `Compare these ${products.length} products for a consumer. Products: ${products.map((p,i)=>`${i+1}. ${p}`).join(", ")}
+
+Respond with ONLY a JSON object, no markdown, no explanation:
+{"products":[{"name":"product name","score":8.5,"price_range":"€500-800","winner_badge":"","best_for":"ideal user 8 words"}],"rows":[{"label":"Display","values":["val1","val2"],"winner":0},{"label":"Camera","values":["val1","val2"],"winner":1},{"label":"Performance","values":["val1","val2"],"winner":0},{"label":"Battery","values":["val1","val2"],"winner":1},{"label":"Price","values":["val1","val2"],"winner":1},{"label":"Build quality","values":["val1","val2"],"winner":0},{"label":"Software","values":["val1","val2"],"winner":-1},{"label":"Unique strength","values":["val1","val2"],"winner":-1}],"summary":"one sentence verdict"}
+winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"Best value"|"Best specs" (only one). Respond in ${lg==="de"?"German":lg==="ro"?"Romanian":lg==="es"?"Spanish":"English"}.`;
+
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: "compare", products, lang: lg })
-      });
+      // Try /api/compare first (dedicated endpoint if it exists)
+      // Fall back to /api/chat with messages format (existing endpoint)
+      let text = "";
+      for (const url of ["/api/compare", "/api/chat"]) {
+        const body = url === "/api/compare"
+          ? { products, lang: lg }
+          : { messages: [{ role: "user", content: comparePrompt }], lang: lg };
 
-      const text = await res.text();
-      let json;
-      try { json = JSON.parse(text); } catch(e) {
-        throw new Error("Response not JSON: " + text.slice(0, 200));
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        text = await res.text();
+        let json;
+        try { json = JSON.parse(text); } catch { continue; }
+
+        // Extract text from various response formats
+        const raw = json.reply || json.content?.[0]?.text || (json.products ? text : null);
+        if (!raw) continue;
+
+        // Parse the actual comparison JSON
+        let parsed;
+        const attempts = [
+          () => JSON.parse(raw),
+          () => JSON.parse(raw.replace(/^```(?:json)?\s*/m,"").replace(/\s*```\s*$/m,"").trim()),
+          () => { const m = raw.match(/\{[\s\S]*\}/); if(m) return JSON.parse(m[0]); throw new Error("x"); },
+          () => json.products ? json : null, // already parsed
+        ];
+        for (const fn of attempts) {
+          try { parsed = fn(); if(parsed) break; } catch {}
+        }
+        if (parsed?.products) { setData(parsed); return; }
       }
+      throw new Error("Could not get comparison data. Response: " + text.slice(0, 150));
 
-      if (json.error) throw new Error(json.error);
-
-      // Flexible: accept 'picks' (old format) or 'products' (new format)
-      if (json.picks && !json.products) json.products = json.picks;
-      if (!json.products || json.products.length === 0) {
-        throw new Error("Got: " + text.slice(0, 300));
-      }
-
-      setData(json);
     } catch(e) {
       setErr(lg==="de"?"Vergleich fehlgeschlagen":lg==="ro"?"Compararea a eșuat":"Comparison failed");
       setErrDetail(e.message);
