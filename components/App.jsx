@@ -3161,6 +3161,59 @@ function RecommendationCard({ pick, index, lang, category, answers, onFavorite, 
         </div>
       </div>
 
+      {/* ── Ai·sel Car Tip: New vs Used ── */}
+      {pick.car_tip && (() => {
+        const tip = pick.car_tip;
+        const vColor = tip.verdict_color === "green" ? "#15803D"
+          : tip.verdict_color === "blue" ? "#1A56DB"
+          : "#B45309";
+        const vBg = tip.verdict_color === "green" ? "#F0FDF4"
+          : tip.verdict_color === "blue" ? "#EFF6FF"
+          : "#FFFBEB";
+        const depIcon = tip.depreciation === "fast" ? "📉" : tip.depreciation === "slow" ? "📈" : "〰️";
+        return (
+          <div style={{ margin:"0 20px 16px", borderRadius:12, overflow:"hidden", border:`1.5px solid ${vColor}30` }}>
+            {/* Header bar */}
+            <div style={{ background:`${vColor}10`, padding:"10px 14px", display:"flex", alignItems:"center", gap:10, borderBottom:`1px solid ${vColor}20` }}>
+              <img src="/asel-mascot.png" style={{ width:28,height:28,borderRadius:"50%",objectFit:"cover",objectPosition:"30% 8%",border:`1.5px solid ${vColor}40`,flexShrink:0 }} alt="Ai·sel" />
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:9,fontWeight:700,letterSpacing:0.8,textTransform:"uppercase",color:vColor,marginBottom:1 }}>Ai·sel tip · New vs Used</div>
+                <div style={{ fontSize:13,fontWeight:800,color:vColor,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{tip.headline}</div>
+              </div>
+              <div style={{ background:vBg, border:`1.5px solid ${vColor}40`, borderRadius:8, padding:"4px 10px", textAlign:"center", flexShrink:0 }}>
+                <div style={{ fontSize:9,fontWeight:700,color:vColor,letterSpacing:0.5,textTransform:"uppercase",lineHeight:1 }}>{tip.verdict}</div>
+              </div>
+            </div>
+            {/* Body */}
+            <div style={{ background:"#fff", padding:"12px 14px" }}>
+              <p style={{ fontSize:12.5,color:"#334155",lineHeight:1.65,margin:"0 0 10px" }}>{tip.reason}</p>
+              <div style={{ display:"flex",gap:10,flexWrap:"wrap" }}>
+                {tip.saving && (
+                  <div style={{ display:"flex",alignItems:"center",gap:5,background:"#F0FDF4",borderRadius:7,padding:"4px 10px",border:"1px solid #86EFAC" }}>
+                    <span style={{ fontSize:13 }}>💰</span>
+                    <span style={{ fontSize:11,fontWeight:700,color:"#15803D" }}>
+                      {lg==="de"?"Ersparnis":lg==="ro"?"Economie":lg==="es"?"Ahorro":"Saving"}: {tip.saving}
+                    </span>
+                  </div>
+                )}
+                {tip.depreciation && (
+                  <div style={{ display:"flex",alignItems:"center",gap:5,background:"#F8FAFC",borderRadius:7,padding:"4px 10px",border:`1px solid ${C.border}` }}>
+                    <span style={{ fontSize:12 }}>{depIcon}</span>
+                    <span style={{ fontSize:11,fontWeight:700,color:C.muted }}>
+                      {lg==="de"?"Wertverlust":lg==="ro"?"Depreciere":lg==="es"?"Depreciación":"Depreciation"}: {
+                        tip.depreciation === "fast" ? (lg==="de"?"Schnell":lg==="ro"?"Rapid":lg==="es"?"Rápida":"Fast") :
+                        tip.depreciation === "slow" ? (lg==="de"?"Gering":lg==="ro"?"Lentă":lg==="es"?"Lenta":"Slow") :
+                        (lg==="de"?"Mittel":lg==="ro"?"Medie":lg==="es"?"Media":"Moderate")
+                      }
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* ── Source + View deal ── pinned to bottom ── */}
       <div style={{ padding:"0 20px 20px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:8, marginTop:"auto" }}>
         <span style={{ color:C.muted,fontSize:11 }}>📖 {pick.source}</span>
