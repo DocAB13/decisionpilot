@@ -2398,8 +2398,9 @@ function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
                 </div>
               </button>
             )}
-            <button onClick={onBack} style={{ background:"rgba(0,0,0,0.28)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.22)",color:"#fff",borderRadius:10,padding:"7px 14px",cursor:"pointer",fontSize:13,fontWeight:700 }}>
-              {uiT("back",lg)}
+            <button onClick={step > 0 ? () => { setStep(s=>s-1); setSelected(null); setAnimKey(k=>k+1); } : onBack}
+              style={{ background:"rgba(0,0,0,0.28)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.22)",color:"#fff",borderRadius:10,padding:"7px 14px",cursor:"pointer",fontSize:13,fontWeight:700 }}>
+              ← {step > 0 ? uiT("back",lg) : (lg==="de"?"Startseite":lg==="ro"?"Acasă":lg==="es"?"Inicio":"Home")}
             </button>
           </div>
           <div style={{ background:"rgba(0,0,0,0.35)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.2)",color:"#fff",borderRadius:20,padding:"6px 16px",fontSize:12,fontWeight:800,letterSpacing:0.8 }}>
@@ -4846,6 +4847,22 @@ export default function App() {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => { setLang(detectLanguage()); }, []);
+
+  // Prevent browser back button from leaving the site
+  useEffect(() => {
+    // Push a state so there's always something to go "back" to
+    window.history.pushState({ dp: true }, "", window.location.href);
+    const handlePop = () => {
+      // Re-push to keep the entry in history
+      window.history.pushState({ dp: true }, "", window.location.href);
+      // Always return to landing
+      setScreen("landing");
+      setAnswers(null);
+      setCategory(null);
+    };
+    window.addEventListener("popstate", handlePop);
+    return () => window.removeEventListener("popstate", handlePop);
+  }, []);
 
   // Load profile + favorites from localStorage on mount
   useEffect(() => {
