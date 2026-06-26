@@ -344,11 +344,12 @@ export function HeroBanner({ onStart, t, lang }) {
               fontSize: 15, fontWeight: 800, cursor: "pointer",
               boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
               transition: "all 0.2s", animation: "heroGlow 2.6s ease-in-out infinite",
+              display: "flex", alignItems: "center", gap: 8,
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-              {t.banner_cta || "Decide now"}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink:0 }}><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              {t.banner_cta || "Decide now →"}
             </button>
             <button onClick={() => onStart("chat")} style={{
               background: "rgba(255,255,255,0.15)", color: "#fff",
