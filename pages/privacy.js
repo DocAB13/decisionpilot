@@ -102,7 +102,7 @@ export default function Privacy() {
           </button>
           {showContact && (
             <div style={{ marginTop:12, padding:"14px 16px", background:"#F8FAFC", borderRadius:8, fontSize:12, color:"#64748B", lineHeight:1.8 }}>
-              <strong style={{ display:"block", marginBottom:4", color:"#475569" }}>Data controller (Art. 4 No. 7 GDPR):</strong>
+              <strong style={{ display:"block", marginBottom:4, color:"#475569" }}>Data controller (Art. 4 No. 7 GDPR):</strong>
               DecisionPilot<br />
               Owner: N. A. Bolos-Ardeleanu<br />
               Dresden, Germany<br />
