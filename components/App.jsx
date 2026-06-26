@@ -3650,15 +3650,15 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:12 }}>
           {[
-            { name:"Mallorca", country:lang==="de"?"Spanien":lang==="ro"?"Spania":"Spain", img:"photo-1558618047-3c8c76ca7d13", price:"ab 442€" },
+            { name:"Mallorca", country:lang==="de"?"Spanien":lang==="ro"?"Spania":"Spain", img:"photo-1570197788417-0e82375c9371", price:"ab 442€" },
             { name:"Santorini", country:lang==="de"?"Griechenland":lang==="ro"?"Grecia":"Greece", img:"photo-1533105079780-92b9be482077", price:"ab 580€" },
-            { name:"Alanya", country:lang==="de"?"Türkei":lang==="ro"?"Turcia":"Turkey", img:"photo-1590523277543-a94d2e4eb00b", price:"ab 389€" },
+            { name:"Alanya", country:lang==="de"?"Türkei":lang==="ro"?"Turcia":"Turkey", img:"photo-1527631746610-bca00a040d60", price:"ab 389€" },
             { name:"Dubai", country:lang==="de"?"VAE":lang==="ro"?"EAU":"UAE", img:"photo-1512453979798-5ea266f8880c", price:"ab 620€" },
           ].map((d,i) => (
             <div key={i} onClick={()=>startWithTracking("hotel")} style={{ position:"relative",borderRadius:14,overflow:"hidden",cursor:"pointer",aspectRatio:"4/3",transition:"transform 0.2s" }}
               onMouseEnter={e=>e.currentTarget.style.transform="scale(1.02)"}
               onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
-              <img src={`https://images.unsplash.com/${d.img}?w=400&h=300&fit=crop&auto=format`} style={{ width:"100%",height:"100%",objectFit:"cover",display:"block" }} alt={d.name} />
+              <img src={`https://images.unsplash.com/${d.img}?w=400&h=300&fit=crop&auto=format`} onError={e=>{e.target.style.display="none";e.target.parentNode.style.background="#1e3a5f";}} style={{ width:"100%",height:"100%",objectFit:"cover",display:"block" }} alt={d.name} />
               <div style={{ position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%)" }} />
               <div style={{ position:"absolute",bottom:0,left:0,padding:"14px 16px" }}>
                 <div style={{ color:"#fff",fontSize:17,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{d.name}</div>
@@ -3669,15 +3669,15 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
         </div>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12 }}>
           {[
-            { name:"Barcelona", country:lang==="de"?"Spanien":"Spain", img:"photo-1511527661048-7fe73d85e9a4", price:"ab 310€" },
+            { name:"Barcelona", country:lang==="de"?"Spanien":"Spain", img:"photo-1539037116277-4db20889f2d4", price:"ab 310€" },
             { name:"Hurghada", country:lang==="de"?"Ägypten":lang==="ro"?"Egipt":"Egypt", img:"photo-1539650116574-8efeb43e2750", price:"ab 399€" },
-            { name:"Maldives", country:"Maldives", img:"photo-1514282401047-d79a71a590e8", price:"ab 1.290€" },
-            { name:"Kreta", country:lang==="de"?"Griechenland":"Greece", img:"photo-1504150558240-0b4fd8946624", price:"ab 359€" },
+            { name:"Maldives", country:"Maldives", img:"photo-1573843981267-be1999ff37cd", price:"ab 1.290€" },
+            { name:"Kreta", country:lang==="de"?"Griechenland":"Greece", img:"photo-1586861203927-800a5acdcc4d", price:"ab 359€" },
           ].map((d,i) => (
             <div key={i} onClick={()=>startWithTracking("hotel")} style={{ position:"relative",borderRadius:14,overflow:"hidden",cursor:"pointer",aspectRatio:"4/3",transition:"transform 0.2s" }}
               onMouseEnter={e=>e.currentTarget.style.transform="scale(1.02)"}
               onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
-              <img src={`https://images.unsplash.com/${d.img}?w=400&h=300&fit=crop&auto=format`} style={{ width:"100%",height:"100%",objectFit:"cover",display:"block" }} alt={d.name} />
+              <img src={`https://images.unsplash.com/${d.img}?w=400&h=300&fit=crop&auto=format`} onError={e=>{e.target.style.display="none";e.target.parentNode.style.background="#1e3a5f";}} style={{ width:"100%",height:"100%",objectFit:"cover",display:"block" }} alt={d.name} />
               <div style={{ position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%)" }} />
               <div style={{ position:"absolute",bottom:0,left:0,padding:"14px 16px" }}>
                 <div style={{ color:"#fff",fontSize:16,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{d.name}</div>
