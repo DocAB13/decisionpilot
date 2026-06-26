@@ -1840,6 +1840,9 @@ const UI_T = {
   whyForYou: {en:"Why this for you",de:"Warum genau das",fr:"Pourquoi ce choix",es:"Por qué esto",it:"Perché questo",pt:"Por que isso",ro:"De ce tocmai asta",nl:"Waarom dit voor jou",pl:"Dlaczego to",ru:"Почему именно это",zh:"为什么推荐给你",ar:"لماذا هذا لك",tr:"Neden bu sizin için"},
   topPick:   {en:"Top pick",de:"Top-Wahl",fr:"Meilleur choix",es:"Mejor opción",it:"Scelta top",pt:"Melhor escolha",ro:"Alegerea nr.1",nl:"Topkeuze",pl:"Najlepszy wybór",ru:"Лучший выбор",zh:"最佳选择",ar:"أفضل اختيار",tr:"En iyi seçim"},
   poweredBy: {en:"Powered by AI · Sources: CNET, TechRadar, Wirecutter",de:"KI-gestützt · Quellen: CNET, TechRadar, Wirecutter",fr:"Propulsé par IA · Sources: CNET, TechRadar, Wirecutter",es:"Impulsado por IA · Fuentes: CNET, TechRadar, Wirecutter",it:"Con IA · Fonti: CNET, TechRadar, Wirecutter",pt:"Com IA · Fontes: CNET, TechRadar, Wirecutter",ro:"Powered by AI · Surse: CNET, TechRadar, Wirecutter",nl:"AI-gestuurd · Bronnen: CNET, TechRadar, Wirecutter",pl:"Napędzane przez AI · Źródła: CNET, TechRadar, Wirecutter",ru:"На основе ИИ · Источники: CNET, TechRadar, Wirecutter",zh:"AI 驱动 · 来源: CNET, TechRadar, Wirecutter",ar:"مدعوم بالذكاء الاصطناعي",tr:"Yapay Zeka Destekli · Kaynaklar: CNET, TechRadar, Wirecutter"},
+  chatWith:  {en:"Chat with Ai·sel",de:"Mit Ai·sel chatten",fr:"Discuter avec Ai·sel",es:"Chatear con Ai·sel",it:"Chatta con Ai·sel",pt:"Conversar com Ai·sel",ro:"Discută cu Ai·sel",nl:"Chat met Ai·sel",pl:"Porozmawiaj z Ai·sel",ru:"Общаться с Ai·sel",zh:"与 Ai·sel 聊天",ar:"تحدث مع Ai·sel",tr:"Ai·sel ile sohbet et",sv:"Chatta med Ai·sel",ko:"Ai·sel과 채팅",ja:"Ai·selとチャット"},
+  poweredAI:{en:"Powered by AI",de:"KI-gestützt",fr:"Propulsé par IA",es:"Impulsado por IA",it:"Con IA",pt:"Com IA",ro:"Powered by AI",nl:"AI-gestuurd",pl:"Napędzane przez AI",ru:"На основе ИИ",zh:"AI 驱动",ar:"بالذكاء الاصطناعي",tr:"Yapay Zeka ile"},
+  sources:   {en:"Sources",de:"Quellen",fr:"Sources",es:"Fuentes",it:"Fonti",pt:"Fontes",ro:"Surse",nl:"Bronnen",pl:"Źródła",ru:"Источники",zh:"来源",ar:"المصادر",tr:"Kaynaklar"},
   chatMore:  {en:"Want more personalized advice? Chat with Ai·sel.",de:"Möchten Sie mehr Beratung? Chatten Sie mit Ai·sel.",fr:"Vous voulez des conseils? Discutez avec Ai·sel.",es:"¿Quieres consejos? Chatea con Ai·sel.",it:"Vuoi consigli? Chatta con Ai·sel.",pt:"Quer conselhos? Converse com Ai·sel.",ro:"Vrei sfaturi? Discută cu Ai·sel.",nl:"Wil je advies? Chat met Ai·sel.",pl:"Chcesz porad? Porozmawiaj z Ai·sel.",ru:"Хотите советов? Пообщайтесь с Ai·sel.",zh:"想要建议？与 Ai·sel 聊天。",ar:"هل تريد نصائح؟ تحدث مع Ai·sel.",tr:"Tavsiye mi istiyorsunuz? Ai·sel ile sohbet edin."},
   loadSteps: {
     en:["Analyzing your preferences...","Searching trusted review sources...","Comparing top options worldwide...","Calculating best matches...","Finalizing recommendations..."],
@@ -2203,7 +2206,7 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCa
               onMouseEnter={e=>{e.currentTarget.style.borderColor=C.gold;e.currentTarget.style.color=C.gold;}}
               onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.textSecondary;}}>
               ⭐
-              {favoritesCount > 0 && <span style={{ fontWeight:700,fontSize:12 }}>{favoritesCount}</span>}
+              {favoritesCount > 0 && <span className="dp-fav-count" style={{ fontWeight:700,fontSize:12 }}>{favoritesCount}</span>}
             </button>
           )}
 
@@ -2218,7 +2221,7 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCa
                   <div style={{ width:26,height:26,borderRadius:"50%",background:`linear-gradient(135deg,${C.accent},#7C3AED)`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13 }}>
                     {STATUSES.find(s=>s.id===profile.status)?.emoji||"👤"}
                   </div>
-                  <span style={{ fontSize:12,fontWeight:700,color:C.text,maxWidth:70,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>
+                  <span className="dp-profile-name" style={{ fontSize:12,fontWeight:700,color:C.text,maxWidth:70,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" }}>
                     {profile.nickname}
                   </span>
                 </>
@@ -2471,10 +2474,13 @@ function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
             <div style={{ flex:1 }}>
               <div style={{ color:catColor,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:0.8,marginBottom:2 }}>Ai·sel tip</div>
               <div style={{ color:C.textSecondary,fontSize:13,lineHeight:1.5 }}>
-                {step===0?"Take your time — your first answer shapes all recommendations.":
-                 step===total-1?"Last question! Ai·sel will now analyze thousands of reviews for you.":
-                 step===total-2?"Almost there! One more question and your picks are ready.":
-                 "Each answer narrows down to find your perfect match."}
+                {step===0
+                  ?(lg==="de"?"Nimm dir Zeit — deine erste Antwort prägt alle Empfehlungen.":lg==="ro"?"Ia-ți timp — primul răspuns modelează toate recomandările.":lg==="es"?"Tómate tu tiempo — tu primera respuesta da forma a todas las recomendaciones.":lg==="fr"?"Prenez votre temps — votre première réponse façonne toutes les recommandations.":"Take your time — your first answer shapes all recommendations.")
+                  :step===total-1
+                  ?(lg==="de"?"Letzte Frage! Ai·sel analysiert jetzt tausende Bewertungen für dich.":lg==="ro"?"Ultima întrebare! Ai·sel analizează acum mii de recenzii pentru tine.":lg==="es"?"¡Última pregunta! Ai·sel analizará miles de reseñas para ti.":lg==="fr"?"Dernière question ! Ai·sel va analyser des milliers d'avis pour vous.":"Last question! Ai·sel will now analyze thousands of reviews for you.")
+                  :step===total-2
+                  ?(lg==="de"?"Fast geschafft! Noch eine Frage und deine Empfehlungen sind bereit.":lg==="ro"?"Aproape gata! Încă o întrebare și recomandările tale sunt pregătite.":lg==="es"?"¡Casi listo! Una pregunta más y tus recomendaciones estarán listas.":lg==="fr"?"Presque fini ! Une question de plus et vos recommandations sont prêtes.":"Almost there! One more question and your picks are ready.")
+                  :(lg==="de"?"Jede Antwort grenzt die Optionen ein, um deine perfekte Wahl zu finden.":lg==="ro"?"Fiecare răspuns restrânge opțiunile pentru a găsi potrivirea perfectă.":lg==="es"?"Cada respuesta reduce las opciones para encontrar tu combinación perfecta.":lg==="fr"?"Chaque réponse réduit les options pour trouver votre correspondance parfaite.":"Each answer narrows down to find your perfect match.")}
               </div>
             </div>
             <button onClick={()=>handleSelect("No preference")}
@@ -3104,7 +3110,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
         </button>
       </div>
 
-      <div style={{ height: 200, backgroundImage: `url(${tree.image})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
+      <div className="dp-results-hero" style={{ height: 200, backgroundImage: `url(${tree.image})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7))" }} />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, maxWidth: 800, margin: "0 auto", padding: "0 24px 28px" }}>
           <h1 style={{ color: "#fff", fontSize: "clamp(20px, 3.5vw, 28px)", fontWeight: 900, margin: 0, letterSpacing: -0.5, textShadow: "0 2px 12px rgba(0,0,0,0.4)" }}>{data?.title}</h1>
@@ -3112,9 +3118,9 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
         </div>
       </div>
 
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 32px 170px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(20px,3vw,40px) clamp(12px,2.5vw,32px) 170px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
-          <span style={{ color: C.muted, fontSize: 13 }}>{uiT("poweredBy", lg)}</span>
+          <span style={{ color: C.muted, fontSize: 13 }}>{uiT("poweredAI",lg)} · {uiT("sources",lg)}: CNET, TechRadar, Wirecutter</span>
           <button onClick={onRestart} style={{ background: C.accentLight, color: C.accent, border: `1px solid ${C.accent}33`, borderRadius: 10, padding: "8px 16px", cursor: "pointer", fontSize: 13, fontWeight: 700 }}>
             🔄 {uiT("startOver", lg)}
           </button>
@@ -3130,6 +3136,32 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
           .pick-cell:nth-child(2n){ border-right:none; }
           @media(min-width:1025px){ .pick-cell:nth-child(2n){ border-right:1px solid var(--border,#E2E8F0); } .pick-cell:nth-child(3n){ border-right:none; } }
           .pick-cell:nth-last-child(-n+3){ border-bottom:none; }
+
+          /* ── MOBILE GLOBAL ── */
+          @media(max-width:768px){
+            /* TopNav: hide favorites count text, shrink profile */
+            .dp-fav-count { display:none !important; }
+            .dp-profile-name { display:none !important; }
+            /* 5-col product sections → 2-col */
+            .dp-products-grid { grid-template-columns:repeat(2,1fr) !important; }
+            /* How it works: 2 col */
+            .steps-grid { grid-template-columns:repeat(2,1fr) !important; }
+            /* Concept section flags: smaller */
+            .dp-flags span { font-size:16px !important; }
+            /* Results header: reduce hero */
+            .dp-results-hero { height:140px !important; }
+            /* Card pros/cons: stack on very small */
+          }
+          @media(max-width:480px){
+            .dp-products-grid { grid-template-columns:1fr !important; }
+            .steps-grid { grid-template-columns:1fr !important; }
+            .picks-grid { grid-template-columns:1fr !important; }
+            .dp-promo-grid { grid-template-columns:1fr !important; }
+          }
+          /* Prevent horizontal scroll */
+          body { overflow-x:hidden; }
+          /* Smooth card hovers on touch devices */
+          @media(hover:none){ .pick-cell:hover { transform:none !important; } }
         `}</style>
         <div className="picks-grid">
           {data?.picks?.map((pick, i) => (
@@ -3263,7 +3295,7 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
           <button onClick={() => window.dispatchEvent(new CustomEvent("openChat"))}
             style={{ background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px 28px", fontSize: 15, fontWeight: 700, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 10 }}>
             <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.6)" }} alt="Ai·sel" />
-            Chat with Ai·sel
+            {uiT("chatWith", lg)}
           </button>
         </div>
       </div>
@@ -3404,7 +3436,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
         <h2 style={{ color: C.text, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 800, margin: "0 0 16px", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           {lang === "de" ? "Beliebte Vergleiche" : lang === "ro" ? "Comparații populare" : lang === "fr" ? "Comparaisons populaires" : "Popular Comparisons"}
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 32 }}>
+        <div className="dp-promo-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 32 }}>
           {[
             { id: "new_car", gid: "auto", title: lang === "de" ? "Auto vergleichen & sparen" : "Compare cars & save", sub: "New & used · Insurance · EV", img: "photo-1558618666-fcd25c85cd64", color: "#1A1A2E" },
             { id: "credit_card", gid: "financial", title: lang === "de" ? "Kredite von 300+ Banken" : "Loans from 300+ banks", sub: "Mortgages · Cards · Deposits", img: "photo-1611974789855-9c2a0a7236a3", color: "#0F3460" },
@@ -3453,7 +3485,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
                 {lang === "de" ? "Alle Angebote →" : lang === "ro" ? "Vezi toate →" : "See all →"}
               </button>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
+            <div className="dp-products-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
               {sec.items.map((item, i) => (
                 <div key={i} onClick={() => startWithTracking(item.id)}
                   style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: "16px", cursor: "pointer", transition: "all 0.2s", display: "flex", gap: 14, alignItems: "center" }}
@@ -4232,7 +4264,7 @@ function ProfileModal({ onClose, onSave, lang, existing }) {
               style={{ width:"100%",padding:"14px 16px",borderRadius:12,border:`2px solid ${nickname.length>=2?C.accent:C.border}`,fontSize:16,fontWeight:600,outline:"none",boxSizing:"border-box",transition:"border-color 0.2s" }}
               autoFocus
             />
-            <div style={{ color:C.muted,fontSize:11,marginTop:6 }}>2–20 {lg==="ro"?"caractere":"characters"}</div>
+            <div style={{ color:C.muted,fontSize:11,marginTop:6 }}>2–20 {lg==="de"?"Zeichen":lg==="ro"?"caractere":lg==="es"?"caracteres":lg==="fr"?"caractères":"characters"}</div>
           </div>
         )}
 
