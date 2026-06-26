@@ -1967,23 +1967,35 @@ function getProductLink(category, productName) {
   if (n.includes("samsung"))     return "https://www.samsung.com/uk/";
   if (n.includes("google pixel")||n.includes("pixel")) return "https://store.google.com/gb/category/phones";
 
-  // Cars
-  if (category==="new_car"||category==="used_car") {
-    if (n.includes("volkswagen")||n.includes("vw")) return "https://www.volkswagen.de/de/modelle.html";
-    if (n.includes("bmw"))       return "https://www.bmw.de/de/neufahrzeuge.html";
-    if (n.includes("mercedes"))  return "https://www.mercedes-benz.de/passengercars.html";
+  // Cars — AutoScout24 search with model name for used; configurator for new
+  if (category==="used_car"||category==="auto") {
+    // Always use AutoScout24 with model search for used/general
+    const q = encodeURIComponent(productName.replace(/\(.*?\)/g,"").trim());
+    return `https://www.autoscout24.de/lst?sort=price&atype=C&q=${q}`;
+  }
+  if (category==="new_car") {
+    const q = encodeURIComponent(productName.replace(/\(.*?\)/g,"").trim());
+    if (n.includes("volkswagen")||n.includes("vw"))  return `https://www.autoscout24.de/lst?sort=price&atype=N&q=${q}`;
+    if (n.includes("bmw"))       return "https://www.bmw.de/de/neufahrzeuge/alle-modelle.html";
+    if (n.includes("mercedes"))  return "https://www.mercedes-benz.de/passengercars/mercedes-benz-cars/car-configurator.html";
     if (n.includes("tesla"))     return "https://www.tesla.com/de_DE/";
     if (n.includes("audi"))      return "https://www.audi.de/de/brand/de/neuwagen.html";
     if (n.includes("toyota"))    return "https://www.toyota.de/neuwagen";
     if (n.includes("renault"))   return "https://www.renault.de/pkw.html";
     if (n.includes("ford"))      return "https://www.ford.de/neuwagen";
     if (n.includes("hyundai"))   return "https://www.hyundai.de/modelle";
-    if (n.includes("kia"))       return "https://www.kia.com/de/";
+    if (n.includes("kia"))       return "https://www.kia.com/de/modelle";
     if (n.includes("opel"))      return "https://www.opel.de/fahrzeuge/pkw.html";
-    if (n.includes("skoda")||n.includes("\u0161koda")) return "https://www.skoda-auto.de/modelle";
-    if (n.includes("volvo"))     return "https://www.volvocars.com/de/cars";
+    if (n.includes("skoda")||n.includes("škoda")) return "https://www.skoda-auto.de/modelle";
+    if (n.includes("volvo"))     return "https://www.volvocars.com/de/v/cars";
     if (n.includes("peugeot"))   return "https://www.peugeot.de/pkw.html";
-    return "https://www.autoscout24.de/";
+    if (n.includes("seat"))      return "https://www.seat.de/modelle";
+    if (n.includes("mazda"))     return "https://www.mazda.de/pkw";
+    if (n.includes("honda"))     return "https://www.honda.de/cars.html";
+    if (n.includes("nissan"))    return "https://www.nissan.de/fahrzeuge/neuwagen.html";
+    if (n.includes("fiat"))      return "https://www.fiat.de/range";
+    if (n.includes("porsche"))   return "https://www.porsche.com/germany/models/";
+    return `https://www.autoscout24.de/lst?sort=price&atype=N&q=${q}`;
   }
 
   // Finance
@@ -2009,7 +2021,9 @@ function getProductLink(category, productName) {
   if (category==="airline")        return "https://www.skyscanner.net/flights";
   if (category==="travel_agency")  return "https://www.booking.com/holidays/?aid=2942851";
   if (category==="travel_insurance") return "https://www.check24.de/reiseversicherung/";
-  if (category==="car_rental")     return "https://www.rentalcars.com/";
+  if (category==="car_rental")     return "https://www.check24.de/mietwagen/";
+  if (category==="tires")          return "https://www.check24.de/reifen/";
+  if (category==="ev_charger")     return "https://www.check24.de/strom/";
 
   // Software
   if (n.includes("nordvpn"))       return "https://nordvpn.com/";
