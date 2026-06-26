@@ -3959,7 +3959,9 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
                     ← {lang === "ro" ? "Categorii" : lang === "de" ? "Kategorien" : lang === "fr" ? "Catégories" : lang === "es" ? "Categorías" : "Categories"}
                   </button>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: 12, background: `${group.color}16`, border: `1.5px solid ${group.color}40`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>{group.emoji}</div>
+                    <div style={{ width:40,height:40,borderRadius:12,background:`${group.color}16`,border:`1.5px solid ${group.color}40`,display:"flex",alignItems:"center",justifyContent:"center",color:group.color }}>
+                      {CAT_SVG_ICONS[group.id] || getIcon(group.id)}
+                    </div>
                     <div>
                       <div style={{ color: C.text, fontSize: 18, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{catName(group.id, lang)}</div>
                       <div style={{ color: C.muted, fontSize: 12 }}>{group.subs.length} {lang === "ro" ? "subcategorii disponibile" : "subcategories"}</div>
@@ -3989,7 +3991,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
                         e.currentTarget.style.transform = "translateY(0)";
                         e.currentTarget.style.boxShadow = "none";
                       }}>
-                      <span style={{ display:"flex",alignItems:"center",color:grpColor }}>{getIcon(sub.id, 22, grpColor)}</span>
+                      <span style={{ display:"flex",alignItems:"center",color:group.color }}>{getIcon(sub.id)}</span>
                       <span style={{ color: C.text, fontSize: 13.5, fontWeight: 600, lineHeight: 1.3 }}>{catName(sub.id, lang)}</span>
                     </button>
                   ))}
