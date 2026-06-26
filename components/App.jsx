@@ -3498,51 +3498,80 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
 
 // ── Compare 2 or 3 Products section ─────────────────────────────────────────
 function CompareSection({ lang, onStart }) {
-  const [cp1, setCp1] = useState("");
-  const [cp2, setCp2] = useState("");
-  const [cp3, setCp3] = useState("");
+  const [cp1, setCp1] = useState(""); const [cp2, setCp2] = useState(""); const [cp3, setCp3] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [err, setErr] = useState("");
+  const lg = lang || "en";
   const clr = ["#4F46E5","#15803D","#C2410C"];
   const bgClr = ["#EEF2FF","#F0FDF4","#FFF7ED"];
-  const lg = lang || "en";
+
+  const inputs = [
+    [cp1, setCp1, lg==="de"?"Produkt 1":lg==="ro"?"Produsul 1":"Product 1", "e.g. iPhone 17 Pro"],
+    [cp2, setCp2, lg==="de"?"Produkt 2":lg==="ro"?"Produsul 2":"Product 2", "e.g. Samsung Galaxy S25"],
+    [cp3, setCp3, lg==="de"?"Produkt 3 (optional)":lg==="ro"?"Produsul 3 (opțional)":"Product 3 (optional)", "e.g. Pixel 9 Pro"],
+  ];
 
   async function doCompare() {
     if (!cp1.trim() || !cp2.trim()) {
-      setErr(lg==="de"?"Bitte mindestens 2 Produkte eingeben":lg==="ro"?"Introdu cel puțin 2 produse":"Please enter at least 2 products");
-      return;
+      setErr(lg==="de"?"Bitte mindestens 2 Produkte eingeben":lg==="ro"?"Introdu cel puțin 2 produse":"Please enter at least 2 products"); return;
     }
     setErr(""); setData(null); setLoading(true);
     const products = [cp1.trim(), cp2.trim(), cp3.trim()].filter(Boolean);
     const count = products.length;
-    const prompt = `Compare these ${count} products and respond ONLY with valid JSON (no markdown, no explanation):
-Products: ${products.map(p=>`"${p}"`).join(", ")}
-{"products":[{"name":"short product name","score":8.5,"price_range":"€500-700","pros":["pro 1","pro 2","pro 3"],"cons":["con 1","con 2"],"best_for":"who this is best for in 10 words","winner_badge":""}],"summary":"one sentence overall verdict"}
-Rules: score 1-10, pros max 3 (each ≤10 words), cons max 2 (each ≤10 words), best_for ≤12 words, winner_badge one of: "" | "Best value" | "Top pick" | "Best specs" — assign to ONE product only. Respond in the same language as the product names (if mixed, use English).`;
+
+    const prompt = `Compare these ${count} products. Respond ONLY with valid JSON (no markdown):
+Products: ${products.map(p => `"${p}"`).join(", ")}
+
+{
+  "products": [
+    {
+      "name": "exact product name",
+      "score": 8.5,
+      "price_range": "€800–1,000",
+      "winner_badge": "",
+      "best_for": "ideal buyer in ≤10 words"
+    }
+  ],
+  "rows": [
+    { "label": "Display", "values": ["6.9\" Super Retina XDR", "6.8\" Dynamic AMOLED", "..."], "winner": 0, "notes": [""] },
+    { "label": "Camera", "values": ["48MP ProRAW system", "200MP system", "..."], "winner": 1, "notes": [""] },
+    { "label": "Battery life", "values": ["25h video", "30h video", "..."], "winner": 1, "notes": [""] },
+    { "label": "Performance", "values": ["A18 Pro chip", "Snapdragon 8 Elite", "..."], "winner": 0, "notes": [""] },
+    { "label": "Storage", "values": ["128GB–2TB", "256GB–1TB", "..."], "winner": 0, "notes": [""] },
+    { "label": "Price", "values": ["€1,299+", "€1,099+", "..."], "winner": 1, "notes": [""] },
+    { "label": "OS / Software", "values": ["iOS 18", "Android 15", "..."], "winner": -1, "notes": [""] },
+    { "label": "Build quality", "values": ["Titanium", "Armor Aluminum", "..."], "winner": 0, "notes": [""] }
+  ],
+  "summary": "one sentence verdict"
+}
+
+Rules:
+- rows: 7–9 comparison criteria relevant to these products
+- winner: index of winning product (0=first, 1=second, 2=third), or -1 if tie/subjective
+- values: one short value per product (≤6 words each)
+- winner_badge: "" | "Best value" | "Top pick" | "Best specs" — only ONE product
+- score: 1–10 float, be honest
+- Respond in ${lg === "de" ? "German" : lg === "ro" ? "Romanian" : lg === "es" ? "Spanish" : "English"}`;
 
     try {
       const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: "compare", prompt, lang: lg })
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ mode:"compare", prompt, lang:lg })
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) { const txt = await res.text(); throw new Error(txt); }
       const txt = await res.text();
       const clean = txt.replace(/```json|```/g,"").trim();
       setData(JSON.parse(clean));
     } catch(e) {
-      setErr(lg==="de"?"Fehler beim Vergleich. Bitte erneut versuchen.":lg==="ro"?"Eroare la comparare. Încearcă din nou.":"Comparison failed. Please try again.");
+      setErr("Comparison failed: " + e.message);
     } finally { setLoading(false); }
   }
 
-  function scoreColor(s){ return s>=8.5?"#15803D":s>=7?"#92400E":"#B91C1C"; }
+  function scoreColor(s) { return s>=8.5?"#15803D":s>=7?"#92400E":"#B91C1C"; }
 
-  const inputs = [
-    [cp1, setCp1, lg==="de"?"Produkt 1":lg==="ro"?"Produsul 1":"Product 1", "e.g. iPhone 16 Pro"],
-    [cp2, setCp2, lg==="de"?"Produkt 2":lg==="ro"?"Produsul 2":"Product 2", "e.g. Samsung Galaxy S25"],
-    [cp3, setCp3, lg==="de"?"Produkt 3 (optional)":lg==="ro"?"Produsul 3 (opțional)":"Product 3 (optional)", "e.g. Pixel 9 Pro"],
-  ];
+  const products = data?.products || [];
+  const cols = products.length || inputs.filter(([v])=>v).length || 3;
 
   return (
     <div style={{ marginBottom:40, background:C.card, borderRadius:20, border:`1px solid ${C.border}`, padding:"28px 28px 24px", boxShadow:C.shadow }}>
@@ -3557,62 +3586,97 @@ Rules: score 1-10, pros max 3 (each ≤10 words), cons max 2 (each ≤10 words),
         {lg==="de"?"2 oder 3 Produkte vergleichen":lg==="ro"?"Compară 2 sau 3 produse":"Compare 2 or 3 products"}
       </h2>
       <p style={{ fontSize:13,color:C.muted,margin:"0 0 20px" }}>
-        {lg==="de"?"Telefone, Autos, Laptops, Bänken — AI vergleicht sofort":lg==="ro"?"Telefoane, mașini, laptopuri, bănci — AI compară instant":"Phones, cars, laptops, banks — AI compares them instantly"}
+        {lg==="de"?"Telefone, Autos, Laptops — AI erstellt sofort eine Vergleichstabelle":lg==="ro"?"Telefoane, mașini, laptopuri — AI generează instant un tabel comparativ":"Phones, cars, laptops — AI instantly builds a comparison table"}
       </p>
 
-      {/* Inputs */}
+      {/* 3-column input grid */}
       <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:14 }}>
         {inputs.map(([val,set,label,ph],i)=>(
           <div key={i}>
             <div style={{ display:"flex",alignItems:"center",gap:6,marginBottom:6 }}>
-              <div style={{ width:20,height:20,borderRadius:"50%",background:i===2?"#F1F5F9":bgClr[i],color:i===2?C.muted:clr[i],display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700 }}>{i+1}</div>
+              <div style={{ width:20,height:20,borderRadius:"50%",background:i===2&&!val?"#F1F5F9":bgClr[i],color:i===2&&!val?C.muted:clr[i],display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,flexShrink:0 }}>{i+1}</div>
               <span style={{ fontSize:11,color:i===2?C.muted:C.textSecondary,fontWeight:600 }}>{label}</span>
-              {i===2&&<span style={{ fontSize:10,color:C.muted,background:`${C.border}`,borderRadius:4,padding:"1px 5px" }}>optional</span>}
             </div>
             <input value={val} onChange={e=>set(e.target.value)} onKeyDown={e=>e.key==="Enter"&&doCompare()} placeholder={ph}
-              style={{ width:"100%",boxSizing:"border-box",padding:"10px 12px",border:`1.5px solid ${i===2&&!val?C.border:val?clr[i]:C.border}`,borderRadius:10,fontSize:14,background:C.bg,color:C.text,outline:"none",transition:"border-color 0.15s",fontFamily:"inherit" }}
+              style={{ width:"100%",boxSizing:"border-box",padding:"10px 12px",border:`1.5px solid ${val?clr[i]:C.border}`,borderRadius:10,fontSize:14,background:C.bg,color:C.text,outline:"none",transition:"border-color 0.15s",fontFamily:"inherit" }}
               onFocus={e=>e.target.style.borderColor=clr[i]} onBlur={e=>e.target.style.borderColor=val?clr[i]:C.border} />
+
+            {/* Score header — shown after compare */}
+            {data && products[i] && (
+              <div style={{ marginTop:8,padding:"10px 12px",background:bgClr[i],borderRadius:10,border:`1px solid ${clr[i]}30` }}>
+                <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4 }}>
+                  <span style={{ fontSize:12,fontWeight:800,color:clr[i],fontFamily:"'Plus Jakarta Sans',sans-serif",lineHeight:1.3 }}>{products[i].name}</span>
+                  {products[i].winner_badge&&<span style={{ fontSize:9,fontWeight:700,padding:"2px 7px",borderRadius:5,background:clr[i],color:"#fff",whiteSpace:"nowrap" }}>{products[i].winner_badge}</span>}
+                </div>
+                <div style={{ display:"flex",alignItems:"baseline",gap:4 }}>
+                  <span style={{ fontSize:22,fontWeight:900,color:scoreColor(products[i].score),lineHeight:1 }}>{Number(products[i].score).toFixed(1)}</span>
+                  <span style={{ fontSize:11,color:C.muted }}>/10 · {products[i].price_range}</span>
+                </div>
+                {products[i].best_for&&<div style={{ fontSize:11,color:C.muted,marginTop:3,lineHeight:1.4 }}>{lg==="de"?"Am besten für":lg==="ro"?"Ideal pentru":"Best for"}: {products[i].best_for}</div>}
+              </div>
+            )}
           </div>
         ))}
       </div>
 
-      {/* Button */}
+      {/* Compare button */}
       <button onClick={doCompare} disabled={loading}
-        style={{ width:"100%",padding:"12px",background:loading?`${C.accent}99`:C.accent,color:"#fff",border:"none",borderRadius:10,fontSize:14,fontWeight:700,cursor:loading?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"opacity 0.15s" }}>
+        style={{ width:"100%",padding:"12px",background:loading?`${C.accent}80`:C.accent,color:"#fff",border:"none",borderRadius:10,fontSize:14,fontWeight:700,cursor:loading?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:8,transition:"opacity 0.15s",marginBottom:err?8:0 }}>
         {loading
-          ? <><span style={{ display:"inline-flex",gap:4,alignItems:"center" }}>{[0,1,2].map(i=><span key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#fff",animation:`cmpBlink 1.2s ${i*0.2}s ease-in-out infinite`,display:"inline-block" }}/>)}</span>{lg==="de"?"Vergleiche…":lg==="ro"?"Comparăm…":"Comparing…"}</>
+          ? <><span style={{ display:"inline-flex",gap:4 }}>{[0,1,2].map(i=><span key={i} style={{ width:5,height:5,borderRadius:"50%",background:"#fff",animation:`cmpBlink 1.2s ${i*0.2}s ease-in-out infinite`,display:"inline-block" }}/>)}</span>{lg==="de"?"Vergleiche…":lg==="ro"?"Comparăm…":"Comparing…"}</>
           : <>{lg==="de"?"Mit AI vergleichen →":lg==="ro"?"Compară cu AI →":"Compare with AI →"}</>}
       </button>
-      {err&&<p style={{ color:"#DC2626",fontSize:13,margin:"10px 0 0",textAlign:"center" }}>{err}</p>}
+      {err&&<p style={{ color:"#DC2626",fontSize:12,margin:"0 0 8px",textAlign:"center" }}>{err}</p>}
 
-      {/* Results */}
-      {data?.products&&(
+      {/* Comparison table */}
+      {data?.rows && data.rows.length > 0 && (
         <div style={{ marginTop:20 }}>
-          <div style={{ display:"grid",gridTemplateColumns:`repeat(${data.products.length},1fr)`,gap:1,background:C.border,borderRadius:14,overflow:"hidden" }}>
-            {data.products.map((p,i)=>(
-              <div key={i} style={{ background:C.card,display:"flex",flexDirection:"column" }}>
-                <div style={{ padding:"14px 14px 10px",borderBottom:`1px solid ${C.border}`,borderTop:`3px solid ${clr[i]||"#888"}` }}>
-                  {p.winner_badge?<div style={{ display:"inline-block",fontSize:10,fontWeight:700,padding:"2px 8px",borderRadius:6,background:bgClr[i]||"#f1f5f9",color:clr[i]||"#888",marginBottom:4 }}>{p.winner_badge}</div>:<div style={{ height:20 }}/>}
-                  <div style={{ fontWeight:800,fontSize:14,color:C.text,marginBottom:4,fontFamily:"'Plus Jakarta Sans',sans-serif",lineHeight:1.3 }}>{p.name}</div>
-                  <div style={{ fontSize:24,fontWeight:900,color:scoreColor(p.score),lineHeight:1 }}>{Number(p.score).toFixed(1)}<span style={{ fontSize:12,color:C.muted,fontWeight:400 }}>/10</span></div>
-                  {p.price_range&&<div style={{ fontSize:11,color:C.muted,marginTop:3 }}>{p.price_range}</div>}
+          <div style={{ borderRadius:12,overflow:"hidden",border:`1px solid ${C.border}` }}>
+            {/* Table header */}
+            <div style={{ display:"grid",gridTemplateColumns:`160px repeat(${products.length},1fr)`,background:"#F8FAFC",borderBottom:`1px solid ${C.border}` }}>
+              <div style={{ padding:"10px 14px",fontSize:11,fontWeight:700,color:C.muted,textTransform:"uppercase",letterSpacing:0.6 }}>
+                {lg==="de"?"Merkmal":lg==="ro"?"Criteriu":"Feature"}
+              </div>
+              {products.map((p,i)=>(
+                <div key={i} style={{ padding:"10px 12px",borderLeft:`1px solid ${C.border}`,fontSize:12,fontWeight:800,color:clr[i],display:"flex",alignItems:"center",gap:6 }}>
+                  <div style={{ width:8,height:8,borderRadius:"50%",background:clr[i],flexShrink:0 }}/>
+                  {p.name.split(" ").slice(0,3).join(" ")}
                 </div>
-                <div style={{ padding:"10px 14px",borderBottom:`1px solid ${C.border}` }}>
-                  <div style={{ fontSize:9,fontWeight:700,letterSpacing:0.8,textTransform:"uppercase",color:"#15803D",marginBottom:7 }}>✓ {lg==="de"?"Vorteile":lg==="ro"?"Avantaje":"Pros"}</div>
-                  {(p.pros||[]).map((x,j)=><div key={j} style={{ display:"flex",gap:5,alignItems:"flex-start",marginBottom:5 }}><div style={{ width:4,height:4,borderRadius:"50%",background:"#15803D",flexShrink:0,marginTop:5 }}/><span style={{ fontSize:12,color:C.textSecondary,lineHeight:1.45 }}>{x}</span></div>)}
+              ))}
+            </div>
+
+            {/* Table rows */}
+            {data.rows.map((row,ri)=>(
+              <div key={ri} style={{ display:"grid",gridTemplateColumns:`160px repeat(${products.length},1fr)`,borderBottom:ri<data.rows.length-1?`1px solid ${C.border}`:"none",background:ri%2===0?"#fff":"#FAFBFC" }}>
+                {/* Feature label */}
+                <div style={{ padding:"10px 14px",fontSize:12,fontWeight:700,color:C.text,display:"flex",alignItems:"center" }}>
+                  {row.label}
                 </div>
-                <div style={{ padding:"10px 14px",borderBottom:`1px solid ${C.border}` }}>
-                  <div style={{ fontSize:9,fontWeight:700,letterSpacing:0.8,textTransform:"uppercase",color:"#DC2626",marginBottom:7 }}>✕ {lg==="de"?"Nachteile":lg==="ro"?"Dezavantaje":"Cons"}</div>
-                  {(p.cons||[]).map((x,j)=><div key={j} style={{ display:"flex",gap:5,alignItems:"flex-start",marginBottom:5 }}><div style={{ width:4,height:4,borderRadius:"50%",background:"#DC2626",flexShrink:0,marginTop:5 }}/><span style={{ fontSize:12,color:C.textSecondary,lineHeight:1.45 }}>{x}</span></div>)}
-                </div>
-                <div style={{ padding:"10px 14px",flex:1 }}>
-                  <div style={{ fontSize:9,fontWeight:700,letterSpacing:0.8,textTransform:"uppercase",color:C.muted,marginBottom:5 }}>{lg==="de"?"Am besten für":lg==="ro"?"Ideal pentru":"Best for"}</div>
-                  <p style={{ fontSize:12,color:C.muted,margin:0,lineHeight:1.55 }}>{p.best_for}</p>
-                </div>
+                {/* Values per product */}
+                {products.map((_,pi)=>{
+                  const isWinner = row.winner === pi;
+                  const isLoser = row.winner !== -1 && row.winner !== pi;
+                  return (
+                    <div key={pi} style={{ padding:"10px 12px",borderLeft:`1px solid ${C.border}`,display:"flex",alignItems:"flex-start",gap:7 }}>
+                      {/* ✓ / ✗ icon */}
+                      <div style={{ width:18,height:18,borderRadius:"50%",background:isWinner?"#DCFCE7":isLoser?"#FEE2E2":"#F1F5F9",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:1 }}>
+                        {isWinner
+                          ? <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="m2 6 3 3 5-5" stroke="#15803D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                          : isLoser
+                          ? <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="m3 3 6 6M9 3 3 9" stroke="#DC2626" strokeWidth="1.8" strokeLinecap="round"/></svg>
+                          : <svg width="8" height="8" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2" fill="#94A3B8"/></svg>}
+                      </div>
+                      <span style={{ fontSize:12,color:isWinner?"#14532D":isLoser?"#7F1D1D":C.textSecondary,fontWeight:isWinner?700:400,lineHeight:1.45 }}>
+                        {row.values?.[pi] || "—"}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             ))}
           </div>
-          {data.summary&&<p style={{ fontSize:12,color:C.muted,margin:"10px 2px 0",lineHeight:1.6 }}>{data.summary}</p>}
+
+          {data.summary&&<p style={{ fontSize:12,color:C.muted,margin:"10px 2px 0",lineHeight:1.6 }}>💡 {data.summary}</p>}
         </div>
       )}
       <style>{`@keyframes cmpBlink{0%,80%,100%{opacity:.15}40%{opacity:1}}`}</style>
