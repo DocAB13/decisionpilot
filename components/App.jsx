@@ -2360,14 +2360,82 @@ function CategoryCard({ cat, onClick }) {
   );
 }
 
-function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
+function QuestionScreen({ category, onComplete, onBack, onHome, t, lang, profile }) {
   const tree = TREES[category];
   const catColor = CATEGORIES_LIST.find(c => c.id === category)?.color || C.accent;
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [selected, setSelected] = useState(null);
   const [animKey, setAnimKey] = useState(0);
+  const [profileFill, setProfileFill] = useState({}); // tracks which answers came from profile
   const lg = lang || "en";
+
+  // ── Match profile to a question step ────────────────────────────────────────
+  function matchProfile(q) {
+    if (!profile || !q) return null;
+    const qText = (q.q || "").toLowerCase();
+    const opts = q.options || [];
+
+    // Budget → price/cost/budget questions
+    if (profile.budget && /budget|price|cost|spending|afford|range|how much/i.test(qText)) {
+      const budgetKw = {
+        tight:   ["budget","cheap","low","under €","< €","economic","affordable","minimal","free","€0","€50","€100"],
+        medium:  ["mid","middle","moderate","standard","reasonable","€200","€300","€400","€500","€150"],
+        comfort: ["comfort","flexible","upper","€500","€600","€700","€800","€1000","€1500"],
+        premium: ["premium","luxury","top","best","no limit","unlimited","€2000","€3000","anything","whatever"]
+      };
+      const kws = budgetKw[profile.budget] || [];
+      const match = opts.find(o => kws.some(k => o.toLowerCase().includes(k)));
+      if (match) return { answer: match, source: "budget" };
+    }
+
+    // Tech level → technical/experience/skill questions
+    if (profile.techLevel && /tech|experience|skill|knowledge|famili|expert|novice|level/i.test(qText)) {
+      const techKw = {
+        beginner:     ["beginner","basic","simple","easy","new","no experience","casual","first time","starter"],
+        intermediate: ["intermediate","some","moderate","familiar","occasional","regular","hobbyist"],
+        advanced:     ["advanced","experienced","power user","frequent","technical","heavy"],
+        expert:       ["expert","professional","developer","tech-savvy","enthusiast","specialist"]
+      };
+      const kws = techKw[profile.techLevel] || [];
+      const match = opts.find(o => kws.some(k => o.toLowerCase().includes(k)));
+      if (match) return { answer: match, source: "techLevel" };
+    }
+
+    // Priorities → what matters most / most important
+    if (profile.priorities?.length > 0 && /priorit|matter|important|care|focus|value|key factor/i.test(qText)) {
+      const prioKw = {
+        price:   ["price","cost","cheap","affordable","value","budget"],
+        quality: ["quality","reliable","durable","best","premium","performance"],
+        privacy: ["privacy","security","private","secure","data"],
+        ease:    ["easy","simple","user-friendly","intuitive","beginner"],
+        speed:   ["speed","fast","quick","performance","instant"],
+        eco:     ["eco","green","sustainable","environment","organic"],
+        support: ["support","help","customer","service","warranty"],
+        local:   ["local","europe","eu","brand","domestic"]
+      };
+      for (const prio of profile.priorities) {
+        const kws = prioKw[prio] || [];
+        const match = opts.find(o => kws.some(k => o.toLowerCase().includes(k)));
+        if (match) return { answer: match, source: "priorities" };
+      }
+    }
+
+    return null;
+  }
+
+  // On step change, check if profile can pre-fill
+  useEffect(() => {
+    if (!tree) return;
+    const q = tree.questions[step];
+    const match = matchProfile(q);
+    if (match && !answers[q?.id]) {
+      setSelected(match.answer);
+      setProfileFill(prev => ({ ...prev, [q.id]: match.source }));
+    } else {
+      setSelected(null);
+    }
+  }, [step]);
 
   if (!tree) {
     return (
@@ -2389,6 +2457,10 @@ function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
 
   function handleSelect(option) {
     setSelected(option);
+    // Clear profile fill indicator if user manually selects different option
+    if (profileFill[question?.id] && option !== selected) {
+      setProfileFill(prev => { const n = {...prev}; delete n[question.id]; return n; });
+    }
     setTimeout(() => {
       const newAnswers = { ...answers, [question.id]: option };
       setAnswers(newAnswers);
@@ -2473,6 +2545,12 @@ function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
           <div style={{ display:"flex",flexDirection:"column",gap:9 }}>
             {question.options.map((opt,i) => {
               const isSel = selected===opt;
+              const isFromProfile = isSel && profileFill[question.id];
+              const profileSourceLabel = {
+                budget: lg==="de"?"aus deinem Budget":lg==="ro"?"din profilul tău":lg==="es"?"de tu perfil":"from your profile",
+                techLevel: lg==="de"?"aus deinem Profil":lg==="ro"?"din profilul tău":lg==="es"?"de tu perfil":"from your profile",
+                priorities: lg==="de"?"aus deinen Prioritäten":lg==="ro"?"din prioritățile tale":lg==="es"?"de tus prioridades":"from your priorities",
+              }[profileFill[question.id]] || "from your profile";
               return (
                 <button key={opt} onClick={()=>handleSelect(opt)}
                   style={{ background:isSel?`${catColor}12`:C.card, border:`2px solid ${isSel?catColor:C.border}`, borderRadius:15, padding:"15px 18px",
@@ -2492,6 +2570,12 @@ function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
                     {String.fromCharCode(65+i)}
                   </div>
                   <span style={{ flex:1,fontSize:15,fontWeight:isSel?700:500,color:isSel?catColor:C.text,lineHeight:1.4 }}>{opt}</span>
+                  {/* Profile pre-fill badge */}
+                  {isFromProfile && (
+                    <span style={{ fontSize:9,fontWeight:700,color:catColor,background:`${catColor}15`,border:`1px solid ${catColor}30`,borderRadius:5,padding:"2px 7px",whiteSpace:"nowrap",letterSpacing:0.3 }}>
+                      ✦ {profileSourceLabel}
+                    </span>
+                  )}
                   <div style={{ width:22,height:22,borderRadius:"50%",border:`2px solid ${isSel?catColor:C.border}`,background:isSel?catColor:"transparent",
                     display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all 0.18s" }}>
                     {isSel&&<span style={{ color:"#fff",fontSize:11,fontWeight:900 }}>✓</span>}
@@ -2502,12 +2586,20 @@ function QuestionScreen({ category, onComplete, onBack, onHome, t, lang }) {
           </div>
 
           {/* Skip + Ai·sel tip */}
-          <div style={{ marginTop:20,display:"flex",alignItems:"flex-start",gap:12,background:`${catColor}08`,border:`1px solid ${catColor}20`,borderRadius:14,padding:"13px 16px" }}>
+          <div style={{ marginTop:20,display:"flex",alignItems:"flex-start",gap:12,background:profileFill[question?.id]?`${catColor}10`:`${catColor}08`,border:`1px solid ${catColor}${profileFill[question?.id]?"40":"20"}`,borderRadius:14,padding:"13px 16px" }}>
             <img src="/asel-mascot.png" style={{ width:30,height:30,borderRadius:"50%",objectFit:"cover",objectPosition:"30% 8%",border:`2px solid ${catColor}40`,flexShrink:0,marginTop:2 }} alt="Ai·sel" />
             <div style={{ flex:1 }}>
               <div style={{ color:catColor,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:0.8,marginBottom:2 }}>Ai·sel tip</div>
               <div style={{ color:C.textSecondary,fontSize:13,lineHeight:1.5 }}>
-                {step===0
+                {profileFill[question?.id]
+                  ? (lg==="de"
+                    ? `Ich habe „${selected}" aus deinem Profil vorausgewählt. Du kannst es ändern.`
+                    : lg==="ro"
+                    ? `Am pre-selectat „${selected}" din profilul tău. Poți schimba dacă vrei.`
+                    : lg==="es"
+                    ? `He preseleccionado „${selected}" de tu perfil. Puedes cambiarlo.`
+                    : `I've pre-selected "${selected}" from your profile. You can change it.`)
+                  : step===0
                   ?(lg==="de"?"Nimm dir Zeit — deine erste Antwort prägt alle Empfehlungen.":lg==="ro"?"Ia-ți timp — primul răspuns modelează toate recomandările.":lg==="es"?"Tómate tu tiempo — tu primera respuesta da forma a todas las recomendaciones.":lg==="fr"?"Prenez votre temps — votre première réponse façonne toutes les recommandations.":"Take your time — your first answer shapes all recommendations.")
                   :step===total-1
                   ?(lg==="de"?"Letzte Frage! Ai·sel analysiert jetzt tausende Bewertungen für dich.":lg==="ro"?"Ultima întrebare! Ai·sel analizează acum mii de recenzii pentru tine.":lg==="es"?"¡Última pregunta! Ai·sel analizará miles de reseñas para ti.":lg==="fr"?"Dernière question ! Ai·sel va analyser des milliers d'avis pour vous.":"Last question! Ai·sel will now analyze thousands of reviews for you.")
@@ -3282,10 +3374,14 @@ function ResultsScreen({ category, answers, onRestart, onBack, onHome, onFavorit
             lang: lg,
             market: getMarket(lg).region,
             currency: getMarket(lg).currency,
+            profile: profile || null,
           }),
         });
         const result = await response.json();
+        // Handle both formats: {type:"recommendations",data:{...}} and direct {title,picks}
         if (result.type === "recommendations") setData(result.data);
+        else if (result.picks) setData(result);
+        else if (result.error) setError(result.error);
         else setError("Could not load recommendations. Please try again.");
       } catch { setError("Connection error. Please try again."); }
       finally { setLoading(false); }
