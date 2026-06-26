@@ -3686,7 +3686,7 @@ winner=index of best product (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"
               </div>
             ))}
           </div>
-          {data.summary&&<p style={{ fontSize:12,color:C.muted,margin:"10px 2px 0",lineHeight:1.6 }}>💡 {data.summary}</p>}
+          {data.summary&&<p style={{ fontSize:13.5, fontWeight:700, color:"#334155", margin:"12px 2px 0", lineHeight:1.65 }}>💡 {data.summary}</p>}
         </div>
       )}
       <style>{`@keyframes cmpBlink{0%,80%,100%{opacity:.15}40%{opacity:1}}`}</style>
