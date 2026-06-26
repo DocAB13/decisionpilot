@@ -3454,14 +3454,14 @@ Products: ${products.map(p=>`"${p}"`).join(", ")}
 Rules: score 1-10, pros max 3 (each ≤10 words), cons max 2 (each ≤10 words), best_for ≤12 words, winner_badge one of: "" | "Best value" | "Top pick" | "Best specs" — assign to ONE product only. Respond in the same language as the product names (if mixed, use English).`;
 
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1000, messages:[{role:"user",content:prompt}] })
+        body: JSON.stringify({ mode: "compare", prompt, lang: lg })
       });
-      const json = await res.json();
-      const raw = (json.content||[]).map(b=>b.text||"").join("");
-      const clean = raw.replace(/```json|```/g,"").trim();
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const txt = await res.text();
+      const clean = txt.replace(/```json|```/g,"").trim();
       setData(JSON.parse(clean));
     } catch(e) {
       setErr(lg==="de"?"Fehler beim Vergleich. Bitte erneut versuchen.":lg==="ro"?"Eroare la comparare. Încearcă din nou.":"Comparison failed. Please try again.");
