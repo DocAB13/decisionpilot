@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAuth } from "../context/AuthContext";
 import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
 import { HeroBanner, WorldwideSection } from "./HeroBanner";
 import AselCorner from "./AselCorner";
@@ -2155,7 +2156,7 @@ const CAT_SVG_ICONS = {
   ecommerce: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>,
 };
 
-function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCategoryClick, profile, onShowProfile, favoritesCount, onShowFavorites }) {
+function TopNav({const { user, signOut } = useAuth(); onBack, showBack, t, lang, setLang, count, onStartSearch, onCategoryClick, profile, onShowProfile, favoritesCount, onShowFavorites }) {
   const [langOpen, setLangOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
@@ -2242,7 +2243,22 @@ function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCa
               {favoritesCount > 0 && <span className="dp-fav-count" style={{ fontWeight:700,fontSize:12 }}>{favoritesCount}</span>}
             </button>
           )}
-
+{/* ── Login/Logout button ── */}
+{user ? (
+  <button onClick={signOut}
+    style={{ display:"flex",alignItems:"center",gap:6,background:"transparent",border:`1px solid ${C.border}`,borderRadius:20,padding:"5px 14px",cursor:"pointer",fontSize:13,color:C.text }}
+    onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;}}
+    onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;}}
+  >
+    {user.email.split("@")[0]}  · Logout
+  </button>
+) : (
+  <a href="/auth/login"
+    style={{ display:"flex",alignItems:"center",gap:6,background:C.accent,border:"none",borderRadius:20,padding:"5px 14px",cursor:"pointer",fontSize:13,color:"#fff",textDecoration:"none" }}
+  >
+    Login
+  </a>
+)}
           {/* ── Profile button ── */}
           {onShowProfile && (
             <button onClick={onShowProfile}
