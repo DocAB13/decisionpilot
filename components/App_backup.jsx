@@ -4117,12 +4117,15 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
         ))}
       </div>
 
+      </div>
+
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
 
         {/* ══ HOW IT WORKS + TRANSPARENCY ══ */}
         <div style={{ marginBottom: 0 }}>
           <div style={{ background:`linear-gradient(135deg,${C.accent} 0%,#7048E8 100%)`,padding:"40px 24px",textAlign:"center",margin:"0 -24px 48px",position:"relative",overflow:"hidden" }}>
-            <img src="/asel-medium.png" alt="Ai·sel"             style={{ position:"absolute",right:"4%",bottom:0,height:"130%",maxHeight:200,objectFit:"contain",objectPosition:"center bottom",filter:"drop-shadow(0 6px 20px rgba(0,0,0,0.2))",opacity:0.9,pointerEvents:"none" }} />
+            <img src="/asel-medium.png" alt="Ai·sel"
+              style={{ position:"absolute",right:"4%",bottom:0,height:"130%",maxHeight:200,objectFit:"contain",objectPosition:"center bottom",filter:"drop-shadow(0 6px 20px rgba(0,0,0,0.2))",opacity:0.9,pointerEvents:"none" }} />
             <div style={{ display:"inline-block",background:"rgba(255,255,255,0.15)",color:"#fff",borderRadius:20,padding:"4px 14px",fontSize:11,fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:12 }}>Guide</div>
             <h2 style={{ color:"#fff",fontSize:"clamp(26px,4vw,42px)",fontWeight:900,letterSpacing:-1,margin:"0 0 10px" }}>
               {lang==="de"?"Wie es funktioniert":lang==="es"?"Cómo funciona":lang==="ro"?"Cum funcționează":"How it works"}
