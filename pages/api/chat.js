@@ -1,89 +1,94 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
-  const { messages, lang, mode, category, answers } = req.body;
 
-  let systemPrompt = "";
+  const { mode, category, answers, lang, market, currency, profile, messages: chatMessages } = req.body;
 
-  if (mode === "tree_result") {
-    systemPrompt = `You are DecisionPilot, a world-class AI recommendation engine. 
-    
-The user has answered a series of questions about their ${category} decision. Based on their answers, you must provide exactly 5 personalized recommendations.
-
-CRITICAL RULES:
-- Recommendations must be REAL products/services that exist in 2025-2026
-- Base recommendations on actual reviews from CNET, TechRadar, GSMArena, Booking.com, AutoScout24, Wirecutter, etc.
-- Each recommendation must be genuinely different and suited to different aspects of their answers
-- Never repeat the same product twice
-- Be specific: include real model names, real prices in USD/EUR, real pros and cons
-- Vary your recommendations: include a best overall, best value, premium pick, hidden gem, and practical choice
-
-Respond ONLY with a valid JSON object, no markdown, no backticks, exactly this structure:
-{
-  "title": "Your personalized recommendations for [category]",
-  "subtitle": "Based on your preferences: [brief summary of their answers]",
-  "picks": [
-    {
-      "rank": 1,
-      "badge": "Best Overall",
-      "name": "Product Name",
-      "price": "$XXX - $XXX",
-      "image_query": "product name high quality photo",
-      "pros": ["pro 1", "pro 2", "pro 3"],
-      "cons": ["con 1", "con 2"],
-      "why": "One sentence explaining why this matches their specific answers",
-      "link": "https://real-url.com",
-      "source": "CNET / TechRadar / GSMArena / etc"
-    }
-  ]
-}`;
-
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 2000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: `User answers: ${JSON.stringify(answers)}` }],
-      }),
-    });
-
-    const data = await response.json();
-    const text = data.content?.map(b => b.text || "").join("") || "{}";
-    try {
-      const clean = text.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(clean);
-      return res.status(200).json({ type: "recommendations", data: parsed });
-    } catch {
-      return res.status(200).json({ type: "error", reply: "Could not generate recommendations. Please try again." });
-    }
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(500).json({ error: "ANTHROPIC_API_KEY not set in Vercel Environment Variables" });
   }
 
-  // Regular chat mode
-  systemPrompt = `You are DecisionPilot, a premium AI decision advisor. Help users make better decisions about vacations, phones, cars, careers, fitness, pets, dining, laptops, and TVs.
+  const langName = { en:"English",de:"German",ro:"Romanian",es:"Spanish",fr:"French",it:"Italian",pt:"Portuguese",nl:"Dutch",pl:"Polish",ru:"Russian",zh:"Chinese",ar:"Arabic",tr:"Turkish",sv:"Swedish",ko:"Korean",ja:"Japanese" }[lang] || "English";
 
-Be warm, direct, and specific. Ask 1-2 clarifying questions first, then give specific actionable recommendations with clear winners. Include real product names, real prices, and real pros/cons. Serve users globally. Respond in the same language the user writes in.`;
+  async function claude(messages, system, maxTokens=1200) {
+    const body = { model:"claude-sonnet-4-6", max_tokens:maxTokens, messages };
+    if (system) body.system = system;
+    const r = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json", "x-api-key":process.env.ANTHROPIC_API_KEY, "anthropic-version":"2023-06-01" },
+      body: JSON.stringify(body),
+    });
+    const d = await r.json();
+    if (d.type==="error"||d.error) throw new Error(d.error?.message||"Anthropic error");
+    if (!d.content?.length) throw new Error("Empty response");
+    return d.content.map(b=>b.text||"").join("");
+  }
 
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": process.env.ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
-    },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-6",
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages,
-    }),
-  });
+  function extractJSON(raw) {
+    try { return JSON.parse(raw.trim()); } catch {}
+    try { return JSON.parse(raw.replace(/^```(?:json)?\s*/m,"").replace(/\s*```\s*$/m,"").trim()); } catch {}
+    const m = raw.match(/\{[\s\S]*\}/);
+    if (m) { try { return JSON.parse(m[0]); } catch {} }
+    throw new Error("Cannot parse JSON: " + raw.slice(0,150));
+  }
 
-  const data = await response.json();
-  const reply = data.content?.map(b => b.text || "").join("") || "Please try again.";
-  res.status(200).json({ type: "chat", reply });
+  // Build profile context string for AI prompts
+  function buildProfileContext(profile) {
+    if (!profile) return "";
+    const budgetLabel = { tight:"tight (<€100/mo)", medium:"medium (€100-500/mo)", comfort:"comfortable (€500-2000/mo)", premium:"premium (€2000+/mo)" }[profile.budget] || "";
+    const techLabel = profile.techLevel || "";
+    const prios = (profile.priorities||[]).join(", ");
+    const statusLabel = profile.status ? `${profile.status} ${profile.nickname||""}`.trim() : profile.nickname || "";
+    let ctx = "";
+    if (statusLabel) ctx += `User: ${statusLabel}. `;
+    if (budgetLabel) ctx += `Budget: ${budgetLabel}. `;
+    if (techLabel) ctx += `Tech level: ${techLabel}. `;
+    if (prios) ctx += `Priorities: ${prios}. `;
+    return ctx ? `\n\nUSER PROFILE (use this to personalize further): ${ctx}` : "";
+  }
+
+  try {
+    // ── Compare ──────────────────────────────────────────────────────────────
+    if (mode === "compare") {
+      const products = (req.body.products||[]).filter(Boolean);
+      if (products.length < 2) return res.status(400).json({ error:"Need at least 2 products" });
+
+      const prompt = `Compare these products: ${products.map((p,i)=>`${i+1}. ${p}`).join(", ")}
+
+Return ONLY a JSON object (no markdown):
+{"products":[{"name":"product name","score":8.5,"price_range":"€500-800","winner_badge":"","best_for":"ideal user 8 words"}],"rows":[{"label":"Display","values":["val1","val2"],"winner":0},{"label":"Camera","values":["val1","val2"],"winner":1},{"label":"Performance","values":["val1","val2"],"winner":0},{"label":"Battery","values":["val1","val2"],"winner":1},{"label":"Price","values":["val1","val2"],"winner":1},{"label":"Build quality","values":["val1","val2"],"winner":0},{"label":"Software","values":["val1","val2"],"winner":-1},{"label":"Unique strength","values":["val1","val2"],"winner":-1}],"summary":"one sentence verdict"}
+winner=index (0,1,2) or -1 for tie. winner_badge=""|"Top pick"|"Best value"|"Best specs" (one only). Respond in ${langName}.`;
+
+      const raw = await claude([{ role:"user", content:prompt }]);
+      return res.status(200).json(extractJSON(raw));
+    }
+
+    // ── Tree recommendations ─────────────────────────────────────────────────
+    if (mode === "tree_result") {
+      const isCarCat = ["auto","new_car","used_car","car_rental"].includes(category);
+      const answerSummary = Object.entries(answers||{}).map(([q,a])=>`${q}: ${a}`).join(", ");
+      const profileCtx = buildProfileContext(profile);
+      const system = `You are DecisionPilot AI. ALL text in ${langName}. Currency: ${currency||"EUR"}. Market: ${market||"EU"}. Return ONLY valid JSON.`;
+      const carTip = isCarCat ? `,"car_tip":{"verdict":"BUY NEW or BUY USED or EITHER WORKS","verdict_color":"green or blue or amber","headline":"short verdict","reason":"2-3 sentences about depreciation and maintenance","saving":"e.g. €8,000-14,000","depreciation":"fast or moderate or slow"}` : "";
+      const prompt = `Category: ${category}. User answers: ${answerSummary}.${profileCtx}
+
+Return ONLY JSON (no markdown):
+{"title":"personalized title for [context]","subtitle":"based on [key preferences]","picks":[{"name":"Product","price":"€X-Y","why":"2-3 sentences referencing their specific answers AND profile if available","pros":["p1","p2","p3","p4","p5"],"cons":["c1","c2"],"badge":"BEST OVERALL","stars":"4.8","source":"Source"${carTip}}]}
+badge: BEST OVERALL|BEST VALUE|PREMIUM PICK|BUDGET PICK|EDITOR'S PICK. Return 3 picks. ALL TEXT IN ${langName.toUpperCase()}.
+${profile ? `The user has a profile — make the "why" explanation explicitly reference their profile preferences (budget: ${profile.budget||"unset"}, priorities: ${(profile.priorities||[]).join(", ")||"unset"}).` : ""}`;
+
+      const raw = await claude([{ role:"user", content:prompt }], system, 2500);
+      return res.status(200).json(extractJSON(raw));
+    }
+
+    // ── Chat ─────────────────────────────────────────────────────────────────
+    const msgs = chatMessages||[];
+    const profileCtx = buildProfileContext(profile);
+    const system = `You are Ai·sel from DecisionPilot. Help users make better decisions. Be concise and friendly. Respond in ${langName}.${profileCtx}`;
+    const raw = await claude(msgs, system);
+    return res.status(200).json({ content:[{ type:"text", text:raw }] });
+
+  } catch(err) {
+    console.error("chat.js error:", err.message);
+    return res.status(500).json({ error: err.message });
+  }
 }
