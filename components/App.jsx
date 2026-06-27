@@ -2224,7 +2224,7 @@ const { plan } = useSubscription();
 
         {/* Right: Favorites, Profile, Lang */}
         <div style={{ display:"flex",alignItems:"center",gap:6,flexShrink:0 }}>
-        {/* Pro/Premium buttons — TEMPORARILY HIDDEN */}
+{/* Pro/Premium buttons — TEMPORARILY HIDDEN */}
         <div style={{ display: "none" }}>
           <button onClick={()=>handleUpgrade("pro", user?.id || "")}style={{ background:"rgba(26,86,219,0.1)",color:C.accent,border:"1.5px solid rgba(26,86,219,0.35)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s",whiteSpace:"nowrap" }}
             onMouseEnter={e=>{e.currentTarget.style.background=C.accent;e.currentTarget.style.color="#fff";}}
