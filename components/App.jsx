@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useSubscription } from "../hooks/useSubscription";
 import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
 import { HeroBanner, WorldwideSection } from "./HeroBanner";
 import AselCorner from "./AselCorner";
@@ -2158,6 +2159,7 @@ const CAT_SVG_ICONS = {
 
 function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCategoryClick, profile, onShowProfile, favoritesCount, onShowFavorites }) {
 const { user, signOut } = useAuth();
+const { plan } = useSubscription();
   const [langOpen, setLangOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
@@ -2251,7 +2253,12 @@ const { user, signOut } = useAuth();
     onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;}}
     onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;}}
   >
-    {user.email.split("@")[0]}  · Logout
+{plan !== 'free' && (
+      <span style={{ background: plan === 'premium' ? '#F59E0B' : '#1A56DB', color: '#fff', borderRadius: 10, padding: '1px 7px', fontSize: 10, fontWeight: 700, marginRight: 4 }}>
+        {plan.toUpperCase()}
+      </span>
+    )}
+    {user.email.split("@")[0]} · Logout
   </button>
 ) : (
   <a href="/auth/login"
