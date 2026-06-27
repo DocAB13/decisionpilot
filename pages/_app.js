@@ -2,12 +2,12 @@ import { useState } from 'react'
 import Head from 'next/head'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import CookieBanner from '../components/CookieBanner'
+import { AuthProvider } from '../context/AuthContext'
 
 export default function App({ Component, pageProps }) {
   const [analyticsEnabled, setAnalyticsEnabled] = useState(false)
-
   return (
-    <>
+    <AuthProvider>
       <Head>
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="apple-touch-icon" href="/icon-180x180.png" />
@@ -23,6 +23,6 @@ export default function App({ Component, pageProps }) {
         onReject={() => setAnalyticsEnabled(false)}
       />
       {analyticsEnabled && <GoogleAnalytics gaId="G-81B4YGZXMD" />}
-    </>
+    </AuthProvider>
   )
 }
