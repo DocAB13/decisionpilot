@@ -2157,6 +2157,7 @@ const CAT_SVG_ICONS = {
 };
 
 function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCategoryClick, profile, onShowProfile, favoritesCount, onShowFavorites }) {
+const { user, signOut } = useAuth();
   const [langOpen, setLangOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const current = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
