@@ -1804,12 +1804,12 @@ const STATUSES = [
 const CATEGORIES_LIST = CATEGORY_GROUPS.flatMap(g => g.subs.map(s => ({...s, groupId: g.id, groupLabel: g.label, color: g.color, desc: g.label})));
 
 
-async function handleUpgrade(plan = "pro") {
+async function handleUpgrade(plan = "pro", userId = "") {
   try {
     const response = await fetch("/api/create-checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan }),
+      body: JSON.stringify({ plan, user_id: userId }),
     });
     const data = await response.json();
     if (data.url) window.location.href = data.url;
@@ -2226,12 +2226,12 @@ const { plan } = useSubscription();
         <div style={{ display:"flex",alignItems:"center",gap:6,flexShrink:0 }}>
         {/* Pro/Premium buttons — TEMPORARILY HIDDEN */}
         <div style={{ display: "none" }}>
-          <button onClick={()=>handleUpgrade("pro")} style={{ background:"rgba(26,86,219,0.1)",color:C.accent,border:"1.5px solid rgba(26,86,219,0.35)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s",whiteSpace:"nowrap" }}
+          <button onClick={()=>handleUpgrade("pro", user?.id || "")}style={{ background:"rgba(26,86,219,0.1)",color:C.accent,border:"1.5px solid rgba(26,86,219,0.35)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s",whiteSpace:"nowrap" }}
             onMouseEnter={e=>{e.currentTarget.style.background=C.accent;e.currentTarget.style.color="#fff";}}
             onMouseLeave={e=>{e.currentTarget.style.background="rgba(26,86,219,0.1)";e.currentTarget.style.color=C.accent;}}>
             ✦ Pro
           </button>
-          <button onClick={()=>handleUpgrade("premium")} style={{ background:"rgba(10,10,14,0.9)",color:"#D4AF37",border:"1.5px solid rgba(212,175,55,0.4)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap" }}>
+          <button onClick={()=>handleUpgrade("premium", user?.id || "")} style={{ background:"rgba(10,10,14,0.9)",color:"#D4AF37",border:"1.5px solid rgba(212,175,55,0.4)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap" }}>
             ♛ Premium
           </button>
         </div>
