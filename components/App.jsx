@@ -2226,12 +2226,12 @@ const { plan } = useSubscription();
         <div style={{ display:"flex",alignItems:"center",gap:6,flexShrink:0 }}>
 {/* Pro/Premium buttons — TEMPORARILY HIDDEN */}
         <div style={{ display: "none" }}>
-          <button onClick={()=>handleUpgrade("pro", user?.id || "")}style={{ background:"rgba(26,86,219,0.1)",color:C.accent,border:"1.5px solid rgba(26,86,219,0.35)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s",whiteSpace:"nowrap" }}
+          <button onClick={()=>handleUpgrade("pro")}style={{ background:"rgba(26,86,219,0.1)",color:C.accent,border:"1.5px solid rgba(26,86,219,0.35)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",transition:"all 0.2s",whiteSpace:"nowrap" }}
             onMouseEnter={e=>{e.currentTarget.style.background=C.accent;e.currentTarget.style.color="#fff";}}
             onMouseLeave={e=>{e.currentTarget.style.background="rgba(26,86,219,0.1)";e.currentTarget.style.color=C.accent;}}>
             ✦ Pro
           </button>
-          <button onClick={()=>handleUpgrade("premium", user?.id || "")} style={{ background:"rgba(10,10,14,0.9)",color:"#D4AF37",border:"1.5px solid rgba(212,175,55,0.4)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap" }}>
+          <button onClick={()=>handleUpgrade("premium")} style={{ background:"rgba(10,10,14,0.9)",color:"#D4AF37",border:"1.5px solid rgba(212,175,55,0.4)",borderRadius:20,padding:"6px 12px",fontSize:12,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap" }}>
             ♛ Premium
           </button>
         </div>
@@ -4366,7 +4366,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
                   <span style={{ color: "#10B981", fontWeight: 700 }}>✓</span> {f}
                 </div>
               ))}
-              <button onClick={() => handleUpgrade("pro", user?.id || "")}
+              <button onClick={() => handleUpgrade("pro")}
                 style={{ marginTop: 24, width: "100%", background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
                 onMouseEnter={e => e.currentTarget.style.background = C.accentDark}
                 onMouseLeave={e => e.currentTarget.style.background = C.accent}>
@@ -4383,7 +4383,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
                   <span style={{ color: "#D4AF37", fontWeight: 700 }}>✓</span> {f}
                 </div>
               ))}
-              <button onClick={() => handleUpgrade("premium", user?.id || "")}
+              <button onClick={() => handleUpgrade("premium")}
                 style={{ marginTop: 24, width: "100%", background: "#D4AF37", color: "#0A0A0E", border: "none", borderRadius: 12, padding: "12px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
                 onMouseEnter={e => e.currentTarget.style.opacity = "0.9"}
                 onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
