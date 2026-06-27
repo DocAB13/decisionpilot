@@ -4332,7 +4332,66 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
           </div>
         </div>
 
-        {/* Pricing — hidden until launch */}
+        {/* Pricing Section */}
+        <div style={{ marginBottom: 80 }}>
+          <div style={{ textAlign: "center", marginBottom: 40 }}>
+            <h2 style={{ fontSize: "clamp(24px, 3vw, 38px)", fontWeight: 900, color: C.text, margin: "0 0 12px", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+              Simple, transparent pricing
+            </h2>
+            <p style={{ color: C.muted, fontSize: 16, margin: 0 }}>Start free. Upgrade when you need more.</p>
+          </div>
+          <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, maxWidth: 900, margin: "0 auto" }}>
+            {/* Free */}
+            <div style={{ background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 20, padding: "32px 28px" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: C.muted, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Free</div>
+              <div style={{ fontSize: 36, fontWeight: 900, color: C.text, marginBottom: 4 }}>€0</div>
+              <div style={{ fontSize: 13, color: C.muted, marginBottom: 24 }}>forever</div>
+              {["Unlimited decisions", "66+ categories", "30 languages", "AI recommendations"].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, fontSize: 14, color: C.text }}>
+                  <span style={{ color: "#10B981", fontWeight: 700 }}>✓</span> {f}
+                </div>
+              ))}
+              <div style={{ marginTop: 24, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 12, padding: "10px", textAlign: "center", fontSize: 14, color: C.muted, fontWeight: 600 }}>
+                Current plan
+              </div>
+            </div>
+            {/* Pro */}
+            <div style={{ background: C.card, border: `2px solid ${C.accent}`, borderRadius: 20, padding: "32px 28px", position: "relative", boxShadow: `0 8px 32px ${C.accent}20` }}>
+              <div style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: C.accent, color: "#fff", fontSize: 11, fontWeight: 700, padding: "3px 14px", borderRadius: 20, letterSpacing: 0.8 }}>MOST POPULAR</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: C.accent, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Pro</div>
+              <div style={{ fontSize: 36, fontWeight: 900, color: C.text, marginBottom: 4 }}>€4.99</div>
+              <div style={{ fontSize: 13, color: C.muted, marginBottom: 24 }}>per month</div>
+              {["Everything in Free", "Priority AI responses", "Decision history", "Advanced comparisons", "No ads"].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, fontSize: 14, color: C.text }}>
+                  <span style={{ color: "#10B981", fontWeight: 700 }}>✓</span> {f}
+                </div>
+              ))}
+              <button onClick={() => handleUpgrade("pro", user?.id || "")}
+                style={{ marginTop: 24, width: "100%", background: C.accent, color: "#fff", border: "none", borderRadius: 12, padding: "12px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
+                onMouseEnter={e => e.currentTarget.style.background = C.accentDark}
+                onMouseLeave={e => e.currentTarget.style.background = C.accent}>
+                Upgrade to Pro →
+              </button>
+            </div>
+            {/* Premium */}
+            <div style={{ background: "#0A0A0E", border: "2px solid #D4AF37", borderRadius: 20, padding: "32px 28px" }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#D4AF37", letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Premium</div>
+              <div style={{ fontSize: 36, fontWeight: 900, color: "#fff", marginBottom: 4 }}>€9.99</div>
+              <div style={{ fontSize: 13, color: "#64748B", marginBottom: 24 }}>per month</div>
+              {["Everything in Pro", "Unlimited AI chat", "Custom decision templates", "API access", "Priority support"].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, fontSize: 14, color: "#CBD5E1" }}>
+                  <span style={{ color: "#D4AF37", fontWeight: 700 }}>✓</span> {f}
+                </div>
+              ))}
+              <button onClick={() => handleUpgrade("premium", user?.id || "")}
+                style={{ marginTop: 24, width: "100%", background: "#D4AF37", color: "#0A0A0E", border: "none", borderRadius: 12, padding: "12px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
+                onMouseEnter={e => e.currentTarget.style.opacity = "0.9"}
+                onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
+                Upgrade to Premium →
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════
