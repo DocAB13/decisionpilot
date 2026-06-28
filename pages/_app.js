@@ -1,3 +1,4 @@
+import '../lib/design-tokens.css'
 import { useState } from 'react'
 import Head from 'next/head'
 import { GoogleAnalytics } from '@next/third-parties/google'
