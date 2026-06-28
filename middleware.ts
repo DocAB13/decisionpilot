@@ -30,7 +30,20 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
+  const { pathname } = request.nextUrl
+
+  const protectedPaths = ['/dashboard', '/history', '/decision']
+  const authPaths = ['/auth/login', '/auth/signup']
+
+  if (user && authPaths.includes(pathname)) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  if (!user && protectedPaths.some(p => pathname.startsWith(p))) {
+    const returnUrl = encodeURIComponent(pathname)
+    return NextResponse.redirect(new URL(`/auth/login?return=${returnUrl}`, request.url))
+  }
 
   return response
 }
