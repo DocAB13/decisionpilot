@@ -4,11 +4,11 @@
 
 **Project:** DecisionOS
 
-**Current Phase:** Phase 3 — API
+**Current Phase:** Phase 4 — AI
 
-**Current IR01 Task:** IR01-027
+**Current IR01 Task:** IR01-041
 
-**Last Completed Task:** IR01-026 — full database verification
+**Last Completed Task:** IR01-040 — Phase 3 API verification
 
 **Repository:**
 - GitHub: Synced
@@ -20,8 +20,8 @@
 
 - Phase 1 — Foundation ✅
 - Phase 2 — Database ✅
-- Phase 3 — API (In Progress)
-- Phase 4 — AI
+- Phase 3 — API ✅
+- Phase 4 — AI (In Progress)
 - Phase 5 — Frontend
 - Phase 6 — Testing & Launch
 
@@ -48,12 +48,26 @@
 - IR01-024 — stuck in_analysis cleanup cron job
 - IR01-025 — subscriptions data integrity audit
 - IR01-026 — full database verification
+- IR01-027 — Supabase server client
+- IR01-028 — Supabase admin client
+- IR01-029 — Decision domain types, constants, and utilities
+- IR01-030 — POST /api/decision/create
+- IR01-031 — GET /api/decision/[id]
+- IR01-032 — DELETE /api/decision/[id]
+- IR01-033 — POST /api/decision/save
+- IR01-034 — POST /api/decision/state
+- IR01-035 — GET /api/decision/history
+- IR01-036 — POST /api/billing/checkout
+- IR01-037 — POST /api/billing/webhook
+- IR01-038 — POST /api/decision/chat (stub)
+- IR01-039 — GET /api/decision/chat/[id]
+- IR01-040 — Phase 3 API verification
 
 ---
 
 ## Next Task
 
-IR01-027
+IR01-041
 
 ---
 
