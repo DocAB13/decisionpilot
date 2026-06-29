@@ -5,6 +5,7 @@ import type {
   ConstraintItem,
   ConstraintsContent,
   ContextContent,
+  DecisionObject,
   FinalDecisionContent,
   GoalContent,
 } from '@/core/decision/Decision.types'
@@ -425,4 +426,127 @@ ${formatConstraints(input.constraints)}`,
     user:    `Generate the action plan for the chosen alternative "${s(chosen.chosen_alternative_name)}" in the required JSON format. The first character of your response must be '{'.`,
     version: PROMPT_VERSIONS.action_plan,
   }
+}
+
+// ---------------------------------------------------------------------------
+// Chat Engine system prompt builder (H11 §2.5, §6.1, §6.4, §7.2 FR-07.4, §8.4)
+// Reconstructed on every API call from the current Decision Object state.
+// Returns a string (not a PromptPair) — the Chat Engine manages user messages
+// separately as a history array (H11 §4.2).
+// ---------------------------------------------------------------------------
+
+export function buildChatSystemPrompt(decision: DecisionObject): string {
+  const components = decision.components
+
+  // ── Component formatters — "Not yet provided" when component is absent ──
+
+  function contextBlock(): string {
+    const raw = components['1_context']?.content
+    if (!raw) return 'CONTEXT: Not yet provided'
+    const ctx = raw as ContextContent
+    return `CONTEXT:\n${formatContext(ctx)}`
+  }
+
+  function goalBlock(): string {
+    const raw = components['2_goal']?.content
+    if (!raw) return 'GOAL: Not yet provided'
+    const goal = raw as GoalContent
+    return `GOAL:\n${formatGoal(goal)}`
+  }
+
+  function constraintsBlock(): string {
+    const raw = components['3_constraints']?.content
+    if (!raw) return 'CONSTRAINTS: Not yet provided'
+    const constraints = raw as ConstraintsContent
+    return `CONSTRAINTS:\n${formatConstraints(constraints)}`
+  }
+
+  function alternativesBlock(): string {
+    const raw = components['4_alternatives']?.content
+    if (!raw) return 'ALTERNATIVES: Not yet provided'
+    const alts = raw as AlternativesContent
+    return `ALTERNATIVES:\n${formatAlternatives(alts)}`
+  }
+
+  function recommendationBlock(): string {
+    const raw = components['7_recommendation']?.content
+    if (!raw) return 'CURRENT RECOMMENDATION: Not yet provided'
+    const rec = raw as Record<string, unknown>
+    const lines: string[] = ['CURRENT RECOMMENDATION:']
+    if (rec.tie_detected === true) {
+      lines.push('Tie detected: Yes')
+      if (typeof rec.tie_explanation === 'string') {
+        lines.push(`Tie explanation: ${rec.tie_explanation}`)
+      }
+    } else {
+      if (typeof rec.recommended_alternative_name === 'string') {
+        lines.push(`Recommended: ${rec.recommended_alternative_name}`)
+      }
+    }
+    if (typeof rec.primary_reasoning === 'string') {
+      lines.push(`Primary reasoning: ${rec.primary_reasoning}`)
+    }
+    if (typeof rec.honest_tradeoffs === 'string') {
+      lines.push(`Trade-offs: ${rec.honest_tradeoffs}`)
+    }
+    if (typeof rec.conditions_for_change === 'string') {
+      lines.push(`Conditions for change: ${rec.conditions_for_change}`)
+    }
+    if (typeof rec.confidence_level === 'string') {
+      lines.push(`Confidence: ${rec.confidence_level}`)
+      if (typeof rec.confidence_rationale === 'string') {
+        lines.push(`Confidence rationale: ${rec.confidence_rationale}`)
+      }
+    }
+    return lines.join('\n')
+  }
+
+  function finalDecisionBlock(): string {
+    const raw = components['8_final_decision']?.content
+    if (!raw) return ''
+    const fd = raw as FinalDecisionContent
+    const lines: string[] = [
+      'FINAL DECISION RECORDED:',
+      `Chosen alternative: ${s(fd.chosen_alternative_name)}`,
+      `Matches AI recommendation: ${fd.matches_recommendation ? 'Yes' : 'No'}`,
+    ]
+    if (fd.divergence_reason) {
+      lines.push(`Reason for diverging from recommendation: ${s(fd.divergence_reason)}`)
+    }
+    lines.push(`User confidence: ${fd.confidence}`)
+    return lines.join('\n')
+  }
+
+  const finalDecision = finalDecisionBlock()
+
+  return [
+    // 1. IDENTITY AND SCOPE (H11 §1.1, §1.2, §2.5, §4.3)
+    `IDENTITY AND SCOPE:
+You are the Chat Engine for DecisionOS, helping the user explore their decision conversationally.
+You are a thinking partner — not a decision-maker. The human is the decision-maker. This order is permanent.
+You operate within the scope of this Decision Object only. You cannot modify the Decision Object directly. You have no access to the internet, real-time data, or any information outside what the user has explicitly provided in this Decision Object.`,
+
+    // 2. DECISION CONTEXT (H11 §4.3, §4.4, §6.4) — all user text sanitized
+    [
+      `DECISION CONTEXT:
+Category: ${decision.category}
+Status: ${decision.status}`,
+      contextBlock(),
+      goalBlock(),
+      constraintsBlock(),
+      alternativesBlock(),
+      recommendationBlock(),
+      finalDecision || null,
+    ].filter(Boolean).join('\n\n'),
+
+    // 3. CHAT ENGINE RULES (H11 §1.1, §1.2, §2.5, §6.1, §7.2 FR-07.4, §8.4)
+    `CHAT ENGINE RULES:
+1. You are a thinking partner. The human is the decision-maker. You support, clarify, and help the user examine their assumptions — you do not decide for them.
+2. You operate within the scope of this Decision Object only. Do not reference information the user has not provided in this Decision Object.
+3. You do not have real-time data. You cannot access current prices, interest rates, market conditions, or any external information. Base everything on what the user has provided.
+4. When the user provides new material information in the conversation that is not already captured in the Decision Object — a new constraint, a change to their goal, or new details about an alternative — flag it explicitly and ask whether they want to formally update the relevant component. For example: "You've mentioned [new information]. This isn't in your current [component]. Would you like to update your [component] to include this? Updating it would allow the AI to re-analyse your decision with this new information."
+5. Do not volunteer advice on topics the user has not raised and that are not directly relevant to this decision. If the user mentions sensitive information in passing, do not analyse it unless they ask.
+6. Keep responses focused and concise.
+7. If you are uncertain, say so. Do not fabricate specifics or invent details the user has not provided.`,
+  ].join('\n\n')
 }
