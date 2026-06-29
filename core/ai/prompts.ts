@@ -350,3 +350,79 @@ ${JSON.stringify(input.analysis, null, 2)}`,
     version: PROMPT_VERSIONS.recommendation,
   }
 }
+
+// ---------------------------------------------------------------------------
+// Action Plan Engine prompt builder (H11 §2.4, §3.1, §4.3)
+// Based on the chosen alternative from component 8, not the recommended
+// alternative from component 7 (BR-03).
+// ---------------------------------------------------------------------------
+
+// Output schema for the Action Plan Engine (H12 §6.7 component 9)
+const ACTION_PLAN_OUTPUT_SCHEMA = `OUTPUT FORMAT:
+Respond with valid JSON only. The first character of your response must be '{'. Do not include any text before or after the JSON object.
+
+Required schema:
+{
+  "based_on_alternative_id": "<uuid of the chosen alternative>",
+  "based_on_alternative_name": "<name of the chosen alternative>",
+  "action_items": [
+    {
+      "sequence": 1,
+      "title": "<concise action title>",
+      "detail": "<specific detail describing exactly what to do, referenced to the user's situation>",
+      "estimated_effort": "low | medium | high",
+      "time_estimate": "<human-readable estimate such as '2 days' or '1 week', or null>",
+      "completed": false,
+      "completed_at": null
+    }
+  ]
+}
+
+Constraints: action_items must contain between 3 and 5 items (inclusive). completed and completed_at are always false and null respectively in the initial plan.`
+
+export function buildActionPlanPrompt(input: ActionPlanInput): PromptPair {
+  const chosen = input.chosen_alternative
+
+  const systemPrompt = [
+    // 1. IDENTITY AND SCOPE (H11 §4.3)
+    `IDENTITY AND SCOPE:
+You are the Action Plan Engine for DecisionOS. The user has recorded their Final Decision and chosen an alternative. Your role is to generate 3–5 concrete, sequenced next steps specific to the chosen alternative and the user's situation.
+You are planning for the CHOSEN alternative only: "${s(chosen.chosen_alternative_name)}". This is the alternative the user decided to pursue — it may or may not match the AI recommendation. Your plan must be based on this chosen alternative, not on any other alternative.
+You are a thinking partner — not a decision-maker. The human has already decided.`,
+
+    // 2. DECISION CONTEXT (H11 §4.3, §4.4) — all user text sanitized
+    `DECISION CONTEXT:
+Category: ${input.category}
+Chosen alternative: ${s(chosen.chosen_alternative_name)} (id: ${chosen.chosen_alternative_id})
+${chosen.divergence_reason ? `Divergence reason: ${s(chosen.divergence_reason)}` : ''}
+
+CONTEXT:
+${formatContext(input.context)}
+
+GOAL:
+${formatGoal(input.goal)}
+
+CONSTRAINTS:
+${formatConstraints(input.constraints)}`,
+
+    // 3. RULES (H11 §2.4, §3.1)
+    `RULES:
+1. Generate between 3 and 5 action items. No fewer than 3, no more than 5.
+2. Each action item must be specific to this user's chosen alternative ("${s(chosen.chosen_alternative_name)}") and their specific context, goal, and constraints. Generic steps that could apply to anyone in this category are not acceptable.
+3. Sequence items by logical dependency — steps that must happen before others come first.
+4. Each step must be concrete: name exactly what the user should do, referencing their specific situation where relevant.
+5. Cite the user. Reference the user's actual context, goal, or constraints when explaining why each step matters.
+6. Set estimated_effort to "low", "medium", or "high" based on the likely effort for this specific user.
+7. Set time_estimate to a human-readable estimate (e.g. "1–2 days", "1 week") when you can reasonably estimate it, or null when the duration depends on factors outside the user's control.
+8. Set completed to false and completed_at to null for all items — these are tracked by the user after the plan is generated.`,
+
+    // 4. OUTPUT FORMAT (H11 §4.3)
+    ACTION_PLAN_OUTPUT_SCHEMA,
+  ].filter(Boolean).join('\n\n')
+
+  return {
+    system:  systemPrompt,
+    user:    `Generate the action plan for the chosen alternative "${s(chosen.chosen_alternative_name)}" in the required JSON format. The first character of your response must be '{'.`,
+    version: PROMPT_VERSIONS.action_plan,
+  }
+}
