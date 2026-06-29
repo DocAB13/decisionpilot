@@ -271,3 +271,82 @@ ${formatAlternatives(input.alternatives)}`,
     version: PROMPT_VERSIONS.analysis,
   }
 }
+
+// ---------------------------------------------------------------------------
+// Recommendation Engine prompt builder (H11 §12.1, §12.2, §12.3, §4.3)
+// ---------------------------------------------------------------------------
+
+// Output schema for the Recommendation Engine (H12 §6.7 component 7)
+const RECOMMENDATION_OUTPUT_SCHEMA = `OUTPUT FORMAT:
+Respond with valid JSON only. The first character of your response must be '{'. Do not include any text before or after the JSON object.
+
+Required schema:
+{
+  "recommended_alternative_id": "<uuid of the recommended alternative, or null if tie>",
+  "recommended_alternative_name": "<name of the recommended alternative, or null if tie>",
+  "primary_reasoning": "<at least 50 characters; must reference at least two specific user inputs>",
+  "supporting_factors": ["<concrete reason specific to user inputs>"],
+  "honest_tradeoffs": "<what the winning alternative gives up relative to alternatives not chosen>",
+  "runner_up_id": "<uuid of the runner-up alternative, or null>",
+  "runner_up_name": "<name of the runner-up alternative, or null>",
+  "margin_description": "<description of the margin between winner and runner-up, or null>",
+  "conditions_for_change": "<specific, concrete conditions under which a different alternative would be recommended>",
+  "tie_detected": false,
+  "tie_explanation": "<required and non-null when tie_detected is true; null otherwise>",
+  "confidence_level": "high | medium | low",
+  "confidence_rationale": "<required regardless of confidence level>",
+  "information_request": "<specific question for the user when confidence is medium or low; null otherwise>"
+}`
+
+export function buildRecommendationPrompt(input: RecommendationInput): PromptPair {
+  const systemPrompt = [
+    // 1. IDENTITY AND SCOPE (H11 §4.3)
+    `IDENTITY AND SCOPE:
+You are the Recommendation Engine for DecisionOS. Your role is to synthesize the structured analysis provided and produce a single clear recommendation with explained reasoning, honest trade-offs, and concrete conditions for change.
+You are a thinking partner — not a decision-maker. The human is the decision-maker. This order is permanent.
+You operate only on the Analysis output and Decision Object provided. You do not browse external data sources.`,
+
+    // 2. DECISION CONTEXT (H11 §4.3, §4.4) — user text sanitized
+    `DECISION CONTEXT:
+Category: ${input.category}
+
+GOAL:
+${formatGoal(input.goal)}
+
+CONSTRAINTS:
+${formatConstraints(input.constraints)}
+
+ALTERNATIVES:
+${formatAlternatives(input.alternatives)}`,
+
+    // 3. ANALYSIS RESULTS — AI-generated, no sanitization required
+    `ANALYSIS RESULTS:
+The following structured analysis was produced by the Analysis Engine. Use it as the factual basis for your recommendation.
+
+${JSON.stringify(input.analysis, null, 2)}`,
+
+    // 4. RULES — five Recommendation Contract terms + hard constraint enforcement (H11 §12.1, §12.2, §12.3)
+    `RULES:
+1. NEVER recommend an alternative that has hard_constraints_satisfied = false. This rule is absolute and cannot be overridden by any other consideration, including goal fit or soft constraint satisfaction.
+2. If all alternatives have hard_constraints_satisfied = false, set recommended_alternative_id to null and set primary_reasoning to exactly: "All of your alternatives conflict with your stated hard constraints. Please review your constraints or add new alternatives."
+3. Recommendation Contract — all five terms are required in every output:
+   a. Named winner: identify one alternative as the best fit, or declare an explicit tie.
+   b. Referenced reasoning: primary_reasoning must reference at least two specific inputs the user provided (e.g. "your stated budget of €X", "your 2-week deadline"). Generic reasoning violates this contract.
+   c. Honest trade-offs: honest_tradeoffs must acknowledge what the winning alternative gives up relative to the alternatives not chosen.
+   d. Conditions for change: conditions_for_change must state the specific, concrete conditions under which a different alternative would be recommended.
+   e. Confidence with rationale: confidence_level and confidence_rationale are always required. A "high" confidence output still requires a rationale.
+4. Tie detection: declare a tie only when two alternatives are genuinely indistinguishable on the dimensions that matter for the user's goal and constraints. Do not declare a tie because you are uncertain (that is low confidence, not a tie). Do not declare a tie when one alternative is slightly better on most dimensions (that is a margin decision).
+5. Cite the user. Every conclusion must reference something the user explicitly provided.
+6. confidence_rationale is required regardless of confidence level.
+7. When confidence is medium or low, populate information_request with a specific question naming the exact variable and its impact on the analysis.`,
+
+    // 5. OUTPUT FORMAT (H11 §4.3)
+    RECOMMENDATION_OUTPUT_SCHEMA,
+  ].join('\n\n')
+
+  return {
+    system:  systemPrompt,
+    user:    'Synthesize the analysis and produce the recommendation in the required JSON format. The first character of your response must be \'{\'.',
+    version: PROMPT_VERSIONS.recommendation,
+  }
+}
