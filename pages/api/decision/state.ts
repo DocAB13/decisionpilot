@@ -2,10 +2,63 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { adminClient } from '@/lib/supabase/admin'
 import { validateStateTransition } from '@/core/decision/Decision.utils'
+import { callAI, parseAIJSON } from '@/core/ai/call'
+import { buildActionPlanPrompt, PROMPT_VERSIONS, type ActionPlanInput } from '@/core/ai/prompts'
+import type {
+  ContextContent,
+  ConstraintsContent,
+  FinalDecisionContent,
+  GoalContent,
+} from '@/core/decision/Decision.types'
+import type { DecisionCategory } from '@/core/decision/Decision.constants'
 
 // User-initiated target states only — system states (in_analysis, waiting_for_user)
 // are not user-requestable per H13 §3.5
 const USER_INITIATABLE = new Set(['draft', 'decision_made', 'executing', 'completed', 'archived'])
+
+// Validates Action Plan output per H11 §AAC-03: action_items must be 3–5 items.
+function validateActionPlanOutput(output: unknown): boolean {
+  if (typeof output !== 'object' || output === null || Array.isArray(output)) return false
+  const items = (output as Record<string, unknown>).action_items
+  return Array.isArray(items) && items.length >= 3 && items.length <= 5
+}
+
+// Append-only save for 9_action_plan (mirrors pattern in save.ts and analyze.ts).
+async function saveActionPlan(
+  decisionId: string,
+  content: unknown
+): Promise<void> {
+  await adminClient
+    .from('decision_components')
+    .update({ is_current: false })
+    .eq('decision_id', decisionId)
+    .eq('component', '9_action_plan')
+    .eq('is_current', true)
+
+  const { data: maxRow } = await adminClient
+    .from('decision_components')
+    .select('version')
+    .eq('decision_id', decisionId)
+    .eq('component', '9_action_plan')
+    .order('version', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  const nextVersion = maxRow ? maxRow.version + 1 : 1
+
+  const { error } = await adminClient
+    .from('decision_components')
+    .insert({
+      decision_id: decisionId,
+      component: '9_action_plan',
+      version: nextVersion,
+      content,
+      is_current: true,
+      prompt_version: PROMPT_VERSIONS.action_plan,
+    })
+
+  if (error) throw error
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // 1. Method guard
@@ -34,10 +87,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: `Invalid to_status: ${to_status}` })
   }
 
-  // 4. Ownership verify
+  // 4. Ownership verify — also fetch category for Action Plan Engine
   const { data: decision, error: fetchError } = await adminClient
     .from('decisions')
-    .select('id, status')
+    .select('id, status, category')
     .eq('id', decision_id)
     .eq('owner_id', user.id)
     .single()
@@ -98,13 +151,70 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (transitionError) throw transitionError
 
-    // 9. Action Plan Engine stub (Phase 4 wires the real call in IR01-050)
+    // ── State has committed. Action Plan Engine runs post-commit (H13 §3.5 steps 10–11). ──
+
     let action_plan: unknown = null
     let action_plan_error: string | undefined
 
     if (to_status === 'decision_made') {
-      // Stub: real implementation in IR01-050
-      action_plan = null
+      const decisionId = decision.id
+      try {
+        // Load components needed for Action Plan Engine
+        const { data: compRows } = await adminClient
+          .from('decision_components')
+          .select('component, content')
+          .eq('decision_id', decisionId)
+          .in('component', ['8_final_decision', '1_context', '2_goal', '3_constraints'])
+          .eq('is_current', true)
+
+        const compMap: Record<string, unknown> = {}
+        for (const row of compRows ?? []) {
+          compMap[row.component] = row.content
+        }
+
+        const chosenAlt = compMap['8_final_decision'] as FinalDecisionContent | undefined
+        const context   = compMap['1_context']        as ContextContent        | undefined
+        const goal      = compMap['2_goal']            as GoalContent           | undefined
+        const constraints = compMap['3_constraints']   as ConstraintsContent    | undefined
+
+        if (!chosenAlt || !context || !goal || !constraints) {
+          throw new Error('Missing required components for Action Plan Engine')
+        }
+
+        const actionPlanInput: ActionPlanInput = {
+          decision_id:        decisionId,
+          category:           decision.category as DecisionCategory,
+          chosen_alternative: chosenAlt,
+          context,
+          goal,
+          constraints,
+        }
+
+        const prompt = buildActionPlanPrompt(actionPlanInput)
+
+        const aiResult = await callAI({
+          system:    prompt.system,
+          user:      prompt.user,
+          maxTokens: 600,
+        })
+
+        let parsedPlan: unknown
+        try {
+          parsedPlan = parseAIJSON(aiResult.text)
+        } catch {
+          throw new Error('Action Plan Engine returned non-JSON output')
+        }
+
+        if (!validateActionPlanOutput(parsedPlan)) {
+          throw new Error('Action Plan output failed validation: action_items must contain 3–5 items')
+        }
+
+        await saveActionPlan(decisionId, parsedPlan)
+        action_plan = parsedPlan
+      } catch (err) {
+        console.error('[POST /api/decision/state] Action Plan Engine failed', err)
+        action_plan_error = 'The action plan could not be generated. The state transition was successful.'
+      }
     }
 
     return res.status(200).json({
