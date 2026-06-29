@@ -4,8 +4,48 @@ import { adminClient } from '@/lib/supabase/admin'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') return handleGet(req, res)
-  if (req.method === 'DELETE') return res.status(405).end() // implemented in IR01-032
+  if (req.method === 'DELETE') return handleDelete(req, res)
   return res.status(405).end()
+}
+
+async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
+  // 1. Auth check
+  const supabase = createClient({ req, res })
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return res.status(401).json({ error: 'Authentication required' })
+  }
+
+  const { id: decisionId } = req.query
+
+  // 2. Verify ownership — returns 404 whether decision is missing or belongs to another user
+  const { data: decision, error: fetchError } = await adminClient
+    .from('decisions')
+    .select('id')
+    .eq('id', decisionId as string)
+    .eq('owner_id', user.id)
+    .single()
+
+  if (fetchError || !decision) {
+    return res.status(404).json({ error: 'Decision not found' })
+  }
+
+  // 3. Delete — ON DELETE CASCADE removes all child rows automatically
+  try {
+    const { error: deleteError } = await adminClient
+      .from('decisions')
+      .delete()
+      .eq('id', decision.id)
+      .eq('owner_id', user.id)
+
+    if (deleteError) throw deleteError
+
+    return res.status(204).end()
+  } catch (err) {
+    console.error('[DELETE /api/decision/[id]]', err)
+    return res.status(500).json({ error: 'Failed to delete decision. Please try again.' })
+  }
 }
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
