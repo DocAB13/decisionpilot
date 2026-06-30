@@ -20,3 +20,10 @@ export function isClientWritable(component: string): boolean {
 export function isServerGenerated(component: string): boolean {
   return ['5_ai_analysis', '6_risks', '7_recommendation', '9_action_plan'].includes(component)
 }
+
+// Chat Engine allowed states (H11 AAC-04, FR-07.1)
+export const CHAT_ALLOWED_STATES = new Set(['draft', 'waiting_for_user', 'decision_made'])
+
+export function isChatAllowedForStatus(status: string): boolean {
+  return CHAT_ALLOWED_STATES.has(status)
+}

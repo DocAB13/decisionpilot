@@ -15,11 +15,13 @@ function isString(val: unknown): val is string {
   return typeof val === 'string'
 }
 
-// Validates the Analysis Engine output per H11 §3.1, §7.3, §9.2, §11.3, §12.2.
+// Validates the Analysis Engine output per H11 §3.1, §7.3, §9.2, §11.3, §12.2, AAC-01.
 // `alternativeIds` is the list of alternative UUIDs from the user's input (component 4).
+// `category` enables category-specific field enforcement (market_data_caveat, professional_advice_disclaimer).
 export function validateAnalysisOutput(
   output: unknown,
-  alternativeIds: string[]
+  alternativeIds: string[],
+  category?: string
 ): ValidationResult {
   const errors: string[] = []
 
@@ -139,10 +141,42 @@ export function validateAnalysisOutput(
     errors.push('confidence_rationale is required and must be non-empty')
   }
 
+  // Category-specific field enforcement (H11 AAC-01, §9.3)
+  if (category === 'financial' || category === 'technology' || category === 'insurance') {
+    if (!isString(output.market_data_caveat) || output.market_data_caveat.trim().length === 0) {
+      errors.push(
+        `market_data_caveat is required and must be non-empty for category "${category}" (H11 §9.3)`
+      )
+    }
+  }
+  if (category === 'financial' || category === 'health' || category === 'insurance') {
+    if (
+      !isString(output.professional_advice_disclaimer) ||
+      output.professional_advice_disclaimer.trim().length === 0
+    ) {
+      errors.push(
+        `professional_advice_disclaimer is required and must be non-empty for category "${category}" (H11 §8.3)`
+      )
+    }
+  }
+
   return { valid: errors.length === 0, errors }
 }
 
-// Validates the Recommendation Engine output per H11 §12.1, §12.2, §11.3.
+// Returns true when every alternative in the analysis has hard_constraints_satisfied = false.
+// Used to detect the conflict-resolution path (H11 §12.2, AAC-05).
+function allAlternativesViolateConstraints(analysis: unknown): boolean {
+  if (!isRecord(analysis)) return false
+  const perAlt = analysis.per_alternative
+  if (!isArray(perAlt) || perAlt.length === 0) return false
+  return perAlt.every(a => {
+    if (!isRecord(a)) return false
+    const cc = a.constraint_compliance
+    return isRecord(cc) && cc.hard_constraints_satisfied === false
+  })
+}
+
+// Validates the Recommendation Engine output per H11 §12.1, §12.2, §11.3, AAC-02, AAC-05.
 // `analysis` is the full 5_ai_analysis component content for cross-checking
 // the recommended alternative's constraint compliance.
 export function validateRecommendationOutput(
@@ -158,8 +192,12 @@ export function validateRecommendationOutput(
   const tieDetected = output.tie_detected === true
   const recommendedId = output.recommended_alternative_id
 
-  // Recommendation Contract term 1: named winner or explicit tie (H11 §12.1)
-  if (!tieDetected && (!isString(recommendedId) || recommendedId.trim().length === 0)) {
+  // When ALL alternatives violate hard constraints the conflict-resolution output is allowed:
+  // recommended_alternative_id may be null and primary_reasoning carries the conflict message (H11 §12.2).
+  const allViolate = allAlternativesViolateConstraints(analysis)
+
+  // Recommendation Contract term 1: named winner, explicit tie, or conflict-resolution null (H11 §12.1)
+  if (!tieDetected && !allViolate && (!isString(recommendedId) || recommendedId.trim().length === 0)) {
     errors.push('recommended_alternative_id must be non-null when tie_detected is false')
   }
 
@@ -200,12 +238,15 @@ export function validateRecommendationOutput(
     errors.push('honest_tradeoffs must be non-empty')
   }
 
-  // Recommendation Contract term 4: conditions_for_change non-empty (H11 §12.1)
+  // Recommendation Contract term 4: conditions_for_change ≥30 chars, specific (H11 §12.1, AAC-02)
   if (
     !isString(output.conditions_for_change) ||
-    output.conditions_for_change.trim().length === 0
+    output.conditions_for_change.trim().length < 30
   ) {
-    errors.push('conditions_for_change must be non-empty')
+    const len = isString(output.conditions_for_change)
+      ? output.conditions_for_change.trim().length
+      : 0
+    errors.push(`conditions_for_change must be at least 30 characters (found ${len})`)
   }
 
   // Recommendation Contract term 5: confidence_level and confidence_rationale (H11 §12.1, §11.3)
@@ -221,6 +262,57 @@ export function validateRecommendationOutput(
     output.confidence_rationale.trim().length === 0
   ) {
     errors.push('confidence_rationale is required and must be non-empty')
+  }
+
+  return { valid: errors.length === 0, errors }
+}
+
+// Validates the Action Plan Engine output per H11 §3.1, AAC-03.
+// Enforces the 3–5 item count and required per-item fields.
+export function validateActionPlanOutput(output: unknown): ValidationResult {
+  const errors: string[] = []
+
+  if (!isRecord(output)) {
+    return { valid: false, errors: ['Action Plan output is not a valid JSON object'] }
+  }
+
+  const items = output.action_items
+  if (!isArray(items)) {
+    return { valid: false, errors: ['action_items must be an array'] }
+  }
+
+  // 3–5 items required (H11 §3.1 Action Plan Engine, AAC-03)
+  if (items.length < 3 || items.length > 5) {
+    errors.push(`action_items must contain 3–5 items (found ${items.length})`)
+  }
+
+  const validEfforts = ['low', 'medium', 'high']
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i]
+    if (!isRecord(item)) {
+      errors.push(`action_items[${i}] is not an object`)
+      continue
+    }
+    if (typeof item.sequence !== 'number') {
+      errors.push(`action_items[${i}]: sequence must be a number`)
+    }
+    if (!isString(item.title) || item.title.trim().length === 0) {
+      errors.push(`action_items[${i}]: title must be non-empty`)
+    }
+    if (!isString(item.detail) || item.detail.trim().length === 0) {
+      errors.push(`action_items[${i}]: detail must be non-empty`)
+    }
+    if (!isString(item.estimated_effort) || !validEfforts.includes(item.estimated_effort)) {
+      errors.push(`action_items[${i}]: estimated_effort must be "low", "medium", or "high"`)
+    }
+    // completed and completed_at are always false/null in the initial plan (H11 Action Plan schema)
+    if (item.completed !== false) {
+      errors.push(`action_items[${i}]: completed must be false in the initial plan`)
+    }
+    if (item.completed_at !== null) {
+      errors.push(`action_items[${i}]: completed_at must be null in the initial plan`)
+    }
   }
 
   return { valid: errors.length === 0, errors }

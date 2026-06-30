@@ -3,10 +3,9 @@ import { createClient } from '@/lib/supabase/server'
 import { adminClient } from '@/lib/supabase/admin'
 import { sanitizeForPrompt } from '@/core/ai/sanitize'
 import { buildChatSystemPrompt } from '@/core/ai/prompts'
+import { isChatAllowedForStatus } from '@/core/decision/Decision.utils'
 import type { DecisionObject } from '@/core/decision/Decision.types'
 import type { ComponentName } from '@/core/decision/Decision.constants'
-
-const CHAT_ALLOWED_STATES = new Set(['draft', 'waiting_for_user', 'decision_made'])
 
 // Chat Engine structured output format (H11 §4.3 OUTPUT FORMAT)
 const CHAT_OUTPUT_FORMAT = `OUTPUT FORMAT:
@@ -95,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // 6. Verify Decision is in an allowed state
-  if (!CHAT_ALLOWED_STATES.has(decision.status)) {
+  if (!isChatAllowedForStatus(decision.status)) {
     return res.status(409).json({
       error: `Chat is not available for decisions in ${decision.status} state`,
     })

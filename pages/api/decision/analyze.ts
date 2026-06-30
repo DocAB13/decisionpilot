@@ -252,7 +252,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let analysisOutput: unknown
   try { analysisOutput = parseAIJSON(rawAnalysis) } catch { analysisOutput = null }
 
-  let analysisValid = validateAnalysisOutput(analysisOutput, alternativeIds)
+  let analysisValid = validateAnalysisOutput(analysisOutput, alternativeIds, decision.category)
 
   if (!analysisValid.valid) {
     try {

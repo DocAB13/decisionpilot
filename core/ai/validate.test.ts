@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { validateAnalysisOutput, validateRecommendationOutput } from './validate'
+import { validateAnalysisOutput, validateRecommendationOutput, validateActionPlanOutput } from './validate'
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -371,5 +371,250 @@ describe('validateRecommendationOutput — Recommendation Contract terms', () =>
   it('rejects non-object output', () => {
     const result = validateRecommendationOutput(null, makeValidAnalysis())
     expect(result.valid).toBe(false)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// validateAnalysisOutput — category-specific enforcement (H11 AAC-01)
+// ---------------------------------------------------------------------------
+
+describe('validateAnalysisOutput — category-specific fields', () => {
+  it('passes financial analysis with non-empty market_data_caveat and professional_advice_disclaimer', () => {
+    const output = makeValidAnalysis()
+    output.market_data_caveat = 'Verify current Irish mortgage rates before signing — rates may have changed since this analysis.'
+    output.professional_advice_disclaimer = 'This analysis supports a personal decision and is not financial advice. For decisions involving significant financial commitments, consult a qualified financial advisor.'
+    const result = validateAnalysisOutput(output, ALT_IDS, 'financial')
+    expect(result.valid).toBe(true)
+  })
+
+  it('rejects financial analysis with null market_data_caveat', () => {
+    const output = makeValidAnalysis() // market_data_caveat is null in base fixture
+    output.professional_advice_disclaimer = 'Not financial advice — consult a qualified advisor.'
+    const result = validateAnalysisOutput(output, ALT_IDS, 'financial')
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('market_data_caveat'))).toBe(true)
+  })
+
+  it('rejects financial analysis with empty market_data_caveat', () => {
+    const output = makeValidAnalysis()
+    output.market_data_caveat = '   '
+    output.professional_advice_disclaimer = 'Not financial advice — consult a qualified advisor.'
+    const result = validateAnalysisOutput(output, ALT_IDS, 'financial')
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('market_data_caveat'))).toBe(true)
+  })
+
+  it('rejects financial analysis with empty professional_advice_disclaimer', () => {
+    const output = makeValidAnalysis()
+    output.market_data_caveat = 'Verify current rates before finalizing.'
+    output.professional_advice_disclaimer = ''
+    const result = validateAnalysisOutput(output, ALT_IDS, 'financial')
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('professional_advice_disclaimer'))).toBe(true)
+  })
+
+  it('passes technology analysis with non-empty market_data_caveat (no disclaimer required)', () => {
+    const output = makeValidAnalysis()
+    output.market_data_caveat = 'Verify current software pricing — subscriptions may have changed since this analysis.'
+    const result = validateAnalysisOutput(output, ALT_IDS, 'technology')
+    expect(result.valid).toBe(true)
+  })
+
+  it('rejects technology analysis with null market_data_caveat', () => {
+    const output = makeValidAnalysis() // market_data_caveat is null
+    const result = validateAnalysisOutput(output, ALT_IDS, 'technology')
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('market_data_caveat'))).toBe(true)
+  })
+
+  it('rejects health analysis with empty professional_advice_disclaimer', () => {
+    const output = makeValidAnalysis()
+    output.professional_advice_disclaimer = ''
+    const result = validateAnalysisOutput(output, ALT_IDS, 'health')
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('professional_advice_disclaimer'))).toBe(true)
+  })
+
+  it('passes non-financial, non-technology analysis with null market_data_caveat (no requirement)', () => {
+    const output = makeValidAnalysis() // market_data_caveat is null
+    const result = validateAnalysisOutput(output, ALT_IDS, 'career')
+    expect(result.valid).toBe(true)
+  })
+
+  it('passes when no category is provided (no category-specific checks)', () => {
+    const output = makeValidAnalysis() // market_data_caveat and disclaimer are null
+    const result = validateAnalysisOutput(output, ALT_IDS)
+    expect(result.valid).toBe(true)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// validateRecommendationOutput — conditions_for_change ≥30 chars (H11 AAC-02)
+// ---------------------------------------------------------------------------
+
+describe('validateRecommendationOutput — conditions_for_change length', () => {
+  it('rejects conditions_for_change shorter than 30 characters', () => {
+    const rec = makeValidRecommendation()
+    rec.conditions_for_change = 'Budget changes.'
+    const result = validateRecommendationOutput(rec, makeValidAnalysis())
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('conditions_for_change'))).toBe(true)
+  })
+
+  it('passes conditions_for_change that is exactly 30 characters', () => {
+    const rec = makeValidRecommendation()
+    rec.conditions_for_change = 'If your budget exceeds €450/mo.' // 31 chars
+    const result = validateRecommendationOutput(rec, makeValidAnalysis())
+    expect(result.valid).toBe(true)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// validateRecommendationOutput — conflict-resolution path (H11 AAC-05)
+// All alternatives violate hard constraints → null recommended_alternative_id allowed
+// ---------------------------------------------------------------------------
+
+describe('validateRecommendationOutput — all-alternatives-violate conflict resolution', () => {
+  function makeAllViolateAnalysis() {
+    const a = makeValidAnalysis()
+    // Make alt-1 also violate constraints (alt-2 already does in the base fixture)
+    a.per_alternative[0].constraint_compliance.hard_constraints_satisfied = false
+    a.per_alternative[0].constraint_compliance.hard_constraint_violations = [
+      'Monthly cost €300 still exceeds the revised €200 hard budget constraint',
+    ]
+    return a
+  }
+
+  it('passes when recommended_alternative_id is null and all alternatives violate constraints', () => {
+    const rec = makeValidRecommendation()
+    rec.recommended_alternative_id = null as never
+    rec.recommended_alternative_name = null as never
+    rec.primary_reasoning =
+      'All of your alternatives conflict with your stated hard constraints. Please review your constraints or add new alternatives.'
+    const result = validateRecommendationOutput(rec, makeAllViolateAnalysis())
+    expect(result.valid).toBe(true)
+  })
+
+  it('still rejects null recommended_alternative_id when only SOME alternatives violate constraints', () => {
+    // Base makeValidAnalysis has alt-1 compliant and alt-2 non-compliant
+    const rec = makeValidRecommendation()
+    rec.recommended_alternative_id = null as never
+    rec.recommended_alternative_name = null as never
+    const result = validateRecommendationOutput(rec, makeValidAnalysis())
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('recommended_alternative_id'))).toBe(true)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// validateActionPlanOutput — AAC-03
+// ---------------------------------------------------------------------------
+
+function makeValidActionPlan(count = 3) {
+  return {
+    based_on_alternative_id: 'alt-1',
+    based_on_alternative_name: 'Option A',
+    action_items: Array.from({ length: count }, (_, i) => ({
+      sequence: i + 1,
+      title: `Step ${i + 1}: Take action`,
+      detail: `Specific detail for step ${i + 1}, referencing the user's chosen alternative Option A and their stated context.`,
+      estimated_effort: 'medium',
+      time_estimate: '1 week',
+      completed: false,
+      completed_at: null,
+    })),
+  }
+}
+
+describe('validateActionPlanOutput — valid outputs', () => {
+  it('passes a plan with exactly 3 items', () => {
+    const result = validateActionPlanOutput(makeValidActionPlan(3))
+    expect(result.valid).toBe(true)
+    expect(result.errors).toHaveLength(0)
+  })
+
+  it('passes a plan with exactly 5 items', () => {
+    const result = validateActionPlanOutput(makeValidActionPlan(5))
+    expect(result.valid).toBe(true)
+  })
+
+  it('passes a plan with 4 items (mid-range)', () => {
+    const result = validateActionPlanOutput(makeValidActionPlan(4))
+    expect(result.valid).toBe(true)
+  })
+})
+
+describe('validateActionPlanOutput — item count enforcement (H11 AAC-03)', () => {
+  it('rejects a plan with fewer than 3 items', () => {
+    const result = validateActionPlanOutput(makeValidActionPlan(2))
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('3–5 items'))).toBe(true)
+  })
+
+  it('rejects a plan with more than 5 items', () => {
+    const result = validateActionPlanOutput(makeValidActionPlan(6))
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('3–5 items'))).toBe(true)
+  })
+
+  it('rejects a plan with 0 items', () => {
+    const result = validateActionPlanOutput(makeValidActionPlan(0))
+    expect(result.valid).toBe(false)
+  })
+})
+
+describe('validateActionPlanOutput — per-item field validation', () => {
+  it('rejects an item with missing title', () => {
+    const plan = makeValidActionPlan(3)
+    plan.action_items[1].title = ''
+    const result = validateActionPlanOutput(plan)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('title'))).toBe(true)
+  })
+
+  it('rejects an item with missing detail', () => {
+    const plan = makeValidActionPlan(3)
+    plan.action_items[0].detail = ''
+    const result = validateActionPlanOutput(plan)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('detail'))).toBe(true)
+  })
+
+  it('rejects an item with invalid estimated_effort', () => {
+    const plan = makeValidActionPlan(3)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(plan.action_items[0] as any).estimated_effort = 'very_high'
+    const result = validateActionPlanOutput(plan)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('estimated_effort'))).toBe(true)
+  })
+
+  it('rejects an item with completed = true (not initial state)', () => {
+    const plan = makeValidActionPlan(3)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(plan.action_items[0] as any).completed = true
+    const result = validateActionPlanOutput(plan)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('completed'))).toBe(true)
+  })
+
+  it('rejects an item with non-null completed_at', () => {
+    const plan = makeValidActionPlan(3)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(plan.action_items[0] as any).completed_at = '2024-01-01T00:00:00Z'
+    const result = validateActionPlanOutput(plan)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('completed_at'))).toBe(true)
+  })
+
+  it('rejects non-object output', () => {
+    const result = validateActionPlanOutput('not an object')
+    expect(result.valid).toBe(false)
+  })
+
+  it('rejects output without action_items array', () => {
+    const result = validateActionPlanOutput({ based_on_alternative_id: 'alt-1' })
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('action_items'))).toBe(true)
   })
 })
