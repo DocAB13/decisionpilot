@@ -6,14 +6,14 @@
 
 **Current Phase:** Phase 5 — Frontend (in progress)
 
-**Current IR01 Task:** IR01-065 — Create Decision Wizard: `pages/decision/new.tsx`
+**Current IR01 Task:** IR01-066 — Create `features/decision-wizard/CategorySelect.tsx`
 
-**Last Completed Task:** IR01-064 — `pages/history.tsx` (full History page)
+**Last Completed Task:** IR01-065 — Decision Wizard entry page and container (`pages/decision/new.tsx`, `features/decision-wizard/Wizard.tsx`)
 
-**IR01 Progress:** 64 / 85 tasks complete (~75%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
+**IR01 Progress:** 65 / 85 tasks complete (~76%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
 
 **Repository:**
-- GitHub: Synced (pushed after IR01-060; commits through IR01-064 are local on `main`, not yet pushed)
+- GitHub: Synced (pushed after IR01-060; commits through IR01-065 are local on `main`, not yet pushed)
 - Vercel: Synced through IR01-060
 
 ---
@@ -23,6 +23,7 @@
 | Sprint | Scope | Status |
 |---|---|---|
 | Sprint 3 | IR01-063, IR01-064 | Completed |
+| Sprint 4 | IR01-065 (in progress, task-by-task) | In progress |
 
 ---
 
@@ -32,12 +33,12 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend — in progress (IR01-056 – IR01-064 done; IR01-065 – IR01-076 remaining)
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-065 done; IR01-066 – IR01-076 remaining)
 - Phase 6 — Testing & Launch — not started
 
 ---
 
-## IR01: In Progress (64 / 85 tasks)
+## IR01: In Progress (65 / 85 tasks)
 
 ### Phase 1 — Foundation
 - IR01-001 through IR01-012 ✅
@@ -87,8 +88,9 @@
 - IR01-062 — `components/ui/SaveIndicator.tsx` — commit `eada52a`
 - IR01-063 — `pages/dashboard.tsx` and `features/decision-history/History.tsx` — commit `d15f159`
 - IR01-064 — `pages/history.tsx` — commit `33b0dad`
+- IR01-065 — Decision Wizard entry page and container: `pages/decision/new.tsx`, `features/decision-wizard/Wizard.tsx` — commit `341a933`
 
-**Remaining in Phase 5:** IR01-065 through IR01-076 (Decision Wizard, Recommendation View, Decision Detail page, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
+**Remaining in Phase 5:** IR01-066 through IR01-076 (CategorySelect, Wizard steps, ProgressBar, Decision Detail page, Recommendation View, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
 
 ### Phase 6 — Testing & Launch
 - IR01-077 through IR01-085 — not started.
@@ -97,8 +99,8 @@
 
 ## Next Task
 
-**IR01-065 — Create Decision Wizard: `pages/decision/new.tsx`**
-Dependencies: IR01-060, IR01-030. Complexity: not yet started.
+**IR01-066 — Create `features/decision-wizard/CategorySelect.tsx`**
+Dependencies: IR01-057, IR01-030. Complexity: Low.
 
 ## Next Milestone
 
