@@ -4,15 +4,25 @@
 
 **Project:** DecisionOS
 
-**Current Phase:** IR01 completed
+**Current Phase:** Phase 5 — Frontend (in progress)
 
-**Current IR01 Task:** —
+**Current IR01 Task:** IR01-065 — Create Decision Wizard: `pages/decision/new.tsx`
 
-**Last Completed Task:** IR01-060 — PageLayout wrapper component
+**Last Completed Task:** IR01-064 — `pages/history.tsx` (full History page)
+
+**IR01 Progress:** 64 / 85 tasks complete (~75%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
 
 **Repository:**
-- GitHub: Synced (pushed after IR01-060)
-- Vercel: Synced
+- GitHub: Synced (pushed after IR01-060; commits through IR01-064 are local on `main`, not yet pushed)
+- Vercel: Synced through IR01-060
+
+---
+
+## Sprints
+
+| Sprint | Scope | Status |
+|---|---|---|
+| Sprint 3 | IR01-063, IR01-064 | Completed |
 
 ---
 
@@ -22,14 +32,12 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend ✅
-- Phase 6 — Testing & Launch ✅
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-064 done; IR01-065 – IR01-076 remaining)
+- Phase 6 — Testing & Launch — not started
 
 ---
 
-## IR01: Complete
-
-All 60 tasks completed (IR01-001 – IR01-060).
+## IR01: In Progress (64 / 85 tasks)
 
 ### Phase 1 — Foundation
 - IR01-001 through IR01-012 ✅
@@ -75,12 +83,26 @@ All 60 tasks completed (IR01-001 – IR01-060).
 - IR01-058 — TopNav layout component
 - IR01-059 — BottomNav mobile layout component
 - IR01-060 — PageLayout wrapper component
+- IR01-061 — `context/DecisionContext.tsx` and `hooks/useDecision.ts` — commit `0ad6cc9`
+- IR01-062 — `components/ui/SaveIndicator.tsx` — commit `eada52a`
+- IR01-063 — `pages/dashboard.tsx` and `features/decision-history/History.tsx` — commit `d15f159`
+- IR01-064 — `pages/history.tsx` — commit `33b0dad`
+
+**Remaining in Phase 5:** IR01-065 through IR01-076 (Decision Wizard, Recommendation View, Decision Detail page, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
+
+### Phase 6 — Testing & Launch
+- IR01-077 through IR01-085 — not started.
 
 ---
 
 ## Next Task
 
-—
+**IR01-065 — Create Decision Wizard: `pages/decision/new.tsx`**
+Dependencies: IR01-060, IR01-030. Complexity: not yet started.
+
+## Next Milestone
+
+IR02 has not been scoped yet — no `IR02` roadmap document exists in `DecisionOS/Implementation Reports/`. The current milestone remains completing IR01: finishing Phase 5 (Decision Wizard through Billing UI, IR01-065 – IR01-076) and then Phase 6 (Testing & Launch, IR01-077 – IR01-085). IR02 scope is expected to come from the Chief Product Architect & Product Manager once IR01 is closed out.
 
 ---
 
