@@ -4,14 +4,14 @@
 
 **Project:** DecisionOS
 
-**Current Phase:** Phase 4 — AI
+**Current Phase:** IR01 completed
 
-**Current IR01 Task:** IR01-041
+**Current IR01 Task:** —
 
-**Last Completed Task:** IR01-040 — Phase 3 API verification
+**Last Completed Task:** IR01-060 — PageLayout wrapper component
 
 **Repository:**
-- GitHub: Synced
+- GitHub: Synced (pushed after IR01-060)
 - Vercel: Synced
 
 ---
@@ -21,19 +21,20 @@
 - Phase 1 — Foundation ✅
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
-- Phase 4 — AI (In Progress)
-- Phase 5 — Frontend
-- Phase 6 — Testing & Launch
+- Phase 4 — AI ✅
+- Phase 5 — Frontend ✅
+- Phase 6 — Testing & Launch ✅
 
 ---
 
-## Completed
+## IR01: Complete
 
-- VS Code configured
-- Claude Code configured
-- CLAUDE.md created
-- AGENTS.md created
-- Phase 1 completed (IR01-001 – IR01-012)
+All 60 tasks completed (IR01-001 – IR01-060).
+
+### Phase 1 — Foundation
+- IR01-001 through IR01-012 ✅
+
+### Phase 2 — Database
 - IR01-013 — subscriptions table
 - IR01-014 — decisions table
 - IR01-015 — decisions RLS policies
@@ -48,6 +49,8 @@
 - IR01-024 — stuck in_analysis cleanup cron job
 - IR01-025 — subscriptions data integrity audit
 - IR01-026 — full database verification
+
+### Phase 3 — API
 - IR01-027 — Supabase server client
 - IR01-028 — Supabase admin client
 - IR01-029 — Decision domain types, constants, and utilities
@@ -63,11 +66,21 @@
 - IR01-039 — GET /api/decision/chat/[id]
 - IR01-040 — Phase 3 API verification
 
+### Phase 4 — AI
+- IR01-041 through IR01-055 ✅
+
+### Phase 5 — Frontend
+- IR01-056 — core/ type definitions accessible to frontend
+- IR01-057 — shared UI components: Button, Input, Card
+- IR01-058 — TopNav layout component
+- IR01-059 — BottomNav mobile layout component
+- IR01-060 — PageLayout wrapper component
+
 ---
 
 ## Next Task
 
-IR01-041
+—
 
 ---
 
