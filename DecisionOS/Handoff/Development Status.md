@@ -13,7 +13,7 @@
 **IR01 Progress:** 70 / 85 tasks complete (~82%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
 
 **Repository:**
-- GitHub: Synced (pushed after IR01-060; commits through IR01-070 are local on `main`, not yet pushed)
+- GitHub: Synced (pushed through IR01-070, commit `fa4a636`)
 - Vercel: Synced through IR01-060
 
 ---
