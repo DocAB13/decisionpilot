@@ -29,11 +29,12 @@ export interface PromptPair {
   version: PromptVersionString
 }
 
-// Interview Engine — Alternative Enrichment (H11 §2.1)
+// Interview Engine — Alternative Enrichment (H11 §2.1, IR01-052)
 export interface SuggestionInput {
   readonly decision_id: string
   readonly category: DecisionCategory
-  readonly goal: GoalContent
+  readonly goal?: GoalContent
+  readonly context_summary?: string   // First 200 chars of context background (H11 §4.2)
   readonly existing_alternatives: ReadonlyArray<Pick<AlternativeItem, 'name'>>
 }
 
@@ -425,6 +426,76 @@ ${formatConstraints(input.constraints)}`,
     system:  systemPrompt,
     user:    `Generate the action plan for the chosen alternative "${s(chosen.chosen_alternative_name)}" in the required JSON format. The first character of your response must be '{'.`,
     version: PROMPT_VERSIONS.action_plan,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Interview Engine — Alternative Suggestion prompt builder (H11 §2.1, §4.2, §4.3, §4.5)
+// Triggered when the user has entered at least one alternative in the Wizard.
+// ---------------------------------------------------------------------------
+
+const SUGGESTION_OUTPUT_SCHEMA = `OUTPUT FORMAT:
+Respond with valid JSON only. The first character of your response must be '{'. Do not include any text before or after the JSON object.
+
+Required schema:
+{
+  "suggestions": [
+    {
+      "name": "<concise alternative name, 2–8 words>",
+      "one_line_rationale": "<one sentence: why this alternative fits this user's specific situation>"
+    }
+  ]
+}
+
+Constraints: suggestions must contain between 0 and 3 items. Return fewer if you cannot identify meaningful distinct options — 1 strong suggestion is better than 3 weak ones. Never include alternatives that duplicate or closely overlap with the alternatives already listed.`
+
+export function buildSuggestionPrompt(input: SuggestionInput): PromptPair {
+  const existingList = input.existing_alternatives.length > 0
+    ? input.existing_alternatives.map((a, i) => `${i + 1}. ${s(a.name)}`).join('\n')
+    : 'None yet'
+
+  const contextSection = input.context_summary
+    ? `CONTEXT SUMMARY:\n${s(input.context_summary)}`
+    : null
+
+  const goalSection = input.goal
+    ? `GOAL:\n${formatGoal(input.goal)}`
+    : null
+
+  const systemPrompt = [
+    // 1. IDENTITY AND SCOPE (H11 §4.3)
+    `IDENTITY AND SCOPE:
+You are the Interview Engine for DecisionOS. Your role is to suggest up to 3 additional alternatives the user may not have considered, given their decision category and current inputs.
+You are a thinking partner — not a decision-maker. The human is the decision-maker.
+You operate only within the information provided. Do not invent specifics, claim real-time data, or reference external sources.`,
+
+    // 2. DECISION CONTEXT (H11 §4.3, §4.4) — all user text sanitized
+    [
+      `DECISION CONTEXT:
+Category: ${input.category}`,
+      contextSection,
+      goalSection,
+      `EXISTING ALTERNATIVES (do not duplicate these):
+${existingList}`,
+    ].filter(Boolean).join('\n\n'),
+
+    // 3. RULES (H11 §1.1, §1.3, §9.2)
+    `RULES:
+1. Suggest between 0 and 3 alternatives. Return an empty array if no meaningful additional options exist.
+2. Never suggest an alternative that duplicates or closely overlaps with an existing alternative — even if named differently.
+3. Each suggestion must be realistic and specific to the ${input.category} decision category.
+4. Each suggestion must be distinct from every other suggestion in your response.
+5. The one_line_rationale must reference something specific to this user's situation. Do not write generic rationales that could apply to anyone in this category.
+6. Do not invent facts. Do not claim current prices, rates, or availability you cannot know.`,
+
+    // 4. OUTPUT FORMAT (H11 §4.3)
+    SUGGESTION_OUTPUT_SCHEMA,
+  ].filter(Boolean).join('\n\n')
+
+  return {
+    system:  systemPrompt,
+    user:    `Suggest up to 3 additional alternatives for this ${input.category} decision that are not already listed. The first character of your response must be '{'.`,
+    version: PROMPT_VERSIONS.interview_suggestions,
   }
 }
 
