@@ -6,14 +6,14 @@
 
 **Current Phase:** Phase 5 — Frontend (in progress)
 
-**Current IR01 Task:** IR01-069 — Create `pages/decision/[id].tsx` and `DecisionContext` provider
+**Current IR01 Task:** IR01-070 — Create `components/ui/AnalysisLoading.tsx`
 
-**Last Completed Task:** IR01-068 — `components/ui/ProgressBar.tsx`
+**Last Completed Task:** IR01-069 — `pages/decision/[id].tsx` (Decision Object view page)
 
-**IR01 Progress:** 68 / 85 tasks complete (~80%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
+**IR01 Progress:** 69 / 85 tasks complete (~81%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
 
 **Repository:**
-- GitHub: Synced (pushed after IR01-060; commits through IR01-068 are local on `main`, not yet pushed)
+- GitHub: Synced (pushed after IR01-060; commits through IR01-069 are local on `main`, not yet pushed)
 - Vercel: Synced through IR01-060
 
 ---
@@ -23,7 +23,7 @@
 | Sprint | Scope | Status |
 |---|---|---|
 | Sprint 3 | IR01-063, IR01-064 | Completed |
-| Sprint 4 | IR01-065, IR01-066, IR01-067, IR01-068 (in progress, task-by-task) | In progress |
+| Sprint 4 | IR01-065, IR01-066, IR01-067, IR01-068, IR01-069 (in progress, task-by-task) | In progress |
 
 ---
 
@@ -33,12 +33,12 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend — in progress (IR01-056 – IR01-068 done; IR01-069 – IR01-076 remaining)
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-069 done; IR01-070 – IR01-076 remaining)
 - Phase 6 — Testing & Launch — not started
 
 ---
 
-## IR01: In Progress (68 / 85 tasks)
+## IR01: In Progress (69 / 85 tasks)
 
 ### Phase 1 — Foundation
 - IR01-001 through IR01-012 ✅
@@ -92,8 +92,9 @@
 - IR01-066 — `features/decision-wizard/CategorySelect.tsx` — commit `740453e`
 - IR01-067 — Wizard steps: `ContextStep.tsx`, `GoalStep.tsx`, `ConstraintsStep.tsx`, `AlternativesStep.tsx` — commit `16f52df`
 - IR01-068 — `components/ui/ProgressBar.tsx` — commit `62b2dbc`
+- IR01-069 — `pages/decision/[id].tsx` (Decision Object view page; minor Wizard.tsx update to pass `anonymous_token` through) — commit `4ac315c`
 
-**Remaining in Phase 5:** IR01-069 through IR01-076 (Decision Detail page, Recommendation View, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
+**Remaining in Phase 5:** IR01-070 through IR01-076 (AnalysisLoading, RecommendationView, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
 
 ### Phase 6 — Testing & Launch
 - IR01-077 through IR01-085 — not started.
@@ -102,8 +103,8 @@
 
 ## Next Task
 
-**IR01-069 — Create `pages/decision/[id].tsx` and `DecisionContext` provider**
-Dependencies: IR01-061, IR01-060, IR01-031. Complexity: High.
+**IR01-070 — Create `components/ui/AnalysisLoading.tsx`**
+Dependencies: IR01-005. Complexity: Low.
 
 ## Next Milestone
 
