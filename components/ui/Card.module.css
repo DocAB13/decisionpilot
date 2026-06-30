@@ -1,0 +1,25 @@
+/* Card — H08 §7 */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6); /* 24px desktop */
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Elevated variant — uses shadow-md immediately */
+.elevated {
+  box-shadow: var(--shadow-md);
+}
+
+/* Mobile: 16px padding — H08 §7 */
+@media (max-width: 767px) {
+  .card {
+    padding: var(--space-4);
+  }
+}

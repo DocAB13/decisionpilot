@@ -1,0 +1,114 @@
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+/* Sizes — H08 §7 */
+.md {
+  height: 40px;
+  padding: 10px 18px;
+  font-size: var(--text-sm);
+}
+
+.lg {
+  height: 48px;
+  padding: 12px 24px;
+  font-size: var(--text-base);
+}
+
+/* Variants — H08 §7 */
+.primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+.primary:hover:not(:disabled) {
+  background: var(--color-accent-dark);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--color-accent);
+  border: 1.5px solid var(--color-accent);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--color-accent-light);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-accent);
+  border: none;
+}
+.ghost:hover:not(:disabled) {
+  background: var(--color-accent-light);
+}
+
+.danger {
+  background: var(--color-danger);
+  color: #fff;
+  border: none;
+}
+.danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+/* Disabled — H08 §7 */
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Loading: keep label invisible for stable width, show spinner on top */
+.label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.loading .label {
+  visibility: hidden;
+}
+
+/* Spinner — H08 §7 */
+.spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner::after {
+  content: '';
+  display: block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--radius-full);
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner::after {
+    animation-duration: 0.01ms;
+  }
+}
