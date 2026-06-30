@@ -3,6 +3,7 @@ import type { GetServerSideProps } from 'next'
 import type { JSX } from 'react'
 
 import { PageLayout } from '@/components/layout/PageLayout'
+import { AnalysisLoading } from '@/components/ui/AnalysisLoading'
 import { Card } from '@/components/ui/Card'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { DecisionProvider } from '@/context/DecisionContext'
@@ -99,13 +100,8 @@ function DecisionRouter(): JSX.Element {
     case DecisionStatus.DRAFT:
       return <WizardSteps decision={decision} />
 
-    // AnalysisLoading lands in IR01-070 — minimal placeholder until then.
     case DecisionStatus.IN_ANALYSIS:
-      return (
-        <Card className={styles.placeholderCard}>
-          <p>Your analysis is underway. This usually takes 10–20 seconds.</p>
-        </Card>
-      )
+      return <AnalysisLoading category={decision.category} title={decision.title} />
 
     // RecommendationView lands in IR01-071 — minimal placeholder until then.
     case DecisionStatus.WAITING_FOR_USER:
