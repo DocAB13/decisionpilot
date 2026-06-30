@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -ExecutionPolicy Bypass -File .\\notify.ps1",
+            "if": "Bash(git commit*)",
+            "shell": "powershell",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
