@@ -38,11 +38,12 @@ export interface SuggestionInput {
   readonly existing_alternatives: ReadonlyArray<Pick<AlternativeItem, 'name'>>
 }
 
-// Interview Engine — Conflict Detection (H11 §2.6)
+// Interview Engine — Conflict Detection (H11 §2.6, IR01-053)
 export interface ConflictInput {
   readonly decision_id: string
   readonly goal: GoalContent
   readonly hard_constraints: ReadonlyArray<ConstraintItem>
+  readonly alternatives?: ReadonlyArray<Pick<AlternativeItem, 'name' | 'user_notes'>>
 }
 
 // Analysis Engine (H11 §2.2, §3.1): category, context, goal, constraints, alternatives
@@ -496,6 +497,97 @@ ${existingList}`,
     system:  systemPrompt,
     user:    `Suggest up to 3 additional alternatives for this ${input.category} decision that are not already listed. The first character of your response must be '{'.`,
     version: PROMPT_VERSIONS.interview_suggestions,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Interview Engine — Conflict Detection prompt builder (H11 §2.6, §4.3, §4.5)
+// Checks for mathematical, logical, or likely conflicts between the user's goal
+// and their hard constraints before analysis is triggered.
+// ---------------------------------------------------------------------------
+
+const CONFLICT_OUTPUT_SCHEMA = `OUTPUT FORMAT:
+Respond with valid JSON only. The first character of your response must be '{'. Do not include any text before or after the JSON object.
+
+When no conflict is detected:
+{
+  "conflict_detected": false,
+  "conflict_description": null,
+  "conflict_type": null
+}
+
+When a conflict is detected:
+{
+  "conflict_detected": true,
+  "conflict_description": "<specific description naming the exact goal statement and constraint that conflict>",
+  "conflict_type": "mathematical | logical | likely"
+}
+
+conflict_type definitions:
+- "mathematical": A constraint contains a numerical value that makes it impossible for any listed alternative to satisfy (e.g., budget constraint of €200 when the cheapest alternative costs €500).
+- "logical": The goal statement and a hard constraint are structurally incompatible — satisfying one makes satisfying the other impossible by definition (e.g., goal is "fully remote work" + constraint is "must remain in current in-office role").
+- "likely": A probable structural incompatibility is apparent from the semantics, even without precise numbers.`
+
+export function buildConflictDetectionPrompt(input: ConflictInput): PromptPair {
+  const constraintList = input.hard_constraints.length > 0
+    ? input.hard_constraints
+        .map((c, i) => {
+          const base = `${i + 1}. [${c.type.toUpperCase()}] ${s(c.description)}`
+          const value = c.value
+            ? `   Value: ${s(c.value)}${c.unit ? ' ' + s(c.unit) : ''}`
+            : null
+          return [base, value].filter(Boolean).join('\n')
+        })
+        .join('\n')
+    : 'None'
+
+  const alternativesSection = input.alternatives && input.alternatives.length > 0
+    ? `ALTERNATIVES:\n${input.alternatives
+        .map((a, i) => {
+          const base = `${i + 1}. ${s(a.name)}`
+          const notes = a.user_notes ? `   Notes: ${s(a.user_notes)}` : null
+          return [base, notes].filter(Boolean).join('\n')
+        })
+        .join('\n')}`
+    : null
+
+  const systemPrompt = [
+    // 1. IDENTITY AND SCOPE (H11 §4.3)
+    `IDENTITY AND SCOPE:
+You are the Interview Engine for DecisionOS, performing a structural conflict check.
+Your role is to identify whether there is a mathematical, logical, or likely conflict between the user's stated goal and their hard constraints — not to evaluate the quality of the decision or the alternatives.
+You are a thinking partner — not a decision-maker. The human is the decision-maker.
+You operate only within the information provided.`,
+
+    // 2. DECISION CONTEXT (H11 §4.3, §4.4) — all user text sanitized
+    [
+      `DECISION CONTEXT:
+
+PRIMARY GOAL:
+${formatGoal(input.goal)}
+
+HARD CONSTRAINTS (must be satisfied):
+${constraintList}`,
+      alternativesSection,
+    ].filter(Boolean).join('\n\n'),
+
+    // 3. RULES (H11 §2.6, §4.3)
+    `RULES:
+1. Check only for structural conflicts between the GOAL and HARD CONSTRAINTS. Do not evaluate soft constraints, trade-offs, or the quality of alternatives.
+2. A mathematical conflict exists when a numerical constraint makes it impossible for any listed alternative to satisfy the constraint. Identify this only when actual numbers are present and clearly conflict.
+3. A logical conflict exists when the goal statement and a hard constraint are structurally incompatible by definition — satisfying one makes satisfying the other impossible.
+4. A likely conflict exists when a probable structural incompatibility is apparent from the semantics even without precise numbers.
+5. If you are uncertain whether a conflict exists, return conflict_detected: false. Only flag genuine structural problems, not planning challenges or trade-offs.
+6. The conflict_description must name the specific goal statement and the specific constraint that conflict. Do not use generic language.`,
+
+    // 4. OUTPUT FORMAT (H11 §4.3)
+    CONFLICT_OUTPUT_SCHEMA,
+  ].filter(Boolean).join('\n\n')
+
+  return {
+    system:  systemPrompt,
+    user:    "Assess whether there is a structural conflict between the goal and hard constraints. The first character of your response must be '{'.",
+    version: PROMPT_VERSIONS.interview_conflict,
   }
 }
 
