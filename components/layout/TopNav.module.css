@@ -1,0 +1,106 @@
+/* TopNav — H08 §3, H09 §3 */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
+}
+
+/* 3-column grid: wordmark | center | actions
+   Equal 1fr side columns keep the center slot perfectly centred. */
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  height: 60px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Wordmark — H08 §3: "DecisionOS" in display font, links to / or /dashboard */
+.wordmark {
+  justify-self: start;
+  font-family: var(--font-display);
+  font-weight: var(--font-black);
+  font-size: var(--text-lg);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  letter-spacing: -0.3px;
+  transition: color var(--transition-fast);
+}
+
+.wordmark:hover {
+  color: var(--color-accent);
+}
+
+/* Center slot — Decision title on Decision-level pages (H09 §3) */
+.center {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-secondary);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
+}
+
+/* Right: auth-dependent actions */
+.actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Plan badge — H08 §7 Badge spec */
+.planBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* PRO — accent blue (H08 §5 accent tokens) */
+.planBadgePro {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-border);
+}
+
+/* PREMIUM — warning amber (H08 §5: "Premium badge" uses --color-warning) */
+.planBadgePremium {
+  background: var(--color-warning-light);
+  color: var(--color-warning);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+/* Mobile (≤767px): wordmark only; center and actions hidden — H08 §3, H09 §3 */
+@media (max-width: 767px) {
+  .inner {
+    grid-template-columns: 1fr;
+    padding: 0 var(--space-4);
+  }
+
+  .wordmark {
+    justify-self: center;
+  }
+
+  .center,
+  .actions {
+    display: none;
+  }
+}
