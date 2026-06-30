@@ -1,0 +1,85 @@
+/* CategorySelect — H08 §8 Wizard container width; H08 §7 Card spec for tiles */
+
+.container {
+  max-width: 720px;
+  margin: var(--space-16) auto;
+  text-align: center;
+}
+
+.heading {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.subheading {
+  margin: 0 0 var(--space-8);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Reset native button chrome; the global *:focus-visible rule
+   (lib/design-tokens.css) provides the visible keyboard focus ring. */
+.cardButton {
+  all: unset;
+  display: block;
+  cursor: pointer;
+  border-radius: var(--radius-lg);
+}
+
+.cardButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.cardButton:hover:not(:disabled) .card {
+  box-shadow: var(--shadow-md);
+}
+
+.icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+}
+
+.description {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.error {
+  margin-top: var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}

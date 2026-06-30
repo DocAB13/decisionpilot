@@ -3,9 +3,9 @@ import type { JSX } from 'react'
 import { useRouter } from 'next/router'
 
 import { Button } from '@/components/ui/Button'
-import { DecisionCategory } from '@/core/decision/Decision.constants'
 import type { DecisionCategory as DecisionCategoryType } from '@/core/decision/Decision.constants'
 
+import { CategorySelect } from './CategorySelect'
 import styles from './Wizard.module.css'
 
 interface Props {
@@ -20,20 +20,6 @@ interface CreateDecisionResponse {
 
 // H13 §2.1 — anonymous token is read from this key on login to transfer ownership
 const ANON_TOKEN_STORAGE_KEY = 'anon_decision_token'
-
-const CATEGORY_LABELS: Record<DecisionCategoryType, string> = {
-  [DecisionCategory.FINANCIAL]: 'Financial',
-  [DecisionCategory.TECHNOLOGY]: 'Technology',
-  [DecisionCategory.HEALTH]: 'Health',
-  [DecisionCategory.TRAVEL]: 'Travel',
-  [DecisionCategory.CAREER]: 'Career',
-  [DecisionCategory.INSURANCE]: 'Insurance',
-  [DecisionCategory.HOME]: 'Home',
-  [DecisionCategory.EDUCATION]: 'Education',
-  [DecisionCategory.LIFESTYLE]: 'Lifestyle',
-}
-
-const CATEGORY_OPTIONS = Object.values(DecisionCategory)
 
 export function Wizard({ category }: Props): JSX.Element {
   const router = useRouter()
@@ -73,27 +59,7 @@ export function Wizard({ category }: Props): JSX.Element {
   }, [category, createDecision])
 
   if (!category) {
-    return (
-      <div className={styles.picker}>
-        <h1 className={styles.heading}>What are you deciding?</h1>
-        <p className={styles.subheading}>Pick a category to start your Decision.</p>
-        <div className={styles.categoryGrid}>
-          {CATEGORY_OPTIONS.map(option => (
-            <Button
-              key={option}
-              variant="secondary"
-              size="lg"
-              loading={creatingCategory === option}
-              disabled={creatingCategory !== null && creatingCategory !== option}
-              onClick={() => createDecision(option)}
-            >
-              {CATEGORY_LABELS[option]}
-            </Button>
-          ))}
-        </div>
-        {error && <p className={styles.error}>{error}</p>}
-      </div>
-    )
+    return <CategorySelect onSelect={createDecision} creatingCategory={creatingCategory} error={error} />
   }
 
   return (
