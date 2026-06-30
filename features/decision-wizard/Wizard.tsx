@@ -40,10 +40,13 @@ export function Wizard({ category }: Props): JSX.Element {
         if (data.error || !data.decision) {
           throw new Error(data.error ?? 'Failed to start a decision')
         }
+        const destination = data.anonymous_token
+          ? `/decision/${data.decision.id}?anonymous_token=${data.anonymous_token}`
+          : `/decision/${data.decision.id}`
         if (data.anonymous_token) {
           localStorage.setItem(ANON_TOKEN_STORAGE_KEY, data.anonymous_token)
         }
-        await router.replace(`/decision/${data.decision.id}`)
+        await router.replace(destination)
       } catch (e) {
         setError(e instanceof Error ? e.message : 'Failed to start a decision')
         setCreatingCategory(null)
