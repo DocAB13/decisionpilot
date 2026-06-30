@@ -19,6 +19,15 @@
   --color-danger:        #EF4444;
   --color-danger-light:  #FEF2F2;
 
+  /* Decision State Colors — H08 §5, used in badges and indicators */
+  --color-state-draft:        #94A3B8;
+  --color-state-analysis:     #8B5CF6;
+  --color-state-waiting:      #F59E0B;
+  --color-state-made:         #1A56DB;
+  --color-state-executing:    #0EA5E9;
+  --color-state-completed:    #10B981;
+  --color-state-archived:     #CBD5E1;
+
   /* Typography */
   --font-body:    'Inter', system-ui, sans-serif;
   --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;

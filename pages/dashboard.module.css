@@ -1,0 +1,46 @@
+/* Dashboard — H08 §10 Layout: 3/12 filter panel + 9/12 list, 1200px max width */
+
+.layout {
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+.filterPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.filterHeading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.listColumn {
+  min-width: 0;
+}
+
+.heading {
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+/* Mobile: filter panel stacks above the list — H08 §10 collapses to a bottom sheet;
+   this MVP uses a simpler stacked layout to keep scope to the listed task files. */
+@media (max-width: 767px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
