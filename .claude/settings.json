@@ -2,12 +2,11 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Bash",
+        "matcher": "Bash|PowerShell",
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -ExecutionPolicy Bypass -File .\\notify.ps1",
-            "if": "Bash(git commit*)",
+            "command": "$j = [Console]::In.ReadToEnd() | ConvertFrom-Json; if ($j.tool_input.command -match 'git\\s+commit') { & '.\\notify.ps1' }",
             "shell": "powershell",
             "timeout": 10
           }
