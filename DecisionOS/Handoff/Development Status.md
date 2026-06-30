@@ -6,14 +6,14 @@
 
 **Current Phase:** Phase 5 — Frontend (in progress)
 
-**Current IR01 Task:** IR01-067 — Create Wizard steps: Context, Goal, Constraints, Alternatives
+**Current IR01 Task:** IR01-068 — Create `components/ui/ProgressBar.tsx` for Wizard
 
-**Last Completed Task:** IR01-066 — `features/decision-wizard/CategorySelect.tsx`
+**Last Completed Task:** IR01-067 — Wizard steps: `ContextStep.tsx`, `GoalStep.tsx`, `ConstraintsStep.tsx`, `AlternativesStep.tsx`
 
-**IR01 Progress:** 66 / 85 tasks complete (~78%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
+**IR01 Progress:** 67 / 85 tasks complete (~79%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
 
 **Repository:**
-- GitHub: Synced (pushed after IR01-060; commits through IR01-066 are local on `main`, not yet pushed)
+- GitHub: Synced (pushed after IR01-060; commits through IR01-067 are local on `main`, not yet pushed)
 - Vercel: Synced through IR01-060
 
 ---
@@ -23,7 +23,7 @@
 | Sprint | Scope | Status |
 |---|---|---|
 | Sprint 3 | IR01-063, IR01-064 | Completed |
-| Sprint 4 | IR01-065, IR01-066 (in progress, task-by-task) | In progress |
+| Sprint 4 | IR01-065, IR01-066, IR01-067 (in progress, task-by-task) | In progress |
 
 ---
 
@@ -33,12 +33,12 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend — in progress (IR01-056 – IR01-066 done; IR01-067 – IR01-076 remaining)
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-067 done; IR01-068 – IR01-076 remaining)
 - Phase 6 — Testing & Launch — not started
 
 ---
 
-## IR01: In Progress (66 / 85 tasks)
+## IR01: In Progress (67 / 85 tasks)
 
 ### Phase 1 — Foundation
 - IR01-001 through IR01-012 ✅
@@ -90,8 +90,9 @@
 - IR01-064 — `pages/history.tsx` — commit `33b0dad`
 - IR01-065 — Decision Wizard entry page and container: `pages/decision/new.tsx`, `features/decision-wizard/Wizard.tsx` — commit `341a933`
 - IR01-066 — `features/decision-wizard/CategorySelect.tsx` — commit `740453e`
+- IR01-067 — Wizard steps: `ContextStep.tsx`, `GoalStep.tsx`, `ConstraintsStep.tsx`, `AlternativesStep.tsx` — commit `16f52df`
 
-**Remaining in Phase 5:** IR01-067 through IR01-076 (Wizard steps, ProgressBar, Decision Detail page, Recommendation View, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
+**Remaining in Phase 5:** IR01-068 through IR01-076 (ProgressBar, Decision Detail page, Recommendation View, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
 
 ### Phase 6 — Testing & Launch
 - IR01-077 through IR01-085 — not started.
@@ -100,8 +101,8 @@
 
 ## Next Task
 
-**IR01-067 — Create Wizard steps: Context, Goal, Constraints, Alternatives**
-Dependencies: IR01-061, IR01-062, IR01-057, IR01-052, IR01-053. Complexity: High.
+**IR01-068 — Create `components/ui/ProgressBar.tsx` for Wizard**
+Dependencies: IR01-067. Complexity: Low.
 
 ## Next Milestone
 
