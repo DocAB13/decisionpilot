@@ -60,8 +60,8 @@ function makeValidAnalysis() {
       commonly_overlooked_risks: ['Auto-renewal contract clauses are common in SaaS agreements'],
       information_gaps: [],
     },
-    market_data_caveat: null,
-    professional_advice_disclaimer: null,
+    market_data_caveat: null as string | null,
+    professional_advice_disclaimer: null as string | null,
     analysis_confidence: 'high',
     confidence_rationale: 'All four input components are well-specified with clear budget, timeline, and geographic constraints.',
   }
