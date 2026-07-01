@@ -1,5 +1,28 @@
 # DecisionOS Changelog
 
+## IR01-073 — AI Chat Interface
+
+**Type:** Feature (new screen)
+
+**Summary:** Built the AI Chat Interface per H08 §11 and H13 §3.6, anchored to a Decision Object.
+
+**Changes:**
+- Added `features/decision-chat/Chat.tsx` + `Chat.module.css`: context label header ("You are discussing your [Category] decision," always visible), scrollable message area (user right/accent-light, AI left/surface), input pinned to the bottom (1000-char max, Enter to send), auto-scroll to the latest message.
+- Optimistic send: the user's message appears immediately with a "sending" state; a failed call marks it "Failed to send. Retry" inline rather than losing it.
+- "Thinking" indicator while waiting for the AI response.
+- Formal Update Prompt (H08 §11): when `material_change_detected` is true, an inline accent-tinted card appears with "Update Decision" / "Keep as context only" actions.
+- Pro+ gate lives inside `Chat.tsx` itself (checked via the existing `useSubscription` hook): Free plan sees an inline upgrade prompt instead of the message area and input, never a redirect away from the decision (H08 UX-P6).
+- Wired into `pages/decision/[id].tsx` via a `showChat` toggle on `DecisionRouter`: desktop renders a 40/60 split (current view alongside the Chat panel), mobile hides the left pane so Chat takes the full width — approximating H08 §11's full-screen mobile spec without any changes to `PageLayout`, `TopNav`, or `BottomNav`.
+- Updated `RecommendationView`'s "Explore with AI" / "Ask AI a question" buttons (added in IR01-071) to call the new `onOpenChat` prop instead of `router.push('/decision/[id]/chat')` — that route was never built and only `features/decision-chat/Chat.tsx` was ever specified as a new file for this task, so Chat renders in place instead of on a separate page.
+
+**Two honest adaptations, not new mechanisms:**
+- "Update Decision" calls the already-existing, already-valid `advanceState('draft')` and closes the chat panel, returning the user to the Wizard at their resume step to edit the affected component and resubmit. There's no dedicated "auto-apply this chat-detected change" endpoint in H13, so this reuses the same backward-edit-and-reanalyze path H08 §8 already describes rather than inventing one.
+- The API only returns a "source component" for `material_change_detected` responses, not for ordinary ones — so the generic "Based on your [component]" source label from H08 §11's Message Anatomy isn't shown on every AI message, since that data doesn't exist for the general case.
+
+**Verification:** `npx tsc --noEmit`, `npx next build`, and `npx vitest run` (153 tests) all pass.
+
+---
+
 ## IR01-072 — Final Decision capture and state advance
 
 **Type:** Feature (new screen) + bug fix (dependency)

@@ -1,5 +1,4 @@
 import type { JSX } from 'react'
-import { useRouter } from 'next/router'
 
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -20,6 +19,7 @@ interface Props {
   decision: DecisionObject
   onRecordDecision?: () => void
   onRetryRecommendation?: () => void
+  onOpenChat?: () => void
 }
 
 interface CombinedAlternative {
@@ -120,8 +120,12 @@ function AlternativeCard({ alt, isRecommended }: { alt: CombinedAlternative; isR
   )
 }
 
-export function RecommendationView({ decision, onRecordDecision, onRetryRecommendation }: Props): JSX.Element {
-  const router = useRouter()
+export function RecommendationView({
+  decision,
+  onRecordDecision,
+  onRetryRecommendation,
+  onOpenChat,
+}: Props): JSX.Element {
   const { plan } = useSubscription()
 
   const analysis = decision.components['5_ai_analysis']?.content as AIAnalysisContent | undefined
@@ -129,15 +133,9 @@ export function RecommendationView({ decision, onRecordDecision, onRetryRecommen
   const recommendation = decision.components['7_recommendation']?.content as RecommendationContent | undefined
 
   const categoryLabel = formatCategoryLabel(decision.category)
+  // Chat.tsx itself gates Free plan with an inline upgrade prompt (H08 UX-P6:
+  // upgrade should never be a wall) — this button always opens the panel.
   const canChat = plan === 'pro' || plan === 'premium'
-
-  const openChat = (): void => {
-    if (canChat) {
-      router.push(`/decision/${decision.id}/chat`)
-    } else {
-      router.push('/account')
-    }
-  }
 
   if (!analysis) {
     return (
@@ -233,7 +231,7 @@ export function RecommendationView({ decision, onRecordDecision, onRetryRecommen
       </div>
 
       <div className={styles.chatEntryDesktop}>
-        <Button variant="secondary" size="md" onClick={openChat}>
+        <Button variant="secondary" size="md" onClick={() => onOpenChat?.()}>
           {canChat ? 'Explore with AI' : 'Explore with AI (Pro)'}
         </Button>
       </div>
@@ -255,7 +253,7 @@ export function RecommendationView({ decision, onRecordDecision, onRetryRecommen
       </div>
 
       <div className={styles.mobileFooter}>
-        <Button variant="ghost" size="md" onClick={openChat}>
+        <Button variant="ghost" size="md" onClick={() => onOpenChat?.()}>
           {canChat ? 'Ask AI a question' : 'Ask AI a question (Pro)'}
         </Button>
         <Button variant="primary" size="lg" onClick={() => onRecordDecision?.()} style={{ width: '100%' }}>

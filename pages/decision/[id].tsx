@@ -14,6 +14,7 @@ import { ConstraintsStep } from '@/features/decision-wizard/ConstraintsStep'
 import { AlternativesStep } from '@/features/decision-wizard/AlternativesStep'
 import { RecommendationView } from '@/features/decision-wizard/RecommendationView'
 import { FinalDecisionForm } from '@/features/decision-wizard/FinalDecisionForm'
+import { Chat } from '@/features/decision-chat/Chat'
 import { DecisionStatus } from '@/core/decision/Decision.constants'
 import type { ActionPlanContent, DecisionObject } from '@/core/decision/Decision.types'
 
@@ -108,6 +109,7 @@ function ActionPlanSummary({ plan }: { plan: ActionPlanContent }): JSX.Element {
 function DecisionRouter(): JSX.Element {
   const { decision, isLoading, error } = useDecision()
   const [showFinalForm, setShowFinalForm] = useState(false)
+  const [showChat, setShowChat] = useState(false)
 
   if (isLoading) {
     return <p className={styles.loadingText}>Loading your decision...</p>
@@ -121,39 +123,64 @@ function DecisionRouter(): JSX.Element {
     )
   }
 
+  let content: JSX.Element
+
   switch (decision.status) {
     case DecisionStatus.DRAFT:
-      return <WizardSteps decision={decision} />
+      content = <WizardSteps decision={decision} />
+      break
 
     case DecisionStatus.IN_ANALYSIS:
-      return <AnalysisLoading category={decision.category} title={decision.title} />
+      content = <AnalysisLoading category={decision.category} title={decision.title} />
+      break
 
     case DecisionStatus.WAITING_FOR_USER:
-      return showFinalForm ? (
+      content = showFinalForm ? (
         <FinalDecisionForm onCancel={() => setShowFinalForm(false)} />
       ) : (
-        <RecommendationView decision={decision} onRecordDecision={() => setShowFinalForm(true)} />
+        <RecommendationView
+          decision={decision}
+          onRecordDecision={() => setShowFinalForm(true)}
+          onOpenChat={() => setShowChat(true)}
+        />
       )
+      break
 
     case DecisionStatus.DECISION_MADE: {
       const actionPlan = decision.components['9_action_plan']?.content as ActionPlanContent | undefined
-      return actionPlan ? (
+      content = actionPlan ? (
         <ActionPlanSummary plan={actionPlan} />
       ) : (
         <Card className={styles.placeholderCard}>
           <p>Your decision is recorded. The action plan couldn&apos;t be generated — you can still view your decision from the Dashboard.</p>
         </Card>
       )
+      break
     }
 
-    // Outcome / Reflection views land in IR01-073 – IR01-075 — minimal placeholder until then.
+    // Outcome / Reflection views land in IR01-074 – IR01-076 — minimal placeholder until then.
     default:
-      return (
+      content = (
         <Card className={styles.placeholderCard}>
           <p>This decision is in the &quot;{decision.status}&quot; state.</p>
         </Card>
       )
   }
+
+  // Chat entry point currently only reachable from RecommendationView (H08 §9) —
+  // showChat only ever gets set while status is waiting_for_user.
+  if (showChat) {
+    return (
+      <div className={styles.chatLayout}>
+        <div className={styles.chatLayoutMain}>{content}</div>
+        <div className={styles.chatLayoutPanel}>
+          <Chat decision={decision} onClose={() => setShowChat(false)} />
+        </div>
+      </div>
+    )
+  }
+
+  return content
 }
 
 export default function DecisionPage({ decisionId }: Props): JSX.Element {

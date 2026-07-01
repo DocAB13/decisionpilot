@@ -6,14 +6,14 @@
 
 **Current Phase:** Phase 5 — Frontend (in progress)
 
-**Current IR01 Task:** IR01-073 — Create `features/decision-chat/Chat.tsx`
+**Current IR01 Task:** IR01-074 — Create billing upgrade flow
 
-**Last Completed Task:** IR01-072 — Final Decision capture and state advance
+**Last Completed Task:** IR01-073 — `features/decision-chat/Chat.tsx`
 
-**IR01 Progress:** 73 / 86 tasks complete (~85%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted).
+**IR01 Progress:** 74 / 86 tasks complete (~86%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted).
 
 **Repository:**
-- GitHub: Synced through IR01-070 (commit `fa4a636`) — IR01-070b, IR01-071, IR01-072 committed locally, not yet pushed
+- GitHub: Synced through IR01-070 (commit `fa4a636`) — IR01-070b, IR01-071, IR01-072, IR01-073 committed locally, not yet pushed
 - Vercel: Synced through IR01-060
 
 ---
@@ -23,7 +23,7 @@
 | Sprint | Scope | Status |
 |---|---|---|
 | Sprint 3 | IR01-063, IR01-064 | Completed |
-| Sprint 4 | IR01-065 – IR01-070, IR01-070b, IR01-071, IR01-072 (in progress, task-by-task) | In progress |
+| Sprint 4 | IR01-065 – IR01-070, IR01-070b, IR01-071, IR01-072, IR01-073 (in progress, task-by-task) | In progress |
 
 ---
 
@@ -33,12 +33,12 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend — in progress (IR01-056 – IR01-072 done; IR01-073 – IR01-076 remaining)
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-073 done; IR01-074 – IR01-076 remaining)
 - Phase 6 — Testing & Launch — not started
 
 ---
 
-## IR01: In Progress (70 / 85 tasks)
+## IR01: In Progress (74 / 86 tasks)
 
 ### Phase 1 — Foundation
 - IR01-001 through IR01-012 ✅
@@ -97,8 +97,9 @@
 - IR01-070b — UI Consistency Pass: extracted the duplicate dashboard/history filter-layout CSS into `components/layout/FilterLayout.module.css`; tokenized the hardcoded Button danger-hover color (`--color-danger-dark`); rebuilt `pages/auth/login.tsx` and `pages/auth/signup.tsx` on the existing `Input`/`Button` components and a shared `Auth.module.css` shell instead of ~150 duplicated inline-style lines each; converted `SaveIndicator` from inline `CSSProperties` to a CSS Module
 - IR01-071 — `features/decision-wizard/RecommendationView.tsx` (Recommendation Screen per H08 §9/H03 component 7; wired into the `waiting_for_user` branch of `pages/decision/[id].tsx`). Added typed shapes for components 5/6/7 (`AIAnalysisContent`, `RisksContent`, `RecommendationContent`, etc.) to `core/decision/Decision.types.ts`, since none existed yet. `onRecordDecision`/`onRetryRecommendation` are optional callback props with no backend wiring yet — deferred to IR01-072 and to the post-MVP Recommendation-only retry endpoint (H13 §3.4 note) respectively.
 - IR01-072 — `features/decision-wizard/FinalDecisionForm.tsx` (component 8 capture + `decision_made` transition). Wired into `pages/decision/[id].tsx` via a local `showFinalForm` toggle; added a `decision_made` router case that displays the Action Plan (component 9) from `decision.components['9_action_plan']`. Added `ActionPlanContent`/`ActionPlanItem` types. Fixed the pre-existing `advanceState` field-name bug (`status` → `to_status`) in `context/DecisionContext.tsx` that this task depended on, and taught `advanceState` to merge a returned `action_plan` into local component state (keeping its `Promise<void>` signature, per H09).
+- IR01-073 — `features/decision-chat/Chat.tsx` (AI Chat per H08 §11/H13 §3.6). Wired into `pages/decision/[id].tsx` via a `showChat` toggle: desktop 40/60 split (current view + Chat panel), mobile hides the left pane so Chat takes the full width. `RecommendationView`'s "Explore with AI"/"Ask AI a question" buttons now call the new `onOpenChat` prop instead of `router.push` to a route that was never built. Free-tier gating lives inside `Chat.tsx` (inline upgrade prompt, no navigation away). "Update Decision" on a material-change prompt calls the existing `advanceState('draft')` rather than a new endpoint, since none exists for auto-applying a chat-detected change.
 
-**Remaining in Phase 5:** IR01-073 (`features/decision-chat/Chat.tsx`), IR01-074 (billing upgrade flow), IR01-075 (`useSubscription` integration into plan-gated features), IR01-076 (Phase 5 E2E verification).
+**Remaining in Phase 5:** IR01-074 (billing upgrade flow), IR01-075 (`useSubscription` integration into plan-gated features), IR01-076 (Phase 5 E2E verification).
 
 ### Phase 6 — Testing & Launch
 - IR01-077 through IR01-085 — not started.
@@ -107,8 +108,8 @@
 
 ## Next Task
 
-**IR01-073 — Create `features/decision-chat/Chat.tsx`**
-Per H08 §11 and H13 §3.6. Chat entry points already exist (gated on plan) in `RecommendationView` from IR01-071, pointing at `/decision/[id]/chat` — that route doesn't exist yet and will 404 until this task lands.
+**IR01-074 — Create billing upgrade flow**
+Per H13 §4.1. Extract `features/marketing/PricingSection.tsx` from the legacy Landing page pricing cards and align with H08. "Upgrade to Pro"/"Upgrade to Premium" calls `POST /api/billing/checkout`; verify `pages/success.tsx` reads `session_id` correctly.
 
 ## Next Milestone
 

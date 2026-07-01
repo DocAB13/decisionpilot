@@ -1,0 +1,193 @@
+/* Chat — H08 §11 AI Chat UX */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Header — H08 §11: context label always visible, never scrolls away */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.contextLabel {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-secondary);
+}
+
+.closeButton {
+  all: unset;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  transition: background var(--transition-fast);
+}
+
+.closeButton:hover {
+  background: var(--color-background);
+}
+
+/* Message area — H08 §11: scrollable, user right accent-light, AI left surface */
+.messageArea {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.message {
+  max-width: 80%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+}
+
+.messageUser {
+  align-self: flex-end;
+  background: var(--color-accent-light);
+}
+
+.messageAssistant {
+  align-self: flex-start;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+}
+
+.messageBody {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+}
+
+/* Failed send — H08 §18 Chat Message Send microinteraction */
+.retryButton {
+  all: unset;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-danger);
+}
+
+/* Formal Update Prompt — H08 §11 */
+.materialChangeCard {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-accent-light);
+  border: 1px solid var(--color-accent-border);
+  border-radius: var(--radius-lg);
+}
+
+.materialChangeText {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+}
+
+.materialChangeActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.statusText {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.errorText {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+
+/* Input area — H08 §11: pinned to bottom of panel */
+.inputArea {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.textarea {
+  flex: 1;
+  min-height: 44px;
+  max-height: 160px;
+  padding: 10px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  resize: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-light);
+}
+
+/* Pro+ gate — H08 UX-P6: honest, specific, non-urgent, no wall */
+.upgradePrompt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+}
+
+.upgradeHeading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+}
+
+.upgradeBody {
+  margin: 0 0 var(--space-2);
+  max-width: 40ch;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}

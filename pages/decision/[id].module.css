@@ -93,3 +93,34 @@
   font-size: var(--text-xs);
   color: var(--color-text-muted);
 }
+
+/* --- Chat layout — H08 §11: desktop 40/60 split, mobile full-screen --- */
+
+.chatLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.chatLayoutMain {
+  flex: 0 0 40%;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.chatLayoutPanel {
+  flex: 1 1 60%;
+  min-width: 0;
+  height: min(640px, calc(100vh - 160px));
+}
+
+@media (max-width: 767px) {
+  .chatLayoutMain {
+    display: none;
+  }
+
+  .chatLayoutPanel {
+    flex: 1 1 100%;
+    height: calc(100vh - 180px);
+  }
+}
