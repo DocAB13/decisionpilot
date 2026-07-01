@@ -141,6 +141,22 @@ export interface RecommendationContent {
   information_request: string | null
 }
 
+export interface ActionPlanItem {
+  sequence: number
+  title: string
+  detail: string
+  estimated_effort: 'low' | 'medium' | 'high'
+  time_estimate: string | null
+  completed: boolean
+  completed_at: string | null
+}
+
+export interface ActionPlanContent {
+  based_on_alternative_id: string
+  based_on_alternative_name: string
+  action_items: ActionPlanItem[]
+}
+
 export interface FinalDecisionContent {
   chosen_alternative_id: string
   chosen_alternative_name: string

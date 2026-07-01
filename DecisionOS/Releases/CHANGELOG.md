@@ -1,5 +1,26 @@
 # DecisionOS Changelog
 
+## IR01-072 — Final Decision capture and state advance
+
+**Type:** Feature (new screen) + bug fix (dependency)
+
+**Summary:** Built the Final Decision capture form (component 8) and the `decision_made` state transition, per the roadmap's IR01-072 spec.
+
+**Changes:**
+- Added `features/decision-wizard/FinalDecisionForm.tsx` + `FinalDecisionForm.module.css`: alternative selection (radio-card group per H08 §7, defaults to the recommended alternative), a `divergence_reason` field that appears only when the choice differs from the recommendation, and a `confident` / `uncertain` / `reluctant` confidence radio group.
+- Submit flow: `updateComponent('8_final_decision', ...)` then `advanceState('decision_made')`, exactly as specified. A failed `advanceState` call is caught and shown inline; the decision stays in `waiting_for_user` (no client-side rollback needed — the context only updates local status after a successful response).
+- Wired into `pages/decision/[id].tsx`: a local `showFinalForm` toggle switches the `waiting_for_user` branch between `RecommendationView` (its "Record My Decision" button now opens the form) and `FinalDecisionForm` (its Back button returns to the recommendation).
+- Added a `decision_made` router case that reads `decision.components['9_action_plan']` and displays the plan inline (title/detail/time-estimate per item), with a graceful fallback message if the Action Plan Engine failed — matching H13 §3.5's "state transition succeeds even if the action plan generation fails" behavior.
+- Added `ActionPlanContent` / `ActionPlanItem` types (component 9) to `core/decision/Decision.types.ts`, matching `ACTION_PLAN_OUTPUT_SCHEMA` in `core/ai/prompts.ts`.
+
+**Bug fix (existing code, a hard dependency of this task):** `context/DecisionContext.tsx`'s `advanceState` posted `{ decision_id, status: to }`, but `pages/api/decision/state.ts` reads `to_status` from the body — every `advanceState()` call 400'd with "to_status is required." This predates IR01-071 (introduced with `DecisionContext` in IR01-061) and had never been exercised until this task's submit flow needed it. Fixed the field name only. `advanceState`'s signature stays `Promise<void>`, unchanged from H09's frozen interface — instead of widening the return type to carry `action_plan`, `advanceState` now merges a returned `action_plan` into local component state the same way `updateComponent` already merges every other component, so `FinalDecisionForm`/the router can read it straight from `decision.components` once the call resolves.
+
+**Verification:** `npx tsc --noEmit`, `npx next build`, and `npx vitest run` (153 tests) all pass.
+
+**Deferred:** No component-completion interactivity (checking off action items, per H08 §18's strikethrough microinteraction) — the roadmap only calls for displaying the plan after the transition, not editing it. That belongs to a later Outcome/Reflection-adjacent task, not yet scoped in IR01.
+
+---
+
 ## IR01-071 — Recommendation Screen
 
 **Type:** Feature (new screen)

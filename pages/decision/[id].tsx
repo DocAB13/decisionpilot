@@ -13,8 +13,9 @@ import { GoalStep } from '@/features/decision-wizard/GoalStep'
 import { ConstraintsStep } from '@/features/decision-wizard/ConstraintsStep'
 import { AlternativesStep } from '@/features/decision-wizard/AlternativesStep'
 import { RecommendationView } from '@/features/decision-wizard/RecommendationView'
+import { FinalDecisionForm } from '@/features/decision-wizard/FinalDecisionForm'
 import { DecisionStatus } from '@/core/decision/Decision.constants'
-import type { DecisionObject } from '@/core/decision/Decision.types'
+import type { ActionPlanContent, DecisionObject } from '@/core/decision/Decision.types'
 
 import styles from './[id].module.css'
 
@@ -82,8 +83,31 @@ function WizardSteps({ decision }: { decision: DecisionObject }): JSX.Element {
   )
 }
 
+function ActionPlanSummary({ plan }: { plan: ActionPlanContent }): JSX.Element {
+  return (
+    <div className={styles.planWrap}>
+      <p className={styles.sectionLabel}>Your decision is recorded</p>
+      <h1 className={styles.planHeading}>Here&apos;s your action plan</h1>
+      <p className={styles.planSubheading}>Based on: {plan.based_on_alternative_name}</p>
+
+      <div className={styles.planList}>
+        {plan.action_items.map(item => (
+          <Card key={item.sequence}>
+            <p className={styles.planItemTitle}>
+              {item.sequence}. {item.title}
+            </p>
+            <p className={styles.planItemDetail}>{item.detail}</p>
+            {item.time_estimate && <p className={styles.planItemMeta}>Estimated time: {item.time_estimate}</p>}
+          </Card>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function DecisionRouter(): JSX.Element {
   const { decision, isLoading, error } = useDecision()
+  const [showFinalForm, setShowFinalForm] = useState(false)
 
   if (isLoading) {
     return <p className={styles.loadingText}>Loading your decision...</p>
@@ -105,12 +129,24 @@ function DecisionRouter(): JSX.Element {
       return <AnalysisLoading category={decision.category} title={decision.title} />
 
     case DecisionStatus.WAITING_FOR_USER:
-      // onRecordDecision / onRetryRecommendation wiring lands in IR01-072
-      // (Final Decision capture + state advance).
-      return <RecommendationView decision={decision} />
+      return showFinalForm ? (
+        <FinalDecisionForm onCancel={() => setShowFinalForm(false)} />
+      ) : (
+        <RecommendationView decision={decision} onRecordDecision={() => setShowFinalForm(true)} />
+      )
 
-    // Final Decision / Action Plan / Outcome / Reflection views land in
-    // IR01-072 – IR01-075 — minimal placeholder until then.
+    case DecisionStatus.DECISION_MADE: {
+      const actionPlan = decision.components['9_action_plan']?.content as ActionPlanContent | undefined
+      return actionPlan ? (
+        <ActionPlanSummary plan={actionPlan} />
+      ) : (
+        <Card className={styles.placeholderCard}>
+          <p>Your decision is recorded. The action plan couldn&apos;t be generated — you can still view your decision from the Dashboard.</p>
+        </Card>
+      )
+    }
+
+    // Outcome / Reflection views land in IR01-073 – IR01-075 — minimal placeholder until then.
     default:
       return (
         <Card className={styles.placeholderCard}>

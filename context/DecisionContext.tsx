@@ -125,11 +125,29 @@ export function DecisionProvider({ decisionId, children }: Props): JSX.Element {
       const res = await fetch('/api/decision/state', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ decision_id: decisionId, status: to }),
+        // Field name must match pages/api/decision/state.ts, which reads `to_status` (H13 §3.5).
+        body: JSON.stringify({ decision_id: decisionId, to_status: to }),
       })
-      const data: { error?: string } = await res.json()
+      const data: { error?: string; action_plan?: unknown } = await res.json()
       if (data.error) throw new Error(data.error)
-      setDecision(prev => (prev ? { ...prev, status: to } : prev))
+      setDecision(prev => {
+        if (!prev) return prev
+        const next = { ...prev, status: to }
+        // decision_made may return a generated Action Plan (component 9) alongside the
+        // transition — merge it in the same way updateComponent merges other components,
+        // so callers can read it straight from `decision.components` once this resolves.
+        if (data.action_plan) {
+          next.components = {
+            ...prev.components,
+            '9_action_plan': {
+              version: (prev.components['9_action_plan']?.version ?? 0) + 1,
+              content: data.action_plan,
+              updated_at: new Date().toISOString(),
+            },
+          }
+        }
+        return next
+      })
     },
     [decisionId]
   )
