@@ -1,5 +1,105 @@
 # DecisionOS Changelog
 
+## H19 — Glossary handbook document written
+
+**Type:** Documentation only — no code changed
+
+**Summary:** `DecisionOS/Company Handbook/H19 - Glossary.md` was a 3-line stub, the last of the six placeholder documents (H14–H19) now completed. Wrote the full glossary by reading H03 (The Decision Model) and H05 (Product Workflow) in full for the first time this session — the two documents defining the thirteen Decision components and the seven-state lifecycle precisely — plus H04's six System Layers (Infrastructure, Data, Intelligence, Decision, Experience, Interface), and consolidating terminology already surfaced while authoring H14/H16/H17/H18. No term was invented; every entry cites the Handbook section it restates.
+
+**Sections added:** Product Terms; Decision Lifecycle Terminology (the seven states plus lifecycle/transition vocabulary); AI Terminology; Technical Terms; Business Terminology; Acronyms (including the project's own ad hoc tracking IDs — CQ1/CQ2, UX1–3, IR01/IR02 — alongside standard ones like GDPR, RLS, JWT).
+
+**Files changed:** `DecisionOS/Company Handbook/H19 - Glossary.md` (written in full).
+
+---
+
+## H18 — Business Model handbook document written
+
+**Type:** Documentation only — no code changed
+
+**Summary:** `DecisionOS/Company Handbook/H18 - Business Model.md` was a 3-line stub (title + `Status: Draft`, same state as H19). Wrote the full document by consolidating the commercial model already specified across H01 (vision), H02 (principles), H06 Part 4/FR-11 (subscription tiers and business rules), and H07 (positioning, pricing rationale, acquisition, retention, revenue) into an executive-level reference — H07 remains the detailed source; H18 does not replace it. No new pricing, tier, or revenue mechanism was introduced.
+
+**Sections added:** Value Proposition; Customer Segments; Pricing Model (Free/Pro/Premium, BR-10's no-core-flow-gating rule); Revenue Model (subscriptions, affiliate, future API/institutional); Growth Strategy (acquisition phasing, retention mechanics); Cost Structure; Success Metrics; Risks; Assumptions; Known Gaps.
+
+**Known Gaps section (§10) — findings surfaced while writing, not fixed in this pass:**
+- No unit-economics/COGS document exists anywhere in the Handbook — §6 (Cost Structure) is qualitative only; no Vercel/Supabase/Anthropic/Stripe cost figures are documented, so gross margin cannot currently be calculated from Handbook sources.
+- No live production revenue yet — H07's own pre-launch criteria require production (not test-mode) payments before launch is complete, so §4's projections remain entirely forward-looking.
+- Cross-document principle-number drift: H07 (and other already-written documents) cite H02 principles by number that don't match H02's actual current numbering — a pre-existing inconsistency, flagged rather than silently renumbered.
+
+**Risks and Assumptions sections** were built from realities already on record elsewhere (solo-operator concentration risk per H14/H15; Anthropic dependency; the blocked pre-launch verification tasks per H16/H17; the `/privacy` legacy-copy drift already flagged in H14 §12.2) rather than speculative additions.
+
+**Files changed:** `DecisionOS/Company Handbook/H18 - Business Model.md` (written in full).
+
+---
+
+## H15 — Operations Handbook document written
+
+**Type:** Documentation only — no code changed
+
+**Summary:** `DecisionOS/Company Handbook/H15 - Operations Handbook.md` was a 3-line stub (title + `Status: Draft`, same state as H18/H19). Wrote the full document, consolidating operations already specified across H09 (§12 Deployment, §13 Environment Variables), H10 (§12 Error Logging, §14 Security Checklist, §17 Release Checklist), H12 (§10 Data Lifecycle, §11 Backup and Recovery), and H14 (§10 Incident Response), citing rather than duplicating. Verified against the live repo, not assumption: confirmed both pg_cron migration files exist in `supabase/migrations/` (`20260615000000_create_anonymous_cleanup_cron.sql`, `20260615000001_create_stuck_analysis_cleanup_cron.sql`) and re-checked `DecisionOS/Handoff/Development Status.md`'s repository sync note.
+
+**Sections added:** Scope; Environment Management; Secrets Management; Deployment; Backups and Recovery; Monitoring; Logging; Scheduled Jobs and Maintenance; Incident Handling; Release Process; Operational Checklist; Known Gaps.
+
+**Known Gaps section (§12) — findings surfaced while writing, not fixed in this pass:**
+- Vercel production is behind GitHub `main` — GitHub synced through IR01-070 (`fa4a636`) with IR01-070b–075c committed but not pushed; Vercel synced only through IR01-060. Production does not yet include Phase 5 frontend work from IR01-061 onward.
+- No monitoring/alerting service is live — the Sentry integration and 2%-failure-rate AI alert are specified (H10 §12.3) but not built; incident detection currently depends on manually checking Vercel/Supabase/Stripe dashboards.
+- `docs/adr/`, referenced by H10 §17.1's release checklist, does not exist yet.
+- No independent check that the two live pg_cron jobs are actually firing on schedule (vs. merely scheduled) has been performed.
+
+**Files changed:** `DecisionOS/Company Handbook/H15 - Operations Handbook.md` (written in full).
+
+---
+
+## H17 — Product Roadmap handbook document written
+
+**Type:** Documentation only — no code changed
+
+**Summary:** `DecisionOS/Company Handbook/H17 - Product Roadmap.md` was a 3-line stub (title + `Status: Draft`, same state as H15/H18/H19). Wrote the full document by collecting every "post-MVP" note already scattered across H01–H16 (grep-verified, not invented — H06 Part 6, H07 Parts 2/4/6, H09 §17, H10 §11/§12, H11 §13, H12 §14, H13) and sequencing them into v1.1/v1.2/long-term tiers using dependency logic already stated in those sources (e.g. Learning Pipeline explicitly needs MVP-collected Outcome/Reflection data first; Public API explicitly waits on product-market fit per H06 itself). No feature not already named somewhere in H01–H16 was added.
+
+**Sections added:** Vision (H01 condensed); Prioritization Principles (H02 Decision Rule, H06 Part 7 P1/P2/P3, H07 phased go-to-market logic); MVP v1.0 (live IR01 status: 77/88 tasks, single missing-secrets blocker for the remaining nine, cross-referencing the H14 §12/H16 §12 known gaps); v1.1 Immediate Post-Launch; v1.2 Deepening the Platform; Long-Term Roadmap (H01 Stage 2/3, H07 Layer 2/3); Intentionally Deferred vs. Permanently Out of Scope (Social features called out as the one *permanent* exclusion, per H02 Principle 7, distinct from every other deferred item); DecisionOS Evolution (ties stages/layers/tiers together, notes no `IR02` roadmap exists yet).
+
+**Files changed:** `DecisionOS/Company Handbook/H17 - Product Roadmap.md` (written in full).
+
+---
+
+## H16 — Testing & QA handbook document written
+
+**Type:** Documentation only — no code changed
+
+**Summary:** `DecisionOS/Company Handbook/H16 - Testing & QA.md` was a 3-line stub (title + `Status: Draft`, same state as H15/H17/H18/H19). Wrote the full document, consolidating the testing/QA process already specified across H06 Part 5 (AC-01–10), H09 §13 (TAC-01–08), H10 §11/§14/§16/§17 (testing strategy, security checklist, Definition of Done, release checklist), and H11 §14 (AAC-01–07), into one reference — matching H14's citation-over-duplication style. Grounded against the live repo rather than assumed: ran `npx vitest run --coverage` (214 tests, 6 files, 97.06% line coverage on `core/`) and checked IR01 Phase 6 (IR01-076 through IR01-085) status directly.
+
+**Sections added:** Scope; Testing Strategy; Unit Testing; Integration Testing; End-to-End Testing; AI Validation; Manual QA; Release Testing; Regression Testing; Acceptance Criteria; Definition of Done; Quality Gates & Current Known Gaps.
+
+**Known Gaps section (§12) — findings surfaced while writing, not fixed in this pass:**
+- `core/ai/call.ts` has no test file (50% line coverage) — hidden by the aggregate 80% threshold in `vitest.config.ts`, which is evaluated across all of `core/` rather than per-file.
+- No `pages/api/**/*.test.ts` files exist, despite H10 §11.3 requiring tests for four specific API-route behaviors (hard constraint enforcement, state reversion on AI failure, anonymous transfer, webhook signature validation) — CQ1/CQ2 are cited as evidence that untested route/middleware paths have shipped real defects before.
+- The H11 §8.5/§9.4 prohibited-phrase output-validation check still doesn't exist (previously flagged in IR01-077 and restated in H14 §12); this is a QA gap, not just a code gap — AAC-05's prompt-injection criterion can't be fully exercised without it.
+- Phase 6 QA tasks (IR01-076, IR01-080–085) remain blocked on missing `.env.local` secrets, not on any defect — restated as a distinct "verified vs. built" completeness gap.
+
+**Recommendation:** the three coverage/test gaps are each scoped-enough for their own IR01 task, matching the IR01-077/078/079 precedent; the Phase 6 blocker resolves automatically once the missing secrets are supplied.
+
+**Files changed:** `DecisionOS/Company Handbook/H16 - Testing & QA.md` (written in full).
+
+---
+
+## H14 — Security & Privacy handbook document written
+
+**Type:** Documentation only — no code changed
+
+**Summary:** `DecisionOS/Company Handbook/H14 - Security & Privacy.md` was a 3-line stub (title + `Status: Draft`, same as the still-unwritten H15–H19). Wrote the full document, consolidating the security and privacy controls already specified across H09 §11, H10 §14, H11 §10, H12 §13, and H13, into the single standalone reference H00's reading order calls for — matching the depth and citation style of the completed H12/H13 documents rather than duplicating their content verbatim.
+
+**Sections added:** Scope; Data Inventory & Classification; Identity & Access Management (authentication, session management, authorization/RLS model, service-role key boundaries); Transport Security & Encryption; AI System Data Handling; Third-Party Subprocessors register; Data Retention & Deletion; Application Security Controls; Privacy Program (GDPR legal bases, data subject rights, consent, residency, data controller, children's privacy); Incident Response; Security Testing & Audit Cadence; Known Gaps.
+
+**Known Gaps section (§12) — findings surfaced while writing, not fixed in this pass:**
+- **§12.1** H12 §13.3 claims GDPR Art. 17 account-level erasure is implemented "in the account settings API route" — no such route exists in `pages/api/`, and `pages/account.tsx` doesn't exist (consistent with UX3's earlier finding). Per-Decision deletion (FR-09.6, `DELETE /api/decision/[id]`) is real; full-account erasure is currently manual only.
+- **§12.2** `pages/privacy.js` still describes the pre-UX1 legacy affiliate-quiz product ("Decision answers" from vacation/car/phone quizzes, an "Affiliate partners" subprocessor list including AutoScout24/CHECK24/Booking.com/Wayfair/Sixt/Europcar) rather than the actual DecisionOS Decision Object model or subprocessor list (Supabase, Vercel, Anthropic, Stripe, Google Analytics). Legal copy was out of scope for UX1 and was never updated to match.
+- **§12.3 / §12.4** No application-level rate limiting and no independent security audit/pen test — both pre-existing, accepted MVP tradeoffs (H13, H10 §14), restated here as security-relevant rather than fixed.
+
+**Recommendation:** §12.1 and §12.2 should each become their own IR01/CQ-style task — neither was in scope for authoring H14 itself.
+
+**Files changed:** `DecisionOS/Company Handbook/H14 - Security & Privacy.md` (written in full).
+
+---
+
 ## UX Critical Fixes — UX1, UX2, UX3 (outside IR01 numbering)
 
 **Type:** Fix (three UX defects requested directly by the Founder, same tracking pattern as CQ1/CQ2)
