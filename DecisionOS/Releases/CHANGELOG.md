@@ -1,5 +1,25 @@
 # DecisionOS Changelog
 
+## IR01-078 — Unit tests for `core/ai/prompts.ts`
+
+**Type:** Test coverage (Phase 6, continuing out of numeric order while IR01-076 remains blocked)
+
+**Summary:** Second task in the unblocked IR01-077 → IR01-078 → IR01-079 chain (see IR01-077 below for why this proceeds ahead of IR01-076). `core/ai/prompts.ts` had 0% coverage and no test file before this task.
+
+**Changes:** Added `core/ai/prompts.test.ts` (48 tests) covering all six prompt builders:
+- `buildAnalysisPrompt` — correct `PROMPT_VERSIONS.analysis`, `market_data_caveat` instruction present for financial/technology/insurance and absent otherwise, professional advice disclaimer present for financial/health/insurance and absent for technology, category rules block omitted entirely for categories with neither, sanitization of an injection string in `context.background` and a fake role marker in an alternative name, optional context/goal/soft-constraint fields rendered when present.
+- `buildRecommendationPrompt` — correct version, the hard-constraint-enforcement rule text, all five Recommendation Contract terms named in the prompt, the analysis output embedded as JSON, sanitization of goal text.
+- `buildActionPlanPrompt` — correct version, prompt scoped to the chosen alternative (not the AI's recommendation), divergence reason included when present, the 3–5 item rule stated, sanitization of the chosen alternative's name.
+- `buildSuggestionPrompt` — correct version, existing-alternatives list used for de-duplication vs. "None yet" when empty, optional context summary/goal sections.
+- `buildConflictDetectionPrompt` — correct version, "None" shown for empty hard constraints, optional alternatives section.
+- `buildChatSystemPrompt` — returns a string (not a `PromptPair`), "Not yet provided" per unpopulated component, populated component content rendered correctly, tie-detected vs. named-winner branches in the recommendation block, final decision block present/absent, sanitization of stored component content.
+
+Tests assert on structural markers and specific injected substrings rather than exact prompt wording, matching this task's own framing ("verify structure, not the exact wording").
+
+**Verification:** `core/ai/prompts.ts` now at 100% line / 99% statement / 88% branch coverage (was 0%). `npx vitest run` (204 tests, up from 156) and `npx tsc --noEmit` both pass. No production code changed — only the new test file was added.
+
+---
+
 ## IR01-077 — Unit tests for `core/ai/validate.ts`
 
 **Type:** Test coverage (Phase 6, completed out of numeric order while IR01-076 remains blocked)

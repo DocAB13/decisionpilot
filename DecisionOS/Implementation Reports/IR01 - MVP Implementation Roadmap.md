@@ -2662,6 +2662,12 @@ Tests: `buildAnalysisPrompt` includes disclaimer for financial category; include
 - `npm test` passes
 - Coverage for `core/ai/prompts.ts` ≥ 80%
 
+**Status: Complete.** `core/ai/prompts.ts` had 0% test coverage and no test file before this task. Added `core/ai/prompts.test.ts` (48 tests) covering all six prompt builders: `buildAnalysisPrompt` (correct `version`, `market_data_caveat` instruction for financial/technology/insurance, professional advice disclaimer for financial/health/insurance, category rules omitted for uncovered categories, injection-string sanitization in `context.background` and an alternative name, optional context/goal/soft-constraint fields), `buildRecommendationPrompt` (correct `version`, hard-constraint rule text, all five Recommendation Contract terms, embedded analysis JSON, sanitized goal text), `buildActionPlanPrompt` (correct `version`, scoped to the chosen alternative not the recommendation, divergence reason, 3–5 item rule, sanitized alternative name), `buildSuggestionPrompt` (correct `version`, existing-alternatives de-dup list vs. "None yet", optional context/goal sections), `buildConflictDetectionPrompt` (correct `version`, "None" for empty hard constraints, optional alternatives section), and `buildChatSystemPrompt` (returns a string, "Not yet provided" per unpopulated component, populated component content, tie-detected vs. named-winner recommendation block, final decision block present/absent, sanitization of stored component content). Tests assert on structural markers and specific injected substrings, not exact prompt wording, per this task's own framing.
+
+`core/ai/prompts.ts` is now at 100% line / 99% statement / 88% branch coverage — well above the 80% bar. No production code changed; only the new test file was added.
+
+`npx vitest run` (204 tests, up from 156) and `npx tsc --noEmit` both pass.
+
 ---
 
 ### IR01-079 — Write component tests for `DecisionContext`
