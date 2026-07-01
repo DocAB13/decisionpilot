@@ -2635,6 +2635,14 @@ Test fixtures: one valid analysis output, variations that fail each specific rul
 - Coverage for `core/ai/validate.ts` ≥ 80%
 - Each validation rule has at least one test that triggers it
 
+**Status: Complete.** `core/ai/validate.test.ts` already carried 620 lines of tests from IR01-045/IR01-055 (built alongside the validation functions themselves), covering `specific_to_user` rejection, minimum pros/cons/risks, hard-constraint-violation cross-checks, information-gap length, all five Recommendation Contract terms, tie detection, the all-alternatives-violate conflict path, category-specific fields, and Action Plan item-count/field rules — already at 96% line coverage against this task's 80% bar. This task closed the three remaining uncovered branches: a non-object entry in `per_alternative`, a non-object entry in `action_items`, and a non-numeric `sequence` field. `validate.ts` is now at 100% line / 97% statement / 91% branch coverage. 3 tests added (153 → 156 total), `npx vitest run` and `npx tsc --noEmit` both pass. No production code changed — `validate.ts` itself was not touched, only its test file.
+
+**Note (H11 section numbers stale, not a defect):** this task's citation of "H11 §5.5 and §6.5" no longer matches the current Handbook — those sections are now Prompt Versioning/Deprecation and Conversation Memory, unrelated to output validation. The actual validation rules live in H11 §7.3 (information gaps), §8.3 (professional advice disclaimer), §9.2–9.3 (`specific_to_user`, `market_data_caveat`), §11.1–11.3 (confidence), and §12.1–12.2 (Recommendation Contract, hard constraints) — all of which are implemented and now fully tested.
+
+**Gap found, not fixed (out of scope — would be new production code, not a test):** H11 §8.5 and §9.4 both specify that the output validation layer must reject responses containing a defined list of prohibited phrases (outcome-prediction language like "will result in," "you will find," "this guarantees," plus Legal-category phrases like "you should sue," "this is legally binding," and real-time-data phrases like "current price is," "as of today"). No such check exists anywhere in `core/ai/` today — not in `validate.ts`, not as a prompt instruction in `prompts.ts`. This task only writes tests for existing validation logic; adding the missing check itself is new production code and was left untouched per this round's scope. Flagging for a future IR01 task (or as part of IR01-078, which touches `prompts.ts`) since it's an explicit Handbook requirement, not a nice-to-have.
+
+`npx vitest run` (156 tests) and `npx tsc --noEmit` pass.
+
 ---
 
 ### IR01-078 — Write unit tests for `core/ai/prompts.ts`

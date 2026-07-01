@@ -1,5 +1,23 @@
 # DecisionOS Changelog
 
+## IR01-077 — Unit tests for `core/ai/validate.ts`
+
+**Type:** Test coverage (Phase 6, completed out of numeric order while IR01-076 remains blocked)
+
+**Summary:** IR01-076 is blocked on missing environment secrets (see below) and cannot be advanced. Per the roadmap's own execution model ("tasks are ordered by dependency, not calendar time") and Appendix A's dependency graph, IR01-077 → IR01-078 → IR01-079 is a chain independent of IR01-076 → IR01-080 → ...: all of Phase 6's production-verification tasks (IR01-080 through IR01-085) genuinely need a live environment and stay blocked behind IR01-076, but the unit-test tasks do not. IR01-077 was next in that unblocked chain.
+
+**Findings:** `core/ai/validate.test.ts` already existed at 620 lines (written under IR01-045/IR01-055 alongside the validation functions themselves) and was already at 96% line coverage on `validate.ts` — clearing this task's 80% bar before any new work. Only 3 lines were uncovered, all defensive branches: a non-object entry in `per_alternative`, a non-object entry in `action_items`, and a non-numeric `sequence` field.
+
+**Changes:** Added 3 tests to `core/ai/validate.test.ts` closing those branches. `validate.ts` is now at 100% line / 97% statement / 91% branch coverage. No production code touched — `validate.ts` itself was not modified.
+
+**Gap found, not fixed (explicitly out of scope for a test-only task):** H11 §8.5 and §9.4 both require the output validation layer to reject responses containing a defined list of prohibited phrases (outcome-prediction language, Legal-category phrases, real-time-data phrases). No such check exists anywhere in `core/ai/` — not in `validate.ts`, not as a prompt instruction in `prompts.ts`. Implementing it is new production code, which this task's scope (write unit tests) and this round's explicit instruction (do not modify production code) both exclude. Flagged for a future task.
+
+**Note:** this task's roadmap citation of "H11 §5.5 and §6.5" is stale — those sections are now Prompt Versioning/Deprecation and Conversation Memory in the current Handbook, unrelated to output validation. The actual validation rules (already implemented and now fully tested) live in H11 §7.3, §8.3, §9.2–9.3, §11.1–11.3, and §12.1–12.2.
+
+**Verification:** `npx vitest run` (156 tests, up from 153) and `npx tsc --noEmit` both pass.
+
+---
+
 ## IR01-076 — Phase 5 E2E user flow verification
 
 **Type:** Verification only — blocked, no code changes

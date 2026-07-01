@@ -218,6 +218,15 @@ describe('validateAnalysisOutput — structural rules', () => {
     // Other violations from alt-2 are fine (it already has non-empty violations)
     expect(result.valid).toBe(true)
   })
+
+  it('rejects when per_alternative contains a non-object entry', () => {
+    const output = makeValidAnalysis()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(output.per_alternative as any) = ['not an object', ...output.per_alternative]
+    const result = validateAnalysisOutput(output, ALT_IDS)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('per_alternative contains a non-object entry'))).toBe(true)
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -564,6 +573,24 @@ describe('validateActionPlanOutput — item count enforcement (H11 AAC-03)', () 
 })
 
 describe('validateActionPlanOutput — per-item field validation', () => {
+  it('rejects when action_items contains a non-object entry', () => {
+    const plan = makeValidActionPlan(3)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(plan.action_items as any)[1] = 'not an object'
+    const result = validateActionPlanOutput(plan)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('action_items[1] is not an object'))).toBe(true)
+  })
+
+  it('rejects an item with a non-numeric sequence', () => {
+    const plan = makeValidActionPlan(3)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(plan.action_items[0] as any).sequence = 'first'
+    const result = validateActionPlanOutput(plan)
+    expect(result.valid).toBe(false)
+    expect(result.errors.some(e => e.includes('sequence must be a number'))).toBe(true)
+  })
+
   it('rejects an item with missing title', () => {
     const plan = makeValidActionPlan(3)
     plan.action_items[1].title = ''

@@ -4,13 +4,13 @@
 
 **Project:** DecisionOS
 
-**Current Phase:** Phase 5 — Frontend (in progress)
+**Current Phase:** Phase 5 — Frontend (in progress) / Phase 6 — Testing & Launch (started out of numeric order, see note)
 
-**Current IR01 Task:** IR01-076 — Phase 5 E2E user flow verification — **BLOCKED** (missing env secrets, see below)
+**Current IR01 Task:** IR01-076 — Phase 5 E2E user flow verification — **BLOCKED** (missing env secrets, see below). Remains open and untouched.
 
-**Last Completed Task:** IR01-075 — `useSubscription` plan-gating verification (no code changes)
+**Last Completed Task:** IR01-077 — Unit tests for `core/ai/validate.ts` (Phase 6). Completed while IR01-076 remains blocked: per the roadmap's own execution model ("tasks are ordered by dependency, not calendar time," IR01 roadmap line 22) and Appendix A's dependency graph, IR01-077 → IR01-078 → IR01-079 is a chain independent of IR01-076 → IR01-080 → ... (all Phase 6 tasks that need a live/production environment are correctly still blocked behind IR01-076).
 
-**IR01 Progress:** 75 / 86 tasks complete (~87%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted). IR01-076 not yet completable — blocked on missing environment secrets.
+**IR01 Progress:** 75 / 86 tasks complete in strict numeric order (~87%), plus IR01-077 (Phase 6) also complete — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted). IR01-076 not yet completable — blocked on missing environment secrets.
 
 **IR01-076 blocker:** `.env.local` is missing `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_PREMIUM_PRICE_ID`. Confirmed at runtime: `POST /api/decision/create` and `POST /api/billing/checkout` both 500 immediately (`lib/supabase/admin.ts` and `lib/stripe/stripe.client.ts` throw at import time without these). All five E2E workflows write decision/billing data as their first step, so none can be driven in a browser until these are added.
 
@@ -35,12 +35,12 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend — in progress (IR01-056 – IR01-075 done; IR01-076 remaining)
-- Phase 6 — Testing & Launch — not started
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-075 done; IR01-076 remaining, blocked)
+- Phase 6 — Testing & Launch — started out of order: IR01-077 done (unblocked per Appendix A dependency graph); IR01-078 onward not started
 
 ---
 
-## IR01: In Progress (76 / 86 tasks)
+## IR01: In Progress (76 / 86 tasks in numeric order; 77 / 86 counting IR01-077)
 
 ### Phase 1 — Foundation
 - IR01-001 through IR01-012 ✅
@@ -106,13 +106,17 @@
 **Remaining in Phase 5:** IR01-076 (Phase 5 E2E verification).
 
 ### Phase 6 — Testing & Launch
-- IR01-077 through IR01-085 — not started.
+- IR01-077 — Unit tests for `core/ai/validate.ts` (H11 §7.3/§8.3/§9.2–9.3/§11.1–11.3/§12.1–12.2). `validate.test.ts` already had 620 lines of tests from IR01-045/055; this task closed the 3 remaining uncovered branches (non-object entries in `per_alternative` and `action_items`, non-numeric `sequence`). `validate.ts` now at 100% line / 97% statement coverage, 156 tests passing (was 153). No production code changed. Gap found, not fixed (out of this task's scope — would be new production code): H11 §8.5/§9.4 prohibited-phrase output validation doesn't exist anywhere in `core/ai/` — flagged for a future task.
+- IR01-078 through IR01-085 — not started. IR01-078/079 (unit/component tests) are unblocked and can proceed next; IR01-080–085 require a live/production environment and remain blocked behind IR01-076.
 
 ---
 
 ## Next Task
 
-**IR01-076 — Phase 5 E2E user flow verification**
+**IR01-078 — Write unit tests for `core/ai/prompts.ts`** (pending approval)
+`prompts.ts` currently has 0% test coverage and no `prompts.test.ts` file exists — genuinely unstarted. Depends on IR01-044/046/048/004, all complete. Not blocked by IR01-076.
+
+**IR01-076 — Phase 5 E2E user flow verification** (blocked, unchanged this round)
 Manual, in-browser verification of all five H05 primary workflows (Anonymous, Returning user, Chat, History, Billing) at 1440px and 375px, per the roadmap's acceptance criteria — not a code-writing task. Requires a running app instance with real Supabase/Stripe test-mode credentials and an actual browser session (login, Stripe Checkout test card, etc.), unlike IR01-065–075 which were all static code changes.
 
 **Known gap for whoever scopes it:** No `pages/account.tsx` exists. `History.tsx` and `Chat.tsx` both route their Free-plan upgrade prompts to `/account`, which 404s today. This will surface directly in WF-5 (Billing) if that workflow's test path goes through the History/Chat upgrade prompts rather than the homepage `PricingSection`.
