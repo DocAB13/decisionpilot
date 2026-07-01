@@ -1,5 +1,21 @@
 # DecisionOS Changelog
 
+## Roadmap extension — IR01-075b, IR01-075c added
+
+**Type:** Roadmap documentation only — no code changed
+
+**Summary:** A chain of read-only work this session (Documentation Consistency Audit → Final Code Quality Audit → MVP UX Audit → MVP v1.0 Scope report → a dedicated investigation) converged on one finding: Outcome, Reflection, Lessons Learned, and the Executing→Completed Decision States are explicitly required for MVP per H05 (Workflow 2.3/2.4), H06 (FR-10, AC-07, listed under "In MVP" in Part 1, absent from the Part 6 out-of-scope list), H08 (dedicated IA routes `/decision/[id]/outcome`, `/decision/[id]/reflect`), and H09 (§17 treats Outcome/Reflection data as already existing ahead of the genuinely-post-MVP Learning Pipeline) — but no IR01 task was ever created to build it. IR01-072's own changelog entry had flagged this in real time ("a later Outcome/Reflection-adjacent task, not yet scoped in IR01") without it ever being scoped.
+
+**Investigation ruled out the alternatives:** not an intentional deferral (genuine deferrals in this roadmap — e.g. IR01-071's `onRetryRecommendation`, IR01-072's Action Plan editing — always carry an explicit Handbook citation; this one carries none), and not a Handbook-internal inconsistency (H05/H06/H08/H09 agree unanimously; the only gap is between the Handbook and the roadmap).
+
+**Changes:** Added `IR01-075b` (Action Plan completion tracking + `decision_made → executing` transition) and `IR01-075c` (Outcome/Reflection/Lessons Learned capture + `executing → completed` transition) to `IR01 - MVP Implementation Roadmap.md`, inserted between IR01-075 and IR01-076 using the same lettered-suffix convention as `IR01-070b` — no completed task renumbered. Updated the roadmap's own Appendix A (dependency graph: `IR01-072 → IR01-075b → IR01-075c`), Appendix B (task count 86 → 88, Medium complexity 29 → 31), and Appendix C (new planned-files note).
+
+**Scope kept minimal by design:** investigation found nearly all required backend surface already exists — `10_outcome`/`11_reflection`/`12_lessons_learned` are already `CLIENT_WRITABLE_COMPONENTS` (IR01-027), `executing`/`completed` are already valid state transitions (IR01-027), and both the generic save (IR01-033) and state (IR01-034) endpoints already accept them. The only new backend surface across both tasks is a narrow exception in `save.ts` for toggling Action Plan item completion (`9_action_plan` is otherwise server-generated and locked). `features/decision-history/History.tsx` was checked directly and already renders `outcome_satisfaction` star ratings and a 30-day-stale "How did your decision go?" prompt (built generically during IR01-063, ahead of these states ever being reachable) — so no third task for "History integration" was needed, tightening the original 3-task estimate to 2.
+
+**Not done:** No code was written. IR01-075b/075c are approved into the roadmap only; implementation is pending separate approval (starting with IR01-075b).
+
+---
+
 ## CQ1 + CQ2 — Critical fixes from the Final Code Quality Audit
 
 **Type:** Security/correctness hotfix (not an IR01-numbered task — audit-driven, approved out of band; IR01-076 stays the current/blocked IR01 task)

@@ -2580,6 +2580,58 @@ No component was found doing plan-based conditional rendering without `useSubscr
 
 ---
 
+### IR01-075b — Action Plan completion tracking + Decision Made → Executing transition
+
+**Inserted task.** Added post-IR01-079, following a Documentation Consistency Audit, a Final Code Quality Audit, an MVP UX Audit, a "Define MVP v1.0 Scope" report, and a dedicated investigation that together established: Outcome, Reflection, Lessons Learned, and the Executing/Completed states are explicitly required for MVP per H05 (Workflow 2.3/2.4), H06 (FR-10, AC-07, listed under "In MVP" in Part 1, absent from the Part 6 out-of-scope list), H08 (dedicated IA routes, `/decision/[id]/outcome` and `/decision/[id]/reflect`), and H09 (§17 treats Outcome/Reflection data as already existing ahead of the genuinely-post-MVP Learning Pipeline) — but no IR01 task was ever created to build them. IR01-072's own changelog had flagged this in real time ("a later Outcome/Reflection-adjacent task, not yet scoped in IR01") without it ever being scoped. Numbered `075b` per the `070b` precedent — inserted without renumbering any completed task, placed after the last actual Phase 5 frontend task (IR01-075) and before Phase 5's own verification task (IR01-076), since this is Phase-5-shaped frontend work with no dependency on IR01-076 or the Phase 6 tasks.
+
+**Description:** Close FR-05.7 (mark Action Plan items complete) and the `decision_made → executing` leg of FR-06.1. Nearly all required backend surface already exists by design (`10_outcome`/`11_reflection`/`12_lessons_learned` are already `CLIENT_WRITABLE_COMPONENTS` per IR01-027; `executing`/`completed` are already valid transitions in `VALID_USER_TRANSITIONS` per IR01-027; `POST /api/decision/state` already accepts them per IR01-034). The one exception: `9_action_plan` is in `SERVER_GENERATED_COMPONENTS`, so `POST /api/decision/save` (IR01-033) currently rejects any client write to it outright — this task adds a narrow exception allowing the owner to toggle `completed`/`completed_at` on existing items only; `title`/`detail`/`sequence`/`estimated_effort` remain immutable from the client, exactly as today.
+
+**Files to modify:**
+- `pages/api/decision/save.ts` — scoped exception for `9_action_plan`: accept a completion-toggle-only update to existing items, reject any other field change with the same 400 as today
+- `pages/decision/[id].tsx`'s `ActionPlanSummary` — add a checkbox per item; a "Confirm — Ready to Execute" button, disabled until every item is complete, calling the existing `advanceState('executing')`
+- `pages/decision/[id].tsx`'s `DecisionRouter` — add `case DecisionStatus.EXECUTING` (reuses the Action Plan view, read-only, with a way forward into IR01-075c)
+
+**Dependencies:** IR01-072 (Action Plan display), IR01-033 (save endpoint pattern), IR01-061 (DecisionContext).
+
+**Complexity:** Medium.
+
+**Estimated implementation time:** 3–4 hours.
+
+**Acceptance criteria:**
+- Toggling an action item's checkbox persists `completed`/`completed_at` via the existing auto-save pattern
+- Attempting to change `title`/`detail`/`sequence`/`estimated_effort` via the same endpoint still returns `400` — server-generated fields stay locked
+- "Confirm — Ready to Execute" is disabled until all items are marked complete (FR-05.7: "only if the user explicitly confirms readiness")
+- Confirming transitions `decision_made → executing`; a decision in `executing` state renders without error in `pages/decision/[id].tsx`
+
+---
+
+### IR01-075c — Outcome, Reflection, and Lessons Learned capture (components 10–12) + Executing → Completed transition
+
+**Inserted task.** See IR01-075b above for the full context on why this task exists and its numbering rationale.
+
+**Description:** Close FR-10.1–10.7, AC-07, H05 Workflow 2.3/2.4, and the `executing → completed` leg of FR-06.1. No new backend surface is required at all for this task — `POST /api/decision/save` already accepts `10_outcome`/`11_reflection`/`12_lessons_learned` (IR01-027, IR01-033) and `POST /api/decision/state` already accepts the `executing → completed` transition (IR01-027, IR01-034). This task is purely frontend: two new form components plus router wiring, following the same pattern every other Phase 5 screen already uses.
+
+**Files to create:**
+- `features/decision-outcome/OutcomeForm.tsx` + `OutcomeForm.module.css` — the three required fields per FR-10.2 (what happened, goal-match yes/partially/no, 1–5 satisfaction rating). Saves to `10_outcome` via the existing save pattern, then immediately calls `advanceState('completed')` per FR-10.6 — the transition happens regardless of whether Reflection/Lessons Learned follow.
+- `features/decision-outcome/ReflectionForm.tsx` + `ReflectionForm.module.css` — Reflection (FR-10.4, fully optional) and Lessons Learned (FR-10.5, optional free text) combined into one immediately-following, fully skippable screen per H05 §2.4. Saves to `11_reflection`/`12_lessons_learned` via the existing save pattern.
+
+**Files to modify:**
+- `pages/decision/[id].tsx`'s `DecisionRouter` — the `executing` case gains a path into `OutcomeForm`; add `case DecisionStatus.COMPLETED` rendering a summary (Outcome + Reflection + Lessons Learned) with Reflection/Lessons Learned editable in place per FR-10.7, reusing `ReflectionForm` in an edit mode
+
+**Dependencies:** IR01-075b (reaching `executing` state at all), IR01-029 (`isClientWritable` already covers components 10–12), IR01-034/IR01-072's `advanceState` pattern.
+
+**Complexity:** Medium.
+
+**Estimated implementation time:** 4–6 hours.
+
+**Acceptance criteria:**
+- All three Outcome fields are required to submit; Reflection and Lessons Learned are fully skippable
+- Submitting Outcome transitions `executing → completed` even when Reflection/Lessons Learned are skipped (FR-10.6)
+- A `completed` decision renders the summary view; existing Reflection/Lessons Learned content is editable in place (FR-10.7); content can still be added later if it was skipped
+- **Verification only, no new code expected:** `features/decision-history/History.tsx`'s existing star-rating display and its `EXECUTING_STALE_DAYS` "How did your decision go?" priority prompt (both already built, generically, as of IR01-063 — confirmed by direct code read during this proposal) should now show real data correctly once this task ships; spot-check rather than rebuild
+
+---
+
 ### IR01-076 — Phase 5 E2E user flow verification
 
 **Description:** Manually execute all five primary user workflows from H05, end-to-end in the browser.
@@ -2886,6 +2938,7 @@ IR01-060 → IR01-065 → IR01-066 → IR01-067
 IR01-067 → IR01-068
 IR01-061 → IR01-069 → IR01-070 → IR01-070b → IR01-071 → IR01-072
 IR01-072 → IR01-073 → IR01-074 → IR01-075
+IR01-072 → IR01-075b → IR01-075c
 All Phase 5 → IR01-076
 
 Phase 6 (Launch) — requires Phase 5
@@ -2901,9 +2954,9 @@ IR01-080 → IR01-083 → IR01-084 → IR01-085
 | Complexity | Task count |
 |---|---|
 | Low | 39 |
-| Medium | 29 |
+| Medium | 31 |
 | High | 18 |
-| **Total** | **86** (85 original + IR01-070b, inserted) |
+| **Total** | **88** (85 original + IR01-070b, IR01-075b, IR01-075c, inserted) |
 
 ---
 
@@ -2917,7 +2970,10 @@ IR01-080 → IR01-083 → IR01-084 → IR01-085
 `supabase/migrations/20260601000000_create_subscriptions.sql` · `20260610000000_create_decisions.sql` · `20260610000001_decisions_rls.sql` · `20260610000002_decisions_indexes_trigger.sql` · `20260610000003_create_decision_components.sql` · `20260610000004_decision_components_rls_indexes.sql` · `20260610000005_create_decision_state_transitions.sql` · `20260610000006_create_decision_chat_messages.sql` · `20260610000007_create_insert_chat_exchange.sql` · `20260615000000_create_anonymous_cleanup_cron.sql` · `20260615000001_create_stuck_analysis_cleanup_cron.sql`
 
 **Files modified (existing):**
-`pages/_app.js` · `middleware.ts` · `tsconfig.json` · `package.json` · `lib/supabase/client.ts` · `lib/supabase/server.ts` · `context/AuthContext.tsx` · `pages/auth/login.tsx` · `pages/auth/signup.tsx` · `pages/api/auth/callback.ts` · `pages/api/create-checkout.js` (deprecation comment) · `pages/api/webhook.js` (deprecation comment)
+`pages/_app.js` · `middleware.ts` · `tsconfig.json` · `package.json` · `lib/supabase/client.ts` · `lib/supabase/server.ts` · `context/AuthContext.tsx` · `pages/auth/login.tsx` · `pages/auth/signup.tsx` · `pages/api/auth/callback.ts` · `pages/api/create-checkout.js` (deprecation comment, later disabled — see "Critical Fixes" section, CQ2) · `pages/api/webhook.js` (deprecation comment, later disabled — see "Critical Fixes" section, CQ2)
+
+**Planned, not yet implemented (IR01-075b, IR01-075c):**
+`features/decision-outcome/OutcomeForm.tsx` · `features/decision-outcome/OutcomeForm.module.css` · `features/decision-outcome/ReflectionForm.tsx` · `features/decision-outcome/ReflectionForm.module.css` — plus modifications to `pages/api/decision/save.ts`, `pages/decision/[id].tsx`, and its `[id].module.css` if styling requires it.
 
 ---
 

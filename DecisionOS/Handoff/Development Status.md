@@ -10,7 +10,9 @@
 
 **Last Completed Task:** CQ1 + CQ2 — two critical fixes from the post-IR01-079 Code Quality Audit (not IR01-numbered; see "Critical Fixes" section below). IR01-076 remains blocked and untouched. Before these fixes, the last IR01-numbered task completed was IR01-079 — Component tests for `DecisionContext` (Phase 6), the final task in the IR01-077 → 078 → 079 chain independent of IR01-076. Every remaining IR01-numbered task (IR01-076, IR01-080–085) still genuinely requires a live/production environment and is blocked.
 
-**IR01 Progress:** 75 / 86 tasks complete in strict numeric order (~87%), plus IR01-077, IR01-078, and IR01-079 (Phase 6) also complete — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted). IR01-076 not yet completable — blocked on missing environment secrets.
+**Roadmap extended, not yet implemented:** `IR01-075b` and `IR01-075c` were added to the roadmap (approved) following a Documentation Consistency Audit, a Final Code Quality Audit, an MVP UX Audit, an MVP v1.0 Scope report, and a dedicated investigation that together established Outcome/Reflection/Lessons Learned/Executing→Completed were explicitly required by H05/H06/H08/H09 but had no IR01 task ever scoped for them (IR01-072's own changelog had flagged this gap in real time without it being filled). Inserted per the `IR01-070b` precedent — no completed task renumbered. See the roadmap's own entries for full detail. **Waiting for approval before implementation begins.**
+
+**IR01 Progress:** 75 / 86 tasks complete in strict numeric order (~87%), plus IR01-077, IR01-078, and IR01-079 (Phase 6) also complete — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (88 total: 85 original + IR01-070b, IR01-075b, IR01-075c, inserted). IR01-076 not yet completable — blocked on missing environment secrets. IR01-075b/075c are newly added and not yet started.
 
 **IR01-076 blocker:** `.env.local` is missing `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_PREMIUM_PRICE_ID`. Confirmed at runtime: `POST /api/decision/create` and `POST /api/billing/checkout` both 500 immediately (`lib/supabase/admin.ts` and `lib/stripe/stripe.client.ts` throw at import time without these). All five E2E workflows write decision/billing data as their first step, so none can be driven in a browser until these are added.
 
@@ -35,12 +37,12 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend — in progress (IR01-056 – IR01-075 done; IR01-076 remaining, blocked)
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-075 done; IR01-075b, IR01-075c newly added, not started; IR01-076 remaining, blocked)
 - Phase 6 — Testing & Launch — started out of order: IR01-077, IR01-078, IR01-079 done (the full unblocked chain per Appendix A's dependency graph); IR01-080 onward all require a live/production environment and remain blocked behind IR01-076
 
 ---
 
-## IR01: In Progress (76 / 86 tasks in numeric order; 79 / 86 counting IR01-077/078/079)
+## IR01: In Progress (76 / 88 tasks in numeric order; 79 / 88 counting IR01-077/078/079)
 
 ### Phase 1 — Foundation
 - IR01-001 through IR01-012 ✅
@@ -102,8 +104,10 @@
 - IR01-073 — `features/decision-chat/Chat.tsx` (AI Chat per H08 §11/H13 §3.6). Wired into `pages/decision/[id].tsx` via a `showChat` toggle: desktop 40/60 split (current view + Chat panel), mobile hides the left pane so Chat takes the full width. `RecommendationView`'s "Explore with AI"/"Ask AI a question" buttons now call the new `onOpenChat` prop instead of `router.push` to a route that was never built. Free-tier gating lives inside `Chat.tsx` (inline upgrade prompt, no navigation away). "Update Decision" on a material-change prompt calls the existing `advanceState('draft')` rather than a new endpoint, since none exists for auto-applying a chat-detected change.
 - IR01-074 — `features/marketing/PricingSection.tsx` (billing upgrade flow per H13 §4.1). Replaced the only reachable pricing cards in the app — a ~60-line block in the legacy `components/App.jsx` homepage wired to the deprecated `/api/create-checkout` — with `<PricingSection />`, now calling `/api/billing/checkout`. Rebuilt `pages/success.js`, which had never actually read `session_id`/`return` or linked to `/dashboard` despite the roadmap assuming it did; it now does both, on H08 tokens.
 - IR01-075 — Verification-only, no code changes. Confirmed `useSubscription.js` returns `{ plan, loading }`; confirmed `Chat.tsx`, `History.tsx` (via API `plan_limit`), and `TopNav.tsx` all correctly gate on plan; also spot-checked `RecommendationView.tsx`, `PricingSection.tsx`, and the legacy `App.jsx`'s own `TopNav` — all correct. No component found gating on plan without going through `useSubscription` or the API's `plan_limit`. Noted (not fixed, no behavioral impact): `useSubscription.js` uses `.single()` against a `subscriptions` table that per its own migration comment only gets a row on first Stripe upgrade, so every free user's query resolves with an ignored "no rows" error — `plan` still correctly falls back to `'free'`, no user-facing symptom.
+- IR01-075b — **Not started.** Action Plan completion tracking (checkboxes on `9_action_plan` items) + `decision_made → executing` transition. Requires a narrow exception in `pages/api/decision/save.ts` to allow toggling `completed`/`completed_at` on an otherwise server-generated component. Estimated 3–4 hours.
+- IR01-075c — **Not started.** Outcome (`10_outcome`), Reflection (`11_reflection`), and Lessons Learned (`12_lessons_learned`) capture + `executing → completed` transition. No new backend surface needed — both endpoints already accept these components/transitions. Estimated 4–6 hours. Depends on IR01-075b.
 
-**Remaining in Phase 5:** IR01-076 (Phase 5 E2E verification).
+**Remaining in Phase 5:** IR01-075b, IR01-075c (newly added, not started), IR01-076 (Phase 5 E2E verification, blocked).
 
 ### Phase 6 — Testing & Launch
 - IR01-077 — Unit tests for `core/ai/validate.ts` (H11 §7.3/§8.3/§9.2–9.3/§11.1–11.3/§12.1–12.2). `validate.test.ts` already had 620 lines of tests from IR01-045/055; this task closed the 3 remaining uncovered branches (non-object entries in `per_alternative` and `action_items`, non-numeric `sequence`). `validate.ts` now at 100% line / 97% statement coverage, 156 tests passing (was 153). No production code changed. Gap found, not fixed (out of this task's scope — would be new production code): H11 §8.5/§9.4 prohibited-phrase output validation doesn't exist anywhere in `core/ai/` — flagged for a future task.
@@ -126,7 +130,10 @@ A read-only Final Code Quality Audit run after IR01-079 found two launch-blockin
 
 ## Next Task
 
-**No further IR01-numbered roadmap work can proceed until IR01-076 is unblocked.** The IR01-077 → 078 → 079 chain (the only Phase 6 tasks not gated on a live/production environment, per Appendix A's dependency graph) is fully complete, and CQ1/CQ2 (audit-driven, outside IR01 numbering) are now fixed. Every remaining IR01 task — IR01-076 itself, and IR01-080 through IR01-085 — needs the missing environment secrets. The Final Code Quality Audit that produced CQ1/CQ2 also found several Recommended/Nice-to-have findings (CQ3–CQ8) not yet approved for a fix — those remain available as further audit-driven work if approved, independent of IR01-076.
+**IR01-075b — Action Plan completion tracking + Decision Made → Executing transition** (approved into the roadmap; waiting for separate approval before implementation starts)
+Newly inserted, not blocked by IR01-076 — pure Phase 5 frontend/API work with dependencies only on already-complete tasks (IR01-072, IR01-033, IR01-061). See the roadmap entry for full file list and acceptance criteria. IR01-075c (Outcome/Reflection/Lessons Learned capture) follows once this ships.
+
+IR01-076 itself, and IR01-080 through IR01-085, remain blocked on the missing environment secrets and cannot proceed regardless. The Final Code Quality Audit that produced CQ1/CQ2 also found several Recommended/Nice-to-have findings (CQ3–CQ8) not yet approved for a fix — those remain available as further audit-driven work if approved, independent of both IR01-076 and IR01-075b/c.
 
 **IR01-076 — Phase 5 E2E user flow verification** (blocked, unchanged this round)
 Manual, in-browser verification of all five H05 primary workflows (Anonymous, Returning user, Chat, History, Billing) at 1440px and 375px, per the roadmap's acceptance criteria — not a code-writing task. Requires a running app instance with real Supabase/Stripe test-mode credentials and an actual browser session (login, Stripe Checkout test card, etc.), unlike IR01-065–075 which were all static code changes.
@@ -135,7 +142,7 @@ Manual, in-browser verification of all five H05 primary workflows (Anonymous, Re
 
 ## Next Milestone
 
-IR02 has not been scoped yet — no `IR02` roadmap document exists in `DecisionOS/Implementation Reports/`. The current milestone remains completing IR01: finishing Phase 5 (Decision Wizard through Billing UI, IR01-065 – IR01-076) and then Phase 6 (Testing & Launch, IR01-077 – IR01-085). IR02 scope is expected to come from the Chief Product Architect & Product Manager once IR01 is closed out.
+IR02 has not been scoped yet — no `IR02` roadmap document exists in `DecisionOS/Implementation Reports/`. The current milestone remains completing IR01: finishing Phase 5 (Decision Wizard through Billing UI, IR01-065 – IR01-076, now including the inserted IR01-075b/075c) and then Phase 6 (Testing & Launch, IR01-077 – IR01-085). IR02 scope is expected to come from the Chief Product Architect & Product Manager once IR01 is closed out.
 
 ---
 
