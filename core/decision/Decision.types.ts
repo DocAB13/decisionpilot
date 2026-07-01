@@ -166,6 +166,34 @@ export interface FinalDecisionContent {
   recorded_at: string
 }
 
+// Outcome, Reflection, Lessons Learned — H12 §"Component 10/11/12", FR-10, IR01-075c.
+
+export interface OutcomeContent {
+  description: string
+  goal_achievement: 'yes' | 'partially' | 'no'
+  satisfaction_rating: number
+  unexpected_developments: string | null
+  recorded_at: string
+}
+
+export interface ReflectionContent {
+  process_quality: 'excellent' | 'good' | 'fair' | 'poor' | null
+  information_gaps_identified: string | null
+  priority_recalibration: string | null
+  ai_analysis_helpful: boolean | null
+  ai_analysis_feedback: string | null
+  would_do_differently: string | null
+  recorded_at: string
+}
+
+export interface LessonsLearnedContent {
+  lessons: string
+  category_tags: string[]
+  reusable_heuristics: string[]
+  consent_to_anonymized_use: boolean
+  recorded_at: string
+}
+
 export interface DecisionObject extends DecisionRow {
   components: Partial<Record<ComponentName, {
     version: number

@@ -1,5 +1,26 @@
 # DecisionOS Changelog
 
+## IR01-075c — Outcome, Reflection, and Lessons Learned capture + Executing → Completed transition
+
+**Type:** Feature (closes the second half of the MVP scope gap identified alongside IR01-075b — see the "Roadmap extension" entry below)
+
+**Summary:** Implemented exactly as scoped in the roadmap. Closes FR-10.1–10.7, AC-07, H05 Workflow 2.3/2.4, and the `executing → completed` leg of FR-06.1. Purely frontend — `POST /api/decision/save` already accepted `10_outcome`/`11_reflection`/`12_lessons_learned` (IR01-027, IR01-033) and `POST /api/decision/state` already accepted the `executing → completed` transition (IR01-027, IR01-034), confirmed before starting; no backend changes.
+
+**Changes:**
+- `core/decision/Decision.types.ts` — added `OutcomeContent`, `ReflectionContent`, `LessonsLearnedContent` interfaces for components 10/11/12 per H12.
+- `features/decision-outcome/OutcomeForm.tsx` + `OutcomeForm.module.css` — the three required Outcome fields (FR-10.2): free-text description, `goal_achievement` (yes/partially/no) radio group, 1–5 `satisfaction_rating` cards. Submit is disabled until all three are set. On submit: saves `10_outcome` via the existing `updateComponent` auto-save path, then unconditionally calls `advanceState('completed')` (FR-10.6) — the transition happens whether or not Reflection/Lessons Learned follow.
+- `features/decision-outcome/ReflectionForm.tsx` + `ReflectionForm.module.css` — Reflection (`process_quality`, `ai_analysis_helpful`, `would_do_differently`; FR-10.4, fully optional) and Lessons Learned (`lessons`; FR-10.5, optional free text) combined into one fully skippable screen. Takes the full `decision` object and pre-fills every field from existing `11_reflection`/`12_lessons_learned` content when present, so the same component serves both the first-time prompt and later in-place editing (FR-10.7) — no separate edit-mode component built. Only calls `updateComponent` for a component that actually has content, so skipping both leaves neither component written.
+- `pages/decision/[id].tsx` — `DecisionRouter`'s `executing` case now toggles (via a local `showOutcomeForm` state, matching the existing `showFinalForm`/`showChat` pattern) between the existing read-only `ActionPlanSummary` and `OutcomeForm`, reached through a new "How did it go?" button. Added `case DecisionStatus.COMPLETED`, rendering a new `CompletedView`: an Outcome summary card (description, goal-match label, star rating rendered the same way `History.tsx` already renders `outcome_satisfaction`) plus a Reflection/Lessons Learned card with an "Edit"/"Add" button that reopens `ReflectionForm` in place. `CompletedView` auto-opens `ReflectionForm` the first time it renders with no existing reflection/lessons content (a `useRef` guard ensures this only fires once per mount, not on every re-render) — this covers both the "immediately-following" screen right after Outcome submission and a later revisit where it was previously skipped.
+- `pages/decision/[id].module.css` — added `.executingActionRow` and `.summaryCard`/`.summaryHeaderRow`/`.summaryLabel`/`.summaryText`/`.summaryTextMuted`/`.summaryMetaRow`. No new design tokens.
+
+**Reused as-is, not modified:** `hooks/useDecision`'s `updateComponent`/`advanceState`, `components/ui/Button`, `components/ui/Card`, and `pages/api/decision/save.ts`/`state.ts`.
+
+**Verification:** `npx tsc --noEmit`, `npx vitest run` (214 tests, unchanged — no new test file, matching this task's file list), and `npx next build` all pass.
+
+**Not done:** IR01-076 (E2E verification) remains blocked on missing environment secrets, untouched by this task.
+
+---
+
 ## IR01-075b — Action Plan completion tracking + Decision Made → Executing transition
 
 **Type:** Feature (closes an MVP scope gap identified this session — see the "Roadmap extension" entry below)

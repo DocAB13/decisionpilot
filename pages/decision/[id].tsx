@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { GetServerSideProps } from 'next'
 import type { JSX } from 'react'
 
@@ -16,8 +16,16 @@ import { AlternativesStep } from '@/features/decision-wizard/AlternativesStep'
 import { RecommendationView } from '@/features/decision-wizard/RecommendationView'
 import { FinalDecisionForm } from '@/features/decision-wizard/FinalDecisionForm'
 import { Chat } from '@/features/decision-chat/Chat'
+import { OutcomeForm } from '@/features/decision-outcome/OutcomeForm'
+import { ReflectionForm } from '@/features/decision-outcome/ReflectionForm'
 import { DecisionStatus } from '@/core/decision/Decision.constants'
-import type { ActionPlanContent, DecisionObject } from '@/core/decision/Decision.types'
+import type {
+  ActionPlanContent,
+  DecisionObject,
+  LessonsLearnedContent,
+  OutcomeContent,
+  ReflectionContent,
+} from '@/core/decision/Decision.types'
 
 import styles from './[id].module.css'
 
@@ -169,10 +177,89 @@ function ActionPlanSummary({ plan, readOnly }: { plan: ActionPlanContent; readOn
   )
 }
 
+const GOAL_ACHIEVEMENT_LABELS: Record<OutcomeContent['goal_achievement'], string> = {
+  yes: 'Yes',
+  partially: 'Partially',
+  no: 'No',
+}
+
+function renderStars(rating: number): string {
+  const filled = Math.round(rating)
+  return '★'.repeat(filled) + '☆'.repeat(5 - filled)
+}
+
+// Completed summary (components 10-12, FR-10.7) — Reflection/Lessons Learned are shown
+// read-only once recorded, with an edit affordance that reopens ReflectionForm in place.
+// If neither was recorded yet (skipped, or just arrived from OutcomeForm), the form opens
+// immediately per H05 §2.4's "immediately-following, fully skippable screen".
+function CompletedView({ decision }: { decision: DecisionObject }): JSX.Element {
+  const outcome = decision.components['10_outcome']?.content as OutcomeContent | undefined
+  const reflection = decision.components['11_reflection']?.content as ReflectionContent | undefined
+  const lessons = decision.components['12_lessons_learned']?.content as LessonsLearnedContent | undefined
+  const hasReflectionContent = Boolean(reflection ?? lessons)
+
+  const [isEditingReflection, setIsEditingReflection] = useState(false)
+  const didInitialize = useRef(false)
+
+  useEffect(() => {
+    if (didInitialize.current) return
+    didInitialize.current = true
+    setIsEditingReflection(!hasReflectionContent)
+  }, [hasReflectionContent])
+
+  if (isEditingReflection) {
+    return <ReflectionForm decision={decision} onDone={() => setIsEditingReflection(false)} />
+  }
+
+  if (!outcome) {
+    return (
+      <Card className={styles.placeholderCard}>
+        <p>This decision is complete, but no outcome was recorded.</p>
+      </Card>
+    )
+  }
+
+  return (
+    <div className={styles.planWrap}>
+      <p className={styles.sectionLabel}>Completed</p>
+      <h1 className={styles.planHeading}>Outcome summary</h1>
+
+      <Card className={styles.summaryCard}>
+        <p className={styles.summaryLabel}>What happened</p>
+        <p className={styles.summaryText}>{outcome.description}</p>
+        <div className={styles.summaryMetaRow}>
+          <span>Goal match: {GOAL_ACHIEVEMENT_LABELS[outcome.goal_achievement]}</span>
+          <span aria-label={`${outcome.satisfaction_rating} out of 5 stars`}>
+            {renderStars(outcome.satisfaction_rating)}
+          </span>
+        </div>
+      </Card>
+
+      <Card className={styles.summaryCard}>
+        <div className={styles.summaryHeaderRow}>
+          <p className={styles.summaryLabel}>Reflection &amp; lessons learned</p>
+          <Button variant="ghost" size="md" onClick={() => setIsEditingReflection(true)}>
+            {hasReflectionContent ? 'Edit' : 'Add'}
+          </Button>
+        </div>
+        {hasReflectionContent ? (
+          <>
+            {reflection?.would_do_differently && <p className={styles.summaryText}>{reflection.would_do_differently}</p>}
+            {lessons?.lessons && <p className={styles.summaryText}>{lessons.lessons}</p>}
+          </>
+        ) : (
+          <p className={styles.summaryTextMuted}>No reflection recorded yet.</p>
+        )}
+      </Card>
+    </div>
+  )
+}
+
 function DecisionRouter(): JSX.Element {
   const { decision, isLoading, error } = useDecision()
   const [showFinalForm, setShowFinalForm] = useState(false)
   const [showChat, setShowChat] = useState(false)
+  const [showOutcomeForm, setShowOutcomeForm] = useState(false)
 
   if (isLoading) {
     return <p className={styles.loadingText}>Loading your decision...</p>
@@ -223,17 +310,32 @@ function DecisionRouter(): JSX.Element {
 
     case DecisionStatus.EXECUTING: {
       const actionPlan = decision.components['9_action_plan']?.content as ActionPlanContent | undefined
-      content = actionPlan ? (
-        <ActionPlanSummary plan={actionPlan} readOnly={true} />
+      content = showOutcomeForm ? (
+        <OutcomeForm onCancel={() => setShowOutcomeForm(false)} onRecorded={() => setShowOutcomeForm(false)} />
       ) : (
-        <Card className={styles.placeholderCard}>
-          <p>This decision is being executed. No action plan is available to display.</p>
-        </Card>
+        <>
+          {actionPlan ? (
+            <ActionPlanSummary plan={actionPlan} readOnly={true} />
+          ) : (
+            <Card className={styles.placeholderCard}>
+              <p>This decision is being executed. No action plan is available to display.</p>
+            </Card>
+          )}
+          <div className={styles.executingActionRow}>
+            <Button variant="primary" size="lg" onClick={() => setShowOutcomeForm(true)}>
+              How did it go?
+            </Button>
+          </div>
+        </>
       )
       break
     }
 
-    // Outcome / Reflection / Completed view lands in IR01-075c — minimal placeholder until then.
+    case DecisionStatus.COMPLETED:
+      content = <CompletedView decision={decision} />
+      break
+
+    // Archived decisions have no dedicated view yet — out of scope for IR01-075c.
     default:
       content = (
         <Card className={styles.placeholderCard}>

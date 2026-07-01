@@ -135,6 +135,60 @@
   margin-top: var(--space-6);
 }
 
+.executingActionRow {
+  max-width: 720px;
+  margin: var(--space-6) auto 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* --- Completed summary (components 10-12, IR01-075c) --- */
+
+.summaryCard {
+  margin-bottom: var(--space-4);
+}
+
+.summaryHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.summaryLabel {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.summaryText {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+}
+
+.summaryTextMuted {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.summaryMetaRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
 /* --- Chat layout — H08 §11: desktop 40/60 split, mobile full-screen --- */
 
 .chatLayout {
