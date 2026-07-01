@@ -2687,6 +2687,14 @@ Tests: `updateComponent` debounces calls by 800ms; calls `/api/decision/save` af
 - `npm test` passes
 - Auto-save debounce test confirms no API call within 800ms, exactly one call after
 
+**Status: Complete.** Added `context/DecisionContext.test.tsx` (10 tests) using `@testing-library/react`'s `renderHook` and MSW's `setupServer` to mock `/api/decision/:id`, `/api/decision/save`, and `/api/decision/state`. Covers: initial load (populates `decision`, clears `isLoading`) and load-error handling; `updateComponent`'s optimistic local state update (before the debounced save fires); the debounce itself — zero `/api/decision/save` calls within 800ms, exactly one after (this task's specific acceptance criterion), and that rapid successive updates collapse into a single call; `saveState` transitioning `'saving'` → `'saved'` on success and → `'error'` after exactly three consecutive save failures (verified via a call counter, matching `saveWithRetry`'s two-retry policy); and `advanceState`'s three branches — successful status update, merging a returned `action_plan` into `components['9_action_plan']`, and rejecting (leaving `decision.status` unchanged) on an API error.
+
+Installed `msw` (`^2.14.6`) as the only new dependency, exactly as this task calls for — it was already present transitively via `vitest`'s own tooling, so no new top-level dependency tree was introduced. Debounce/retry timing tests use real timers (not `vi.useFakeTimers()`) since fake timers interacting with MSW's fetch interception across `saveWithRetry`'s recursive `await new Promise(setTimeout)` retry chain is a known source of flakiness; the trade-off is one test file taking ~9s of real wall-clock time (the three-failures test alone spans the full 800ms + 1000ms + 3000ms retry sequence), against a materially more reliable suite.
+
+**Necessary test-infrastructure fix (not a redesign, not production code):** `context/DecisionContext.tsx` is the first `.tsx` file with JSX any test in this repo has ever imported. `vitest.config.ts` had no JSX transform configured, and `tsconfig.json`'s `"jsx": "preserve"` (correct for Next.js's own SWC build pipeline) made Vite's transform fail outright (`Failed to parse source... make sure to not set jsx to preserve`) — this would have blocked any component test, not just this one. Fixed by adding `oxc: { jsx: { runtime: 'automatic' } }` to `vitest.config.ts` (Vite 8 resolves JSX via its oxc transform, not esbuild, in this version). Confirmed `npx next build` still succeeds unchanged — this only affects the Vitest/Vite pipeline, not Next's own compiler.
+
+`npx vitest run` (214 tests, up from 204) and `npx tsc --noEmit` both pass. `npx next build` unaffected.
+
 ---
 
 ### IR01-080 — Run full H09 TAC checklist

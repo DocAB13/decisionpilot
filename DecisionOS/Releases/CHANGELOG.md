@@ -1,5 +1,28 @@
 # DecisionOS Changelog
 
+## IR01-079 — Component tests for `context/DecisionContext.tsx`
+
+**Type:** Test coverage (Phase 6, final task in the chain independent of the still-blocked IR01-076)
+
+**Summary:** Last task in the IR01-077 → IR01-078 → IR01-079 chain (see IR01-077 below for why this proceeds ahead of IR01-076). With this complete, every remaining Phase 6 task (IR01-080 through IR01-085) requires a live/production environment and is genuinely blocked behind IR01-076 — no further roadmap work is available until it's unblocked.
+
+**Changes:** Added `context/DecisionContext.test.tsx` (10 tests) using `@testing-library/react`'s `renderHook` and MSW's `setupServer` to mock `/api/decision/:id`, `/api/decision/save`, and `/api/decision/state`:
+- Initial load populates `decision` and clears `isLoading`; a `{ error }` response sets `error` and leaves `decision` null.
+- `updateComponent` updates local state optimistically before the debounced save fires.
+- The 800ms auto-save debounce: zero `/api/decision/save` calls within the window, exactly one call after (this task's specific acceptance criterion) — plus a supporting test confirming rapid successive updates collapse into a single call.
+- `saveState` transitions `'saving'` → `'saved'` on a successful save, and → `'error'` after exactly three consecutive failures (verified via a call counter against `saveWithRetry`'s two-retry policy).
+- `advanceState`'s three branches: successful status update, merging a returned `action_plan` into `components['9_action_plan']`, and rejecting with `decision.status` left unchanged on an API error.
+
+**Dependency installed:** `msw` (`^2.14.6`) — the only new dependency, exactly as this task calls for. It was already present transitively via `vitest`'s own tooling, so this added no new top-level dependency tree.
+
+**Timing approach:** debounce/retry tests use real timers rather than `vi.useFakeTimers()` — combining fake timers with MSW's fetch interception across `saveWithRetry`'s recursive retry chain (`await new Promise(setTimeout)`) is a known source of flakiness. Trade-off: this test file takes ~9s of real wall-clock time (the three-failures test spans the full 800ms + 1000ms + 3000ms sequence) in exchange for reliability.
+
+**Necessary test-infrastructure fix (test config only, not production code):** `context/DecisionContext.tsx` is the first `.tsx` file with JSX that any test in this repo has imported. `vitest.config.ts` had no JSX transform configured — combined with `tsconfig.json`'s `"jsx": "preserve"` (correct for Next.js's own SWC pipeline), Vite's transform failed outright on any `.tsx` import, which would have blocked every future component test, not just this one. Fixed by adding `oxc: { jsx: { runtime: 'automatic' } } }` to `vitest.config.ts` (Vite 8 resolves JSX via oxc, not esbuild). Confirmed `npx next build` still succeeds unchanged.
+
+**Verification:** `npx vitest run` (214 tests, up from 204), `npx tsc --noEmit`, and `npx next build` all pass.
+
+---
+
 ## IR01-078 — Unit tests for `core/ai/prompts.ts`
 
 **Type:** Test coverage (Phase 6, continuing out of numeric order while IR01-076 remains blocked)
