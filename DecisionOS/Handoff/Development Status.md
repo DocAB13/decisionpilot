@@ -10,7 +10,7 @@
 
 **Last Completed Task:** IR01-075c — Outcome, Reflection, and Lessons Learned capture (components 10–12) + `executing → completed` transition. Implemented exactly as scoped in the roadmap (`core/decision/Decision.types.ts`, `features/decision-outcome/OutcomeForm.tsx`+`.module.css`, `features/decision-outcome/ReflectionForm.tsx`+`.module.css`, `pages/decision/[id].tsx`, `pages/decision/[id].module.css` only). IR01-076 remains blocked and untouched.
 
-**Most recent work (outside IR01 numbering):** UX Critical Fixes UX1–UX3 (landing page repositioning, "Update Decision" copy honesty, `/account` → `/#pricing` upgrade links) — see the new "UX Critical Fixes" section below.
+**Most recent work (outside IR01 numbering):** Authored the six previously-stub Company Handbook documents — H14 (Security & Privacy), H15 (Operations Handbook), H16 (Testing & QA), H17 (Product Roadmap), H18 (Business Model), H19 (Glossary) — see the new "Handbook Documentation" section below. Before that: UX Critical Fixes UX1–UX3 (landing page repositioning, "Update Decision" copy honesty, `/account` → `/#pricing` upgrade links) — see the "UX Critical Fixes" section below.
 
 **Roadmap extended, IR01-075b and IR01-075c both implemented:** `IR01-075b` and `IR01-075c` were added to the roadmap following a Documentation Consistency Audit, a Final Code Quality Audit, an MVP UX Audit, an MVP v1.0 Scope report, and a dedicated investigation that together established Outcome/Reflection/Lessons Learned/Executing→Completed were explicitly required by H05/H06/H08/H09 but had no IR01 task ever scoped for them. Inserted per the `IR01-070b` precedent — no completed task renumbered. Both are now done.
 
@@ -19,8 +19,8 @@
 **IR01-076 blocker:** `.env.local` is missing `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_PREMIUM_PRICE_ID`. Confirmed at runtime: `POST /api/decision/create` and `POST /api/billing/checkout` both 500 immediately (`lib/supabase/admin.ts` and `lib/stripe/stripe.client.ts` throw at import time without these). All five E2E workflows write decision/billing data as their first step, so none can be driven in a browser until these are added.
 
 **Repository:**
-- GitHub: Synced through IR01-070 (commit `fa4a636`) — IR01-070b, IR01-071, IR01-072, IR01-073, IR01-074, IR01-075, IR01-075b, IR01-075c committed locally, not yet pushed
-- Vercel: Synced through IR01-060
+- GitHub: Pushed through commit `b2c71d5` ("docs: author H14-H19 Handbook documents") — this push carried everything that had been committed locally but unpushed (IR01-070b through IR01-075c, CQ1/CQ2, UX1–UX3) plus the H14–H19 Handbook authoring commit. This Development Status update, once committed, will be the next commit on top.
+- Vercel: A production deploy should trigger automatically on every push to `main` per H09 §12 — not independently re-verified against the Vercel dashboard this session. Last confirmed sync point prior to this push was IR01-060; this push is the first opportunity for Vercel to pick up IR01-061 through IR01-075c's frontend work.
 
 ---
 
@@ -139,6 +139,14 @@ Three UX defects requested directly by the Founder, fixed and tracked the same w
 - **UX3** — `History.tsx` and `Chat.tsx`'s "Upgrade plan" buttons called `router.push('/account')`, a 404 (previously flagged here as a known gap). Both now route to `/#pricing`; added `id="pricing"` to the existing `<PricingSection />` wrapper in `App.jsx` so the anchor lands on the real, already-functional Stripe checkout flow.
 
 **Verification:** `npx tsc --noEmit`, `npx vitest run` (214 tests, unchanged), and `npx next build` all pass for all three.
+
+---
+
+## Handbook Documentation — H14–H19 (outside IR01 numbering)
+
+The six remaining stub Company Handbook documents (title + `Status: Draft` only, no content) were authored in full, one at a time with approval between each: **H14** (Security & Privacy), **H16** (Testing & QA), **H17** (Product Roadmap), **H15** (Operations Handbook), **H18** (Business Model), **H19** (Glossary). Each consolidates and cross-references controls, processes, or terminology already specified across H01–H13 rather than introducing new scope, and each carries its own "Known Gaps" section recording discrepancies found against the live repo instead of describing them as resolved (e.g., H14: no GDPR account-erasure route exists; H16: `core/ai/call.ts` has no test file; H15: Vercel was behind GitHub at time of writing; H18: no unit-economics document exists in the Handbook). Full detail in each document and in `DecisionOS/Releases/CHANGELOG.md`.
+
+**Verification:** documentation only — no code changed, no test/build verification applicable.
 
 ---
 
