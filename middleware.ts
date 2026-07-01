@@ -33,9 +33,15 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
-  // /decision/new is open to anonymous users (H05 WF-1, IR01-065)
+  // /decision/new is open to anonymous users (H05 WF-1, IR01-065).
+  // /decision/:id is also open to anonymous users carrying a valid anonymous_token
+  // (H13 §2.1) — the same query param every /api/decision/* route already accepts
+  // in place of a session; ownership of the token itself is enforced at the API/DB
+  // layer, not here.
   const protectedPaths = ['/dashboard', '/history']
-  const isDecisionProtected = pathname.startsWith('/decision/') && pathname !== '/decision/new'
+  const hasAnonymousToken = request.nextUrl.searchParams.has('anonymous_token')
+  const isDecisionProtected =
+    pathname.startsWith('/decision/') && pathname !== '/decision/new' && !hasAnonymousToken
   const authPaths = ['/auth/login', '/auth/signup']
 
   if (user && authPaths.includes(pathname)) {

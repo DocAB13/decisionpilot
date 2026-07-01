@@ -1,35 +1,8 @@
-// @deprecated — use /api/billing/checkout
-import Stripe from 'stripe';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-const PRICE_IDS = {
-  pro: 'price_1TkAIMFhDaeXj1q8W3BnIuSv',
-  premium: 'price_1TkXXtFhDaeXj1q8ZUMJqp1M',
-};
-
+// @deprecated — disabled. Use /api/billing/checkout instead.
+// This endpoint used to trust a client-supplied `user_id` with no authentication,
+// letting anyone grant a Stripe subscription to an arbitrary account (code quality
+// audit CQ2). Disabled rather than fixed in place so the only supported checkout
+// path is the authenticated one at /api/billing/checkout.
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).end();
-  try {
-    const { plan } = req.body;
-    const priceId = PRICE_IDS[plan] || PRICE_IDS.pro;
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'subscription',
-      line_items: [{
-        price: priceId,
-        quantity: 1,
-      }],
-success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin}/`,
-      allow_promotion_codes: true,
-      billing_address_collection: 'auto',
-      metadata: {
-        user_id: req.body.user_id || '',
-        plan: plan,
-      },
-    });    res.status(200).json({ url: session.url });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.status(410).json({ error: 'This endpoint has been disabled. Use /api/billing/checkout.' });
 }

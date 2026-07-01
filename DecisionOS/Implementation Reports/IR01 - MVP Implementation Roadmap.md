@@ -2697,6 +2697,28 @@ Installed `msw` (`^2.14.6`) as the only new dependency, exactly as this task cal
 
 ---
 
+## Critical Fixes — Code Quality Audit (outside IR01 numbering)
+
+Two launch-blocking defects were found by a read-only Final Code Quality Audit performed after IR01-079, empirically confirmed against a running `next dev` instance, and fixed with explicit approval. These are not IR01 roadmap tasks (no task ID assigned, no renumbering) — they're audit-driven hotfixes to the two highest-stakes live paths (anonymous onboarding and billing), tracked here because both sit squarely in Phase 5/3 territory the roadmap already covers.
+
+### CQ1 — Anonymous users blocked from their own decision flow by middleware
+
+**Finding:** `features/decision-wizard/Wizard.tsx` creates an anonymous decision and navigates to `/decision/{id}?anonymous_token={token}`, but `middleware.ts` only exempted the literal path `/decision/new` from its auth gate — every other `/decision/:id` path, including the one the Wizard itself navigates to immediately after creating a decision, redirected straight to `/auth/login`, discarding the token. Confirmed live: both a full document request and the `/_next/data/...` request the Pages Router client transition actually issues returned `307` to `/auth/login`. This broke WF-1 (the entire "no signup required" anonymous funnel, H05) end-to-end — an anonymous user could never get past decision creation. IR01-076's E2E pass never reached this bug because it was blocked earlier by the missing-secrets 500.
+
+**Fix:** `middleware.ts` now also treats `/decision/:id` as open when the request carries an `anonymous_token` query param — the same param every `/api/decision/*` route already accepts in place of a session (H13 §2.1). Token *ownership* is still enforced only at the API/DB layer, unchanged; middleware just stops turning away a request that the API layer would have accepted anyway. Minimal, one condition added — no changes to the authentication system itself.
+
+**Verification:** Live-tested against `next dev`: `/decision/fake-id?anonymous_token=...` now returns `404` (correctly reaches the page, which 404s because that specific decision doesn't exist — expected) instead of `307`. `/decision/fake-id` with no token still correctly `307`s to `/auth/login?return=...`, confirming the existing protection for genuinely unauthenticated access is untouched. `npx tsc --noEmit`, `npx vitest run` (214 tests), and `npx next build` all pass.
+
+### CQ2 — Legacy billing endpoints allowed granting a subscription to an arbitrary account
+
+**Finding:** `pages/api/create-checkout.js` took `user_id` directly from the request body with no authentication and embedded it in Stripe Checkout session metadata. `pages/api/webhook.js` then blindly trusted that `user_id` on `checkout.session.completed` to upsert an `active` subscription. Both endpoints were still live and reachable (the legacy `TopNav` inline in `components/App.jsx` still calls `handleUpgrade()` → `/api/create-checkout`, and the endpoint itself was callable directly regardless of any UI). Net effect: anyone could POST an arbitrary UUID as `user_id` and, on completing a real Stripe Checkout session, grant that account a Pro/Premium subscription — independent of who actually paid.
+
+**Fix:** Both files disabled — the handlers no longer touch Stripe or Supabase at all; they immediately return `410 Gone` with a pointer to the canonical endpoint. The canonical, authenticated pair (`pages/api/billing/checkout.ts`, which derives `user_id` server-side from the session cookie, and `pages/api/billing/webhook.ts`) is untouched and remains the only functional checkout/webhook path. No auth logic was added to the legacy files — they're inert, not retrofitted, per the "do not introduce new functionality" instruction. `components/App.jsx`'s legacy upgrade buttons were left untouched (out of this fix's scope); they now surface "Something went wrong" if clicked, since their only backing endpoint is disabled — no code change there, matching "no unrelated refactoring."
+
+**Verification:** Live-tested against `next dev`: `POST /api/create-checkout` with an attacker-supplied `user_id` returns `410` with no Stripe session created. `POST /api/webhook` returns `410` with no Supabase write attempted. `npx tsc --noEmit`, `npx vitest run` (214 tests), and `npx next build` all pass — `next build`'s route list still shows both routes present (as inert stubs), confirming no import/build breakage.
+
+---
+
 ### IR01-080 — Run full H09 TAC checklist
 
 **Description:** Execute every item in H09 Technical Acceptance Criteria (TAC-01 through TAC-08) against the production deployment.

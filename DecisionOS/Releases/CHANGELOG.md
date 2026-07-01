@@ -1,5 +1,27 @@
 # DecisionOS Changelog
 
+## CQ1 + CQ2 — Critical fixes from the Final Code Quality Audit
+
+**Type:** Security/correctness hotfix (not an IR01-numbered task — audit-driven, approved out of band; IR01-076 stays the current/blocked IR01 task)
+
+**Summary:** A read-only Final Code Quality Audit run after IR01-079 surfaced two launch-blocking defects, both empirically confirmed against a running `next dev` instance before any fix was made. Both are now fixed, re-verified live, and covered by the existing test/build gates.
+
+**CQ1 — Anonymous users could never reach their own decision after creating it.**
+`features/decision-wizard/Wizard.tsx` navigates to `/decision/{id}?anonymous_token={token}` right after creating an anonymous decision, but `middleware.ts` only exempted the literal `/decision/new` path from its auth gate — every other `/decision/:id` path redirected straight to `/auth/login`, discarding the token. Confirmed live: both a full document request and the `/_next/data/...` request the client router actually issues returned `307`. This broke WF-1 (the entire anonymous "no signup required" funnel, H05) end-to-end; IR01-076's E2E pass never reached it because it was blocked earlier by the missing-secrets 500.
+
+Fix: `middleware.ts` now also exempts `/decision/:id` when the request carries an `anonymous_token` query param — the same param every `/api/decision/*` route already accepts in place of a session (H13 §2.1). Token ownership is still enforced only at the API/DB layer, unchanged. One condition added; no authentication-system changes.
+
+**CQ2 — Legacy billing endpoints let anyone grant a subscription to an arbitrary account.**
+`pages/api/create-checkout.js` took `user_id` straight from the request body with no authentication and embedded it in Stripe Checkout session metadata; `pages/api/webhook.js` then blindly trusted that `user_id` to upsert an `active` subscription. Both were still live and reachable (`components/App.jsx`'s own legacy `TopNav` still calls `handleUpgrade()` → `/api/create-checkout`, and the endpoint was callable directly regardless of UI). Net effect: anyone could grant a Pro/Premium subscription to any account they chose.
+
+Fix: both handlers disabled — they now return `410 Gone` immediately, touching neither Stripe nor Supabase. The canonical, authenticated pair (`pages/api/billing/checkout.ts`, `pages/api/billing/webhook.ts`) is untouched and remains the only functional checkout/webhook path. `components/App.jsx`'s legacy upgrade buttons were left as-is (out of scope) — they now fail cleanly on click instead of being exploitable.
+
+**Verification:** `npx tsc --noEmit`, `npx vitest run` (214 tests), and `npx next build` all pass. Both fixes additionally live-tested against `next dev`: anonymous decision access now returns `404` (reaches the page) instead of `307`; unauthenticated access still correctly `307`s; both legacy billing endpoints return `410` with no Stripe/Supabase side effects (tested with an attacker-supplied `user_id`).
+
+**Not done (explicitly out of this fix's scope, per instruction):** `components/App.jsx`'s legacy TopNav and upgrade buttons were not rewired to the canonical billing flow. CQ3–CQ8 from the same audit (legacy `/api/chat.js` sanitization/rate-limiting gaps, missing `AbortController` cleanup, dual-TopNav duplication, Chat.tsx accessibility gaps, two dead files, `checkJs` blind spot) remain unfixed pending separate approval.
+
+---
+
 ## IR01-079 — Component tests for `context/DecisionContext.tsx`
 
 **Type:** Test coverage (Phase 6, final task in the chain independent of the still-blocked IR01-076)
