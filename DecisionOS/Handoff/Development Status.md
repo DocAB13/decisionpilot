@@ -6,11 +6,13 @@
 
 **Current Phase:** Phase 5 — Frontend (in progress)
 
-**Current IR01 Task:** IR01-076 — Phase 5 E2E user flow verification
+**Current IR01 Task:** IR01-076 — Phase 5 E2E user flow verification — **BLOCKED** (missing env secrets, see below)
 
 **Last Completed Task:** IR01-075 — `useSubscription` plan-gating verification (no code changes)
 
-**IR01 Progress:** 76 / 86 tasks complete (~88%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted).
+**IR01 Progress:** 75 / 86 tasks complete (~87%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted). IR01-076 not yet completable — blocked on missing environment secrets.
+
+**IR01-076 blocker:** `.env.local` is missing `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_PREMIUM_PRICE_ID`. Confirmed at runtime: `POST /api/decision/create` and `POST /api/billing/checkout` both 500 immediately (`lib/supabase/admin.ts` and `lib/stripe/stripe.client.ts` throw at import time without these). All five E2E workflows write decision/billing data as their first step, so none can be driven in a browser until these are added.
 
 **Repository:**
 - GitHub: Synced through IR01-070 (commit `fa4a636`) — IR01-070b, IR01-071, IR01-072, IR01-073, IR01-074, IR01-075 committed locally, not yet pushed

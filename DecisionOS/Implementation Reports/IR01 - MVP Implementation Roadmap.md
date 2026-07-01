@@ -2597,6 +2597,16 @@ No component was found doing plan-based conditional rendering without `useSubscr
 
 **Acceptance criteria:** All five workflows complete without console errors or UI breakage. Verify in Chrome at 1440px (desktop) and 375px (mobile).
 
+**Status: Blocked — environment missing required secrets.** Started `next dev` and drove the two server-side surfaces WF-1 and WF-5 depend on before touching a browser:
+- `POST /api/decision/create` (WF-1's first step, "start a decision") → HTTP 500, `SUPABASE_SERVICE_ROLE_KEY is not configured`, thrown at import time in `lib/supabase/admin.ts`.
+- `POST /api/billing/checkout` (WF-5) → HTTP 500 for the same reason (`stripe.client.ts` throws without `STRIPE_SECRET_KEY`).
+
+`.env.local` currently defines only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Every route the five workflows exercise (`create`, `[id]`, `save`, `state`, `history`, `chat`, `chat/[id]`, `analyze`, `suggest`, `conflict`, `billing/checkout`, `billing/webhook`) imports `adminClient` (needs `SUPABASE_SERVICE_ROLE_KEY`); chat/analyze additionally need `ANTHROPIC_API_KEY`; billing additionally needs `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_PREMIUM_PRICE_ID`. None of the five workflows can progress past their first data-writing step without these. This is a missing-credential gap, not a code defect — no fix is in scope.
+
+**Not run:** all five workflows in Chrome at 1440px/375px, since none can get past step one.
+
+**Needed to unblock:** `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_PREMIUM_PRICE_ID` added to `.env.local` (test/sandbox values are sufficient for Stripe/Supabase).
+
 ---
 
 ## Phase 6 — Testing and Production Launch

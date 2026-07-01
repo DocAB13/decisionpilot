@@ -1,5 +1,22 @@
 # DecisionOS Changelog
 
+## IR01-076 — Phase 5 E2E user flow verification
+
+**Type:** Verification only — blocked, no code changes
+
+**Summary:** Attempted to manually drive all five H05 user workflows end-to-end. Started `next dev` and, before opening a browser, confirmed the two write-path endpoints WF-1 and WF-5 need are reachable at all.
+
+**Findings:**
+- `POST /api/decision/create` (WF-1 step 1) → HTTP 500: `SUPABASE_SERVICE_ROLE_KEY is not configured`, thrown at import time by `lib/supabase/admin.ts`.
+- `POST /api/billing/checkout` (WF-5) → HTTP 500 for the same reason, via `lib/stripe/stripe.client.ts`.
+- `.env.local` defines only `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Every API route the five workflows touch imports `adminClient`, which requires `SUPABASE_SERVICE_ROLE_KEY`; chat/AI analysis additionally requires `ANTHROPIC_API_KEY`; billing additionally requires `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_PREMIUM_PRICE_ID`.
+
+**Not done:** None of the five workflows were run in a browser (Chrome, 1440px/375px) — all five fail at their first data-writing step before any UI or console-error observation is possible. This is a missing-credential environment gap, not a code defect, so no fix is within this task's scope.
+
+**Verification:** `curl -X POST /api/decision/create` and `curl -X POST /api/billing/checkout` against a local `next dev` server, both reproducing HTTP 500 with the errors above. Dev server stopped after confirming the blocker.
+
+---
+
 ## IR01-075 — `useSubscription` plan-gating verification
 
 **Type:** Verification only — no code changes
