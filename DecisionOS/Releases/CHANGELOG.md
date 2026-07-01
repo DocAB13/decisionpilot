@@ -1,5 +1,22 @@
 # DecisionOS Changelog
 
+## IR01-074 — Billing upgrade flow
+
+**Type:** Feature (new component) + bug fix (pre-existing gap in a listed acceptance-criteria file)
+
+**Summary:** Built the Stripe Checkout upgrade flow per H13 §4.1: a reusable, H08-aligned pricing component, and a working post-checkout confirmation page.
+
+**Changes:**
+- Added `features/marketing/PricingSection.tsx` + `PricingSection.module.css`: Free/Pro/Premium cards (`Card` component, H08 §6 three-column grid), plan-aware "Current plan" label via the existing `useSubscription` hook, and "Upgrade to Pro"/"Upgrade to Premium" buttons that `POST /api/billing/checkout` and redirect via `window.location.href` on success.
+- Replaced the only reachable pricing cards in the app — an inline ~60-line block inside the legacy `components/App.jsx` homepage, wired to the deprecated `/api/create-checkout` — with `<PricingSection />`. No other part of that 5000-line legacy file was touched (its other, unrelated `handleUpgrade` nav-badge buttons are untouched).
+- Rebuilt `pages/success.js` + new `pages/success.module.css`: it previously ignored `session_id`/`return` entirely, linked to `/` instead of `/dashboard`, and referenced the old "DecisionPilot" product name — none of which satisfied this task's own acceptance criteria. It now reads `session_id`/`return` from `router.query` (defaulting to `/dashboard` per H13 §4.1), and is built on H08 tokens reusing `Card`/`Button`.
+
+**Verification:** `npx tsc --noEmit`, `npx next build`, and `npx vitest run` (153 tests) all pass. Also smoke-tested the production build with `next start`: homepage and `/success?session_id=...` both return 200 with no server errors.
+
+**Not done (explicitly out of scope for this task):** `pages/account.tsx` still doesn't exist. `History.tsx` (IR01-063) and `Chat.tsx` (IR01-073) both already route their Free-plan upgrade prompts there, so those links still 404. IR01-074's file list only specified `PricingSection.tsx` — a dedicated account/billing page isn't listed until a future task.
+
+---
+
 ## IR01-073 — AI Chat Interface
 
 **Type:** Feature (new screen)
