@@ -6,14 +6,14 @@
 
 **Current Phase:** Phase 5 — Frontend (in progress)
 
-**Current IR01 Task:** IR01-075 — Integrate `useSubscription` hook into plan-gated features
+**Current IR01 Task:** IR01-076 — Phase 5 E2E user flow verification
 
-**Last Completed Task:** IR01-074 — Billing upgrade flow
+**Last Completed Task:** IR01-075 — `useSubscription` plan-gating verification (no code changes)
 
-**IR01 Progress:** 75 / 86 tasks complete (~87%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted).
+**IR01 Progress:** 76 / 86 tasks complete (~88%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted).
 
 **Repository:**
-- GitHub: Synced through IR01-070 (commit `fa4a636`) — IR01-070b, IR01-071, IR01-072, IR01-073, IR01-074 committed locally, not yet pushed
+- GitHub: Synced through IR01-070 (commit `fa4a636`) — IR01-070b, IR01-071, IR01-072, IR01-073, IR01-074, IR01-075 committed locally, not yet pushed
 - Vercel: Synced through IR01-060
 
 ---
@@ -23,7 +23,7 @@
 | Sprint | Scope | Status |
 |---|---|---|
 | Sprint 3 | IR01-063, IR01-064 | Completed |
-| Sprint 4 | IR01-065 – IR01-070, IR01-070b, IR01-071, IR01-072, IR01-073, IR01-074 (in progress, task-by-task) | In progress |
+| Sprint 4 | IR01-065 – IR01-070, IR01-070b, IR01-071 – IR01-075 (in progress, task-by-task) | In progress |
 
 ---
 
@@ -33,12 +33,12 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend — in progress (IR01-056 – IR01-074 done; IR01-075 – IR01-076 remaining)
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-075 done; IR01-076 remaining)
 - Phase 6 — Testing & Launch — not started
 
 ---
 
-## IR01: In Progress (75 / 86 tasks)
+## IR01: In Progress (76 / 86 tasks)
 
 ### Phase 1 — Foundation
 - IR01-001 through IR01-012 ✅
@@ -99,8 +99,9 @@
 - IR01-072 — `features/decision-wizard/FinalDecisionForm.tsx` (component 8 capture + `decision_made` transition). Wired into `pages/decision/[id].tsx` via a local `showFinalForm` toggle; added a `decision_made` router case that displays the Action Plan (component 9) from `decision.components['9_action_plan']`. Added `ActionPlanContent`/`ActionPlanItem` types. Fixed the pre-existing `advanceState` field-name bug (`status` → `to_status`) in `context/DecisionContext.tsx` that this task depended on, and taught `advanceState` to merge a returned `action_plan` into local component state (keeping its `Promise<void>` signature, per H09).
 - IR01-073 — `features/decision-chat/Chat.tsx` (AI Chat per H08 §11/H13 §3.6). Wired into `pages/decision/[id].tsx` via a `showChat` toggle: desktop 40/60 split (current view + Chat panel), mobile hides the left pane so Chat takes the full width. `RecommendationView`'s "Explore with AI"/"Ask AI a question" buttons now call the new `onOpenChat` prop instead of `router.push` to a route that was never built. Free-tier gating lives inside `Chat.tsx` (inline upgrade prompt, no navigation away). "Update Decision" on a material-change prompt calls the existing `advanceState('draft')` rather than a new endpoint, since none exists for auto-applying a chat-detected change.
 - IR01-074 — `features/marketing/PricingSection.tsx` (billing upgrade flow per H13 §4.1). Replaced the only reachable pricing cards in the app — a ~60-line block in the legacy `components/App.jsx` homepage wired to the deprecated `/api/create-checkout` — with `<PricingSection />`, now calling `/api/billing/checkout`. Rebuilt `pages/success.js`, which had never actually read `session_id`/`return` or linked to `/dashboard` despite the roadmap assuming it did; it now does both, on H08 tokens.
+- IR01-075 — Verification-only, no code changes. Confirmed `useSubscription.js` returns `{ plan, loading }`; confirmed `Chat.tsx`, `History.tsx` (via API `plan_limit`), and `TopNav.tsx` all correctly gate on plan; also spot-checked `RecommendationView.tsx`, `PricingSection.tsx`, and the legacy `App.jsx`'s own `TopNav` — all correct. No component found gating on plan without going through `useSubscription` or the API's `plan_limit`. Noted (not fixed, no behavioral impact): `useSubscription.js` uses `.single()` against a `subscriptions` table that per its own migration comment only gets a row on first Stripe upgrade, so every free user's query resolves with an ignored "no rows" error — `plan` still correctly falls back to `'free'`, no user-facing symptom.
 
-**Remaining in Phase 5:** IR01-075 (`useSubscription` integration into plan-gated features), IR01-076 (Phase 5 E2E verification).
+**Remaining in Phase 5:** IR01-076 (Phase 5 E2E verification).
 
 ### Phase 6 — Testing & Launch
 - IR01-077 through IR01-085 — not started.
@@ -109,10 +110,10 @@
 
 ## Next Task
 
-**IR01-075 — Integrate `useSubscription` hook into plan-gated features**
-Verify `hooks/useSubscription.js` is wired into all plan-gated components: `Chat.tsx` (done, IR01-073), `History.tsx`'s `plan_limit` (done, IR01-063), and the TopNav plan badge (done, IR01-058). Mostly a verification pass per the roadmap's own framing, plus closing the `/account` gap noted below if in scope.
+**IR01-076 — Phase 5 E2E user flow verification**
+Manual, in-browser verification of all five H05 primary workflows (Anonymous, Returning user, Chat, History, Billing) at 1440px and 375px, per the roadmap's acceptance criteria — not a code-writing task. Requires a running app instance with real Supabase/Stripe test-mode credentials and an actual browser session (login, Stripe Checkout test card, etc.), unlike IR01-065–075 which were all static code changes.
 
-**Known gap for whoever scopes it:** No `pages/account.tsx` exists. `History.tsx` and `Chat.tsx` both route their Free-plan upgrade prompts to `/account`, which 404s today. Neither IR01-074 nor IR01-075 lists creating this page as a file to build.
+**Known gap for whoever scopes it:** No `pages/account.tsx` exists. `History.tsx` and `Chat.tsx` both route their Free-plan upgrade prompts to `/account`, which 404s today. This will surface directly in WF-5 (Billing) if that workflow's test path goes through the History/Chat upgrade prompts rather than the homepage `PricingSection`.
 
 ## Next Milestone
 

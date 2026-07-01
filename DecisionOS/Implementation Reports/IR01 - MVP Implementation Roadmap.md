@@ -2567,6 +2567,17 @@ The legacy Landing page (`components/App.jsx`) had the only reachable pricing ca
 - Free user with >10 decisions sees upgrade prompt in History
 - Plan badge in TopNav reflects current plan from `useSubscription`
 
+**Status: Complete — verification only, no code changes.** Checked every plan-gated surface in the app against `hooks/useSubscription.js`:
+- `hooks/useSubscription.js` returns exactly `{ plan, loading }` — confirmed.
+- `features/decision-chat/Chat.tsx` (IR01-073): `canChat = plan === 'pro' || plan === 'premium'`; the inline upgrade prompt renders on `!canChat`, which is logically equivalent to the roadmap's `plan === 'free'` check (plan is always `'free' | 'pro' | 'premium'`) — same behavior, already correct.
+- `features/decision-history/History.tsx` (IR01-063): reads `plan_limit` from `GET /api/decision/history`, which computes it server-side as `actualTotal > 10` for free-tier users (`pages/api/decision/history.ts`) — confirmed correct end to end.
+- `components/layout/TopNav.tsx` (IR01-058): reads `plan` from `useSubscription`, shows the PRO/PREMIUM badge only for those tiers — confirmed.
+- Also checked, not in this task's file list but relevant: `features/decision-wizard/RecommendationView.tsx` (IR01-071) and `features/marketing/PricingSection.tsx` (IR01-074) both already use `useSubscription` correctly; the legacy `components/App.jsx` has its own unrelated `TopNav` function that also already uses `useSubscription` correctly (predates this roadmap).
+
+No component was found doing plan-based conditional rendering without `useSubscription` or the API's `plan_limit`. `npx tsc --noEmit` and `npx vitest run` (153 tests) re-confirmed green with zero files touched.
+
+**Observed but not changed (out of scope — no behavioral impact):** `useSubscription.js` queries `subscriptions` with `.single()` rather than `.maybeSingle()`. Per the table's own migration comment, a `subscriptions` row is only written by the Stripe webhook on first upgrade — a user who has never upgraded has no row at all, so this query resolves with a Postgrest "no rows" error every time for every free user. The code doesn't check the `error` field, so `plan` still correctly falls back to `'free'` via `data?.plan || 'free'` — no user-facing symptom, nothing thrown, nothing logged. Fixing it would touch a hook used on every page in the app for a purely internal, invisible correction, which is outside "confirm it's wired" and risked being the kind of unrelated refactor this task explicitly said not to do.
+
 ---
 
 ### IR01-076 — Phase 5 E2E user flow verification

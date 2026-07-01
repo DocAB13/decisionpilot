@@ -1,5 +1,26 @@
 # DecisionOS Changelog
 
+## IR01-075 — `useSubscription` plan-gating verification
+
+**Type:** Verification only — no code changes
+
+**Summary:** Per the roadmap's own framing ("Confirm `hooks/useSubscription.js` is wired into all plan-gated components"), audited every plan-gated surface in the app rather than building anything new.
+
+**Findings — all already correctly wired:**
+- `hooks/useSubscription.js` returns exactly `{ plan, loading }`.
+- `features/decision-chat/Chat.tsx` (IR01-073) gates on `plan === 'pro' || plan === 'premium'`, equivalent to the roadmap's `plan === 'free'` framing.
+- `features/decision-history/History.tsx` (IR01-063) reacts to `plan_limit` from `GET /api/decision/history`, which the endpoint computes server-side as `actualTotal > 10` for free-tier users.
+- `components/layout/TopNav.tsx` (IR01-058) shows the PRO/PREMIUM badge from `useSubscription`.
+- Also checked (not in this task's file list): `RecommendationView.tsx` (IR01-071), `PricingSection.tsx` (IR01-074), and the legacy `App.jsx`'s own separate `TopNav` function — all already use `useSubscription` correctly.
+
+No component was found rendering plan-based content without going through `useSubscription` or the API's `plan_limit`.
+
+**Verification:** `npx tsc --noEmit` and `npx vitest run` (153 tests) re-confirmed green; zero files were changed for this task.
+
+**Noted, not fixed (no user-facing impact — would be unrelated-refactor scope):** `useSubscription.js` queries the `subscriptions` table with `.single()`. Per that table's own migration comment, a row only exists once a user has gone through the Stripe webhook (i.e., first upgrade) — a free user who's never upgraded has no row at all, so this query always resolves with an unchecked "no rows" error for them. `plan` still correctly defaults to `'free'` via `data?.plan || 'free'`, and nothing is thrown or logged, so there's no visible symptom. Left as-is since fixing it means touching a hook used on every page for a purely internal correction outside this task's "confirm it's wired" scope.
+
+---
+
 ## IR01-074 — Billing upgrade flow
 
 **Type:** Feature (new component) + bug fix (pre-existing gap in a listed acceptance-criteria file)
