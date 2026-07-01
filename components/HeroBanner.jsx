@@ -211,173 +211,61 @@ export function AnimatedGlobe({ t }) {
   );
 }
 
-export function HeroBanner({ onStart, t, lang }) {
-  const [current, setCurrent] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const timerRef = useRef(null);
-
-  const CATEGORIES = [
-    { id: "vacation", label: "✈️ Vacation" },
-    { id: "car", label: "Cars" },
-    { id: "realestate", label: "🏡 Houses" },
-  ];
-
-  function goTo(idx) {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setTimeout(() => { setCurrent(idx); setIsAnimating(false); }, 300);
-  }
-
-  useEffect(() => {
-    if (isPaused) return;
-    timerRef.current = setInterval(() => {
-      goTo((current + 1) % SLIDES.length);
-    }, 6000);
-    return () => clearInterval(timerRef.current);
-  }, [current, isPaused]);
-
-  const slide = SLIDES[current];
-  const quote = t.categories_data?.[slide.id]?.quote || "";
-
+// Rebuilt for DecisionOS (formerly a rotating product-comparison carousel with stock
+// photos, fabricated review counts, and per-slide affiliate-quiz CTAs). Static hero,
+// honest copy, single CTA into the real wizard at /decision/new.
+export function HeroBanner({ onStart }) {
   return (
-    <div style={{ position: "relative", overflow: "hidden", borderRadius: 0 }}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}>
-
-      {/* Background image - with optional slow zoom for house slide */}
-      <div style={{
-        position: "absolute", inset: 0,
-        backgroundImage: `url(https://images.unsplash.com/${slide.image}?w=1600&h=700&fit=crop&auto=format)`,
-        backgroundSize: "cover", backgroundPosition: "center",
-        opacity: isAnimating ? 0 : 1,
-        animation: slide.slowZoom ? "heroSlowZoom 14s ease-in-out infinite alternate" : "none",
-        transition: "opacity 0.5s ease",
-      }} />
-
-      {/* Gradient overlay */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: slide.gradient || `linear-gradient(135deg, ${slide.color}EE 0%, ${slide.color}99 40%, rgba(0,0,0,0.3) 100%)`,
-        transition: "background 0.5s ease",
-      }} />
-
-      {/* Price badge (vacation only) */}
-      {slide.price && (
-        <div style={{
-          position: "absolute", bottom: 28, right: 28, zIndex: 5,
-          background: "rgba(255,255,255,0.15)", backdropFilter: "blur(12px)",
-          border: "1.5px solid rgba(255,255,255,0.4)",
-          borderRadius: 14, padding: "10px 18px",
-          animation: "heroGlow 2.6s ease-in-out infinite",
-        }}>
-          <div style={{ color: "rgba(255,255,255,0.75)", fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 2 }}>Best deal</div>
-          <div style={{ color: "#fff", fontSize: 22, fontWeight: 900, letterSpacing: -0.5 }}>{slide.price}</div>
-        </div>
-      )}
-
-      {/* Content */}
+    <div style={{ position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #1A56DB 0%, #3B5BDB 55%, #7048E8 100%)" }}>
       <div className="hero-content" style={{
         position: "relative", zIndex: 1,
         maxWidth: 1100, margin: "0 auto",
-        padding: "60px 32px",
+        padding: "72px 32px",
         display: "flex", alignItems: "center", gap: 40,
-        minHeight: 420,
+        minHeight: 360,
       }}>
-        {/* Left text */}
-        <div style={{ flex: 1, minWidth: 0, position: "relative" }}>
-          <button onClick={() => { const el = document.getElementById("dp-comparator"); el ? el.scrollIntoView({behavior:"smooth"}) : window.scrollTo({top:600,behavior:"smooth"}); }}
-            style={{ display:"inline-flex",alignItems:"center",gap:8,
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display:"inline-flex",alignItems:"center",gap:8,
             background:"rgba(255,255,255,0.15)",backdropFilter:"blur(10px)",
             border:"1px solid rgba(255,255,255,0.3)",
             borderRadius:24,padding:"6px 16px",marginBottom:20,
-            color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",
-            transition:"all 0.18s" }}
-            onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.25)";e.currentTarget.style.transform="translateY(-1px)";}}
-            onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.15)";e.currentTarget.style.transform="translateY(0)";}}>
+            color:"#fff",fontSize:13,fontWeight:600 }}>
             <span style={{ width:7,height:7,borderRadius:"50%",background:"#4ADE80",display:"inline-block",boxShadow:"0 0 8px #4ADE80" }} />
-            {t.tagline}
-          </button>
-
-          {/* Market tagline — AI-powered comparison platform */}
-          {t.marketTag && (
-            <p style={{ color:"rgba(255,255,255,0.75)", fontSize:"clamp(12px,1.6vw,15px)", fontWeight:500, margin:"0 0 14px", letterSpacing:0.1, lineHeight:1.5, maxWidth:520 }}>
-              {t.marketTag}
-            </p>
-          )}
+            AI-powered decision assistant
+          </div>
 
           <h1 style={{
-            color: "#fff", fontSize: "clamp(32px, 5vw, 58px)",
-            fontWeight: 900, lineHeight: 1.08, letterSpacing: -2,
-            margin: "0 0 8px", textShadow: "0 2px 20px rgba(0,0,0,0.3)",
-            opacity: isAnimating ? 0 : 1, transition: "opacity 0.3s ease",
+            color: "#fff", fontSize: "clamp(32px, 5vw, 54px)",
+            fontWeight: 900, lineHeight: 1.1, letterSpacing: -1.5,
+            margin: "0 0 16px", textShadow: "0 2px 20px rgba(0,0,0,0.2)",
           }}>
-            {t.hero_title}
+            Make your biggest decisions with confidence
           </h1>
 
-          <h2 style={{
-            fontSize: "clamp(28px, 4vw, 50px)", fontWeight: 900,
-            lineHeight: 1.08, letterSpacing: -2, margin: "0 0 20px",
-            background: "linear-gradient(90deg, #fff 0%, rgba(255,255,255,0.7) 100%)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            opacity: isAnimating ? 0 : 1, transition: "opacity 0.3s ease 0.05s",
+          <p style={{
+            color: "rgba(255,255,255,0.85)", fontSize: "clamp(15px,1.8vw,18px)", fontWeight: 500,
+            margin: "0 0 28px", lineHeight: 1.6, maxWidth: 520,
           }}>
-            {t.hero_subtitle}
-          </h2>
-
-          {/* Quote */}
-          {quote && (
-            <div style={{
-              background: "rgba(255,255,255,0.12)", backdropFilter: "blur(8px)",
-              border: "1px solid rgba(255,255,255,0.2)",
-              borderLeft: "3px solid rgba(255,255,255,0.6)",
-              borderRadius: 10, padding: "12px 16px", marginBottom: 28,
-              color: "rgba(255,255,255,0.9)", fontSize: 14, fontStyle: "italic",
-              lineHeight: 1.6, maxWidth: 480,
-              opacity: isAnimating ? 0 : 1, transition: "opacity 0.3s ease 0.1s",
-            }}>
-              "{quote}"
-            </div>
-          )}
+            DecisionOS walks you through your context, goals, constraints, and alternatives, then gives you an AI-generated recommendation, an action plan, and outcome tracking — for financial, career, health, and other major life decisions.
+          </p>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <button onClick={() => onStart("tree", slide.id)} style={{
-              background: "#fff", color: slide.color,
-              border: "none", borderRadius: 10, padding: "13px 24px",
-              fontSize: 15, fontWeight: 800, cursor: "pointer",
+            <button onClick={() => onStart("new-decision")} style={{
+              background: "#fff", color: "#1A56DB",
+              border: "none", borderRadius: 10, padding: "14px 28px",
+              fontSize: 16, fontWeight: 800, cursor: "pointer",
               boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-              transition: "all 0.2s", animation: "heroGlow 2.6s ease-in-out infinite",
+              transition: "all 0.2s",
               display: "flex", alignItems: "center", gap: 8,
             }}
               onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
               onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink:0 }}><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-              {t.banner_cta || "Decide now →"}
-            </button>
-            <button onClick={() => onStart("chat")} style={{
-              background: "rgba(255,255,255,0.15)", color: "#fff",
-              border: "2px solid rgba(255,255,255,0.4)",
-              borderRadius: 10, padding: "10px 20px",
-              fontSize: 15, fontWeight: 700, cursor: "pointer",
-              backdropFilter: "blur(8px)", transition: "all 0.2s",
-              display: "flex", alignItems: "center", gap: 8,
-            }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
-              onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}>
-              <img src="/asel-mascot.png" style={{ width: 26, height: 26, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%", border: "2px solid rgba(255,255,255,0.4)" }} alt="Ai·sel" />
-              Chat with Ai·sel
+              Start a Decision →
             </button>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 18 }}>
-            <span style={{ color: "#FBBF24", fontSize: 13, letterSpacing: 1 }}>★★★★★</span>
-            <span style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 500 }}>
-              4.8/5 · Trusted by 50,000+ people
-            </span>
-          </div>
-
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 14 }}>
-            {["✓ Free forever", "✓ No signup needed", "✓ Private & secure"].map(label => (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 20 }}>
+            {["Free to start", "AI recommendation with reasoning", "Track the outcome"].map(label => (
               <span key={label} style={{
                 background: "rgba(255,255,255,0.12)", backdropFilter: "blur(6px)",
                 border: "1px solid rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.9)",
@@ -386,81 +274,7 @@ export function HeroBanner({ onStart, t, lang }) {
             ))}
           </div>
         </div>
-
-        {/* Right: category thumbnails */}
-        <div className="hero-thumbs" style={{ display: "flex", flexDirection: "column", gap: 8, flexShrink: 0 }}>
-          {SLIDES.map((s, i) => (
-            <button key={s.id} onClick={() => goTo(i)} style={{
-              width: 120, height: 36, borderRadius: 8, overflow: "hidden",
-              border: `2px solid ${i === current ? "#fff" : "rgba(255,255,255,0.3)"}`,
-              cursor: "pointer", padding: 0, position: "relative",
-              opacity: i === current ? 1 : 0.6,
-              transform: i === current ? "scale(1.05)" : "scale(1)",
-              transition: "all 0.2s",
-            }}>
-              <div style={{
-                position: "absolute", inset: 0,
-                backgroundImage: `url(https://images.unsplash.com/${s.image}?w=120&h=36&fit=crop&auto=format)`,
-                backgroundSize: "cover", backgroundPosition: "center",
-              }} />
-              <div style={{
-                position: "absolute", inset: 0,
-                background: i === current ? `${s.color}80` : "rgba(0,0,0,0.35)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "#fff", fontSize: 11, fontWeight: 700, gap: 4,
-              }}>
-                <span>{s.emoji}</span>
-                <span style={{ fontSize: 10 }}>{s.label}</span>
-              </div>
-            </button>
-          ))}
-        </div>
       </div>
-
-      {/* Bottom dots - bigger and more clickable */}
-      <div style={{
-        position: "absolute", bottom: 20, left: "50%", transform: "translateX(-50%)",
-        display: "flex", gap: 8, zIndex: 5,
-      }}>
-        {SLIDES.map((s, i) => (
-          <button key={i} onClick={() => goTo(i)} style={{
-            width: i === current ? 32 : 10, height: 10, borderRadius: 5,
-            background: i === current ? "#fff" : "rgba(255,255,255,0.5)",
-            border: "none", cursor: "pointer", padding: 0,
-            transition: "all 0.3s", boxShadow: i === current ? "0 2px 8px rgba(0,0,0,0.3)" : "none",
-          }} />
-        ))}
-      </div>
-
-      {/* Progress bar */}
-      {!isPaused && (
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: "rgba(255,255,255,0.2)" }}>
-          <div style={{
-            height: "100%", background: "#fff",
-            animation: "progress 4.5s linear infinite",
-          }} />
-        </div>
-      )}
-
-      <style>{`
-        @keyframes progress {
-          from { width: 0%; }
-          to { width: 100%; }
-        }
-        @keyframes heroGlow {
-          0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
-          50% { box-shadow: 0 4px 26px rgba(255,255,255,0.45); }
-        }
-        @keyframes heroSlowZoom {
-          0%   { transform: scale(1);    background-position: center; }
-          100% { transform: scale(1.10); background-position: 55% 50%; }
-        }
-        @keyframes aselFloat {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          33%      { transform: translateY(-10px) rotate(1deg); }
-          66%      { transform: translateY(-5px) rotate(-0.5deg); }
-        }
-      `}</style>
     </div>
   );
 }

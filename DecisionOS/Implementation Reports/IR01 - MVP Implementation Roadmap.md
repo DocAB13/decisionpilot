@@ -2792,6 +2792,40 @@ Two launch-blocking defects were found by a read-only Final Code Quality Audit p
 
 ---
 
+## UX Critical Fixes (outside IR01 numbering)
+
+Three UX defects, requested directly by the Founder, fixed the same way CQ1/CQ2 were: no task ID, no renumbering, tracked here because the touched files (the legacy landing page, `Chat.tsx`, `History.tsx`) sit in Phase 5/6 territory the roadmap already covers.
+
+### UX1 — Landing page marketed a different, older product than the DecisionOS MVP
+
+**Finding:** `components/App.jsx` (the component `pages/index.js` renders) and `components/HeroBanner.jsx` were still the legacy pre-pivot "DecisionPilot" product: a client-side product-comparison quiz with fabricated data presented as real — invented review counts ("18,431 reviews"), fabricated bank loan rates ("300+ banks"), an animated fake user counter (counting up to 24,891), fake Google/Trustpilot ratings, named-but-invented customer testimonials, a "Trusted partners" strip naming AutoScout24/CHECK24/Booking.com/Wayfair/Sixt/Europcar (no relationship exists), and false scale claims ("66+ Categories · 30 Languages", "190+ Countries · 1M+ Decisions"). The FAQ additionally described an affiliate-link revenue model and "completely free, no account needed, advanced features coming soon" — both false: DecisionOS has no affiliate links and already has live Free/Pro/Premium subscriptions (`features/marketing/PricingSection.tsx`, IR01-074). The only real DecisionOS surface on the page was `<PricingSection />`; nothing else linked into the actual wizard at `/decision/new`.
+
+**Fix (repositioned around the real product, confirmed with the Founder before the rewrite — see the two clarifying questions this session):** Rebuilt `HeroBanner.jsx`'s hero as a static, honest section (was a rotating stock-photo carousel with fake "4.8/5 · Trusted by 50,000+ people" and "free forever / no signup" claims) with a single "Start a Decision →" CTA into `/decision/new`. In `App.jsx`: rewrote the "why us" positioning copy and the 4-step "How it works" section to describe the actual wizard flow (context/goal/constraints/alternatives → AI recommendation → action plan → outcome tracking, per IR01-065–075c); replaced the 66+ product-category tree with a new `DECISIONOS_CATEGORIES` constant — the real 9 categories from `core/decision/Decision.constants.ts` — each linking to `/decision/new?category=...` (a param `pages/decision/new.tsx` already accepted); removed the fabricated-data sections entirely (promo banners, phone/loan comparison cards, tourism destinations, trust ratings, the "Global Vision" concept section, the animated-globe stats, testimonials, trusted partners); rewrote the FAQ with accurate answers (real pricing, no affiliate claims, real category list, real post-recommendation flow); fixed the footer (brand name, tagline, category links, copyright, removed four dead "#"-href social icons); rebranded "DecisionPilot" → "DecisionOS" throughout (nav logo, footer, welcome modal, meta tags in `pages/index.js`).
+
+**Explicitly left alone (per the Founder's second answer this session):** The legacy per-category quiz engine (`QuestionScreen`, `ResultsScreen` with its affiliate-link resolver, `ChatScreen` "Ai·sel", `FavoritesScreen`, the profile-personalization modal, `MARKETS`/`getMarket`) — thousands of lines, a distinct feature, not deleted. It's simply no longer linked to from the repositioned landing content, so it's unreachable from the main flow rather than removed. `TopNav`'s own category-pill row (shared across all legacy screens) was left as-is aside from its brand text, to avoid touching shared chrome outside this task's scope. `public/site.webmanifest`/`sitemap.xml` domain references were not touched.
+
+**Verification:** `npx tsc --noEmit`, `npx vitest run` (214 tests, unchanged), and `npx next build` all pass.
+
+### UX2 — "Update Decision" chat prompt promised an automatic update and reanalysis that never happened
+
+**Finding:** `features/decision-chat/Chat.tsx`'s material-change card (H08 §11) told the user "Would you like to update your {component} with this? This will trigger a new analysis," with a button labeled "Update Decision." In reality, per H13, no "apply this chat-detected change" endpoint exists — clicking the button only called `advanceState('draft')` and closed the chat panel. It did not write the chat-mentioned content into any component, and did not trigger a new AI analysis (that only happens later, if the user manually re-completes the wizard and submits). The action itself was already the correct, honest minimal one (per this task's own prior code comment); the copy shown to the user overpromised what it did.
+
+**Fix:** Corrected the copy to describe the real behavior — "If this changes your {component}, you can reopen this decision to edit it yourself — you'll need to resubmit for a new AI recommendation afterward" — and renamed the button to "Reopen to edit" (was "Update Decision") and the handler to `handleReopenForEditing` (was `handleUpdateDecision`). No behavior change; `advanceState('draft')` is still the only call made.
+
+**Note:** H08 §11 specifies literal "[Update Decision] [Keep as context only]" button labels. This fix intentionally deviates from that literal wording, per this session's explicit instruction to stop promising functionality that doesn't happen — the same category of Handbook-vs-reality gap CQ1/CQ2 fixed elsewhere. Flagging here rather than silently diverging from the Handbook.
+
+**Verification:** No test file exists for `Chat.tsx` (confirmed before editing). `npx tsc --noEmit`, `npx vitest run` (214 tests, unchanged), and `npx next build` all pass.
+
+### UX3 — "Upgrade plan" buttons in History and Chat linked to a 404
+
+**Finding:** `features/decision-history/History.tsx` (plan-limit prompt) and `features/decision-chat/Chat.tsx` (Pro-feature upgrade prompt) both called `router.push('/account')`. No `pages/account.tsx` exists — both buttons 404'd. This gap was already flagged in Development Status as a known issue for whoever ran IR01-076.
+
+**Fix:** Both now call `router.push('/#pricing')`. Added `id="pricing"` to the `<div>` wrapping `<PricingSection />` in `components/App.jsx` (the only place a plan can actually be chosen — real Stripe checkout via `/api/billing/checkout`, IR01-074) so the anchor lands on the actual pricing cards. No new page, no new component — reuses the existing, already-functional pricing flow.
+
+**Verification:** `npx tsc --noEmit`, `npx vitest run` (214 tests, unchanged), and `npx next build` all pass.
+
+---
+
 ### IR01-080 — Run full H09 TAC checklist
 
 **Description:** Execute every item in H09 Technical Acceptance Criteria (TAC-01 through TAC-08) against the production deployment.

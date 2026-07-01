@@ -323,7 +323,7 @@ export function History({ filters, emptyStateVariant, onClearFilters }: Props): 
             You&apos;ve reached the Free plan limit of 10 saved decisions. Upgrade to see your full
             history.
           </p>
-          <Button variant="primary" size="md" onClick={() => router.push('/account')}>
+          <Button variant="primary" size="md" onClick={() => router.push('/#pricing')}>
             Upgrade plan
           </Button>
         </Card>

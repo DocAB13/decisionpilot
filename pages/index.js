@@ -5,8 +5,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>DecisionPilot – AI-Powered Comparison Platform for Smarter Buying Decisions</title>
-        <meta name="description" content="AI-powered comparison platform for smarter buying decisions. Personalized recommendations across 66+ categories — free, unbiased, instant. Available in 30 languages." />
+        <title>DecisionOS – Your AI Decision Assistant</title>
+        <meta name="description" content="DecisionOS helps you think through your biggest decisions — financial, career, health, and more. Get an AI-generated recommendation, action plan, and outcome tracking. Free to start." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
         {/* 3-Market hreflang — EN / DE / ES */}
@@ -20,8 +20,8 @@ export default function Home() {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#1A56DB" />
-        <meta property="og:title" content="DecisionPilot – AI-Powered Comparison Platform" />
-        <meta property="og:description" content="AI-powered comparison platform for smarter buying decisions. 66+ categories, 30 languages. Free forever." />
+        <meta property="og:title" content="DecisionOS – Your AI Decision Assistant" />
+        <meta property="og:description" content="Think through your biggest decisions with an AI-generated recommendation, action plan, and outcome tracking. Free to start." />
         <meta property="og:url" content="https://decisionpilot.tech" />
         <meta property="og:type" content="website" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

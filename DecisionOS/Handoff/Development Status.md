@@ -10,6 +10,8 @@
 
 **Last Completed Task:** IR01-075c — Outcome, Reflection, and Lessons Learned capture (components 10–12) + `executing → completed` transition. Implemented exactly as scoped in the roadmap (`core/decision/Decision.types.ts`, `features/decision-outcome/OutcomeForm.tsx`+`.module.css`, `features/decision-outcome/ReflectionForm.tsx`+`.module.css`, `pages/decision/[id].tsx`, `pages/decision/[id].module.css` only). IR01-076 remains blocked and untouched.
 
+**Most recent work (outside IR01 numbering):** UX Critical Fixes UX1–UX3 (landing page repositioning, "Update Decision" copy honesty, `/account` → `/#pricing` upgrade links) — see the new "UX Critical Fixes" section below.
+
 **Roadmap extended, IR01-075b and IR01-075c both implemented:** `IR01-075b` and `IR01-075c` were added to the roadmap following a Documentation Consistency Audit, a Final Code Quality Audit, an MVP UX Audit, an MVP v1.0 Scope report, and a dedicated investigation that together established Outcome/Reflection/Lessons Learned/Executing→Completed were explicitly required by H05/H06/H08/H09 but had no IR01 task ever scoped for them. Inserted per the `IR01-070b` precedent — no completed task renumbered. Both are now done.
 
 **IR01 Progress:** 77 / 88 tasks complete in strict numeric-plus-lettered order, plus IR01-077, IR01-078, and IR01-079 (Phase 6) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (88 total: 85 original + IR01-070b, IR01-075b, IR01-075c, inserted). IR01-076 not yet completable — blocked on missing environment secrets. IR01-075c is now complete.
@@ -128,16 +130,26 @@ A read-only Final Code Quality Audit run after IR01-079 found two launch-blockin
 
 ---
 
+## UX Critical Fixes (outside IR01 numbering)
+
+Three UX defects requested directly by the Founder, fixed and tracked the same way as CQ1/CQ2. Full detail in `IR01 - MVP Implementation Roadmap.md`'s "UX Critical Fixes" section.
+
+- **UX1** — The landing page (`components/App.jsx`, `components/HeroBanner.jsx`, rendered by `pages/index.js`) was still the legacy pre-pivot "DecisionPilot" product: a comparison-shopping quiz with fabricated review counts, fake bank loan rates, a fake animated user counter, fake ratings, invented testimonials, a fake partners strip, and false scale claims (66+ categories, 30 languages, 190+ countries). Rebuilt the hero, positioning copy, "how it works" steps, categories (now the real 9 from `Decision.constants.ts`, linking to `/decision/new?category=...`), FAQ, and footer to honestly describe DecisionOS; removed the fabricated-data sections entirely; rebranded to "DecisionOS" throughout. The legacy quiz engine (`QuestionScreen`/`ResultsScreen`/`ChatScreen`/`FavoritesScreen`) was left in place, just no longer linked to from the landing content — not deleted (confirmed with the Founder before starting; a fresh discovery of the fabricated-data scope also prompted a follow-up confirmation mid-task).
+- **UX2** — `features/decision-chat/Chat.tsx`'s "Update Decision" prompt claimed clicking it would update the decision and "trigger a new analysis." It only called the existing `advanceState('draft')` and closed the chat — no content was applied, no analysis was triggered. Corrected the copy and renamed the button to "Reopen to edit" to match what actually happens; no behavior change. Note: this intentionally deviates from H08 §11's literal "Update Decision" label, per this session's explicit instruction — flagged rather than silently diverged.
+- **UX3** — `History.tsx` and `Chat.tsx`'s "Upgrade plan" buttons called `router.push('/account')`, a 404 (previously flagged here as a known gap). Both now route to `/#pricing`; added `id="pricing"` to the existing `<PricingSection />` wrapper in `App.jsx` so the anchor lands on the real, already-functional Stripe checkout flow.
+
+**Verification:** `npx tsc --noEmit`, `npx vitest run` (214 tests, unchanged), and `npx next build` all pass for all three.
+
+---
+
 ## Next Task
 
-IR01-075b and IR01-075c are both complete. The only remaining Phase 5 task is:
+IR01-075b and IR01-075c are both complete, and the UX1–UX3 critical fixes above are done. The only remaining Phase 5 task is:
 
 **IR01-076 — Phase 5 E2E user flow verification** (blocked, unchanged this round)
 Manual, in-browser verification of all five H05 primary workflows (Anonymous, Returning user, Chat, History, Billing) at 1440px and 375px, per the roadmap's acceptance criteria — not a code-writing task. Requires a running app instance with real Supabase/Stripe test-mode credentials and an actual browser session (login, Stripe Checkout test card, etc.), unlike IR01-065–075c which were all static code changes.
 
 IR01-076 itself, and IR01-080 through IR01-085, remain blocked on the missing environment secrets and cannot proceed regardless. The Final Code Quality Audit that produced CQ1/CQ2 also found several Recommended/Nice-to-have findings (CQ3–CQ8) not yet approved for a fix — those remain available as further audit-driven work if approved.
-
-**Known gap for whoever scopes it:** No `pages/account.tsx` exists. `History.tsx` and `Chat.tsx` both route their Free-plan upgrade prompts to `/account`, which 404s today. This will surface directly in WF-5 (Billing) if that workflow's test path goes through the History/Chat upgrade prompts rather than the homepage `PricingSection`.
 
 ## Next Milestone
 

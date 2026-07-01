@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useSubscription } from "../hooks/useSubscription";
 import { LANGUAGES, getTranslation, detectLanguage } from "./translations";
-import { HeroBanner, WorldwideSection } from "./HeroBanner";
+import { HeroBanner } from "./HeroBanner";
 import AselCorner from "./AselCorner";
 import { PricingSection } from "../features/marketing/PricingSection";
 
@@ -2087,7 +2087,7 @@ function HomeButton({ onHome, lang }) {
       <div style={{ width:28,height:28,borderRadius:7,background:`linear-gradient(135deg,\${C.accent},#6B8EFF)`,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0 }}>
         <img src="/asel-mascot.png" style={{ width:24,height:24,objectFit:"cover",objectPosition:"30% 8%" }} alt="" />
       </div>
-      <span style={{ fontWeight:800,fontSize:14,color:C.text,letterSpacing:-0.3,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>DecisionPilot</span>
+      <span style={{ fontWeight:800,fontSize:14,color:C.text,letterSpacing:-0.3,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>DecisionOS</span>
     </button>
   );
 }
@@ -2158,6 +2158,23 @@ const CAT_SVG_ICONS = {
   ecommerce: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>,
 };
 
+// DecisionOS's real 9 decision categories (core/decision/Decision.constants.ts DecisionCategory),
+// replacing the legacy 66+ product-category tree on the landing page.
+const DECISIONOS_CATEGORIES = [
+  { id: "financial", label: "Financial", desc: "Budgeting, investing, major purchases", color: "#1A56DB", icon: CAT_SVG_ICONS.financial },
+  { id: "technology", label: "Technology", desc: "Devices, software, tech decisions", color: "#7C3AED", icon: CAT_SVG_ICONS.tech },
+  { id: "health", label: "Health", desc: "Medical, wellness, fitness", color: "#DC2626", icon: CAT_SVG_ICONS.health },
+  { id: "travel", label: "Travel", desc: "Trips, relocation, travel planning", color: "#0369A1", icon: CAT_SVG_ICONS.tourism },
+  { id: "career", label: "Career", desc: "Job offers, career moves", color: "#059669",
+    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> },
+  { id: "insurance", label: "Insurance", desc: "Coverage and policy decisions", color: "#7048E8",
+    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5z"/></svg> },
+  { id: "home", label: "Home", desc: "Buying, renting, renovating", color: "#B45309", icon: CAT_SVG_ICONS.home },
+  { id: "education", label: "Education", desc: "Courses, degrees, certifications", color: "#0891B2", icon: CAT_SVG_ICONS.education },
+  { id: "lifestyle", label: "Lifestyle", desc: "Everyday and personal decisions", color: "#DB2777",
+    icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 18 5.5 21.5 7 14.5 2 9.5 9 9 12 2"/></svg> },
+];
+
 function TopNav({ onBack, showBack, t, lang, setLang, count, onStartSearch, onCategoryClick, profile, onShowProfile, favoritesCount, onShowFavorites }) {
 const { user, signOut } = useAuth();
 const { plan } = useSubscription();
@@ -2204,7 +2221,7 @@ const { plan } = useSubscription();
           <div style={{ width:32,height:32,borderRadius:8,background:`linear-gradient(135deg,${C.accent},#6B8EFF)`,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden" }}>
             <img src="/asel-mascot.png" style={{ width:28,height:28,objectFit:"cover",objectPosition:"30% 8%" }} alt="" />
           </div>
-          <span style={{ color:C.text,fontWeight:900,fontSize:16,letterSpacing:-0.5,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>DecisionPilot</span>
+          <span style={{ color:C.text,fontWeight:900,fontSize:16,letterSpacing:-0.5,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>DecisionOS</span>
         </div>
 
         {/* ── CENTERED SEARCH BAR (CHECK24 style) ── */}
@@ -3892,7 +3909,7 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
           setSelectedGroup(gid);
           setTimeout(() => document.getElementById("categories")?.scrollIntoView({behavior:"smooth", block:"start"}), 80);
         }} />
-      <HeroBanner onStart={onStart} t={{ ...t, marketTag: getMarket(lang).heroTag }} lang={lang} />
+      <HeroBanner onStart={onStart} />
 
       {/* Search bar */}
       <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "14px 24px", display: "none" }}>
@@ -3932,248 +3949,68 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
 
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
 
-      {/* ③ AI POSITIONING — why we're different */}
+      {/* ③ WHY DECISIONOS */}
       <div style={{ padding: "40px 0 32px", borderBottom: `1px solid ${C.border}` }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
-          <div style={{ flex: 1, minWidth: 260 }}>
-            <button onClick={()=>document.getElementById("dp-comparator")?.scrollIntoView({behavior:"smooth"})}
-              style={{ display:"inline-flex",alignItems:"center",gap:6,background:`${C.accent}12`,border:`1px solid ${C.accent}30`,borderRadius:20,padding:"4px 12px",fontSize:11,fontWeight:700,color:C.accent,letterSpacing:0.8,textTransform:"uppercase",marginBottom:14,cursor:"pointer",transition:"all 0.18s" }}
-              onMouseEnter={e=>{e.currentTarget.style.background=`${C.accent}20`;e.currentTarget.style.transform="translateY(-1px)";}}
-              onMouseLeave={e=>{e.currentTarget.style.background=`${C.accent}12`;e.currentTarget.style.transform="translateY(0)";}}>
-              <span style={{ width:6,height:6,borderRadius:"50%",background:C.accent,display:"inline-block",animation:"aselLoadPulse 1.4s ease-in-out infinite" }} />
-              AI-Powered · Not just comparison
-            </button>
-            <h2 style={{ color: C.text, fontSize: "clamp(22px, 3vw, 34px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 10px" }}>
-              The future of decision-making is <span style={{ color: C.accent }}>here</span>
-            </h2>
-            <p style={{ color: C.textSecondary, fontSize: 15, lineHeight: 1.7, margin: "0 0 20px", maxWidth: 520 }}>
-              Comparison tools have evolved — and so have your needs. DecisionPilot brings the next step: personalized AI intelligence that understands your priorities, cuts through the noise, and helps you decide with confidence.
-            </p>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              {[
-                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="3"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="3"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="3"/></svg>, text: lang==="de"?"KI lernt deine Prioritäten":lang==="ro"?"AI îți învață prioritățile":lang==="es"?"IA aprende tus prioridades":"AI learns your priorities", action: () => onShowProfile && onShowProfile(), color: C.accent },
-                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, text: lang==="de"?"Antwort in unter 60 Sekunden":lang==="ro"?"Răspuns în sub 60 de secunde":lang==="es"?"Respuesta en menos de 60 segundos":"Answer in under 60 seconds", action: () => document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}), color: "#7048E8" },
-                { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>, text: lang==="de"?"30 Sprachen unterstützt":lang==="ro"?"30 de limbi acceptate":lang==="es"?"30 idiomas soportados":"30 languages supported", action: () => document.querySelector(".lang-flag-btn")?.click(), color: "#059669" },
-              ].map((item, i) => (
-                <button key={i} onClick={item.action}
-                  style={{ display:"flex",alignItems:"center",gap:8,background:C.card,border:`1px solid ${C.border}`,borderRadius:10,padding:"8px 14px",fontSize:13,fontWeight:600,color:C.text,cursor:"pointer",transition:"all 0.18s" }}
-                  onMouseEnter={e=>{ e.currentTarget.style.borderColor=item.color; e.currentTarget.style.color=item.color; e.currentTarget.style.background=`${item.color}08`; e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow=`0 4px 12px ${item.color}20`; }}
-                  onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.color=C.text; e.currentTarget.style.background=C.card; e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}>
-                  <span style={{ color:item.color }}>{item.icon}</span>{item.text}
-                </button>
-              ))}
-            </div>
-            </div>
+        <div style={{ flex: 1, minWidth: 260 }}>
+          <div style={{ display:"inline-flex",alignItems:"center",gap:6,background:`${C.accent}12`,border:`1px solid ${C.accent}30`,borderRadius:20,padding:"4px 12px",fontSize:11,fontWeight:700,color:C.accent,letterSpacing:0.8,textTransform:"uppercase",marginBottom:14 }}>
+            <span style={{ width:6,height:6,borderRadius:"50%",background:C.accent,display:"inline-block",animation:"aselLoadPulse 1.4s ease-in-out infinite" }} />
+            AI-Powered · Not just a checklist
           </div>
-          <div style={{ display: "flex", gap: 16, flexShrink: 0 }}>
+          <h2 style={{ color: C.text, fontSize: "clamp(22px, 3vw, 34px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 10px" }}>
+            Decisions, structured — with AI to help you <span style={{ color: C.accent }}>see clearly</span>
+          </h2>
+          <p style={{ color: C.textSecondary, fontSize: 15, lineHeight: 1.7, margin: "0 0 20px", maxWidth: 560 }}>
+            DecisionOS doesn't just compare products — it works through your context, goals, constraints, and alternatives with you, then produces a clear recommendation with reasoning, an action plan, and a way to track how it turned out.
+          </p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             {[
-              { num: "66+", label: lang === "de" ? "Kategorien" : lang === "ro" ? "Subcategorii" : "Categories", color: C.accent,
-                action: () => document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}) },
-              { num: "30+", label: lang === "de" ? "Sprachen" : lang === "ro" ? "Limbi" : "Languages", color: "#7048E8",
-                action: () => document.querySelector(".lang-flag-btn")?.click() },
-              { num: "AI", label: lang === "de" ? "Powered" : "Powered", color: "#059669",
-                action: () => onStart("chat") },
-            ].map((s, i) => (
-              <div key={i} onClick={s.action}
-                style={{ textAlign:"center", padding:"20px 24px", background:C.card, border:`1.5px solid ${C.border}`, borderRadius:16, minWidth:80, cursor:"pointer", transition:"all 0.18s" }}
-                onMouseEnter={e=>{ e.currentTarget.style.borderColor=s.color; e.currentTarget.style.transform="translateY(-3px)"; e.currentTarget.style.boxShadow=`0 8px 24px ${s.color}22`; }}
-                onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}>
-                <div style={{ color:s.color, fontSize:28, fontWeight:900, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:-1 }}>{s.num}</div>
-                <div style={{ color:C.muted, fontSize:11, marginTop:4, fontWeight:600 }}>{s.label}</div>
-              </div>
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>, text: "9 decision categories", action: () => document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}), color: C.accent },
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="3"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="3"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="3"/></svg>, text: "AI recommendation with reasoning", action: () => document.getElementById("how-it-works")?.scrollIntoView({behavior:"smooth"}), color: "#7048E8" },
+              { icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>, text: "Free to start", action: () => onStart("new-decision"), color: "#059669" },
+            ].map((item, i) => (
+              <button key={i} onClick={item.action}
+                style={{ display:"flex",alignItems:"center",gap:8,background:C.card,border:`1px solid ${C.border}`,borderRadius:10,padding:"8px 14px",fontSize:13,fontWeight:600,color:C.text,cursor:"pointer",transition:"all 0.18s" }}
+                onMouseEnter={e=>{ e.currentTarget.style.borderColor=item.color; e.currentTarget.style.color=item.color; e.currentTarget.style.background=`${item.color}08`; e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow=`0 4px 12px ${item.color}20`; }}
+                onMouseLeave={e=>{ e.currentTarget.style.borderColor=C.border; e.currentTarget.style.color=C.text; e.currentTarget.style.background=C.card; e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}>
+                <span style={{ color:item.color }}>{item.icon}</span>{item.text}
+              </button>
             ))}
           </div>
         </div>
       </div>
-
-      {/* ④ SPLIT PROMO BANNERS */}
-      <div style={{ padding: "32px 0 0" }}>
-        <h2 style={{ color: C.text, fontSize: "clamp(18px, 2.5vw, 24px)", fontWeight: 800, margin: "0 0 16px", fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          {uiT("popularComp",lang)}
-        </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 32 }}>
-          {[
-            { id: "new_car", gid: "auto", title: lang === "de" ? "Auto vergleichen & sparen" : "Compare cars & save", sub: "New & used · Insurance · EV", img: "photo-1558618666-fcd25c85cd64", color: "#1A1A2E" },
-            { id: "credit_card", gid: "financial", title: lang === "de" ? "Kredite von 300+ Banken" : "Loans from 300+ banks", sub: "Mortgages · Cards · Deposits", img: "photo-1611974789855-9c2a0a7236a3", color: "#0F3460" },
-            { id: "mobile_plan", gid: "telecom", title: lang === "de" ? "Handyverträge vergleichen" : "Compare mobile plans", sub: "5G · Unlimited · SIM-only", img: "photo-1511707171634-5f897ff02aa9", color: "#16213E" },
-            { id: "hotel", gid: "tourism", title: lang === "de" ? "Hotels & Reisen finden" : "Find hotels & travel deals", sub: "Hotels · Flights · Packages", img: "photo-1566073771259-6a8506099945", color: "#0C1445" },
-          ].map(promo => (
-            <div key={promo.id} onClick={() => startWithTracking(promo.id)}
-              style={{ position: "relative", borderRadius: 16, overflow: "hidden", height: 100, cursor: "pointer", transition: "transform 0.2s, box-shadow 0.2s" }}
-              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.2)"; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div style={{ position: "absolute", inset: 0, backgroundImage: `url(https://images.unsplash.com/${promo.img}?w=600&h=200&fit=crop&auto=format)`, backgroundSize: "cover", backgroundPosition: "center" }} />
-              <div style={{ position: "absolute", inset: 0, background: `linear-gradient(100deg, ${promo.color}EE 40%, ${promo.color}88 70%, transparent 100%)` }} />
-              <div style={{ position: "relative", zIndex: 1, padding: "16px 20px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <div style={{ color: "#fff", fontSize: 15, fontWeight: 800, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{promo.title}</div>
-                <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 12 }}>{promo.sub}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ④b AI COMPARE */}
-      <CompareSection lang={lang} onStart={onStart} />
-      {[
-        { section: uiT("compareSmartph",lang), gid: "tech", items: [
-          { id: "phone", label: "Apple iPhone 17 Pro", sub: lang==="de"?"ab 1€ mit Vertrag · 131 Tarife":"from €1 on contract · 131 plans", img: "photo-1592750475338-74b7b21085ab", rating: "4.9", reviews: "18.431" },
-          { id: "phone", label: "Samsung Galaxy S26 Ultra", sub: lang==="de"?"ab 1€ mit Vertrag · 172 Tarife":"from €1 on contract · 172 plans", img: "photo-1610945415295-d9bbf067e59c", rating: "4.7", reviews: "12.922" },
-          { id: "phone", label: "Google Pixel 10 Pro", sub: lang==="de"?"ab 1€ mit Vertrag · 89 Tarife":"from €1 on contract · 89 plans", img: "photo-1567581935884-3349723552ca", rating: "4.6", reviews: "6.211" },
-          { id: "phone", label: "OnePlus 13", sub: lang==="de"?"ab 699€ · 54 Tarife":"from €699 unlocked · 54 plans", img: "photo-1574755393849-623942496936", rating: "4.5", reviews: "3.841" },
-          { id: "phone", label: "Sony Xperia 1 VII", sub: lang==="de"?"ab 1€ mit Vertrag · 41 Tarife":"from €1 on contract · 41 plans", img: "photo-1512054502232-10a0a035d672", rating: "4.4", reviews: "2.108" },
-        ]},
-        { section: uiT("compareLoans",lang), gid: "financial", items: [
-          { id: "personal_loan", label: "5.000 €", sub: lang==="de"?"ab 98,50€ / Monat · 60 Monate":"from €98/mo · 60 months", img: null, badge: "€", rating: null },
-          { id: "personal_loan", label: "10.000 €", sub: lang==="de"?"ab 179,55€ / Monat · 72 Monate":"from €179/mo · 72 months", img: null, badge: "€€", rating: null },
-          { id: "personal_loan", label: "20.000 €", sub: lang==="de"?"ab 314,18€ / Monat · 84 Monate":"from €314/mo · 84 months", img: null, badge: "€€€", rating: null },
-          { id: "personal_loan", label: "50.000 €", sub: lang==="de"?"ab 489,92€ / Monat · 96 Monate":"from €489/mo · 96 months", img: null, badge: "€€€€", rating: null },
-          { id: "mortgage", label: "150.000 €", sub: lang==="de"?"Immobilienkredit · Festzins":"Mortgage · Fixed rate", img: null, badge: "🏠", rating: null },
-        ]},
-      ].map(sec => {
-        const grp = CATEGORY_GROUPS.find(g => g.id === sec.gid);
-        return (
-          <div key={sec.section} style={{ marginBottom: 36 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-              <h2 style={{ color: C.text, fontSize: "clamp(16px, 2.2vw, 22px)", fontWeight: 800, margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{sec.section}</h2>
-              <button onClick={() => { setSelectedGroup(sec.gid); document.getElementById("categories")?.scrollIntoView({behavior:"smooth"}); }}
-                style={{ background: "none", border: "none", color: C.accent, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                {lang === "de" ? "Alle Angebote →" : lang === "ro" ? "Vezi toate →" : uiT("seeAll",lang)}
-              </button>
-            </div>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:12 }}>
-              {sec.items.map((item, i) => (
-                <div key={i} onClick={() => startWithTracking(item.id)}
-                  style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 14, padding: "16px", cursor: "pointer", transition: "all 0.2s", display: "flex", gap: 14, alignItems: "center" }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = grp?.color || C.accent; e.currentTarget.style.boxShadow = `0 4px 16px ${grp?.color || C.accent}18`; e.currentTarget.style.transform = "translateY(-1px)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                  {item.img ? (
-                    <div style={{ width: 60, height: 60, borderRadius: 10, overflow: "hidden", flexShrink: 0, background: C.bg }}>
-                      <img src={`https://images.unsplash.com/${item.img}?w=120&h=120&fit=crop&auto=format`} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="" />
-                    </div>
-                  ) : (
-                    <div style={{ width: 60, height: 60, borderRadius: 10, flexShrink: 0, background: `${grp?.color || C.accent}15`, border: `1px solid ${grp?.color || C.accent}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 900, color: grp?.color || C.accent }}>
-                      {item.badge}
-                    </div>
-                  )}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ color: C.text, fontSize: 14, fontWeight: 700, marginBottom: 3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{item.label}</div>
-                    <div style={{ color: C.muted, fontSize: 12, lineHeight: 1.4 }}>{item.sub}</div>
-                    {item.rating && <div style={{ color: "#F59E0B", fontSize: 11, marginTop: 4 }}>★ {item.rating} · {item.reviews} reviews</div>}
-                  </div>
-                  <span style={{ color: C.accent, fontSize: 16 }}>›</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-
-      {/* ⑤b TOURISM DESTINATIONS — CHECK24 style with real photos */}
-      <div style={{ marginBottom: 36 }}>
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
-          <h2 style={{ color:C.text, fontSize:"clamp(16px,2.2vw,22px)", fontWeight:800, margin:0, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-            {uiT("popularDest",lang)}
-          </h2>
-          <button onClick={()=>startWithTracking("hotel")} style={{ background:"none",border:"none",color:C.accent,fontSize:13,fontWeight:700,cursor:"pointer" }}>
-            {uiT("exploreAll",lang)}
-          </button>
-        </div>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:12 }}>
-          {[
-            { name:"Mallorca", country:lang==="de"?"Spanien":lang==="ro"?"Spania":"Spain", img:"photo-1570197788417-0e82375c9371", price:"ab 442€" },
-            { name:"Santorini", country:lang==="de"?"Griechenland":lang==="ro"?"Grecia":"Greece", img:"photo-1533105079780-92b9be482077", price:"ab 580€" },
-            { name:"Alanya", country:lang==="de"?"Türkei":lang==="ro"?"Turcia":"Turkey", img:"photo-1527631746610-bca00a040d60", price:"ab 389€" },
-            { name:"Dubai", country:lang==="de"?"VAE":lang==="ro"?"EAU":"UAE", img:"photo-1512453979798-5ea266f8880c", price:"ab 620€" },
-          ].map((d,i) => (
-            <div key={i} onClick={()=>startWithTracking("hotel")} style={{ position:"relative",borderRadius:14,overflow:"hidden",cursor:"pointer",aspectRatio:"4/3",transition:"transform 0.2s" }}
-              onMouseEnter={e=>e.currentTarget.style.transform="scale(1.02)"}
-              onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
-              <img src={`https://images.unsplash.com/${d.img}?w=400&h=300&fit=crop&auto=format`} onError={e=>{e.target.style.display="none";e.target.parentNode.style.background="#1e3a5f";}} style={{ width:"100%",height:"100%",objectFit:"cover",display:"block" }} alt={d.name} />
-              <div style={{ position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%)" }} />
-              <div style={{ position:"absolute",bottom:0,left:0,padding:"14px 16px" }}>
-                <div style={{ color:"#fff",fontSize:17,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{d.name}</div>
-                <div style={{ color:"rgba(255,255,255,0.8)",fontSize:12 }}>{d.country} · {d.price}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:12 }}>
-          {[
-            { name:"Barcelona", country:lang==="de"?"Spanien":"Spain", img:"photo-1539037116277-4db20889f2d4", price:"ab 310€" },
-            { name:"Hurghada", country:lang==="de"?"Ägypten":lang==="ro"?"Egipt":"Egypt", img:"photo-1539650116574-8efeb43e2750", price:"ab 399€" },
-            { name:"Maldives", country:"Maldives", img:"photo-1573843981267-be1999ff37cd", price:"ab 1.290€" },
-            { name:"Kreta", country:lang==="de"?"Griechenland":"Greece", img:"photo-1586861203927-800a5acdcc4d", price:"ab 359€" },
-          ].map((d,i) => (
-            <div key={i} onClick={()=>startWithTracking("hotel")} style={{ position:"relative",borderRadius:14,overflow:"hidden",cursor:"pointer",aspectRatio:"4/3",transition:"transform 0.2s" }}
-              onMouseEnter={e=>e.currentTarget.style.transform="scale(1.02)"}
-              onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}>
-              <img src={`https://images.unsplash.com/${d.img}?w=400&h=300&fit=crop&auto=format`} onError={e=>{e.target.style.display="none";e.target.parentNode.style.background="#1e3a5f";}} style={{ width:"100%",height:"100%",objectFit:"cover",display:"block" }} alt={d.name} />
-              <div style={{ position:"absolute",inset:0,background:"linear-gradient(to top,rgba(0,0,0,0.72) 0%,transparent 55%)" }} />
-              <div style={{ position:"absolute",bottom:0,left:0,padding:"14px 16px" }}>
-                <div style={{ color:"#fff",fontSize:16,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{d.name}</div>
-                <div style={{ color:"rgba(255,255,255,0.8)",fontSize:12 }}>{d.country} · {d.price}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ⑥ TRUST RATINGS */}
-      <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 16, padding: "24px 28px", marginBottom: 40, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
-        <div style={{ flex: 1, minWidth: 200 }}>
-          <div style={{ color: C.text, fontSize: 16, fontWeight: 800, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Trusted by users worldwide</div>
-          <div style={{ color: C.muted, fontSize: 13 }}>AI-powered decisions. Real results. No bias.</div>
-        </div>
-        {[
-          { stars: "★★★★★", score: "4.9", label: "Google Reviews", count: "2,841 ratings" },
-          { stars: "★★★★★", score: "4.8", label: "Trustpilot", count: "1,290 ratings" },
-        ].map((r, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 20px", background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12 }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ color: "#F59E0B", fontSize: 18, letterSpacing: 1 }}>{r.stars}</div>
-              <div style={{ color: C.text, fontSize: 22, fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{r.score}</div>
-            </div>
-            <div>
-              <div style={{ color: C.text, fontSize: 13, fontWeight: 700 }}>{r.label}</div>
-              <div style={{ color: C.muted, fontSize: 11 }}>{r.count}</div>
-            </div>
-          </div>
-        ))}
       </div>
 
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "0 24px" }}>
 
-        {/* ══ HOW IT WORKS + TRANSPARENCY ══ */}
-        <div style={{ marginBottom: 0 }}>
+        {/* ══ HOW IT WORKS ══ */}
+        <div id="how-it-works" style={{ marginBottom: 0 }}>
           <div style={{ background:`linear-gradient(135deg,${C.accent} 0%,#7048E8 100%)`,padding:"40px 24px",textAlign:"center",margin:"0 -24px 48px",position:"relative",overflow:"hidden" }}>
-            <img src="/asel-medium.png" alt="Ai·sel"             style={{ position:"absolute",right:"4%",bottom:0,height:"130%",maxHeight:200,objectFit:"contain",objectPosition:"center bottom",filter:"drop-shadow(0 6px 20px rgba(0,0,0,0.2))",opacity:0.9,pointerEvents:"none" }} />
             <div style={{ display:"inline-block",background:"rgba(255,255,255,0.15)",color:"#fff",borderRadius:20,padding:"4px 14px",fontSize:11,fontWeight:700,letterSpacing:1,textTransform:"uppercase",marginBottom:12 }}>Guide</div>
             <h2 style={{ color:"#fff",fontSize:"clamp(26px,4vw,42px)",fontWeight:900,letterSpacing:-1,margin:"0 0 10px" }}>
-              {lang==="de"?"Wie es funktioniert":lang==="es"?"Cómo funciona":lang==="ro"?"Cum funcționează":"How it works"}
+              How it works
             </h2>
             <p style={{ color:"rgba(255,255,255,0.82)",fontSize:17,margin:0 }}>
-              {lang==="de"?"Deine Antwort in unter 60 Sekunden":lang==="es"?"Tu respuesta en menos de 60 segundos":lang==="ro"?"Răspunsul tău în mai puțin de 60 de secunde":"Get your answer in under 60 seconds"}
+              From an open question to a clear recommendation and a plan
             </p>
           </div>
 
           <div className="steps-grid" style={{ display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:18,marginBottom:32 }}>
             {[
               { num:1, grad:[C.accent,C.purple],
-                title: lang==="de"?"Kategorie wählen":lang==="es"?"Elige una categoría":lang==="ro"?"Alege o categorie":"Choose a category",
-                desc: lang==="de"?"Wähle aus 66+ Kategorien — von Smartphones bis Krediten.":lang==="es"?"Elige entre 66+ categorías — de smartphones a préstamos.":lang==="ro"?"Alege din 66+ categorii — de la telefoane la credite.":"Pick from 66+ categories — smartphones to loans to hotels.",
-                icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg> },
-              { num:2, grad:[C.purple,"#059669"],
-                title: lang==="de"?"Einige Fragen beantworten":lang==="es"?"Responde algunas preguntas":lang==="ro"?"Răspunde la câteva întrebări":"Answer a few questions",
-                desc: lang==="de"?"Ai·sel lernt genau, was du brauchst — Budget, Nutzung, Prioritäten.":lang==="es"?"Ai·sel aprende exactamente lo que necesitas — presupuesto, uso, prioridades.":lang==="ro"?"Ai·sel află exact ce ai nevoie — buget, utilizare, priorități.":"Ai·sel learns exactly what you need — budget, usage, priorities.",
+                title: "Tell us the decision",
+                desc: "Describe your context, your goal, and any constraints — budget, timeline, must-haves.",
                 icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> },
+              { num:2, grad:[C.purple,"#059669"],
+                title: "Add your alternatives",
+                desc: "List the options you're actually weighing, whatever they are.",
+                icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg> },
               { num:3, grad:["#059669",C.gold],
-                title: lang==="de"?"KI analysiert Optionen":lang==="es"?"La IA analiza opciones":lang==="ro"?"AI analizează opțiunile":"AI analyzes hundreds of options",
-                desc: lang==="de"?"Durchsucht CNET, Wirecutter, Booking und mehr. Filtert nach deinem Profil — nicht nach Kommissionen.":lang==="es"?"Busca en CNET, Wirecutter, Booking y más. Filtra por tu perfil — no por comisiones.":lang==="ro"?"Caută pe CNET, Wirecutter, Booking și mai mult. Filtrează după profilul tău — nu după comisioane.":"Searches CNET, Wirecutter, Booking & more. Filters by your profile — not by commissions.",
+                title: "Get an AI recommendation",
+                desc: "The AI weighs your alternatives against your goals and constraints, and explains its reasoning.",
                 icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg> },
               { num:4, grad:[C.gold,C.accent],
-                title: lang==="de"?"Top-Empfehlungen erhalten":lang==="es"?"Recibe tus mejores opciones":lang==="ro"?"Primești top recomandări":"Get your top matches + why",
-                desc: lang==="de"?"Personalisierte Empfehlungen mit Vor-/Nachteilen, Match-Score und direkten Links. Wir erklären, warum jede Empfehlung zu dir passt.":lang==="es"?"Recomendaciones personalizadas con pros/contras, puntuación de coincidencia y enlaces directos. Explicamos por qué cada opción se adapta a ti.":lang==="ro"?"Recomandări personalizate cu avantaje/dezavantaje, scor de potrivire și link-uri directe. Explicăm de ce fiecare recomandare ți se potrivește.":"Personalized picks with pros/cons, Match %, and direct links. We explain exactly why each recommendation fits your needs.",
+                title: "Act on it, then track the outcome",
+                desc: "Follow the action plan it builds for you, then record what happened and what you'd do differently.",
                 icon:<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg> },
             ].map((s,i) => (
               <div key={i} style={{ background:`${s.grad[0]}08`,border:`1px solid ${s.grad[0]}22`,borderRadius:18,padding:"26px 22px",transition:"all 0.2s ease" }}
@@ -4193,284 +4030,69 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
 
         </div>
 
-        {/* Categories - immediately after How it works */}
+        {/* Categories — DecisionOS's actual 9 decision categories (H03), linking straight
+            into the real wizard at /decision/new?category=... (already accepts this param,
+            see pages/decision/new.tsx). Replaces the legacy 66+ product-category tree. */}
         <div id="categories" style={{ marginTop: 48, marginBottom: 80 }}>
-          {/* Full-width categories banner */}
           <div style={{ background: `linear-gradient(135deg, ${C.purple} 0%, ${C.accent} 100%)`, padding: "40px 24px", textAlign: "center", margin: "0 -24px 40px" }}>
             <div style={{ display: "inline-block", background: "rgba(255,255,255,0.15)", color: "#fff", borderRadius: 20, padding: "4px 14px", fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", marginBottom: 12 }}>Explore</div>
-            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>{t?.what_title || "What can you decide?"}</h2>
-            <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 17, margin: 0 }}>
-              {selectedGroup ? catName(selectedGroup, lang) : `${CATEGORY_GROUPS.length} categories · ${CATEGORIES_LIST.length} subcategories`}
-            </p>
+            <h2 style={{ color: "#fff", fontSize: "clamp(26px, 4vw, 42px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 10px" }}>What can you decide?</h2>
+            <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 17, margin: 0 }}>9 decision categories, one AI-guided process</p>
           </div>
 
-          {/* LEVEL 1 — Main category tiles (hidden when group selected) */}
-          {!selectedGroup && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 14 }}>
-              {CATEGORY_GROUPS.map(group => (
-                <button key={group.id} onClick={() => setSelectedGroup(group.id)}
-                  style={{
-                    background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 18,
-                    padding: "22px 14px", cursor: "pointer", textAlign: "center",
-                    transition: "all 0.2s cubic-bezier(.4,0,.2,1)",
-                    display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = `${group.color}10`;
-                    e.currentTarget.style.borderColor = `${group.color}60`;
-                    e.currentTarget.style.transform = "translateY(-4px)";
-                    e.currentTarget.style.boxShadow = `0 12px 30px ${group.color}20`;
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = C.card;
-                    e.currentTarget.style.borderColor = C.border;
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}>
-                  <div style={{
-                    width: 52, height: 52, borderRadius: 14, flexShrink: 0,
-                    background: `${group.color}16`, border: `1.5px solid ${group.color}35`,
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26,
-                  }}>{group.emoji}</div>
-                  <div style={{ color: C.text, fontSize: 13, fontWeight: 700, lineHeight: 1.3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-                    {catName(group.id, lang)}
-                  </div>
-                  <div style={{ color: C.muted, fontSize: 11, fontWeight: 500 }}>
-                    {group.subs.length} {lang === "ro" ? "subcategorii" : lang === "de" ? "Unterkategorien" : lang === "fr" ? "sous-catégories" : lang === "es" ? "subcategorías" : "subcategories"}
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* LEVEL 2 — Subcategory view (shown when group is selected) */}
-          {selectedGroup && (() => {
-            const group = CATEGORY_GROUPS.find(g => g.id === selectedGroup);
-            if (!group) return null;
-            return (
-              <div style={{ animation: "fadeUp 0.3s ease" }}>
-                {/* Back + group header */}
-                <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
-                  <button onClick={() => setSelectedGroup(null)} style={{
-                    display: "flex", alignItems: "center", gap: 6,
-                    background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10,
-                    padding: "8px 14px", cursor: "pointer", fontSize: 13, fontWeight: 700, color: C.textSecondary,
-                    transition: "all 0.15s", flexShrink: 0,
-                  }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = group.color; e.currentTarget.style.color = group.color; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textSecondary; }}>
-                    ← {lang === "ro" ? "Categorii" : lang === "de" ? "Kategorien" : lang === "fr" ? "Catégories" : lang === "es" ? "Categorías" : "Categories"}
-                  </button>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div style={{ width:40,height:40,borderRadius:12,background:`${group.color}16`,border:`1.5px solid ${group.color}40`,display:"flex",alignItems:"center",justifyContent:"center",color:group.color }}>
-                      {CAT_SVG_ICONS[group.id] || getIcon(group.id)}
-                    </div>
-                    <div>
-                      <div style={{ color: C.text, fontSize: 18, fontWeight: 800, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{catName(group.id, lang)}</div>
-                      <div style={{ color: C.muted, fontSize: 12 }}>{group.subs.length} {lang === "ro" ? "subcategorii disponibile" : "subcategories"}</div>
-                    </div>
-                  </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 14 }}>
+            {DECISIONOS_CATEGORIES.map(cat => (
+              <button key={cat.id} onClick={() => { window.location.href = `/decision/new?category=${cat.id}`; }}
+                style={{
+                  background: C.card, border: `1.5px solid ${C.border}`, borderRadius: 18,
+                  padding: "22px 14px", cursor: "pointer", textAlign: "center",
+                  transition: "all 0.2s cubic-bezier(.4,0,.2,1)",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = `${cat.color}10`;
+                  e.currentTarget.style.borderColor = `${cat.color}60`;
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow = `0 12px 30px ${cat.color}20`;
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = C.card;
+                  e.currentTarget.style.borderColor = C.border;
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}>
+                <div style={{
+                  width: 52, height: 52, borderRadius: 14, flexShrink: 0,
+                  background: `${cat.color}16`, border: `1.5px solid ${cat.color}35`,
+                  display: "flex", alignItems: "center", justifyContent: "center", color: cat.color,
+                }}>{cat.icon}</div>
+                <div style={{ color: C.text, fontSize: 13, fontWeight: 700, lineHeight: 1.3, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+                  {cat.label}
                 </div>
-
-                {/* Subcategory grid */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
-                  {group.subs.map(sub => (
-                    <button key={sub.id} onClick={() => onStart("tree", sub.id)}
-                      style={{
-                        display: "flex", alignItems: "center", gap: 12,
-                        background: C.card, border: `1.5px solid ${C.border}`,
-                        borderRadius: 14, padding: "14px 16px",
-                        cursor: "pointer", transition: "all 0.18s", textAlign: "left",
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.background = `${group.color}0e`;
-                        e.currentTarget.style.borderColor = `${group.color}55`;
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow = `0 6px 18px ${group.color}18`;
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.background = C.card;
-                        e.currentTarget.style.borderColor = C.border;
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "none";
-                      }}>
-                      <span style={{ display:"flex",alignItems:"center",color:group.color }}>{getIcon(sub.id)}</span>
-                      <span style={{ color: C.text, fontSize: 13.5, fontWeight: 600, lineHeight: 1.3 }}>{catName(sub.id, lang)}</span>
-                    </button>
-                  ))}
+                <div style={{ color: C.muted, fontSize: 11, fontWeight: 500, lineHeight: 1.3 }}>
+                  {cat.desc}
                 </div>
-              </div>
-            );
-          })()}
-        </div>
-
-        {/* AI Chat CTA - Can't find your category? */}
-        <div style={{ marginBottom: 80 }}>
-          <div style={{
-            background: `linear-gradient(135deg, ${C.accent} 0%, #3B5BDB 50%, #7048E8 100%)`,
-            borderRadius: 24,
-            boxShadow: `0 20px 60px ${C.accent}30`,
-            padding: "52px 40px",
-            textAlign: "center",
-          }}>
-            <h2 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 12px" }}>
-              Can't find your category?
-            </h2>
-            <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 16, margin: "0 0 28px", lineHeight: 1.6 }}>
-              Chat with Ai·sel about any decision — from choosing a university to planning a wedding.
-            </p>
-            <button onClick={() => onStart("chat")} style={{
-              background: "#fff", color: C.accent, border: "none", borderRadius: 14,
-              padding: "14px 32px", fontSize: 16, fontWeight: 800, cursor: "pointer",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.2)", transition: "all 0.2s",
-              display: "inline-flex", alignItems: "center", gap: 10,
-            }}
-              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
-              onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-              <img src="/asel-mascot.png" style={{ width: 30, height: 30, borderRadius: "50%", objectFit: "cover", objectPosition: "30% 8%" }} alt="Ai·sel" />
-              Chat with Ai·sel →
-            </button>
-          </div>
-        </div>
-
-        {/* Pricing Section — H08-aligned, IR01-074 */}
-        <PricingSection />
-      </div>
-
-      {/* ═══════════════════════════════════════════════════════════
-          CONCEPT SECTION — International platform for every need
-      ═══════════════════════════════════════════════════════════ */}
-      <div style={{ background: `linear-gradient(135deg, #0F172A 0%, #1E2D4A 50%, #0F172A 100%)`, padding: "72px 24px", overflow: "hidden", position: "relative" }}>
-
-        {/* Decorative globe grid lines */}
-        <div style={{ position: "absolute", inset: 0, opacity: 0.07, backgroundImage: "radial-gradient(circle at 50% 50%, #1A56DB 1px, transparent 1px)", backgroundSize: "40px 40px", pointerEvents: "none" }} />
-
-        <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
-
-          {/* Header */}
-          <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(26,86,219,0.2)", border: "1px solid rgba(26,86,219,0.4)", borderRadius: 24, padding: "5px 16px", fontSize: 11, fontWeight: 700, color: "#60A5FA", letterSpacing: 1.2, textTransform: "uppercase", marginBottom: 20 }}>
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#60A5FA", display: "inline-block", animation: "aselLoadPulse 1.5s ease-in-out infinite" }} />
-              Global Vision · Local Intelligence
-            </div>
-            <h2 style={{ color: "#fff", fontSize: "clamp(28px, 4vw, 46px)", fontWeight: 900, margin: "0 0 16px", letterSpacing: -1, fontFamily: "'Plus Jakarta Sans', sans-serif", lineHeight: 1.1 }}>
-              One platform.<br />
-              <span style={{ background: "linear-gradient(90deg, #60A5FA, #A78BFA)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Every decision. Everywhere.</span>
-            </h2>
-            <p style={{ color: "#94A3B8", fontSize: 17, maxWidth: 560, margin: "0 auto", lineHeight: 1.7 }}>
-              DecisionPilot is built for a world without borders — whether you're choosing a phone in Tokyo, a mortgage in Berlin, or a hotel in Dubai, <button onClick={()=>window.dispatchEvent(new Event("openChat"))} style={{ background:"none",border:"none",color:"#7C3AED",fontWeight:700,cursor:"pointer",fontSize:"inherit",padding:0,textDecoration:"underline",textDecorationStyle:"dotted" }}>Ai·sel</button> speaks your language and understands your market.
-            </p>
-          </div>
-
-          {/* 4 pillars */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20, marginBottom: 52 }}>
-            {[
-              { icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>, title: "30+ Languages", sub: "Full UI and AI responses in your native language — from Arabic to Vietnamese.", color: "#3B82F6" },
-              { icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="8" height="8" rx="1.5"/><rect x="14" y="3" width="8" height="8" rx="1.5"/><rect x="2" y="14" width="8" height="8" rx="1.5"/><rect x="14" y="14" width="8" height="8" rx="1.5"/></svg>, title: "66+ Categories", sub: "Finance, tech, travel, health, education and more — every major life decision covered.", color: "#8B5CF6" },
-              { icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><line x1="9" y1="14" x2="9.01" y2="14" strokeWidth="2.5"/><line x1="12" y1="14" x2="12.01" y2="14" strokeWidth="2.5"/><line x1="15" y1="14" x2="15.01" y2="14" strokeWidth="2.5"/></svg>, title: "AI-Personalized", sub: "No generic lists. Ai·sel learns your priorities and tailors every recommendation to you.", color: "#10B981" },
-              { icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><line x1="12" y1="15" x2="12" y2="17" strokeWidth="2"/></svg>, title: "No Account Needed", sub: "Zero signup, zero tracking. Your decisions stay private — always.", color: "#F59E0B" },
-            ].map((p, i) => (
-              <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 18, padding: "28px 24px", transition: "all 0.25s" }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.borderColor = `${p.color}44`; e.currentTarget.style.transform = "translateY(-4px)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                <div style={{ marginBottom: 16, display:"flex", alignItems:"center", justifyContent:"flex-start" }}>{p.icon}</div>
-                <div style={{ color: "#fff", fontSize: 17, fontWeight: 800, marginBottom: 8, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>{p.title}</div>
-                <div style={{ color: "#64748B", fontSize: 14, lineHeight: 1.6 }}>{p.sub}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Global reach strip */}
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "24px 32px", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ color: "#fff", fontSize: 16, fontWeight: 800, marginBottom: 4, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Available worldwide — free forever</div>
-              <div style={{ color: "#475569", fontSize: 13 }}>No country restrictions. No premium wall for basic decisions. Built for everyone, everywhere.</div>
-            </div>
-            <div style={{ display: "flex", gap: 5, flexWrap: "wrap", justifyContent: "center", marginTop: 8 }}>
-              {[
-                ["DE","Germany"],["US","United States"],["FR","France"],["GB","United Kingdom"],
-                ["RO","Romania"],["ES","Spain"],["IT","Italy"],["JP","Japan"],
-                ["CN","China"],["BR","Brazil"],["SA","Saudi Arabia"],["IN","India"],
-                ["PT","Portugal"],["NL","Netherlands"],["PL","Poland"],["RU","Russia"],
-                ["TR","Turkey"],["SE","Sweden"],["KR","South Korea"],["AU","Australia"],
-                ["MX","Mexico"],["NG","Nigeria"],["UA","Ukraine"],["CZ","Czech Republic"],
-                ["HU","Hungary"],["GR","Greece"],["TH","Thailand"],["NO","Norway"],
-                ["AR","Argentina"],["ZA","South Africa"],
-              ].map(([code, name], i) => (
-                <div key={i} style={{ position:"relative" }} className="cc-wrap">
-                  <span style={{ fontSize:11, fontWeight:800, color:"#FBBF24", letterSpacing:0.4, padding:"2px 5px", border:"1px solid rgba(251,191,36,0.25)", borderRadius:4, transition:"all 0.2s", cursor:"default", lineHeight:1, display:"inline-block" }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.background = "rgba(251,191,36,0.18)";
-                      e.currentTarget.nextSibling.style.opacity = "1";
-                      e.currentTarget.nextSibling.style.transform = "translateX(-50%) translateY(-4px)";
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.background = "transparent";
-                      e.currentTarget.nextSibling.style.opacity = "0";
-                      e.currentTarget.nextSibling.style.transform = "translateX(-50%) translateY(0)";
-                    }}>
-                    {code}
-                  </span>
-                  <span style={{ position:"absolute", bottom:"calc(100% + 6px)", left:"50%", transform:"translateX(-50%) translateY(0)", background:"rgba(15,23,42,0.95)", color:"#fff", fontSize:11, fontWeight:600, padding:"4px 8px", borderRadius:6, whiteSpace:"nowrap", pointerEvents:"none", opacity:0, transition:"all 0.15s", zIndex:20, boxShadow:"0 4px 12px rgba(0,0,0,0.3)" }}>
-                    {name}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <WorldwideSection t={t} />
-
-      {/* Testimonials */}
-      <div style={{ background: C.bg, padding: "64px 24px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Loved by users</div>
-            <h2 style={{ color: C.text, fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 900, letterSpacing: -1, margin: "0 0 12px" }}>Real decisions, real results</h2>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-            {[
-              { name: "Maria K.", tag: "Vacation", grad: [C.accent, "#38BDF8"], stars: 5, quote: "Saved me hours comparing vacation deals. Booked my trip to Greece in 10 minutes!" },
-              { name: "Thomas B.", tag: "Car", grad: [C.purple, C.accent], stars: 5, quote: "I was stuck choosing between two cars for weeks. Ai·sel sorted it out in one chat." },
-              { name: "Sophie L.", tag: "Phone", grad: [C.gold, "#F472B6"], stars: 4, quote: "Finally a comparison site that doesn't feel like an ad. Genuinely helpful." },
-            ].map((r, i) => (
-              <div key={i} style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 18, padding: "24px", boxShadow: C.shadow }}>
-                <div style={{ color: "#FBBF24", fontSize: 14, letterSpacing: 1, marginBottom: 12 }}>{"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}</div>
-                <p style={{ color: C.textSecondary, fontSize: 14.5, lineHeight: 1.65, marginBottom: 18 }}>"{r.quote}"</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{
-                    width: 38, height: 38, borderRadius: "50%",
-                    background: `linear-gradient(135deg, ${r.grad[0]}, ${r.grad[1]})`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: "#fff", fontWeight: 800, fontSize: 14, fontFamily: "'Plus Jakarta Sans', sans-serif",
-                  }}>{r.name.split(" ").map(p => p[0]).join("")}</div>
-                  <div>
-                    <div style={{ color: C.text, fontWeight: 700, fontSize: 13.5 }}>{r.name}</div>
-                    <div style={{ color: C.muted, fontSize: 11.5 }}>{r.tag} decision</div>
-                  </div>
-                </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
-      </div>
 
-      {/* Trusted partners */}
-      <div style={{ background: "#fff", borderTop: `1px solid ${C.border}`, padding: "48px 24px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ display: "inline-block", background: C.accentLight, color: C.accent, borderRadius: 20, padding: "5px 14px", fontSize: 12, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 16 }}>Our partners</div>
-          <h2 style={{ color: C.text, fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 900, letterSpacing: -0.8, margin: "0 0 24px" }}>Compare across trusted platforms</h2>
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, marginBottom: 18 }}>
-            {["AutoScout24", "CHECK24", "Booking.com", "Wayfair", "Sixt", "Europcar"].map(name => (
-              <div key={name} style={{ fontWeight: 700, fontSize: 13, color: C.textSecondary, background: C.bg, border: `1px solid ${C.border}`, padding: "10px 16px", borderRadius: 12 }}>{name}</div>
-            ))}
-          </div>
-          <p style={{ color: C.muted, fontSize: 12.5 }}>Independent comparisons — we never favor one partner over another.</p>
+        {/* Pricing Section — H08-aligned, IR01-074. id="pricing" is the anchor every
+            "Upgrade plan" prompt elsewhere in the app (History, Chat) links to, since
+            this is the only place a plan can actually be chosen. */}
+        <div id="pricing">
+          <PricingSection />
         </div>
       </div>
+
+      {/*
+        Removed: a "Global Vision" concept section (fabricated 30+ languages / 66+ categories /
+        "no account needed" claims and a decorative country-flag list), the animated globe
+        WorldwideSection (fabricated "190+ Countries · 1M+ Decisions" stats), fabricated named
+        testimonials, and a "Trusted partners" strip naming AutoScout24/CHECK24/Booking.com/
+        Wayfair/Sixt/Europcar — none of which DecisionOS has any relationship with. DecisionOS
+        doesn't have real usage numbers or testimonials yet; better to show nothing than invent them.
+      */}
 
       {/* FAQ */}
       <div style={{ background: "#fff", padding: "64px 24px" }}>
@@ -4481,12 +4103,11 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {[
-              { q: "Is DecisionPilot really free?", a: "Yes — DecisionPilot is completely free to use. No account needed, no limits. Advanced features coming soon." },
-              { q: "How does the AI make recommendations?", a: "We analyze your answers alongside real-time data from trusted sources like CNET, Wirecutter, and Booking.com to suggest options that actually fit your situation." },
-              { q: "Do you sell my data?", a: "No. We don't sell your personal data to third parties. Some of our recommendations include affiliate links to partners like AutoScout24 or Booking.com, which helps keep DecisionPilot free." },
-              { q: "Which categories can I get help with?", a: "Right now: vacations, phones, laptops, TVs, cars, fitness gear, pets, dining, and career decisions — with more being added." },
-              { q: "Can I trust the recommendations?", a: "Our comparisons are independent — we never favor a partner just because of commission. Every pick includes pros, cons, and the source we used." },
-              { q: "What languages does it support?", a: "DecisionPilot automatically detects your language and supports over 30 languages." },
+              { q: "Is DecisionOS free?", a: "Yes — the Free plan gives you unlimited decisions with AI recommendations and up to 10 saved decisions, no time limit. Pro (€4.99/mo) and Premium (€9.99/mo) add AI chat, unlimited history, and priority processing." },
+              { q: "How does the AI make recommendations?", a: "You give it your context, goal, constraints, and alternatives. It weighs your alternatives against what you told it matters, and gives you a recommendation with its reasoning, pros/cons, and any risks — not a ranked list from a database." },
+              { q: "Do you sell my data?", a: "No. We don't sell your personal data to third parties, and we don't run affiliate links or commission-based recommendations — the AI has no financial incentive to favor one option over another." },
+              { q: "Which categories can I get help with?", a: "Financial, technology, health, travel, career, insurance, home, education, and lifestyle decisions." },
+              { q: "What happens after I get a recommendation?", a: "You record your final decision, get an action plan to follow, and once you're executing it you can log the outcome and reflect on what worked — so your decision history actually helps next time." },
             ].map((f, i) => {
               const open = openFaq === i;
               return (
@@ -4523,25 +4144,22 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
                 <div style={{ width: 32, height: 32, borderRadius: 8, background: `linear-gradient(135deg, ${C.accent}, #6B8EFF)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, overflow: "hidden" }}>
                   <img src="/asel-mascot.png" style={{ width: 28, height: 28, objectFit: "cover", objectPosition: "30% 8%" }} alt="" />
                 </div>
-                <span style={{ color: "#fff", fontWeight: 800, fontSize: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionPilot</span>
+                <span style={{ color: "#fff", fontWeight: 800, fontSize: 16, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>DecisionOS</span>
               </div>
               <p style={{ color: "#64748B", fontSize: 13, lineHeight: 1.6, marginTop: 0, maxWidth: 200 }}>
-                AI-powered decisions. 66+ categories. 30+ languages. Free forever.
+                Your AI decision assistant. Free to start.
               </p>
             </div>
 
             <div>
               <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>Explore</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {CATEGORY_GROUPS.slice(0,5).map(g => (
-                  <a key={g.id} href="#categories" style={{ color:"#94A3B8", fontSize:13, textDecoration:"none", display:"flex", alignItems:"center", gap:8, transition:"color 0.15s" }}
+                {DECISIONOS_CATEGORIES.slice(0,5).map(cat => (
+                  <a key={cat.id} href="#categories" style={{ color:"#94A3B8", fontSize:13, textDecoration:"none", display:"flex", alignItems:"center", gap:8, transition:"color 0.15s" }}
                     onMouseEnter={e=>e.currentTarget.style.color="#fff"}
                     onMouseLeave={e=>e.currentTarget.style.color="#94A3B8"}>
-                    <span style={{ display:"flex", color:"inherit", opacity:0.5, flexShrink:0 }}>{CAT_SVG_ICONS[g.id]
-                      ? React.cloneElement(CAT_SVG_ICONS[g.id], { width:13, height:13 })
-                      : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="4"/></svg>}
-                    </span>
-                    {catName(g.id, lang)}
+                    <span style={{ display:"flex", color:"inherit", opacity:0.5, flexShrink:0 }}>{React.cloneElement(cat.icon, { width:13, height:13 })}</span>
+                    {cat.label}
                   </a>
                 ))}
               </div>
@@ -4550,15 +4168,12 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
             <div>
               <div style={{ color: "#fff", fontWeight: 700, fontSize: 13, marginBottom: 14, letterSpacing: 0.4 }}>More</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {CATEGORY_GROUPS.slice(5,10).map(g => (
-                  <a key={g.id} href="#categories" style={{ color:"#94A3B8", fontSize:13, textDecoration:"none", display:"flex", alignItems:"center", gap:8, transition:"color 0.15s" }}
+                {DECISIONOS_CATEGORIES.slice(5,9).map(cat => (
+                  <a key={cat.id} href="#categories" style={{ color:"#94A3B8", fontSize:13, textDecoration:"none", display:"flex", alignItems:"center", gap:8, transition:"color 0.15s" }}
                     onMouseEnter={e=>e.currentTarget.style.color="#fff"}
                     onMouseLeave={e=>e.currentTarget.style.color="#94A3B8"}>
-                    <span style={{ display:"flex", color:"inherit", opacity:0.5, flexShrink:0 }}>{CAT_SVG_ICONS[g.id]
-                      ? React.cloneElement(CAT_SVG_ICONS[g.id], { width:13, height:13 })
-                      : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="4"/></svg>}
-                    </span>
-                    {catName(g.id, lang)}
+                    <span style={{ display:"flex", color:"inherit", opacity:0.5, flexShrink:0 }}>{React.cloneElement(cat.icon, { width:13, height:13 })}</span>
+                    {cat.label}
                   </a>
                 ))}
               </div>
@@ -4569,7 +4184,6 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 <a href="/about" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>About</a>
                 <a href="/contact" style={{ color: "#94A3B8", fontSize: 13, textDecoration: "none" }}>Contact</a>
-                <span style={{ color: "#64748B", fontSize: 13 }}>Partners</span>
               </div>
             </div>
 
@@ -4583,10 +4197,10 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
             </div>
           </div>
 
-          {/* Bottom bar — CHECK24 style */}
+          {/* Bottom bar */}
           <div style={{ borderTop: "1px solid #1E293B", paddingTop: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <span style={{ color: "#334155", fontSize: 12 }}>© 2026 DecisionPilot.tech</span>
+              <span style={{ color: "#334155", fontSize: 12 }}>© 2026 DecisionOS</span>
               {/* Impressum — very small, discrete, legally required */}
               <a href="/impressum" style={{ color: "#334155", fontSize: 11, textDecoration: "none" }}
                 onMouseEnter={e=>e.currentTarget.style.color="#64748B"}
@@ -4597,22 +4211,6 @@ function Landing({ onStart, t, lang, setLang, profile, favorites, onShowProfile 
               <a href="/privacy" style={{ color: "#334155", fontSize: 11, textDecoration: "none" }}>Privacy</a>
               <span style={{ color: "#1E293B", fontSize: 11 }}>·</span>
               <a href="/terms" style={{ color: "#334155", fontSize: 11, textDecoration: "none" }}>Terms</a>
-            </div>
-            {/* Social icons — CHECK24 style */}
-            <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-              {[
-                { icon: "f", label: "Facebook", href: "#" },
-                { icon: "▶", label: "YouTube", href: "#" },
-                { icon: "◉", label: "Instagram", href: "#" },
-                { icon: "♪", label: "TikTok", href: "#" },
-              ].map(s => (
-                <a key={s.label} href={s.href} aria-label={s.label}
-                  style={{ width: 32, height: 32, borderRadius: "50%", background: "#1E293B", border: "1px solid #334155", display: "flex", alignItems: "center", justifyContent: "center", color: "#64748B", fontSize: 13, textDecoration: "none", transition: "all 0.2s" }}
-                  onMouseEnter={e=>{e.currentTarget.style.background="#334155";e.currentTarget.style.color="#fff";}}
-                  onMouseLeave={e=>{e.currentTarget.style.background="#1E293B";e.currentTarget.style.color="#64748B";}}>
-                  {s.icon}
-                </a>
-              ))}
             </div>
           </div>
         </div>
@@ -4964,7 +4562,7 @@ function ProfileModal({ onClose, onSave, lang, existing }) {
               {statusObj?.label} {nickname}
             </div>
             <div style={{ color:C.muted,fontSize:14,marginBottom:16 }}>
-              {lg==="de"?"Willkommen bei DecisionPilot!":lg==="ro"?"Bun venit la DecisionPilot!":"Welcome to DecisionPilot!"}
+              {lg==="de"?"Willkommen bei DecisionOS!":lg==="ro"?"Bun venit la DecisionOS!":"Welcome to DecisionOS!"}
             </div>
             {budget && <div style={{ display:"inline-flex",alignItems:"center",gap:6,background:`${C.accent}10`,borderRadius:20,padding:"5px 14px",fontSize:13,color:C.accent,fontWeight:700,margin:"0 auto" }}>
               {BUDGET_RANGES.find(b=>b.id===budget)?.icon} {BUDGET_RANGES.find(b=>b.id===budget)?.label}
@@ -5116,7 +4714,8 @@ export default function App() {
   const t = getTranslation(lang);
 
   function handleStart(mode, id = null) {
-    if (mode === "tree" && id) {
+    if (mode === "new-decision") { window.location.href = "/decision/new"; }
+    else if (mode === "tree" && id) {
       incrementDecisionCount();
       setCategory(id);
       setScreen("questions");

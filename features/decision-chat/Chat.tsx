@@ -169,8 +169,10 @@ export function Chat({ decision, onClose }: Props): JSX.Element {
 
   // No dedicated "apply update" endpoint exists — the honest, minimal action available
   // today is the same backward-navigation path H08 §8 already describes: return to
-  // draft so the user can edit the affected component themselves and resubmit.
-  const handleUpdateDecision = async (): Promise<void> => {
+  // draft so the user can edit the affected component themselves and resubmit. This does
+  // NOT apply what was said in chat automatically, and does NOT trigger a new analysis by
+  // itself — the copy below (UX2) must not claim either of those.
+  const handleReopenForEditing = async (): Promise<void> => {
     setUpdateError(null)
     try {
       await advanceState('draft')
@@ -196,7 +198,7 @@ export function Chat({ decision, onClose }: Props): JSX.Element {
             Upgrade to Pro or Premium to ask follow-up questions about this decision and explore your alternatives
             with AI.
           </p>
-          <Button variant="primary" size="md" onClick={() => router.push('/account')}>
+          <Button variant="primary" size="md" onClick={() => router.push('/#pricing')}>
             Upgrade plan
           </Button>
         </div>
@@ -224,13 +226,13 @@ export function Chat({ decision, onClose }: Props): JSX.Element {
                 {message.materialChange && (
                   <div className={styles.materialChangeCard}>
                     <p className={styles.materialChangeText}>
-                      You mentioned {message.materialChange.summary}. Would you like to update your{' '}
-                      {formatComponentLabel(message.materialChange.component)} with this? This will trigger a new
-                      analysis.
+                      You mentioned {message.materialChange.summary}. If this changes your{' '}
+                      {formatComponentLabel(message.materialChange.component)}, you can reopen this decision to edit
+                      it yourself — you'll need to resubmit for a new AI recommendation afterward.
                     </p>
                     <div className={styles.materialChangeActions}>
-                      <Button variant="secondary" size="md" onClick={handleUpdateDecision}>
-                        Update Decision
+                      <Button variant="secondary" size="md" onClick={handleReopenForEditing}>
+                        Reopen to edit
                       </Button>
                       <Button variant="ghost" size="md" onClick={() => handleKeepAsContext(message.id)}>
                         Keep as context only

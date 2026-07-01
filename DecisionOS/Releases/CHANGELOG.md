@@ -1,5 +1,24 @@
 # DecisionOS Changelog
 
+## UX Critical Fixes — UX1, UX2, UX3 (outside IR01 numbering)
+
+**Type:** Fix (three UX defects requested directly by the Founder, same tracking pattern as CQ1/CQ2)
+
+**UX1 — Landing page rewritten to match the actual DecisionOS MVP:**
+- `components/HeroBanner.jsx` — replaced the rotating product-comparison carousel (stock photos, fake "4.8/5 · Trusted by 50,000+ people", per-slide affiliate-quiz CTAs) with a static, honest hero: one headline, one description of the real wizard flow, one "Start a Decision →" CTA into `/decision/new`.
+- `components/App.jsx` — rewrote the "why DecisionOS" positioning copy and the 4-step "How it works" section to describe the real flow (context/goal/constraints/alternatives → AI recommendation → action plan → outcome tracking). Replaced the legacy 66+ product-category tree with a new `DECISIONOS_CATEGORIES` constant (the real 9 categories from `core/decision/Decision.constants.ts`), each linking to `/decision/new?category=...` (a param `pages/decision/new.tsx` already accepted — no new backend surface). Removed entirely: fake promo banners, fake phone/loan comparison cards with invented review counts and rates, fake tourism destination cards, fake Google/Trustpilot ratings, a "Global Vision" section with false 30+languages/66+categories/no-account claims and a decorative country-flag list, an animated-globe section with fabricated "190+ Countries · 1M+ Decisions" stats, three invented named testimonials, and a "Trusted partners" strip naming AutoScout24/CHECK24/Booking.com/Wayfair/Sixt/Europcar. Rewrote the FAQ with accurate answers (real Free/Pro/Premium pricing, no affiliate-link claims, real category list, real post-recommendation flow). Fixed the footer (brand, tagline, category links, copyright; removed four dead "#"-href social icons). Rebranded "DecisionPilot" → "DecisionOS" throughout, including `pages/index.js`'s title/meta/OG tags.
+- **Left in place, not deleted:** the legacy per-category quiz engine (`QuestionScreen`, `ResultsScreen` + its affiliate-link resolver, `ChatScreen` "Ai·sel", `FavoritesScreen`, the profile-personalization modal) — thousands of lines, a distinct feature. It's no longer linked to from the repositioned landing content, so it's unreachable from the main flow rather than removed, per explicit confirmation this session.
+
+**UX2 — "Update Decision" chat prompt no longer promises functionality that doesn't happen:**
+- `features/decision-chat/Chat.tsx` — the material-change card claimed clicking "Update Decision" would apply the chat-mentioned change and "trigger a new analysis." In reality it only called `advanceState('draft')` and closed the chat (no dedicated "apply this change" endpoint exists, per H13). Corrected the copy to state what actually happens, and renamed the button to "Reopen to edit" (handler renamed `handleReopenForEditing`). No behavior change.
+
+**UX3 — Broken `/account` upgrade links replaced with the real upgrade flow:**
+- `features/decision-history/History.tsx` and `features/decision-chat/Chat.tsx` — "Upgrade plan" buttons called `router.push('/account')`, which 404s (`pages/account.tsx` doesn't exist). Both now call `router.push('/#pricing')`. Added `id="pricing"` to `App.jsx`'s `<PricingSection />` wrapper — the only place a plan can actually be chosen (real Stripe checkout via `/api/billing/checkout`, IR01-074) — so the anchor lands correctly. No new page or component.
+
+**Verification:** `npx tsc --noEmit`, `npx vitest run` (214 tests, unchanged — no test file exists for `Chat.tsx` or the legacy landing components), and `npx next build` all pass.
+
+---
+
 ## IR01-075c — Outcome, Reflection, and Lessons Learned capture + Executing → Completed transition
 
 **Type:** Feature (closes the second half of the MVP scope gap identified alongside IR01-075b — see the "Roadmap extension" entry below)
