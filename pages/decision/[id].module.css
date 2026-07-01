@@ -94,6 +94,47 @@
   color: var(--color-text-muted);
 }
 
+/* --- Action Plan item completion (IR01-075b, H08 "Action Plan Item Completion") --- */
+
+.planItemRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.planItemRowInteractive {
+  cursor: pointer;
+}
+
+.planItemCheckbox {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--color-success);
+  cursor: pointer;
+}
+
+.planItemBody {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.planItemTitleDone {
+  color: var(--color-text-secondary);
+  text-decoration: line-through;
+  text-decoration-color: var(--color-success);
+  transition: color 200ms ease;
+}
+
+.planConfirmRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+}
+
 /* --- Chat layout — H08 §11: desktop 40/60 split, mobile full-screen --- */
 
 .chatLayout {

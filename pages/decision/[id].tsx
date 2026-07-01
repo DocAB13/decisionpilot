@@ -4,6 +4,7 @@ import type { JSX } from 'react'
 
 import { PageLayout } from '@/components/layout/PageLayout'
 import { AnalysisLoading } from '@/components/ui/AnalysisLoading'
+import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { DecisionProvider } from '@/context/DecisionContext'
@@ -84,24 +85,86 @@ function WizardSteps({ decision }: { decision: DecisionObject }): JSX.Element {
   )
 }
 
-function ActionPlanSummary({ plan }: { plan: ActionPlanContent }): JSX.Element {
+// readOnly is true once the decision has moved to `executing` (IR01-075b) — items stay
+// visible as a record but are no longer toggleable, and there is no further confirm action
+// here (IR01-075c owns what comes next).
+function ActionPlanSummary({ plan, readOnly }: { plan: ActionPlanContent; readOnly: boolean }): JSX.Element {
+  const { updateComponent, advanceState } = useDecision()
+  const [isConfirming, setIsConfirming] = useState(false)
+  const [confirmError, setConfirmError] = useState<string | null>(null)
+
+  const allComplete = plan.action_items.length > 0 && plan.action_items.every(item => item.completed)
+
+  const handleToggle = (sequence: number, completed: boolean): void => {
+    const nextItems = plan.action_items.map(item =>
+      item.sequence === sequence
+        ? { ...item, completed, completed_at: completed ? new Date().toISOString() : null }
+        : item
+    )
+    void updateComponent('9_action_plan', { ...plan, action_items: nextItems })
+  }
+
+  const handleConfirm = async (): Promise<void> => {
+    setConfirmError(null)
+    setIsConfirming(true)
+    try {
+      await advanceState('executing')
+    } catch (e) {
+      setConfirmError(e instanceof Error ? e.message : 'Failed to confirm. Please try again.')
+      setIsConfirming(false)
+    }
+  }
+
   return (
     <div className={styles.planWrap}>
-      <p className={styles.sectionLabel}>Your decision is recorded</p>
+      <p className={styles.sectionLabel}>{readOnly ? 'Executing your plan' : 'Your decision is recorded'}</p>
       <h1 className={styles.planHeading}>Here&apos;s your action plan</h1>
       <p className={styles.planSubheading}>Based on: {plan.based_on_alternative_name}</p>
 
       <div className={styles.planList}>
-        {plan.action_items.map(item => (
-          <Card key={item.sequence}>
-            <p className={styles.planItemTitle}>
-              {item.sequence}. {item.title}
-            </p>
-            <p className={styles.planItemDetail}>{item.detail}</p>
-            {item.time_estimate && <p className={styles.planItemMeta}>Estimated time: {item.time_estimate}</p>}
-          </Card>
-        ))}
+        {plan.action_items.map(item => {
+          const itemBody = (
+            <span className={styles.planItemBody}>
+              <p
+                className={[styles.planItemTitle, item.completed ? styles.planItemTitleDone : '']
+                  .filter(Boolean)
+                  .join(' ')}
+              >
+                {item.sequence}. {item.title}
+              </p>
+              <p className={styles.planItemDetail}>{item.detail}</p>
+              {item.time_estimate && <p className={styles.planItemMeta}>Estimated time: {item.time_estimate}</p>}
+            </span>
+          )
+          return (
+            <Card key={item.sequence}>
+              {readOnly ? (
+                <div className={styles.planItemRow}>{itemBody}</div>
+              ) : (
+                <label className={[styles.planItemRow, styles.planItemRowInteractive].join(' ')}>
+                  <input
+                    type="checkbox"
+                    className={styles.planItemCheckbox}
+                    checked={item.completed}
+                    onChange={e => handleToggle(item.sequence, e.target.checked)}
+                    aria-label={`Mark "${item.title}" as complete`}
+                  />
+                  {itemBody}
+                </label>
+              )}
+            </Card>
+          )
+        })}
       </div>
+
+      {!readOnly && (
+        <div className={styles.planConfirmRow}>
+          {confirmError && <p className={styles.submitError}>{confirmError}</p>}
+          <Button variant="primary" size="lg" disabled={!allComplete} loading={isConfirming} onClick={handleConfirm}>
+            Confirm — Ready to Execute
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
@@ -149,7 +212,7 @@ function DecisionRouter(): JSX.Element {
     case DecisionStatus.DECISION_MADE: {
       const actionPlan = decision.components['9_action_plan']?.content as ActionPlanContent | undefined
       content = actionPlan ? (
-        <ActionPlanSummary plan={actionPlan} />
+        <ActionPlanSummary plan={actionPlan} readOnly={false} />
       ) : (
         <Card className={styles.placeholderCard}>
           <p>Your decision is recorded. The action plan couldn&apos;t be generated — you can still view your decision from the Dashboard.</p>
@@ -158,7 +221,19 @@ function DecisionRouter(): JSX.Element {
       break
     }
 
-    // Outcome / Reflection views land in IR01-074 – IR01-076 — minimal placeholder until then.
+    case DecisionStatus.EXECUTING: {
+      const actionPlan = decision.components['9_action_plan']?.content as ActionPlanContent | undefined
+      content = actionPlan ? (
+        <ActionPlanSummary plan={actionPlan} readOnly={true} />
+      ) : (
+        <Card className={styles.placeholderCard}>
+          <p>This decision is being executed. No action plan is available to display.</p>
+        </Card>
+      )
+      break
+    }
+
+    // Outcome / Reflection / Completed view lands in IR01-075c — minimal placeholder until then.
     default:
       content = (
         <Card className={styles.placeholderCard}>

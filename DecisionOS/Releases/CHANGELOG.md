@@ -1,5 +1,24 @@
 # DecisionOS Changelog
 
+## IR01-075b — Action Plan completion tracking + Decision Made → Executing transition
+
+**Type:** Feature (closes an MVP scope gap identified this session — see the "Roadmap extension" entry below)
+
+**Summary:** Implemented exactly as scoped in the roadmap. Closes FR-05.7 (marking Action Plan items complete) and the `decision_made → executing` leg of FR-06.1.
+
+**Changes:**
+- `pages/api/decision/save.ts` — added `isActionPlanCompletionToggle()`, a structural-diff check: the stored `9_action_plan` content and the incoming write must match exactly on `based_on_alternative_id`/`based_on_alternative_name` and every item's `sequence`/`title`/`detail`/`estimated_effort`/`time_estimate`; only `completed` (boolean) and `completed_at` (`null` or string) may differ. `SERVER_GENERATED_COMPONENTS`'s blanket 400-rejection and the `CLIENT_WRITABLE_COMPONENTS` check both get a narrow, explicit `9_action_plan` exception — every other component's validation path is untouched. The exception fetches the current `is_current = true` row, diffs it, and on success falls through to the exact same version-bump-and-insert logic every other component already uses (steps 5–8 of the handler) — no new write path was created.
+- `pages/decision/[id].tsx` — `ActionPlanSummary` gained a `readOnly` prop. Not read-only (the `decision_made` case): each item renders in a `<label>` (matching `FinalDecisionForm`'s existing whole-card-clickable radio pattern) with a checkbox calling the existing `updateComponent('9_action_plan', ...)` through the existing debounced auto-save path — no new save mechanism introduced. A "Confirm — Ready to Execute" button, disabled until every item is `completed`, calls the existing `advanceState('executing')`. Added `case DecisionStatus.EXECUTING` to `DecisionRouter`, rendering the same component with `readOnly={true}` (checkbox and confirm button omitted). Also corrected the `default` case's comment, which incorrectly attributed the Outcome/Reflection/Completed gap to "IR01-074–076" — now correctly points to IR01-075c.
+- `pages/decision/[id].module.css` — added `.planItemRow`/`.planItemRowInteractive`/`.planItemCheckbox`/`.planItemBody`/`.planItemTitleDone`/`.planConfirmRow`, styled per H08's "Action Plan Item Completion" spec (checkbox `accent-color: var(--color-success)`; completed items get a success-colored strikethrough). No new design tokens.
+
+**Reused as-is, not modified:** `context/DecisionContext.tsx`'s `updateComponent`/`advanceState`, `components/ui/Button`, and every other component's save validation.
+
+**Verification:** `npx tsc --noEmit`, `npx vitest run` (214 tests, unchanged — no new test file, matching this task's file list), and `npx next build` all pass. Live-tested against `next dev`: `/decision/fake-id` still correctly redirects unauthenticated requests (unrelated to this change, confirms no regression); `POST /api/decision/save` with `component: '9_action_plan'` and no session still 401s before reaching the new validation logic, confirming the route compiles and the existing auth/ownership order is unchanged.
+
+**Not done (explicitly out of scope, per instruction):** IR01-075c (Outcome/Reflection/Lessons Learned, `executing → completed`) and IR01-076 (E2E verification) were not touched. Full write-path exercise of the new completion-toggle logic (real toggle → `200`, tampered field → `400`) requires a live decision and is blocked behind IR01-076's missing environment secrets — the same limitation every task has had since IR01-076 was first blocked.
+
+---
+
 ## Roadmap extension — IR01-075b, IR01-075c added
 
 **Type:** Roadmap documentation only — no code changed

@@ -6,6 +6,44 @@ import { CLIENT_WRITABLE_COMPONENTS, SERVER_GENERATED_COMPONENTS } from '@/core/
 const CLIENT_WRITABLE = CLIENT_WRITABLE_COMPONENTS as readonly string[]
 const SERVER_GENERATED = SERVER_GENERATED_COMPONENTS as readonly string[]
 
+// 9_action_plan is server-generated, but the owner may toggle `completed`/`completed_at`
+// on existing items (IR01-075b, FR-05.7). Every other field — including item order and
+// count — must match the current version exactly, or the write is rejected.
+function isActionPlanCompletionToggle(previous: unknown, next: unknown): boolean {
+  if (typeof previous !== 'object' || previous === null) return false
+  if (typeof next !== 'object' || next === null) return false
+  const prev = previous as Record<string, unknown>
+  const nxt = next as Record<string, unknown>
+
+  if (prev.based_on_alternative_id !== nxt.based_on_alternative_id) return false
+  if (prev.based_on_alternative_name !== nxt.based_on_alternative_name) return false
+
+  const prevItems = prev.action_items
+  const nextItems = nxt.action_items
+  if (!Array.isArray(prevItems) || !Array.isArray(nextItems)) return false
+  if (prevItems.length !== nextItems.length) return false
+
+  return prevItems.every((prevItem, i) => {
+    const nextItem = nextItems[i]
+    if (typeof prevItem !== 'object' || prevItem === null) return false
+    if (typeof nextItem !== 'object' || nextItem === null) return false
+    const p = prevItem as Record<string, unknown>
+    const n = nextItem as Record<string, unknown>
+
+    const unchangedFieldsMatch =
+      p.sequence === n.sequence &&
+      p.title === n.title &&
+      p.detail === n.detail &&
+      p.estimated_effort === n.estimated_effort &&
+      p.time_estimate === n.time_estimate
+
+    const completedIsValid = typeof n.completed === 'boolean'
+    const completedAtIsValid = n.completed_at === null || typeof n.completed_at === 'string'
+
+    return unchangedFieldsMatch && completedIsValid && completedAtIsValid
+  })
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // 1. Method guard
   if (req.method !== 'POST') {
@@ -33,13 +71,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ error: 'content is required' })
   }
 
-  // Server-generated check comes before client-writable — gives the more specific error
-  if (SERVER_GENERATED.includes(component)) {
+  // Server-generated check comes before client-writable — gives the more specific error,
+  // except for 9_action_plan's narrow completion-toggle exception (IR01-075b).
+  const isActionPlan = component === '9_action_plan'
+  if (SERVER_GENERATED.includes(component) && !isActionPlan) {
     return res.status(400).json({
       error: `Component ${component} is server-generated and cannot be written by the client`,
     })
   }
-  if (!CLIENT_WRITABLE.includes(component)) {
+  if (!isActionPlan && !CLIENT_WRITABLE.includes(component)) {
     return res.status(400).json({ error: `Invalid component: ${component}` })
   }
 
@@ -60,6 +100,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (decisionError || !decision) {
     return res.status(404).json({ error: 'Decision not found' })
+  }
+
+  if (isActionPlan) {
+    const { data: currentPlan } = await adminClient
+      .from('decision_components')
+      .select('content')
+      .eq('decision_id', decision.id)
+      .eq('component', '9_action_plan')
+      .eq('is_current', true)
+      .maybeSingle()
+
+    if (!currentPlan || !isActionPlanCompletionToggle(currentPlan.content, content)) {
+      return res.status(400).json({
+        error:
+          'Component 9_action_plan is server-generated; only `completed` and `completed_at` on existing items may be changed',
+      })
+    }
   }
 
   try {
