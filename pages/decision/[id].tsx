@@ -12,6 +12,7 @@ import { ContextStep } from '@/features/decision-wizard/ContextStep'
 import { GoalStep } from '@/features/decision-wizard/GoalStep'
 import { ConstraintsStep } from '@/features/decision-wizard/ConstraintsStep'
 import { AlternativesStep } from '@/features/decision-wizard/AlternativesStep'
+import { RecommendationView } from '@/features/decision-wizard/RecommendationView'
 import { DecisionStatus } from '@/core/decision/Decision.constants'
 import type { DecisionObject } from '@/core/decision/Decision.types'
 
@@ -103,13 +104,10 @@ function DecisionRouter(): JSX.Element {
     case DecisionStatus.IN_ANALYSIS:
       return <AnalysisLoading category={decision.category} title={decision.title} />
 
-    // RecommendationView lands in IR01-071 — minimal placeholder until then.
     case DecisionStatus.WAITING_FOR_USER:
-      return (
-        <Card className={styles.placeholderCard}>
-          <p>Your recommendation is ready.</p>
-        </Card>
-      )
+      // onRecordDecision / onRetryRecommendation wiring lands in IR01-072
+      // (Final Decision capture + state advance).
+      return <RecommendationView decision={decision} />
 
     // Final Decision / Action Plan / Outcome / Reflection views land in
     // IR01-072 – IR01-075 — minimal placeholder until then.

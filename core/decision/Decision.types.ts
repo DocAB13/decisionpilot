@@ -64,6 +64,83 @@ export interface AlternativesContent {
   do_nothing_included: boolean
 }
 
+// AI-generated components — H12 §6.5–6.7, H11 §3.1, §12.1
+
+export interface AnalysisProCon {
+  title: string
+  detail: string
+  specific_to_user: boolean
+}
+
+export interface AnalysisRisk {
+  title: string
+  detail: string
+  severity: 'low' | 'medium' | 'high'
+  likelihood: 'low' | 'medium' | 'high'
+  mitigation: string | null
+}
+
+export interface ConstraintCompliance {
+  hard_constraints_satisfied: boolean
+  hard_constraint_violations: string[]
+  soft_constraints_satisfied: string[]
+  soft_constraints_compromised: string[]
+}
+
+export interface AnalysisPerAlternative {
+  alternative_id: string
+  alternative_name: string
+  pros: AnalysisProCon[]
+  cons: AnalysisProCon[]
+  goal_fit_assessment: string
+  constraint_compliance: ConstraintCompliance
+}
+
+export interface AIAnalysisContent {
+  per_alternative: AnalysisPerAlternative[]
+  cross_alternative: {
+    key_differentiators: string[]
+    commonly_overlooked_risks: string[]
+    information_gaps: Array<{
+      missing_information: string
+      impact_on_analysis: string
+      component_to_update: string
+    }>
+  }
+  market_data_caveat: string | null
+  professional_advice_disclaimer: string | null
+  analysis_confidence: 'high' | 'medium' | 'low'
+  confidence_rationale: string
+  analysis_version: string
+}
+
+export interface RisksPerAlternative {
+  alternative_id: string
+  alternative_name: string
+  risks: AnalysisRisk[]
+}
+
+export interface RisksContent {
+  per_alternative: RisksPerAlternative[]
+}
+
+export interface RecommendationContent {
+  recommended_alternative_id: string | null
+  recommended_alternative_name: string | null
+  primary_reasoning: string
+  supporting_factors: string[]
+  honest_tradeoffs: string
+  runner_up_id: string | null
+  runner_up_name: string | null
+  margin_description: string | null
+  conditions_for_change: string
+  tie_detected: boolean
+  tie_explanation: string | null
+  confidence_level: 'high' | 'medium' | 'low'
+  confidence_rationale: string
+  information_request: string | null
+}
+
 export interface FinalDecisionContent {
   chosen_alternative_id: string
   chosen_alternative_name: string

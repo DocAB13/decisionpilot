@@ -6,14 +6,14 @@
 
 **Current Phase:** Phase 5 — Frontend (in progress)
 
-**Current IR01 Task:** IR01-071 — Create `features/decision-wizard/RecommendationView.tsx`
+**Current IR01 Task:** IR01-072 — Create Final Decision capture and state advance
 
-**Last Completed Task:** IR01-070b — UI Consistency Pass (inserted task, not part of the original roadmap sequence)
+**Last Completed Task:** IR01-071 — `features/decision-wizard/RecommendationView.tsx`
 
-**IR01 Progress:** 71 / 86 tasks complete (~83%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted).
+**IR01 Progress:** 72 / 86 tasks complete (~84%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted).
 
 **Repository:**
-- GitHub: Synced (pushed through IR01-070, commit `fa4a636`) — IR01-070b not yet pushed
+- GitHub: Synced through IR01-070 (commit `fa4a636`) — IR01-070b and IR01-071 committed locally, not yet pushed
 - Vercel: Synced through IR01-060
 
 ---
@@ -23,7 +23,7 @@
 | Sprint | Scope | Status |
 |---|---|---|
 | Sprint 3 | IR01-063, IR01-064 | Completed |
-| Sprint 4 | IR01-065, IR01-066, IR01-067, IR01-068, IR01-069, IR01-070 (in progress, task-by-task) | In progress |
+| Sprint 4 | IR01-065 – IR01-070, IR01-070b, IR01-071 (in progress, task-by-task) | In progress |
 
 ---
 
@@ -33,7 +33,7 @@
 - Phase 2 — Database ✅
 - Phase 3 — API ✅
 - Phase 4 — AI ✅
-- Phase 5 — Frontend — in progress (IR01-056 – IR01-070 done; IR01-071 – IR01-076 remaining)
+- Phase 5 — Frontend — in progress (IR01-056 – IR01-071 done; IR01-072 – IR01-076 remaining)
 - Phase 6 — Testing & Launch — not started
 
 ---
@@ -95,8 +95,9 @@
 - IR01-069 — `pages/decision/[id].tsx` (Decision Object view page; minor Wizard.tsx update to pass `anonymous_token` through) — commit `4ac315c`
 - IR01-070 — `components/ui/AnalysisLoading.tsx` (wired into the `in_analysis` branch of `pages/decision/[id].tsx`) — commit `9d07c19`
 - IR01-070b — UI Consistency Pass: extracted the duplicate dashboard/history filter-layout CSS into `components/layout/FilterLayout.module.css`; tokenized the hardcoded Button danger-hover color (`--color-danger-dark`); rebuilt `pages/auth/login.tsx` and `pages/auth/signup.tsx` on the existing `Input`/`Button` components and a shared `Auth.module.css` shell instead of ~150 duplicated inline-style lines each; converted `SaveIndicator` from inline `CSSProperties` to a CSS Module
+- IR01-071 — `features/decision-wizard/RecommendationView.tsx` (Recommendation Screen per H08 §9/H03 component 7; wired into the `waiting_for_user` branch of `pages/decision/[id].tsx`). Added typed shapes for components 5/6/7 (`AIAnalysisContent`, `RisksContent`, `RecommendationContent`, etc.) to `core/decision/Decision.types.ts`, since none existed yet. `onRecordDecision`/`onRetryRecommendation` are optional callback props with no backend wiring yet — deferred to IR01-072 and to the post-MVP Recommendation-only retry endpoint (H13 §3.4 note) respectively.
 
-**Remaining in Phase 5:** IR01-071 through IR01-076 (RecommendationView, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
+**Remaining in Phase 5:** IR01-072 through IR01-076 (Final Decision / Outcome / Reflection steps, AI Chat Interface, Billing UI, Phase 5 verification).
 
 ### Phase 6 — Testing & Launch
 - IR01-077 through IR01-085 — not started.
@@ -105,10 +106,12 @@
 
 ## Next Task
 
-**IR01-071 — Create `features/decision-wizard/RecommendationView.tsx`**
-Dependencies: IR01-061, IR01-057. Complexity: High.
+**IR01-072 — Create Final Decision capture and state advance**
+Dependencies: IR01-061, IR01-071. Complexity: Medium.
 
-(IR01-070b was an inserted consistency-pass task; it did not change what's next — IR01-071 remains the roadmap's next task, unchanged from the original scope.)
+Owns wiring `RecommendationView`'s `onRecordDecision` callback (currently a no-op) to the new `FinalDecisionForm.tsx` and the `advanceState('decision_made')` transition.
+
+**Known issue to account for:** `DecisionContext.advanceState()` (`context/DecisionContext.tsx`) currently posts `{ decision_id, status: to }` to `POST /api/decision/state`, but that endpoint reads `to_status` from the body (`pages/api/decision/state.ts`) — so any call to `advanceState()` today gets a `400 "to_status is required"`. This predates IR01-071 and wasn't touched here (out of scope for a presentational-component task), but IR01-072 will hit it immediately when wiring the `decision_made` transition and should fix the field-name mismatch as part of that work.
 
 ## Next Milestone
 
