@@ -9,8 +9,7 @@ import { DecisionCategory, DecisionStatus } from '@/core/decision/Decision.const
 import type { DecisionCategory as DecisionCategoryType, DecisionStatus as DecisionStatusType } from '@/core/decision/Decision.constants'
 import { createClient } from '@/lib/supabase/server'
 import inputStyles from '@/components/ui/Input.module.css'
-
-import styles from './history.module.css'
+import styles from '@/components/layout/FilterLayout.module.css'
 
 const STATUS_OPTIONS: Array<{ value: DecisionStatusType; label: string }> = [
   { value: DecisionStatus.DRAFT, label: 'Draft' },

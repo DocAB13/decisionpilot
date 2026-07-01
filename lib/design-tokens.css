@@ -17,6 +17,7 @@
   --color-warning:       #F59E0B;
   --color-warning-light: #FFFBEB;
   --color-danger:        #EF4444;
+  --color-danger-dark:   #DC2626;
   --color-danger-light:  #FEF2F2;
 
   /* Decision State Colors — H08 §5, used in badges and indicators */

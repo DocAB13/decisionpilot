@@ -1,0 +1,34 @@
+/* SaveIndicator — H08 §7 Save Indicator */
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-slow);
+}
+
+.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.saving {
+  color: var(--color-text-muted);
+}
+
+.saved {
+  color: var(--color-success);
+}
+
+.error {
+  color: var(--color-danger);
+}

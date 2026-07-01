@@ -2385,6 +2385,31 @@ Shows rotating status messages every 4–6 seconds. A horizontal progress bar fi
 
 ---
 
+### IR01-070b — UI Consistency Pass
+
+**Description:** Inserted task, not part of the original roadmap sequence. Audits every screen shipped in IR01-056 through IR01-070 against H08 (colors, typography, spacing, radius, shadows, buttons) and DAC-01/DAC-10, removes duplicated styling, and consolidates repeated markup into existing shared components. No new features, no redesign, no change to existing functionality.
+
+**Files changed:**
+- `components/layout/FilterLayout.module.css` (new) — shared `.layout`/`.filterPanel`/`.filterHeading`/`.listColumn`/`.heading` rules, replacing the near-identical `pages/dashboard.module.css` and `pages/history.module.css` (deleted)
+- `pages/dashboard.tsx`, `pages/history.tsx` — import the shared module
+- `lib/design-tokens.css` — added `--color-danger-dark` (mirrors the existing `--color-accent-dark` pattern)
+- `components/ui/Button.module.css` — `.danger:hover` now references `--color-danger-dark` instead of a hardcoded `#dc2626`
+- `components/ui/Input.tsx` — widened `label` prop from `string` to `React.ReactNode` (backward compatible) to support inline hint text without duplicating the Input component
+- `pages/auth/Auth.module.css` (new), `pages/auth/login.tsx`, `pages/auth/signup.tsx` — replaced two ~150-line pages of duplicated inline-style form/card/button markup with the existing `Input`, `Button` components and one shared page-shell module
+- `components/ui/SaveIndicator.tsx`, `components/ui/SaveIndicator.module.css` (new) — converted from inline `CSSProperties` objects to a CSS Module, matching the styling convention used by every other component
+
+**Dependencies:** IR01-070.
+
+**Complexity:** Low.
+
+**Acceptance criteria:**
+- No behavior change: `npx tsc --noEmit`, `npx next build`, and `npx vitest run` all pass
+- Dashboard and History pages render identically (same grid, same filter panel)
+- Login and signup pages preserve all existing behavior (anon token transfer, redirects, loading/error/message states)
+- No new hardcoded colors introduced; the two fixed hardcodes are the only token changes
+
+---
+
 ### IR01-071 — Create `features/decision-wizard/RecommendationView.tsx`
 
 **Description:** Create the Recommendation Screen per H08 §9 and H03 component 7.
@@ -2766,7 +2791,7 @@ IR01-060 → IR01-061 → IR01-062
 IR01-057 → IR01-063 → IR01-064
 IR01-060 → IR01-065 → IR01-066 → IR01-067
 IR01-067 → IR01-068
-IR01-061 → IR01-069 → IR01-070 → IR01-071 → IR01-072
+IR01-061 → IR01-069 → IR01-070 → IR01-070b → IR01-071 → IR01-072
 IR01-072 → IR01-073 → IR01-074 → IR01-075
 All Phase 5 → IR01-076
 
@@ -2782,10 +2807,10 @@ IR01-080 → IR01-083 → IR01-084 → IR01-085
 
 | Complexity | Task count |
 |---|---|
-| Low | 38 |
+| Low | 39 |
 | Medium | 29 |
 | High | 18 |
-| **Total** | **85** |
+| **Total** | **86** (85 original + IR01-070b, inserted) |
 
 ---
 
@@ -2793,7 +2818,7 @@ IR01-080 → IR01-083 → IR01-084 → IR01-085
 
 **New files (not existing in codebase):**
 
-`lib/design-tokens.css` · `hooks/useAuth.ts` · `lib/stripe/stripe.client.ts` · `core/decision/Decision.constants.ts` · `core/decision/Decision.types.ts` · `core/decision/Decision.utils.ts` · `core/decision/Decision.utils.test.ts` · `core/ai/sanitize.ts` · `core/ai/sanitize.test.ts` · `core/ai/call.ts` · `core/ai/prompts.ts` · `core/ai/validate.ts` · `core/ai/validate.test.ts` · `core/ai/prompts.test.ts` · `vitest.config.ts` · `vitest.setup.ts` · `context/DecisionContext.tsx` · `context/DecisionContext.test.tsx` · `hooks/useDecision.ts` · `components/layout/TopNav.tsx` · `components/layout/BottomNav.tsx` · `components/layout/PageLayout.tsx` · `components/ui/Button.tsx` · `components/ui/Input.tsx` · `components/ui/Card.tsx` · `components/ui/SaveIndicator.tsx` · `components/ui/ProgressBar.tsx` · `components/ui/AnalysisLoading.tsx` · `features/decision-wizard/Wizard.tsx` · `features/decision-wizard/CategorySelect.tsx` · `features/decision-wizard/ContextStep.tsx` · `features/decision-wizard/GoalStep.tsx` · `features/decision-wizard/ConstraintsStep.tsx` · `features/decision-wizard/AlternativesStep.tsx` · `features/decision-wizard/RecommendationView.tsx` · `features/decision-wizard/FinalDecisionForm.tsx` · `features/decision-chat/Chat.tsx` · `features/decision-history/History.tsx` · `features/marketing/PricingSection.tsx` · `pages/dashboard.tsx` · `pages/history.tsx` · `pages/decision/new.tsx` · `pages/decision/[id].tsx` · `pages/api/decision/create.ts` · `pages/api/decision/[id].ts` · `pages/api/decision/save.ts` · `pages/api/decision/analyze.ts` · `pages/api/decision/state.ts` · `pages/api/decision/chat.ts` · `pages/api/decision/chat/[id].ts` · `pages/api/decision/history.ts` · `pages/api/decision/suggest.ts` · `pages/api/decision/conflict.ts` · `pages/api/billing/checkout.ts` · `pages/api/billing/webhook.ts`
+`lib/design-tokens.css` · `hooks/useAuth.ts` · `lib/stripe/stripe.client.ts` · `core/decision/Decision.constants.ts` · `core/decision/Decision.types.ts` · `core/decision/Decision.utils.ts` · `core/decision/Decision.utils.test.ts` · `core/ai/sanitize.ts` · `core/ai/sanitize.test.ts` · `core/ai/call.ts` · `core/ai/prompts.ts` · `core/ai/validate.ts` · `core/ai/validate.test.ts` · `core/ai/prompts.test.ts` · `vitest.config.ts` · `vitest.setup.ts` · `context/DecisionContext.tsx` · `context/DecisionContext.test.tsx` · `hooks/useDecision.ts` · `components/layout/TopNav.tsx` · `components/layout/BottomNav.tsx` · `components/layout/PageLayout.tsx` · `components/ui/Button.tsx` · `components/ui/Input.tsx` · `components/ui/Card.tsx` · `components/ui/SaveIndicator.tsx` · `components/ui/ProgressBar.tsx` · `components/ui/AnalysisLoading.tsx` · `features/decision-wizard/Wizard.tsx` · `features/decision-wizard/CategorySelect.tsx` · `features/decision-wizard/ContextStep.tsx` · `features/decision-wizard/GoalStep.tsx` · `features/decision-wizard/ConstraintsStep.tsx` · `features/decision-wizard/AlternativesStep.tsx` · `features/decision-wizard/RecommendationView.tsx` · `features/decision-wizard/FinalDecisionForm.tsx` · `features/decision-chat/Chat.tsx` · `features/decision-history/History.tsx` · `features/marketing/PricingSection.tsx` · `pages/dashboard.tsx` · `pages/history.tsx` · `pages/decision/new.tsx` · `pages/decision/[id].tsx` · `pages/api/decision/create.ts` · `pages/api/decision/[id].ts` · `pages/api/decision/save.ts` · `pages/api/decision/analyze.ts` · `pages/api/decision/state.ts` · `pages/api/decision/chat.ts` · `pages/api/decision/chat/[id].ts` · `pages/api/decision/history.ts` · `pages/api/decision/suggest.ts` · `pages/api/decision/conflict.ts` · `pages/api/billing/checkout.ts` · `pages/api/billing/webhook.ts` · `components/layout/FilterLayout.module.css` · `pages/auth/Auth.module.css` · `components/ui/SaveIndicator.module.css` (IR01-070b)
 
 **Migration files:**
 `supabase/migrations/20260601000000_create_subscriptions.sql` · `20260610000000_create_decisions.sql` · `20260610000001_decisions_rls.sql` · `20260610000002_decisions_indexes_trigger.sql` · `20260610000003_create_decision_components.sql` · `20260610000004_decision_components_rls_indexes.sql` · `20260610000005_create_decision_state_transitions.sql` · `20260610000006_create_decision_chat_messages.sql` · `20260610000007_create_insert_chat_exchange.sql` · `20260615000000_create_anonymous_cleanup_cron.sql` · `20260615000001_create_stuck_analysis_cleanup_cron.sql`

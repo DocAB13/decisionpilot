@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Input.module.css'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string
+  label: React.ReactNode
   id: string
   error?: string
 }

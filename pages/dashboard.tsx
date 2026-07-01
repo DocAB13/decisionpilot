@@ -9,8 +9,7 @@ import { DecisionCategory, DecisionStatus } from '@/core/decision/Decision.const
 import type { DecisionCategory as DecisionCategoryType, DecisionStatus as DecisionStatusType } from '@/core/decision/Decision.constants'
 import { createClient } from '@/lib/supabase/server'
 import inputStyles from '@/components/ui/Input.module.css'
-
-import styles from './dashboard.module.css'
+import styles from '@/components/layout/FilterLayout.module.css'
 
 // Decisions shown on the Dashboard by default exclude Archived — H08 §4 IA
 const NON_ARCHIVED_STATUSES: DecisionStatusType[] = [

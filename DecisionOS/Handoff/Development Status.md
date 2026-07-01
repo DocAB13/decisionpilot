@@ -8,12 +8,12 @@
 
 **Current IR01 Task:** IR01-071 — Create `features/decision-wizard/RecommendationView.tsx`
 
-**Last Completed Task:** IR01-070 — `components/ui/AnalysisLoading.tsx`
+**Last Completed Task:** IR01-070b — UI Consistency Pass (inserted task, not part of the original roadmap sequence)
 
-**IR01 Progress:** 70 / 85 tasks complete (~82%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count.
+**IR01 Progress:** 71 / 86 tasks complete (~83%) — see `IR01 - MVP Implementation Roadmap.md` Appendix B for the full task count (85 original + IR01-070b, inserted).
 
 **Repository:**
-- GitHub: Synced (pushed through IR01-070, commit `fa4a636`)
+- GitHub: Synced (pushed through IR01-070, commit `fa4a636`) — IR01-070b not yet pushed
 - Vercel: Synced through IR01-060
 
 ---
@@ -94,6 +94,7 @@
 - IR01-068 — `components/ui/ProgressBar.tsx` — commit `62b2dbc`
 - IR01-069 — `pages/decision/[id].tsx` (Decision Object view page; minor Wizard.tsx update to pass `anonymous_token` through) — commit `4ac315c`
 - IR01-070 — `components/ui/AnalysisLoading.tsx` (wired into the `in_analysis` branch of `pages/decision/[id].tsx`) — commit `9d07c19`
+- IR01-070b — UI Consistency Pass: extracted the duplicate dashboard/history filter-layout CSS into `components/layout/FilterLayout.module.css`; tokenized the hardcoded Button danger-hover color (`--color-danger-dark`); rebuilt `pages/auth/login.tsx` and `pages/auth/signup.tsx` on the existing `Input`/`Button` components and a shared `Auth.module.css` shell instead of ~150 duplicated inline-style lines each; converted `SaveIndicator` from inline `CSSProperties` to a CSS Module
 
 **Remaining in Phase 5:** IR01-071 through IR01-076 (RecommendationView, AI Chat Interface, Final Decision / Outcome / Reflection steps, Billing UI, Phase 5 verification).
 
@@ -106,6 +107,8 @@
 
 **IR01-071 — Create `features/decision-wizard/RecommendationView.tsx`**
 Dependencies: IR01-061, IR01-057. Complexity: High.
+
+(IR01-070b was an inserted consistency-pass task; it did not change what's next — IR01-071 remains the roadmap's next task, unchanged from the original scope.)
 
 ## Next Milestone
 

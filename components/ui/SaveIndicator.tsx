@@ -1,16 +1,9 @@
-import type { CSSProperties, JSX } from 'react'
+import type { JSX } from 'react'
+
+import styles from './SaveIndicator.module.css'
 
 interface Props {
   saveState: 'idle' | 'saving' | 'saved' | 'error'
-}
-
-const baseContainerStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 'var(--space-1)',
-  fontSize: 'var(--text-sm)',
-  lineHeight: '1',
-  transition: 'opacity var(--transition-slow)',
 }
 
 function SpinnerIcon(): JSX.Element {
@@ -21,7 +14,7 @@ function SpinnerIcon(): JSX.Element {
       viewBox="0 0 14 14"
       fill="none"
       aria-hidden="true"
-      style={{ flexShrink: 0 }}
+      className={styles.icon}
     >
       <circle
         cx="7"
@@ -53,7 +46,7 @@ function CheckIcon(): JSX.Element {
       viewBox="0 0 14 14"
       fill="none"
       aria-hidden="true"
-      style={{ flexShrink: 0 }}
+      className={styles.icon}
     >
       <path
         d="M2.5 7L5.5 10L11.5 4"
@@ -74,7 +67,7 @@ function WarningIcon(): JSX.Element {
       viewBox="0 0 14 14"
       fill="none"
       aria-hidden="true"
-      style={{ flexShrink: 0 }}
+      className={styles.icon}
     >
       <path
         d="M7 1.75L12.5 11.25H1.5L7 1.75Z"
@@ -98,30 +91,26 @@ function WarningIcon(): JSX.Element {
 
 export function SaveIndicator({ saveState }: Props): JSX.Element {
   const isVisible = saveState !== 'idle'
-  const containerStyle: CSSProperties = {
-    ...baseContainerStyle,
-    opacity: isVisible ? 1 : 0,
-    pointerEvents: isVisible ? 'auto' : 'none',
-  }
+  const containerClassName = [styles.container, isVisible ? styles.visible : ''].filter(Boolean).join(' ')
 
   return (
-    <div style={containerStyle} aria-live="polite">
+    <div className={containerClassName} aria-live="polite">
       {saveState === 'saving' && (
         <>
           <SpinnerIcon />
-          <span style={{ color: 'var(--color-text-muted)' }}>Saving...</span>
+          <span className={styles.saving}>Saving...</span>
         </>
       )}
       {saveState === 'saved' && (
         <>
           <CheckIcon />
-          <span style={{ color: 'var(--color-success)' }}>Saved</span>
+          <span className={styles.saved}>Saved</span>
         </>
       )}
       {saveState === 'error' && (
         <>
           <WarningIcon />
-          <span style={{ color: 'var(--color-danger)' }}>Not saved</span>
+          <span className={styles.error}>Not saved</span>
         </>
       )}
     </div>
