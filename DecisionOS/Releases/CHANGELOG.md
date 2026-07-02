@@ -1,5 +1,93 @@
 # DecisionOS Changelog
 
+## Documentation sync — IR01 Roadmap and Development Status before push
+
+**Type:** Documentation only — no code changed
+
+**Summary:** Pre-push verification pass. Confirmed IR01-076 still correctly states `Status: Blocked — environment missing required secrets` with the missing Stripe/Supabase/Anthropic variables explicitly listed — no change needed. `IR01 - MVP Implementation Roadmap.md` was missing dedicated sections for three "outside IR01 numbering" efforts that already had CHANGELOG entries but no roadmap-level record (unlike CQ1/CQ2 and UX1–UX3, which already had both): added "Handbook Documentation — H14 through H19," "Legal Pages Rewrite — Privacy, Terms, Cookies," and "Test Coverage — `core/ai/call.ts`" sections, in the same spot and style as the existing Critical Fixes / UX Critical Fixes sections (between IR01-079 and IR01-080). Updated `DecisionOS/Handoff/Development Status.md`'s "Most recent work" summary and Repository section, and added matching "Legal Pages Rewrite" and "Test Coverage" sections there too, mirroring its existing "Handbook Documentation" section.
+
+**Files changed:** `DecisionOS/Implementation Reports/IR01 - MVP Implementation Roadmap.md`, `DecisionOS/Handoff/Development Status.md`.
+
+---
+
+## Unit tests added for `core/ai/call.ts`
+
+**Type:** Test coverage — closes the gap flagged in H16 §12 (no test file, 50% line coverage)
+
+**Summary:** `core/ai/call.ts` (the Anthropic API fetch wrapper) had no dedicated test file; only its 29-second timeout path and `parseAIJSON` were incidentally covered by `acceptance-criteria.test.ts` (AAC-06). Added `core/ai/call.test.ts` covering the remaining `callAI` paths: the missing-API-key guard, request construction (URL, headers, body shape), the successful response path (including `cleanJSON`'s markdown-fence stripping, multi-block text concatenation, and default token-usage-to-0 when `usage` is absent), and Anthropic's error-response shapes (`type: "error"`, a bare `error` field, and the no-message fallback). No production code was changed — `call.ts` itself was not touched, only the new test file was added.
+
+**Coverage impact:** `core/ai/call.ts` moved from 50% to 100% line coverage. Overall `core/` coverage: statements 95.5% → 98.26%, branches 86.2% → 90.68%, lines 97.06% → 100%. Test count: 214 → 225 (11 new tests, all in the new file).
+
+**Verification:** `npx vitest run --coverage` (225 tests passing, 7 files), `npx tsc --noEmit`, and `npx next build` all pass.
+
+**Files changed:** `core/ai/call.test.ts` (new file only).
+
+---
+
+## Cookie Policy rewritten to match the actual DecisionOS product
+
+**Type:** Content fix — closes the last of the three legacy-copy drifts flagged across the Privacy Policy and Terms of Service tasks
+
+**Summary:** `pages/cookies.js` described "your daily Free-plan decision count" and "language preference" as strictly-necessary cookies (neither exists — Free tier is unlimited Decisions with a History cap, not a daily count, and DecisionOS is English-only in MVP with no language switcher), and listed the same fictional affiliate partners (AutoScout24, CHECK24, Booking.com) as third-party cookie setters. Rewrote against H12 §13 and H14 (§3.2 session cookies, §9.3 consent gating, §6 subprocessor register) — no legal statement invented beyond what those documents establish.
+
+**Changes:**
+- §2 (cookies we use) corrected to describe what's actually necessary: the Supabase session cookie (HttpOnly, up to 30 days per H09 §11) and the cookie-consent choice (stored via `localStorage`, per the real `CookieBanner.js` implementation) — removed the non-existent daily-count and language-preference items.
+- §4 (third-party cookies) replaced the fictional partner list with the real affiliate networks (Amazon Associates, CJ Affiliate, Awin), and corrected the trigger condition to match Terms/Privacy: only when the user's own Final Decision maps to a purchasable product.
+- §5 (cookie duration) corrected to state the actual 30-day session length and consent-choice persistence (until browser data is cleared), removing the stale "daily Free-plan limits" reference.
+- Intro line broadened to "cookies and similar technologies (such as local storage)" since the consent choice itself is `localStorage`, not a cookie — technically accurate rather than glossing over the mechanism.
+- Rebranded "DecisionPilot" → "DecisionOS" in the page's own content and `<title>`, matching the Privacy Policy and Terms of Service. Shared `LegalLayout` chrome not touched — out of scope.
+
+**Verification:** `npx next build` passes; `/cookies` compiles cleanly (2.38 kB), no errors. No other files were touched.
+
+**Files changed:** `pages/cookies.js` (content rewritten in full; layout/props unchanged).
+
+---
+
+## Terms of Service rewritten to match the actual DecisionOS product
+
+**Type:** Content fix — same legacy-copy drift as the Privacy Policy, flagged as out of scope in that task's CHANGELOG entry
+
+**Summary:** `pages/terms.js` still described DecisionOS as "an AI-assisted comparison and recommendation tool" for "vacations, cars, electronics," referenced a legacy in-app persona ("the Ai·sel character"), listed the same fictional affiliate partners as the old Privacy Policy (AutoScout24, CHECK24, Booking.com, Wayfair, Sixt, Europcar), and described Free-tier billing as "limited daily decisions" at USD pricing — none of which match the real product or business model. Rewrote the page's content in full against H12 §13, H14 (§6 subprocessor register), and H18 (§3 pricing tiers, §4 affiliate constraints) — no legal statement invented beyond what those documents already establish.
+
+**Changes:**
+- §1 rewritten to describe the actual Decision Object flow (context/goal/constraints/alternatives → AI analysis/recommendation/action plan → outcome tracking) instead of a category-comparison tool.
+- §2 (Not professional advice) broadened from "AI chat responses" to cover recommendations, analysis, and action plans generally — same disclaimer intent, correct scope.
+- §3 (Plans and billing) corrected to the real tiers and pricing from H18 §3/H06 FR-11: Free is unlimited Decisions with a 10-item History cap (not "limited daily decisions"), Pro €4.99/month and Premium €9.99/month (was USD), and added BR-10's rule that no step of the Decision process is ever gated behind a paid plan. Cancellation wording corrected to state the account reverts to Free with no data loss (H07/H18 §5), not just "access continues until period end."
+- §4 (Affiliate disclosure) replaced the fictional retailer list with the real affiliate networks (Amazon Associates, CJ Affiliate, Awin) and the actual constraint that a link only ever points to the option the user's own Final Decision named, never a sponsored alternative — matching the Privacy Policy's equivalent section.
+- §5 (Acceptable use) — "abuse the Free plan's limits" (a daily-cap concept that no longer applies) generalized to "circumvent plan limits."
+- §6 (Intellectual property) — removed the reference to the legacy "Ai·sel" chat persona, which belongs to the unreachable legacy quiz engine UX1 left in place, not the current product surface.
+- Rebranded "DecisionPilot" → "DecisionOS" in the page's own content and `<title>`, matching the Privacy Policy and UX1's earlier site rebrand. Shared `LegalLayout` chrome not touched — out of scope.
+
+**Not changed (explicitly out of scope):** `pages/cookies.js` has the same legacy affiliate-list drift and was left untouched — flagged for a future task, not fixed in this pass.
+
+**Verification:** `npx next build` passes; `/terms` compiles cleanly (3.44 kB). No other files were touched.
+
+**Files changed:** `pages/terms.js` (content rewritten in full; layout/props unchanged).
+
+---
+
+## Privacy Policy rewritten to match the actual DecisionOS product
+
+**Type:** Content fix — closes the legal-copy drift flagged in H14 §12.2
+
+**Summary:** `pages/privacy.js` still described the pre-pivot legacy product — "Decision answers" from category quizzes (vacation, car, phone) and an "Affiliate partners" list naming AutoScout24, CHECK24, Booking.com, Wayfair, Sixt, and Europcar, none of which DecisionOS has any relationship with. Rewrote the page's content in full against H12 §13 (data classification/GDPR), H14 (§2 data inventory, §6 subprocessor register, §9 privacy program), and H18 (§3 pricing tiers) — no legal statement invented beyond what those documents already establish.
+
+**Changes:**
+- Replaced the legacy quiz/comparison-marketplace description with an accurate summary of the real product (Decision Object: context/goal/constraints/alternatives → AI analysis/recommendation → outcome/reflection tracking).
+- Added a dedicated "Anonymous and authenticated use" section (§2) explaining the 48-hour anonymous-Decision window (BR-04) and automatic transfer on signup.
+- Added a dedicated "How AI processing works" section (§4) describing what's sent to Anthropic, the structured/sanitized injection defense, and that the AI never acts on or accesses the account.
+- Replaced the fictional retailer partner list with the real subprocessor register from H14 §6: Supabase, Anthropic, Stripe, Vercel, Google Analytics, and the three real affiliate networks (Amazon Associates, CJ Affiliate, Awin) — described with the actual constraint that they only apply to the user's own chosen option and never influence the recommendation (H07/H18).
+- Rewrote data-retention language (§7) to state accurately what's self-service today (per-Decision deletion from the Dashboard, live) versus what requires contacting support (full account erasure — no self-service route exists yet, per H14 §12.1). This makes the policy honest about current capability rather than promising a route that doesn't exist.
+- Rebranded "DecisionPilot" → "DecisionOS" throughout the page's own content and `<title>`, matching UX1's earlier rebrand of the marketing site. The shared `LegalLayout` chrome (nav wordmark, footer) was not touched — out of this task's scope.
+
+**Not changed (explicitly out of scope):** `pages/terms.js` and `pages/cookies.js` have the same legacy-product drift (comparison-marketplace framing, the same fictional affiliate list, USD pricing) and were left untouched — flagged here for a future task, not fixed in this pass. No GDPR account-deletion endpoint was implemented; §7/§8 direct users to contact support for full account erasure, per this task's explicit instruction to wait for approval before building that endpoint.
+
+**Verification:** `npx next build` passes; `/privacy` compiles cleanly (4.51 kB). No other files were touched.
+
+**Files changed:** `pages/privacy.js` (content rewritten in full; layout/props unchanged).
+
+---
+
 ## H19 — Glossary handbook document written
 
 **Type:** Documentation only — no code changed

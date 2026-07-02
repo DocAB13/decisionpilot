@@ -2826,6 +2826,42 @@ Three UX defects, requested directly by the Founder, fixed the same way CQ1/CQ2 
 
 ---
 
+## Handbook Documentation — H14 through H19 (outside IR01 numbering)
+
+The six remaining stub Company Handbook documents (title + `Status: Draft` only) were authored in full, one at a time with approval between each, not as IR01 tasks — no task ID assigned, no renumbering, tracked here for the same reason CQ1/CQ2 and UX1–UX3 are: real work that happened during this roadmap's execution window.
+
+**H14 (Security & Privacy), H16 (Testing & QA), H17 (Product Roadmap), H15 (Operations Handbook), H18 (Business Model), H19 (Glossary)** — each consolidates and cross-references controls, processes, or terminology already specified across H01–H13 rather than introducing new scope, and each carries its own "Known Gaps" section recording discrepancies found against the live repo instead of describing them as resolved (account-erasure route missing, `core/ai/call.ts` untested at the time, Vercel behind GitHub, no unit-economics document, etc. — see each document's own §12/§10 and `DecisionOS/Releases/CHANGELOG.md` for the full list).
+
+**Verification:** documentation only — no code changed, no test/build verification applicable.
+
+---
+
+## Legal Pages Rewrite — Privacy, Terms, Cookies (outside IR01 numbering)
+
+`pages/privacy.js`, `pages/terms.js`, and `pages/cookies.js` all still described the pre-pivot legacy "DecisionPilot" comparison-marketplace product (category quizzes, a fictional affiliate partner list — AutoScout24, CHECK24, Booking.com, Wayfair, Sixt, Europcar — the legacy "Ai·sel" persona, USD pricing, and a "daily Free-plan limit" that never matched the real Free tier). This was first flagged as a known gap while authoring H14 (§12.2) and fixed as three sequential, separately-approved content passes, grounded in H12 §13, H14, and H18 — no legal statement invented beyond what those documents already establish.
+
+- **Privacy Policy** — rewritten to describe the real Decision Object data model, added an anonymous-vs-authenticated-use section and an AI-processing section, replaced the fictional partner list with the real subprocessor register (Supabase, Anthropic, Stripe, Vercel, Google Analytics, and the real affiliate networks — Amazon Associates, CJ Affiliate, Awin), and corrected data-retention language to state accurately what's self-service today (per-Decision deletion) versus what requires contacting support (full account erasure — no self-service route exists yet, per H14 §12.1).
+- **Terms of Service** — rewritten to describe the real product and the actual Free/Pro/Premium tiers and €-pricing (was USD), added BR-10's no-core-flow-gating rule, corrected the affiliate disclosure to the real networks, and removed the legacy "Ai·sel" persona reference.
+- **Cookie Policy** — corrected the "necessary cookies" description to what's actually real (the Supabase session cookie, up to 30 days, and the `localStorage`-based consent choice), removing the fictional daily-count and language-preference items, and replaced the fictional partner list with the real affiliate networks.
+
+Rebranded "DecisionPilot" → "DecisionOS" in all three pages' own content and `<title>`, matching UX1's earlier site rebrand. The shared `LegalLayout` component (nav wordmark, footer) was not touched in any of the three passes — out of scope each time.
+
+**Verification:** `npx next build` passes after each of the three changes; `/privacy`, `/terms`, and `/cookies` all compile cleanly. No other files were touched.
+
+---
+
+## Test Coverage — `core/ai/call.ts` (outside IR01 numbering)
+
+`core/ai/call.ts` (the Anthropic API fetch wrapper) had no dedicated test file and sat at 50% line coverage — a gap flagged while authoring H16 (§12) and closed as an audit-driven test-only task, the same way IR01-077/078/079 closed similar coverage gaps, but not itself a numbered IR01 task since it was scoped and approved outside the roadmap's original task list.
+
+Added `core/ai/call.test.ts` covering the paths `acceptance-criteria.test.ts` didn't already exercise (that file already covered the 29-second timeout and `parseAIJSON`): the missing-API-key guard, request construction (URL/headers/body shape), the successful response path (`cleanJSON`'s markdown-fence stripping, multi-block text concatenation, default-to-0 token usage), and all three Anthropic error-response shapes. No production code was changed — `call.ts` itself was not touched.
+
+`core/ai/call.ts` moved from 50% to 100% line coverage; overall `core/` coverage moved from 97.06% to 100% lines. Test count: 214 → 225.
+
+**Verification:** `npx vitest run --coverage` (225 tests, 7 files), `npx tsc --noEmit`, and `npx next build` all pass.
+
+---
+
 ### IR01-080 — Run full H09 TAC checklist
 
 **Description:** Execute every item in H09 Technical Acceptance Criteria (TAC-01 through TAC-08) against the production deployment.
