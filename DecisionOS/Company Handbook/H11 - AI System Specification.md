@@ -411,7 +411,7 @@ When a major version makes a previous version obsolete, the old version is marke
 
 DecisionOS uses a deliberately bounded memory model. The AI knows only what is present in the current Decision Object. It does not have memory of previous sessions, previous Decision Objects, or any information not explicitly provided by the user.
 
-This model is described in detail in H11 §6 (Document H10 — AI System Specification). The key points are:
+The key points are:
 
 **Within a Decision Object (current session):** Full memory of all components, all previous AI outputs, and the last 20 Chat messages.
 

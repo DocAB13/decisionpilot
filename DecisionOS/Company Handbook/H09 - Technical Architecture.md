@@ -876,7 +876,7 @@ Every API route that operates on user data:
 
 No resource is returned or modified based solely on a URL parameter without verifying ownership.
 
-### Data Privacy (H02 Principle 8)
+### Data Privacy (H02 Product Objective)
 
 - Decision Object content is not shared between users.
 - No behavioral profiling for advertising.

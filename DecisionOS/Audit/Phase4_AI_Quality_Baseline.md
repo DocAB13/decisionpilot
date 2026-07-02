@@ -2,6 +2,8 @@
 **DecisionOS | IR01-054**
 *Per H11 §14 AAC-07*
 
+> **HISTORICAL — SUPERSEDED.** Snapshot at IR01-054 (112/112 tests passing at the time; the suite is now 299 tests across 12 files). The "Prompt design review... Per H11 §4.3, §5.5, §6.5" line below is stale — H11 was reorganized after this was written, and §5/§6 are now Prompt Versioning/Conversation Memory, unrelated to validation. The current, correct citations for this content are H11 §4.3 (Category-Specific Rules — still correct), §7.3 (information gaps), §8.3 (professional advice disclaimer), and §9.2–9.3 (`specific_to_user`, `market_data_caveat`) — see IR01-077's own note in `IR01 - MVP Implementation Roadmap.md` for the full re-derivation. Live AI execution against production is still pending — see IR01-082 in the current roadmap.
+
 ---
 
 ## Status

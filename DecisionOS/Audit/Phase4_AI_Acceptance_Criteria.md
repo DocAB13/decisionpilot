@@ -2,6 +2,8 @@
 **DecisionOS | IR01-055**
 *Per H11 §14 AAC-01 through AAC-06*
 
+> **HISTORICAL — SUPERSEDED.** Snapshot at IR01-055 (153/153 tests passing at the time; the suite is now 299 tests across 12 files). AAC-07 (Quality Baseline) is covered separately in the sibling `Phase4_AI_Quality_Baseline.md`, not in this document, per its own AAC-01–AAC-06 scope stated above. For current AI validation status, see `H16 - Testing & QA.md` §6 and `H11 - AI System Specification.md` §14.
+
 ---
 
 ## Summary

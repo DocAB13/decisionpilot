@@ -1366,7 +1366,7 @@ No table grants `anon` key access to other users' rows under any condition.
 
 **Right to Erasure (Art. 17):** User account deletion via `supabase.auth.admin.deleteUser()` cascade-deletes all user data. Implemented in the account settings API route.
 
-**Data Minimization (Art. 5):** Only data necessary for the Decision Object is collected. No behavioral profiles, no advertising data, no third-party data sharing. See H02 Principle 8.
+**Data Minimization (Art. 5):** Only data necessary for the Decision Object is collected. No behavioral profiles, no advertising data, no third-party data sharing. See H02's Product Objective (the product is not designed to maximize engagement or serve interests other than the user's).
 
 **Storage Limitation (Art. 5):** Anonymous Decision Objects are deleted after 48 hours. User account deletion removes all associated data. No indefinite retention of personal data.
 

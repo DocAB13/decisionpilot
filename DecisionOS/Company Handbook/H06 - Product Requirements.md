@@ -512,7 +512,7 @@ The following items are explicitly out of scope for the current MVP. They are no
 
 **Multi-Language UI** — The UI must be implemented in English for MVP. The localization infrastructure (i18n framework, string extraction) should be in place to support future languages without a full rewrite, but translated strings are post-MVP.
 
-**Social Features** — Community ratings, "what others decided," shared decision templates, and any social proof mechanisms are permanently out of scope per Principle 6 (H02), not merely deferred.
+**Social Features** — Community ratings, "what others decided," shared decision templates, and any social proof mechanisms are permanently out of scope per Principle 7 (H02, Human-Centered Design — "never manipulates, pressures, or nudges users"), not merely deferred.
 
 **Third-Party Data Integrations** — Real-time market data, live product pricing, or external database lookups are post-MVP. The AI Reasoning Engine works from user-provided context in MVP.
 

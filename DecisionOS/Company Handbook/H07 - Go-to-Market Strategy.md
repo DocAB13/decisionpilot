@@ -14,7 +14,7 @@ H07 is not a marketing playbook. It does not define ad copy, visual identity, or
 
 Before reading H07, readers should be familiar with:
 - **H01** — the target users, mission, and competitive positioning
-- **H02** — the principles that constrain how we grow (Principle 7: Build for Trust Before Growth)
+- **H02** — the principles that constrain how we grow; **H01**'s Core Principles list includes the specific one (Principle 6: "Trust is the foundation of the product")
 - **H06** — the subscription tiers and their feature definitions
 
 ---
@@ -214,7 +214,7 @@ These are not targets. They are the minimum viable commercial trajectory for a s
 
 ### Secondary Revenue — Affiliate Partnerships
 
-Affiliate revenue is a secondary channel that is acceptable only under strict conditions aligned with H02 Principle 6 (Personalization over Popularity) and Principle 8 (Data Serves the User, Not the Company).
+Affiliate revenue is a secondary channel that is acceptable only under strict conditions aligned with H02 Principle 7 (Human-Centered Design — personalization over popularity, no manipulation) and H02's Product Objective (data serves the user's own decisions, not third-party or company interests).
 
 **Acceptable affiliate structure:** When a user completes a Decision and their Final Decision is a specific product or service, DecisionOS may include a link to that product or service that carries an affiliate tag. The link must be to the product the user chose — not to a sponsored alternative. The affiliate relationship must be disclosed.
 
@@ -311,7 +311,7 @@ Success metrics are organized into three tiers: product health, commercial healt
 
 ### Metrics We Explicitly Do Not Optimize For
 
-Per H02 Principle 3 (Every Feature Must Improve Decision Quality) and Principle 7 (Build for Trust Before Growth):
+Per H02's Decision Rule ("Does this feature help users make better decisions?") and H01 Core Principle 6 (Trust is the foundation of the product):
 
 - **Daily Active Users** — DecisionOS is not a daily-use product. DAU as a primary metric would incentivize engagement features that do not serve Decision quality.
 - **Session Duration** — A longer session is not a better product. A shorter session that reaches a confident Final Decision faster is better.
@@ -322,17 +322,17 @@ Per H02 Principle 3 (Every Feature Must Improve Decision Quality) and Principle 
 
 ## Part 9 — Constraints and Principles
 
-The go-to-market strategy is not exempt from the principles defined in H02. Three principles have specific implications for GTM decisions.
+The go-to-market strategy is not exempt from the principles defined in H01 and H02. Two H02 principles and one H01 principle have specific implications for GTM decisions.
 
-### Principle 6 — Personalization Over Popularity
+### H02 Principle 7 — Human-Centered Design (Personalization Over Popularity)
 
-We will not publish "what most users decide" statistics, even if they would drive social proof. We will not surface "trending decisions" or "popular alternatives." These mechanics would undermine the personalization that is our primary competitive advantage.
+We will not publish "what most users decide" statistics, even if they would drive social proof. We will not surface "trending decisions" or "popular alternatives." These mechanics would undermine the personalization that is our primary competitive advantage — and would be exactly the kind of nudging toward a specific choice Principle 7 rules out.
 
-### Principle 7 — Build for Trust Before Growth
+### H01 Core Principle 6 — Trust Is the Foundation of the Product (Build for Trust Before Growth)
 
 We will not launch broad marketing campaigns before the product is ready to fulfill the trust it implies. A user who arrives at DecisionOS because of a marketing claim and receives a disappointing experience is a cost, not an acquisition. The sequence is always: trust first, then scale.
 
-### Principle 8 — Data Serves the User, Not the Company
+### H02's Product Objective — Data Serves the User, Not the Company
 
 We will not use Decision Object data for advertising targeting, even anonymized aggregate data. We will not sell behavioral insights derived from user decisions. We will not build acquisition models based on personal information users shared in the context of a decision.
 

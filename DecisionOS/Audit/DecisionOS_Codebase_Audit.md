@@ -2,6 +2,8 @@
 **Transformation from DecisionPilot to DecisionOS**
 *Generated June 2026*
 
+> **HISTORICAL — SUPERSEDED.** This is a point-in-time snapshot of the codebase taken before most of the IR01 roadmap was implemented (e.g., it records `components/App.jsx` at 5,211 lines; as of the Documentation Consistency Cleanup it is ~2,120 lines after the legacy quiz engine was code-split out — see `DecisionOS/Releases/CHANGELOG.md`). It is preserved as a historical record of the starting state this project transformed from, not as a description of the current codebase. For current state, see `DecisionOS/Handoff/Development Status.md`; for the plan this audit fed into, see `DecisionOS/Implementation Reports/IR01 - MVP Implementation Roadmap.md`.
+
 ---
 
 ## 1. Project Inventory

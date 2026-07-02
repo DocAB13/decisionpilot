@@ -1485,6 +1485,8 @@ Key implementation points:
 
 **Reference documents:** H11 (AI System Specification), H13 §3.4 (analyze endpoint), H13 §3.5 (state endpoint — Action Plan).
 
+> **Note on H11 §-numbers below (added during the Documentation Consistency Cleanup):** the task descriptions in this phase were written against an earlier draft of H11's section structure. H11 was later reorganized; its current top-level sections are 1 AI Philosophy, 2 AI Responsibilities, 3 Decision Reasoning Flow, 4 Prompt Architecture, 5 Prompt Versioning, 6 Conversation Memory, 7 Follow-Up Questioning, 8 AI Safety, 9 Hallucination Mitigation, 10 Input Sanitization, 11 Confidence Handling, 12 Recommendation Generation, 13 Multi-Model Support, 14 AI Acceptance Criteria. Citations to §10, §11, §12, §13, §14, and §4.1–4.5 below still line up with this structure and can be read as-is. Citations that assumed a since-removed per-engine breakdown (e.g. "§9.1/§9.2/§9.3 Prompt Template," "§5.5/§6.5" for output validation) do not — the validation rules they meant now live in §7.3 (information gaps), §8.3 (professional advice disclaimer), §9.2–9.3 (`specific_to_user`, `market_data_caveat`), §11.1–11.3 (confidence), and §12.1–12.2 (Recommendation Contract, hard constraints), per IR01-077's own re-derivation below. The original task text is left as written — it reflects what was actually asked and built — rather than silently rewritten with guessed new numbers.
+
 ---
 
 ### IR01-041 — Create `core/ai/sanitize.ts` and tests

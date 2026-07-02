@@ -1,5 +1,23 @@
 # DecisionOS Changelog
 
+## Documentation Consistency Cleanup
+
+**Type:** Docs only — no code changed.
+
+**Summary:** Read the complete Handbook (H00–H19), IR01 Roadmap, Development Status, CHANGELOG, and all four Audit documents, then fixed five categories of drift accumulated across many rounds of Handbook authoring:
+
+1. **H00 index.** Reading Order and Document Status had never been updated past the original H01–H15 stub-import plan: titles were stale for 9 of 15 original documents (e.g., "H04 — User Experience" vs. H04's actual title "System Architecture"; "H14 — Frontend Architecture" vs. H14's actual "Security & Privacy"), H16–H19 were missing entirely, and every status said "Pending"/"Not Started" though H01–H13 have said "Frozen" in their own footers for a long time. Rewrote both the Reading Order (all 20 documents, correct titles) and Document Status table (H01–H13 Frozen, H14–H19 Draft — pending founder review, matching each document's own header/footer).
+2. **H02 ↔ H07 principle references.** H07 (and, it turned out, H06/H08/H09/H12/H14) cited "H02 Principle 6/8" for concepts H02's actual 10 principles don't contain at those numbers. Traced each citation to the closest matching actual principle by content: "no social proof / personalization" → H02 Principle 7 (Human-Centered Design, not 6); "simplicity" (H08) → H02 Principle 9 (Default to Simplicity, not 2); "build for trust before growth" → re-attributed to H01 Core Principle 6 ("Trust is the foundation of the product"), since no H02 principle covers it; "data serves the user, not the company" (H07/H09/H12/H14, all independently citing "Principle 8") → re-attributed to H02's Product Objective, since none of H02's 10 principles is about data/advertising ethics and inventing a new Principle 8 label was not an option. H07's own "Part 9 — Constraints and Principles" subsection headers were relabeled to match.
+3. **H11 section-number references.** Confirmed via H11's actual current section list (1 AI Philosophy … 14 AI Acceptance Criteria) that citations to §10–§14 and §4.1–4.5 throughout IR01/H12/H13/H16/H19 are accurate, but citations assuming a since-removed per-engine breakdown (§9.1/9.2/9.3 "Prompt Template," §5.5/§6.5 for output validation) are stale — a pre-existing drift IR01-077 had already partially diagnosed. Added one consolidated note at the top of IR01 Phase 4 mapping every stale citation to its current correct location, rather than guessing and silently rewriting ~25 scattered inline citations in completed task descriptions. Also fixed a self-referential bug inside H11 itself (§6 described its own content as being "in H11 §6 (Document H10 — AI System Specification)" — wrong document number, and circular).
+4. **Outdated audit documents.** Added a "HISTORICAL — SUPERSEDED" banner to all four files in `DecisionOS/Audit/` (`DecisionOS_Codebase_Audit.md`, `IR01_Final_Audit.md`, `Phase4_AI_Acceptance_Criteria.md`, `Phase4_AI_Quality_Baseline.md`), each explaining specifically what has since changed (test counts, `App.jsx` line count, H11's reorganization) and pointing to the current live source (`Development Status.md`, current H11/H16). Content left untouched — these are point-in-time snapshots, not living documents.
+5. **General consistency.** Updated H18 §10's own "Known Gaps" item about this exact principle-number drift to mark it resolved, since H18 had explicitly flagged it as needing "a Handbook consistency pass" — this task is that pass.
+
+**Not done, per instruction:** no code was touched; no new product/business requirements were introduced (every citation fix points to a principle or section that already existed, chosen by content match, never invented); no Handbook content was rewritten to fit a citation — only citations were corrected to fit the Handbook.
+
+**Files changed:** `H00 - Company Handbook Index.md`, `H06 - Product Requirements.md`, `H07 - Go-to-Market Strategy.md`, `H08 - UX & Design System.md`, `H09 - Technical Architecture.md`, `H11 - AI System Specification.md`, `H12 - Database Specification.md`, `H14 - Security & Privacy.md`, `H18 - Business Model.md`, `IR01 - MVP Implementation Roadmap.md`, `Audit/DecisionOS_Codebase_Audit.md`, `Audit/IR01_Final_Audit.md`, `Audit/Phase4_AI_Acceptance_Criteria.md`, `Audit/Phase4_AI_Quality_Baseline.md`.
+
+---
+
 ## Performance critical fix: code-split the legacy quiz engine out of the homepage bundle
 
 **Type:** Fix — implements the 1 Critical finding from the read-only performance audit (approved for immediate action; the 4 Recommended and 2 Nice-to-have findings were explicitly left untouched)

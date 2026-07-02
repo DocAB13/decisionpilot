@@ -20,11 +20,7 @@
 
 The Company Handbook is the single source of truth for DecisionOS.
 
-
-
 Every product decision, architecture decision, business rule and implementation must be consistent with these documents.
-
-
 
 If a conversation conflicts with the Handbook, the Handbook always wins.
 
@@ -44,31 +40,39 @@ If a conversation conflicts with the Handbook, the Handbook always wins.
 
 \* H02 — Product Principles
 
-\* H03 — Domain Model
+\* H03 — The Decision Model
 
-\* H04 — User Experience
+\* H04 — System Architecture
 
-\* H05 — Product Specification
+\* H05 — Product Workflow
 
-\* H06 — Functional Requirements
+\* H06 — Product Requirements (PRD)
 
-\* H07 — User Flows
+\* H07 — Go-to-Market Strategy
 
-\* H08 — UI Specification
+\* H08 — UX \& Design System
 
 \* H09 — Technical Architecture
 
-\* H10 — Backend Architecture
+\* H10 — Development Standards \& Engineering Handbook
 
-\* H11 — AI Architecture
+\* H11 — AI System Specification
 
 \* H12 — Database Specification
 
 \* H13 — API Specification
 
-\* H14 — Frontend Architecture
+\* H14 — Security \& Privacy
 
 \* H15 — Operations Handbook
+
+\* H16 — Testing \& QA
+
+\* H17 — Product Roadmap
+
+\* H18 — Business Model
+
+\* H19 — Glossary
 
 
 
@@ -80,39 +84,51 @@ If a conversation conflicts with the Handbook, the Handbook always wins.
 
 
 
-| Handbook | Status         |
+\| Handbook | Status                         |
 
-| -------- | -------------- |
+\| -------- | ------------------------------- |
 
-| H00      | Final          |
+\| H00      | Final                           |
 
-| H01      | Pending        |
+\| H01      | Frozen                          |
 
-| H02      | Pending        |
+\| H02      | Frozen                          |
 
-| H03      | Pending Import |
+\| H03      | Frozen                          |
 
-| H04      | Pending        |
+\| H04      | Frozen                          |
 
-| H05      | Pending        |
+\| H05      | Frozen                          |
 
-| H06      | Pending Import |
+\| H06      | Frozen                          |
 
-| H07      | Pending        |
+\| H07      | Frozen                          |
 
-| H08      | Pending        |
+\| H08      | Frozen                          |
 
-| H09      | Pending Import |
+\| H09      | Frozen                          |
 
-| H10      | Pending Import |
+\| H10      | Frozen                          |
 
-| H11      | Pending Import |
+\| H11      | Frozen                          |
 
-| H12      | Pending Import |
+\| H12      | Frozen                          |
 
-| H13      | Pending Import |
+\| H13      | Frozen                          |
 
-| H14      | Not Started    |
+\| H14      | Draft — pending founder review  |
 
-| H15      | Not Started    |
+\| H15      | Draft — pending founder review  |
+
+\| H16      | Draft — pending founder review  |
+
+\| H17      | Draft — pending founder review  |
+
+\| H18      | Draft — pending founder review  |
+
+\| H19      | Draft — pending founder review  |
+
+
+
+This table reflects each document's own header/footer status line as of the Documentation Consistency Cleanup (see `DecisionOS/Releases/CHANGELOG.md`). H01–H13 are the original frozen source of truth. H14–H19 were authored later, one at a time with approval between each, and remain in draft pending Founder review before being frozen.
 

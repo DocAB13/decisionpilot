@@ -144,7 +144,7 @@ Made explicit here because the model depends on them, per H07's own framing:
 
 1. **No unit-economics/COGS document exists.** §6's cost structure is qualitative only — no monthly Vercel/Supabase spend, no Anthropic per-request cost, and no Stripe fee rate is documented anywhere in the Handbook. Gross margin cannot currently be calculated from Handbook sources alone.
 2. **No live production revenue yet.** H07's pre-launch completion criteria require subscription payments to process correctly in production, not test mode, before launch is considered complete — the projections in §4 are therefore entirely forward-looking, not validated against actual conversions.
-3. **Cross-document principle-number drift.** H07 and other Handbook documents cite H02 principles by number (e.g., "Principle 6," "Principle 8") that do not match H02's actual current numbering (1. AI Never Decides through 10. Evolution Without Rebuilding). This is a pre-existing citation drift, not introduced here — flagged for a Handbook consistency pass rather than silently re-numbered in this document.
+3. ~~Cross-document principle-number drift.~~ **Resolved** in the Documentation Consistency Cleanup (see `DecisionOS/Releases/CHANGELOG.md`): H07's citations were corrected to the matching H02/H01 principle by content (Principle 6→7 for "no social proof," "Build for Trust"/"Data Serves the User" re-attributed to H01 Core Principle 6 and H02's Product Objective respectively, since neither had a clean match in H02's numbered list), and the same corrections were cascaded to H06, H08, H09, H12, and H14, which had independently inherited the same stale numbers.
 
 ---
 

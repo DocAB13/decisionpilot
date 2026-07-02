@@ -3,6 +3,8 @@
 **Compared against:** Company Handbook (H03–H13), IR01 MVP Roadmap, DecisionOS_Codebase_Audit.md
 *Generated June 2026*
 
+> **HISTORICAL — SUPERSEDED.** This audit is a snapshot checkpoint at IR01-060; the roadmap has since grown to 88 tasks (77+ complete) and includes work this document predates (IR01-061 through IR01-085, IR01-070b/075b/075c, CQ1/CQ2, UX1–UX3, and the H14–H19 Handbook/testing/accessibility/performance work). Some H11 section-number citations below (e.g. §5.5, §6.5) also predate a later reorganization of H11 — see `H11 - AI System Specification.md`'s current section list. For current progress, see `DecisionOS/Handoff/Development Status.md`, which is the live tracker this document is not.
+
 ---
 
 ## 1. What Is Fully Implemented

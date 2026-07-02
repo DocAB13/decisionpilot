@@ -12,7 +12,7 @@ This document is the consolidated, authoritative reference for how DecisionOS pr
 Where a control is defined in full elsewhere, H14 states the control and cites the source rather than re-deriving it. Where H14 identifies a gap between what the Handbook specifies and what is currently implemented, the gap is stated explicitly in §12 — H14 does not paper over gaps by describing aspirational behavior as fact.
 
 Before reading H14, engineers should be familiar with:
-- **H02 Principle 8** — the product principle ("Privacy by default") this entire document implements
+- **H02's Product Objective** — the product is not designed to maximize AI usage or engagement, and data serves the user's own decisions, not third-party interests; the principle this entire document implements
 - **H06 FR-08, FR-09** — authentication and Decision Dashboard/deletion requirements
 - **H09 §11** — the security controls as implemented in the current architecture
 - **H10 §14** — the pre-release Security Checklist (the operational, checkbox form of this document)

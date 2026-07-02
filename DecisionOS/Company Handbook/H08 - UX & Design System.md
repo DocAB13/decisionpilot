@@ -11,7 +11,7 @@ This document is the authoritative reference for every visual and interaction de
 H08 does not invent new product features, change business rules, or modify workflows. Everything here derives from what has already been defined. Where this document makes a design choice, that choice exists to serve a requirement already established in H03, H05, or H06.
 
 Before reading H08, engineers and designers should be familiar with:
-- **H02 Principle 2** — Simplicity Is the Feature (the governing constraint on all design decisions)
+- **H02 Principle 9** — Default to Simplicity (the governing constraint on all design decisions)
 - **H05** — the seven user workflows that every screen must serve
 - **H06** — the functional requirements and acceptance criteria that every component must satisfy
 
