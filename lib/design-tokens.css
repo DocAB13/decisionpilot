@@ -7,16 +7,16 @@
   --color-border-strong: #C8D0E0;
   --color-text-primary:  #0F172A;
   --color-text-secondary:#475569;
-  --color-text-muted:    #94A3B8;
+  --color-text-muted:    #5B6B80;   /* was #94A3B8 — failed WCAG AA (2.56:1) as text; now ~5.2:1 */
   --color-accent:        #1A56DB;
   --color-accent-dark:   #1240A8;
   --color-accent-light:  #EFF4FF;
   --color-accent-border: #BFCFFF;
-  --color-success:       #10B981;
+  --color-success:       #047857;   /* was #10B981 — failed WCAG AA (2.54:1) as text; now ~5.2:1 */
   --color-success-light: #ECFDF5;
   --color-warning:       #F59E0B;
   --color-warning-light: #FFFBEB;
-  --color-danger:        #EF4444;
+  --color-danger:        #B91C1C;   /* was #EF4444 — failed WCAG AA (3.76:1) as text; now ~6.1:1 */
   --color-danger-dark:   #DC2626;
   --color-danger-light:  #FEF2F2;
 
@@ -71,6 +71,24 @@
 *:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+/* Skip to content link — H08 §14 keyboard navigation / WCAG 2.4.1 */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 8px;
+  background: var(--color-accent);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  z-index: 9999;
+  text-decoration: none;
+  font-weight: var(--font-medium);
+  transition: top 150ms ease;
+}
+.skip-link:focus {
+  top: 8px;
 }
 
 /* Global button press scale — H10 §13 */

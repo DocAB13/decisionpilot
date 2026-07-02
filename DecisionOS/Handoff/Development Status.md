@@ -10,7 +10,7 @@
 
 **Last Completed Task:** IR01-075c — Outcome, Reflection, and Lessons Learned capture (components 10–12) + `executing → completed` transition. Implemented exactly as scoped in the roadmap (`core/decision/Decision.types.ts`, `features/decision-outcome/OutcomeForm.tsx`+`.module.css`, `features/decision-outcome/ReflectionForm.tsx`+`.module.css`, `pages/decision/[id].tsx`, `pages/decision/[id].module.css` only). IR01-076 remains blocked and untouched.
 
-**Most recent work (outside IR01 numbering):** (1) Added `core/ai/call.test.ts`, closing the H16 §12 gap — `call.ts` moved from 50% to 100% line coverage, 214 → 225 tests, no production code changed. (2) Rewrote `pages/privacy.js`, `pages/terms.js`, and `pages/cookies.js` to remove the legacy "DecisionPilot" comparison-marketplace content flagged in H14 §12.2. (3) Authored the six previously-stub Company Handbook documents — H14 (Security & Privacy), H15 (Operations Handbook), H16 (Testing & QA), H17 (Product Roadmap), H18 (Business Model), H19 (Glossary). See the "Handbook Documentation," "Legal Pages Rewrite," and "Test Coverage" sections below. Before all of that: UX Critical Fixes UX1–UX3 (landing page repositioning, "Update Decision" copy honesty, `/account` → `/#pricing` upgrade links) — see the "UX Critical Fixes" section below.
+**Most recent work (outside IR01 numbering):** (-2) Ran a read-only performance audit and implemented the one approved Critical fix: `components/App.jsx`'s ~394 KB legacy-quiz-engine chunk (downloaded by every homepage visitor) was code-split into a new, on-demand-only file, `components/legacy/QuizEngine.jsx`. Mid-implementation discovery: the quiz engine is not actually unreachable — it's still live via the Favorites button, Profile button, and the Ai·sel mascot's chat trigger, all rendered by the current homepage — so it was code-split (preserving 100% of functionality) rather than deleted. `App.jsx`'s chunk: 403,509 → 231,848 bytes (≈42.5% smaller); the new chunk (173,262 bytes) only loads if one of those three is clicked. See the "Performance Audit + Critical Fix #1" section below. (-1) Ran a read-only accessibility audit (WCAG 2.1 AA per H08 §14) and implemented the two fixes approved for immediate action: darkened `--color-text-muted`/`--color-success`/`--color-danger` in `lib/design-tokens.css` (all three previously failed 4.5:1 text contrast; all three now clear 5:1+) and added a skip-to-content link to `components/layout/PageLayout.tsx`. Only these two changes were made — every other finding (Chat panel focus/Escape handling, `Button`'s `role="status"`/`aria-hidden` conflict, missing `<main>` on auth pages, etc.) was left untouched per instruction. See the "Accessibility Audit + Critical Fixes" section below. (0) Traced H10 §11.3's third named testing requirement — anonymous Decision transfer on signup — and found it is **not actually implemented**: `pages/auth/login.tsx`/`signup.tsx` copy the anonymous token from `localStorage` into a cookie, but nothing anywhere (`callback.ts`, `middleware.ts`, `create.ts`, or any DB trigger) ever reads that cookie to perform the claim. No tests added (nothing real to test); no code changed. See the "Anonymous → account transfer" section below. (1) Added unit tests for all five priority API routes — `pages/api/billing/webhook.ts`, `pages/api/decision/analyze.ts`, `save.ts`, `[id].ts`, and `state.ts` — closing the H10 §11.3 / H16 §12 gap (no `pages/api/**/*.test.ts` file existed before this). 60 new tests this round on top of the 14 for `webhook.ts`; suite: 225 → 299. **Architectural correction along the way:** discovered that Next.js's Pages Router builds every file under `pages/` as a route — test files included — so all five test files (plus a shared helper) were moved to `__tests__/api/...` outside Next's routing scope; confirmed via `next build` that no `.test` routes remain. `webhook.test.ts` had never been committed, so nothing shipped. See the "Test Coverage — API Routes" section below. (2) Added `core/ai/call.test.ts`, closing the H16 §12 gap for `call.ts` — 50% → 100% line coverage, 214 → 225 tests. (3) Rewrote `pages/privacy.js`, `pages/terms.js`, and `pages/cookies.js` to remove the legacy "DecisionPilot" comparison-marketplace content flagged in H14 §12.2. (4) Authored the six previously-stub Company Handbook documents — H14 (Security & Privacy), H15 (Operations Handbook), H16 (Testing & QA), H17 (Product Roadmap), H18 (Business Model), H19 (Glossary). See the "Handbook Documentation" and "Legal Pages Rewrite" sections below. Before all of that: UX Critical Fixes UX1–UX3 — see the "UX Critical Fixes" section below.
 
 **Roadmap extended, IR01-075b and IR01-075c both implemented:** `IR01-075b` and `IR01-075c` were added to the roadmap following a Documentation Consistency Audit, a Final Code Quality Audit, an MVP UX Audit, an MVP v1.0 Scope report, and a dedicated investigation that together established Outcome/Reflection/Lessons Learned/Executing→Completed were explicitly required by H05/H06/H08/H09 but had no IR01 task ever scoped for them. Inserted per the `IR01-070b` precedent — no completed task renumbered. Both are now done.
 
@@ -19,8 +19,8 @@
 **IR01-076 blocker:** `.env.local` is missing `SUPABASE_SERVICE_ROLE_KEY`, `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRO_PRICE_ID`, `STRIPE_PREMIUM_PRICE_ID`. Confirmed at runtime: `POST /api/decision/create` and `POST /api/billing/checkout` both 500 immediately (`lib/supabase/admin.ts` and `lib/stripe/stripe.client.ts` throw at import time without these). All five E2E workflows write decision/billing data as their first step, so none can be driven in a browser until these are added.
 
 **Repository:**
-- GitHub: Last confirmed push was commit `4052686` ("docs: sync Development Status with H14-H19 authoring and latest push"). This update adds one more round of work on top — the Privacy/Terms/Cookies rewrite, the `core/ai/call.ts` test file, and this roadmap/status sync — staged for the next commit and push.
-- Vercel: A production deploy should trigger automatically on every push to `main` per H09 §12 — not independently re-verified against the Vercel dashboard this session. Last confirmed sync point was IR01-060; the `b2c71d5`/`4052686` push was the first opportunity for Vercel to pick up IR01-061 through IR01-075c's frontend work, still not independently re-checked.
+- GitHub: Last confirmed push was commit `f2e0862` ("fix(legal): rewrite Privacy/Terms/Cookies for real product; test(ai): cover core/ai/call.ts"). This update adds one more round of work on top — `pages/api/billing/webhook.test.ts` and this roadmap/status sync — staged for the next commit and push.
+- Vercel: A production deploy should trigger automatically on every push to `main` per H09 §12 — not independently re-verified against the Vercel dashboard this session. Last confirmed sync point was IR01-060; the pushes since (`b2c71d5`, `4052686`, `f2e0862`) were the first opportunities for Vercel to pick up IR01-061 through IR01-075c's frontend work and the Privacy/Terms/Cookies rewrite, still not independently re-checked.
 
 ---
 
@@ -171,6 +171,80 @@ Rebranded "DecisionPilot" → "DecisionOS" in all three pages' own content/`<tit
 `call.ts`: 50% → 100% line coverage. Overall `core/`: 97.06% → 100% lines. Tests: 214 → 225.
 
 **Verification:** `npx vitest run --coverage` (225 tests, 7 files), `npx tsc --noEmit`, `npx next build` all pass.
+
+---
+
+## Test Coverage — API Routes (outside IR01 numbering, in progress)
+
+H10 §11.3 requires four specific API route behaviors to be tested; no `pages/api/**/*.test.ts` file existed anywhere in the repo (H16 §12). Being closed one route at a time, starting with the most security-critical.
+
+**`pages/api/billing/webhook.ts`** (14 tests) — `@/lib/supabase/admin` is mocked; Stripe signature verification is **not** mocked — tests sign real payloads with the real `stripe` SDK's `generateTestHeaderString()`. Covers the method guard, all three signature-rejection paths, both handled event types including their warning-only and 500-on-error branches, and an unhandled event type. 0% → 100% coverage.
+
+**`pages/api/decision/analyze.ts`** (13 tests) — the AI Analysis/Recommendation Engine orchestration route, and H10 §11.3's second named requirement (state reversion to `draft` on AI failure). `callAI` is mocked; `parseAIJSON`, `buildAnalysisPrompt`/`buildRecommendationPrompt`, and `validateAnalysisOutput`/`validateRecommendationOutput` are the real, already-tested `core/ai/` functions. Covers auth/ownership/state guards, revert-to-draft-and-503 on missing components or an Analysis Engine failure, one-regeneration recovery, the full happy path, and partial success when the Recommendation Engine fails. 0% → 87.5% lines.
+
+**`pages/api/decision/save.ts`** (18 tests) — all input-validation branches, ownership, the successful write path with version increment, and all three IR01-075b Action Plan completion-toggle branches. 0% → 100% lines.
+
+**`pages/api/decision/[id].ts`** (13 tests) — `GET`'s auth/404/success/history-merge paths and `DELETE`'s auth/404/204/500 paths. 0% → 100% lines.
+
+**`pages/api/decision/state.ts`** (16 tests) — transition validation, the decision_made precondition, and the Action Plan Engine's success path plus four distinct failure modes (all resulting in `200` + `action_plan_error`, per the route's own design). 0% → 100% lines.
+
+**Architectural correction:** Next.js's Pages Router builds every file under `pages/` as a route — `next build` was building `webhook.test.ts` and the four new `pages/api/decision/*.test.ts` files as live, empty production routes (e.g. `/api/decision/analyze.test`). Caught before any push (`webhook.test.ts` had never been committed). Fixed by moving all five test files plus their shared helper to `__tests__/api/...`, mirroring the `pages/api/...` structure outside Next's routing scope — a documented, deliberate deviation from H10 §11.4 for `pages/api/` specifically. Confirmed via `next build` that no `.test` routes remain, and cleared the stale `.next/` cache.
+
+**Combined result:** suite 225 → 299 tests (12 files). No production route file was modified.
+
+**Not done yet — next priority, pending approval:** H10 §11.3's fourth named requirement, anonymous transfer on signup, needs its actual implementation located first — `pages/api/auth/callback.ts` (12 lines) only calls `exchangeCodeForSession` and redirects; it does not contain the transfer logic itself.
+
+**Verification:** `npx vitest run` (299 tests, 12 files), `npx tsc --noEmit`, `npx next build` all pass; confirmed no `.test` routes appear in the build output.
+
+---
+
+## Anonymous → account transfer: traced, and found to be unimplemented (outside IR01 numbering)
+
+Traced the full execution path per instruction, not assuming `pages/api/auth/callback.ts` was responsible:
+
+- `Wizard.tsx` creates an anonymous Decision and stores its `anonymous_token` in `localStorage['anon_decision_token']`.
+- `pages/auth/login.tsx` and `signup.tsx` both read that key and write it into a cookie before calling Supabase Auth, each citing "H13 §2.1" in a comment claiming this transfers ownership.
+- **Nothing reads that cookie.** `callback.ts` only exchanges the auth code and redirects; `middleware.ts` only touches the Supabase session cookie and the unrelated `anonymous_token` URL query param; `create.ts` always inserts a fresh row and never checks for a prior anonymous one; no route reads `req.cookies['anon_decision_token']` anywhere; the `decisions` table migrations define the owned-XOR-anonymous constraint but contain no trigger that ever flips one into the other.
+
+**The feature does not exist** — the code writes a cookie nobody consumes. Same class of Handbook-vs-reality gap as CQ1/CQ2 and the existing H14/H16 Known Gaps, not a new pattern. No tests were added (nothing real to test) and no code was changed (building the missing claim step is a production-behavior change out of this task's scope). Full detail, including every file checked, is in `IR01 - MVP Implementation Roadmap.md`'s matching section.
+
+**Verification:** `npx vitest run` (299 tests, unchanged) and `npx next build` both pass, confirming no code was touched during this investigation.
+
+**Recommendation:** a future task should build the actual claim step (most naturally in `callback.ts`, reading the cookie and running the `UPDATE decisions ... WHERE anonymous_token = ...` H09 already describes) and add its tests in that same task.
+
+---
+
+## Accessibility Audit + Critical Fixes (outside IR01 numbering)
+
+A read-only audit against H08 §14's WCAG 2.1 AA target found 9 issues (3 Critical, 4 Recommended, 2 Nice to have; estimated ≈80% overall). Two were approved for immediate fix; the rest were explicitly left untouched per instruction.
+
+**Fix 1 — Contrast (`lib/design-tokens.css`):** three shared tokens used as text color across 15+ components failed WCAG AA 4.5:1 — `--color-text-muted` (`#94A3B8`, ≈2.56:1), `--color-success` (`#10B981`, ≈2.54:1), `--color-danger` (`#EF4444`, ≈3.76:1). Darkened to `#5B6B80` (≈5.2–5.4:1), `#047857` (≈5.2–5.5:1), and `#B91C1C` (≈6.1–6.5:1) respectively — each with a comfortable safety margin, not a bare pass. Only the token values changed; no component files touched, so all 30+ usage sites pick up the fix automatically. `--color-danger-dark` (button hover) was left as-is — a cosmetic-only nuance, not a functional issue.
+
+**Fix 2 — Skip link (`components/layout/PageLayout.tsx`):** added a standard skip-to-content link (hidden until keyboard-focused) as the first element in the one shared layout component identified in the audit, targeting a new `id="main-content"` on the existing `<main>`. CSS added alongside the existing global focus-ring/reduced-motion rules in `design-tokens.css` — no new file created. Not added to `pages/auth/*` or the legacy homepage, since neither uses `PageLayout`.
+
+**Verification:** `npx vitest run` (299 tests, unchanged), `npx tsc --noEmit`, `npx next build` all pass. Exactly two files changed — confirmed via `git diff`.
+
+**Files changed:** `lib/design-tokens.css`, `components/layout/PageLayout.tsx`.
+
+---
+
+## Performance Audit + Critical Fix #1 (outside IR01 numbering)
+
+A read-only performance audit found 1 Critical, 4 Recommended, 2 Nice-to-have issues (≈78% overall). Only the Critical fix was approved.
+
+**Finding:** `App.jsx` (4,812 lines) compiled to a single ~394 KB chunk downloaded by every homepage visitor. Most of it was the legacy quiz engine (`QuestionScreen`/`ResultsScreen`/`ChatScreen`/`FavoritesScreen`/`ProfileModal`).
+
+**Correction found mid-implementation:** the quiz engine is not actually unreachable — the current homepage still renders a live Favorites button, Profile button, and an Ai·sel mascot chat trigger, all of which lead into that code. Deleting it would have broken those three currently-working buttons. Flagged to the Founder; no response in the wait window; proceeded with the option consistent with the task's own constraints (preserve functionality, no redesign).
+
+**Fix:** code-split (not deleted). Exhaustively mapped all 16 module-scope constants and 29 functions in `App.jsx` to separate what only the legacy screens use from what the real `Landing`/`TopNav` also need. Moved the legacy-exclusive ~2,700 lines to a new `components/legacy/QuizEngine.jsx`, lazy-loaded via five `next/dynamic({ ssr: false })` calls — loaded together, once, only if Favorites/Profile/the mascot chat is actually clicked. 5 genuinely shared identifiers (`C`, `catName`, `CATEGORIES_LIST`, `STATUSES`, `getIcon`) were exported from `App.jsx` rather than duplicated. Two latent extraction bugs (an off-by-one orphaning `ASEL_ACCESSORY_Q`'s closing brace; `BUDGET_RANGES`/`TECH_LEVELS` initially left behind) were caught during verification, before the build.
+
+**Result:** `App.jsx`'s chunk 403,509 → 231,848 bytes (≈42.5% smaller); new on-demand chunk 173,262 bytes; homepage's own "First Load JS" unchanged at 152 kB (already deferred behind the outer dynamic import).
+
+**Verification:** `npx next build`, `npx vitest run` (299 tests, unchanged), `npx tsc --noEmit` all pass. Confirmed via string-level chunk inspection that quiz-only content is exclusively in the new chunk. **Live browser click-testing was not completed** — no browser-automation tool was available without installing a new dependency, judged out of scope. Recommend a manual smoke test (click Favorites/Profile/Ai·sel-chat once) before treating this as fully verified.
+
+**Not done, per instruction:** no other performance finding was touched.
+
+**Files changed:** `components/App.jsx` (modified), `components/legacy/QuizEngine.jsx` (new).
 
 ---
 

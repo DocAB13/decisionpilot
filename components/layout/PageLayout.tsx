@@ -10,8 +10,9 @@ interface Props {
 export function PageLayout({ children, decisionTitle }: Props): React.ReactElement {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-background)' }}>
+      <a href="#main-content" className="skip-link">Skip to content</a>
       <TopNav decisionTitle={decisionTitle} />
-      <main style={{ maxWidth: 1200, margin: '0 auto', padding: 'var(--space-6)' }}>
+      <main id="main-content" style={{ maxWidth: 1200, margin: '0 auto', padding: 'var(--space-6)' }}>
         {children}
       </main>
       <BottomNav />
